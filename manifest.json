@@ -1,0 +1,10 @@
+{
+  "manifest_version": 2,
+  "name": "My Notes",
+  "description": "Chrome Extension that turns your \"New Tab\" into a note taking tool.",
+  "version": "1.0",
+  "permissions": ["storage"],
+  "chrome_url_overrides" : {
+    "newtab": "newtab.html"
+  }
+}
