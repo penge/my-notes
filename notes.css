@@ -15,3 +15,13 @@ body {
   resize: none;
   box-sizing: border-box;
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #36393f;
+  }
+  #textarea {
+    background: #36393f;
+    color: white;
+  }
+}
