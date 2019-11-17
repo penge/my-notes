@@ -10,6 +10,9 @@
 
 - And! It is Synchronized across every Chrome window you have open
 
+## Image
+
+![My Notes](image.png)
 
 ## Install
 
