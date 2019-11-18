@@ -16,6 +16,11 @@ body {
   box-sizing: border-box;
 }
 
+.blur {
+   color: transparent;
+   text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background: #36393f;
