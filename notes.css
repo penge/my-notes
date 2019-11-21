@@ -14,14 +14,47 @@ body {
   outline: none;
   resize: none;
   box-sizing: border-box;
+  padding: 5px;
+}
+
+#textarea::placeholder {
+   color: silver;
+}
+
+#settings {
+  z-index: 100;
+  position: fixed;
+  font-size: 300%;
+  font-family: monospace;
+  bottom: 0;
+  right: 0;
+  padding: 20px;
+  background: white;
+  cursor: pointer;
+  user-select: none;
+}
+
+#minus, #plus {
+  display: inline-block;
+}
+
+#minus {
+  font-size: 75%;
+}
+
+#plus {
+  font-weight: bold;
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
+  body, #settings {
     background: #36393f;
   }
-  #textarea {
+  #textarea, #settings {
     background: #36393f;
     color: white;
+  }
+  #textarea::placeholder {
+   color: #e0e0e0;
   }
 }

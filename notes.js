@@ -1,11 +1,61 @@
 /* global chrome */
 
-const textarea = document.getElementById("textarea");
+/* Elements */
 
-chrome.storage.sync.get(["newtab"], result => {
-  textarea.value = result.newtab || "";
+const textarea = document.getElementById("textarea");
+const minus = document.getElementById("minus");
+const plus = document.getElementById("plus");
+
+
+/* Helpers */
+
+const setPlaceholder = () => {
+  if (textarea.value === "") {
+    textarea.placeholder = "Type your notes here.";
+  }
+};
+
+const currentSize = () => {
+  return parseInt(textarea.style.fontSize.replace("%", ""), 10);
+};
+
+const changeSize = (size) => {
+  textarea.style.fontSize = size + "%";
+  chrome.storage.sync.set({ size: size });
+};
+
+
+/* Font size */
+
+const minSize = 150;
+const maxSize = 600;
+const defaultSize = 200;
+
+minus.addEventListener("click", function () {
+  const size = currentSize() - 50;
+  if (size >= minSize) {
+    changeSize(size);
+  }
+});
+
+plus.addEventListener("click", function () {
+  const size = currentSize() + 50;
+  if (size <= maxSize) {
+    changeSize(size);
+  }
+});
+
+
+/* Storage */
+
+chrome.storage.sync.get(["value", "size"], result => {
+  textarea.value = result.value || "";
+  textarea.style.fontSize = (result.size || defaultSize) + "%";
+  setPlaceholder();
 });
 
 textarea.addEventListener("keyup", () => {
-  chrome.storage.sync.set({ newtab: textarea.value });
+  chrome.storage.sync.set({ value: textarea.value });
+  setPlaceholder();
 });
+
