@@ -4,6 +4,12 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+}
+
+#light, #dark {
+  opacity: 1;
 }
 
 #textarea {
@@ -17,10 +23,6 @@ body {
   padding: 5px;
 }
 
-#textarea::placeholder {
-   color: silver;
-}
-
 #settings {
   z-index: 100;
   position: fixed;
@@ -32,6 +34,19 @@ body {
   background: white;
   cursor: pointer;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mode {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 5px;
+  left: 5px;
+  position: relative;
+  border-width: 5px;
+  border-style: solid;
 }
 
 #minus, #plus {
@@ -46,15 +61,40 @@ body {
   font-weight: bold;
 }
 
-@media (prefers-color-scheme: dark) {
-  body, #settings {
-    background: #36393f;
-  }
-  #textarea, #settings {
-    background: #36393f;
-    color: white;
-  }
-  #textarea::placeholder {
-   color: #e0e0e0;
-  }
+
+/* Light mode */
+
+#light,
+#light #textarea,
+#light #settings {
+  background: white;
+  color: black;
+}
+
+#light #textarea::placeholder {
+  color: silver;
+}
+
+#light #mode {
+  border-color: white;
+  background: black;
+}
+
+
+/* Dark mode */
+
+#dark,
+#dark #textarea,
+#dark #settings {
+  background: #36393f;
+  color: white;
+}
+
+#dark #textarea::placeholder {
+  color: #e0e0e0;
+}
+
+#dark #mode {
+  border-color: #36393f;
+  background: white;
 }
