@@ -1,0 +1,48 @@
+body {
+  padding: 50px;
+  font-family: Calibri, Arial;
+  font-size: 150%;
+}
+
+h3 {
+  padding-top: 50px;
+}
+
+#current-font-name {
+  padding: 0px 8px;
+  font-weight: bold;
+}
+
+.font-generic {
+  cursor: pointer;
+}
+
+.divider {
+  padding: 0 12px;
+}
+
+.fonts {
+  display: none;
+}
+
+.selection {
+  padding: 10px 0px;
+  font-size: 80%;
+}
+
+#comment {
+  font-size: 70%;
+  padding-top: 80px;
+  line-height: 150%;
+  opacity: .5;
+}
+
+@media only screen and (max-width: 600px) {
+  .font-generic {
+    display: block;
+  }
+
+  .divider {
+    display: none;
+  }
+}

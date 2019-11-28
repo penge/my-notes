@@ -37,19 +37,19 @@ const setMode = (mode) => {
 
 /* Font size */
 
-const minSize = 150;
+const minSize = 100;
 const maxSize = 600;
 const defaultSize = 200;
 
 minus.addEventListener("click", function () {
-  const size = currentSize() - 50;
+  const size = currentSize() - 25;
   if (size >= minSize) {
     changeSize(size);
   }
 });
 
 plus.addEventListener("click", function () {
-  const size = currentSize() + 50;
+  const size = currentSize() + 25;
   if (size <= maxSize) {
     changeSize(size);
   }
@@ -69,9 +69,10 @@ mode.addEventListener("click", function () {
 
 /* Storage */
 
-chrome.storage.sync.get(["value", "size", "mode"], result => {
+chrome.storage.sync.get(["value", "size", "font", "mode"], result => {
   textarea.value = result.value || "";
   textarea.style.fontSize = (result.size || defaultSize) + "%";
+  textarea.style.fontFamily = result.font.fontFamily;
   setPlaceholder();
   setMode(result.mode || defaultMode);
 });
