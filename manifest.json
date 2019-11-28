@@ -3,13 +3,14 @@
   "name": "My Notes",
   "description": "Chrome Extension that turns your \"New Tab\" into a note taking tool.",
   "version": "1.3",
+  "icons": { "128": "icon128.png" },
   "options_page": "options.html",
   "permissions": ["storage"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
   },
-  "chrome_url_overrides" : {
-    "newtab": "newtab.html"
+  "chrome_url_overrides": {
+    "newtab": "notes.html"
   }
 }
