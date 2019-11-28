@@ -29,9 +29,8 @@ body {
   font-size: 300%;
   font-family: monospace;
   bottom: 0;
-  right: 0;
+  right: 5px;
   padding: 20px;
-  background: white;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -42,11 +41,6 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  top: 5px;
-  left: 5px;
-  position: relative;
-  border-width: 5px;
-  border-style: solid;
 }
 
 #minus, #plus {
@@ -65,8 +59,7 @@ body {
 /* Light mode */
 
 #light,
-#light #textarea,
-#light #settings {
+#light #textarea {
   background: white;
   color: black;
 }
@@ -76,7 +69,6 @@ body {
 }
 
 #light #mode {
-  border-color: white;
   background: black;
 }
 
@@ -84,8 +76,7 @@ body {
 /* Dark mode */
 
 #dark,
-#dark #textarea,
-#dark #settings {
+#dark #textarea {
   background: #36393f;
   color: white;
 }
@@ -95,6 +86,5 @@ body {
 }
 
 #dark #mode {
-  border-color: #36393f;
   background: white;
 }
