@@ -1,6 +1,6 @@
 "use strict";
 
-(function() {
+(function () {
 
 /* global chrome */
 
@@ -69,16 +69,84 @@ mode.addEventListener("click", function () {
 
 /* Storage */
 
+let lastSavedText;
+
 chrome.storage.sync.get(["value", "size", "font", "mode"], result => {
   textarea.value = result.value || "";
+  lastSavedText = textarea.value;
+
   textarea.style.fontSize = (result.size || defaultSize) + "%";
   textarea.style.fontFamily = result.font.fontFamily;
+
   setPlaceholder();
   setMode(result.mode || defaultMode);
 });
 
-textarea.addEventListener("keyup", () => {
-  chrome.storage.sync.set({ value: textarea.value });
+
+/* Typing */
+
+const TAB = "  ";
+
+function isTab(event) {
+  return event.keyCode === 9 || event.which === 9 || event.key === "Tab";
+}
+
+function isShift(event) {
+  return event.shiftKey;
+}
+
+textarea.addEventListener("keydown", (event) => {
+  if (isTab(event)) {
+    event.preventDefault();
+  }
+});
+
+textarea.addEventListener("keyup", (event) => {
+  if (isTab(event)) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    if (start === end) {
+      let before = textarea.value.substring(0, start);
+      let after = textarea.value.substring(start);
+      let movement = isShift(event) ? (TAB.length * -1) : TAB.length;
+      let change = false;
+
+      if (movement > 0) { // only TAB
+        before = before + TAB;
+        change = true;
+
+      }
+      else { // SHIFT + TAB
+        for (let i = 1; i <= Math.abs(movement); i++) {
+          if (before.endsWith(" ")) {
+            before = before.substring(0, before.length - 1);
+            change = true;
+          }
+          else {
+            movement = (i - 1) * -1;
+            break;
+          }
+        }
+      }
+
+      if (change) {
+        textarea.value = before + after;
+        textarea.selectionStart = start + movement;
+        textarea.selectionEnd = end + movement;
+      }
+    }
+  }
+
+  // Do not save text if unchanged (Ctrl, Alt, Shift, Arrow keys)
+  if (lastSavedText === textarea.value) {
+    return;
+  }
+
+  chrome.storage.sync.set({ value: textarea.value }, function () {
+    lastSavedText = textarea.value;
+  });
+
   setPlaceholder();
 });
 
