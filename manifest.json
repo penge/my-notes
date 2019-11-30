@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "My Notes",
   "description": "Chrome Extension that turns your \"New Tab\" into a note taking tool.",
-  "version": "1.3",
+  "version": "1.4",
   "icons": { "128": "icon128.png" },
   "options_page": "options.html",
   "permissions": ["storage"],
