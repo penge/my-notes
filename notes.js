@@ -69,11 +69,13 @@ mode.addEventListener("click", function () {
 
 /* Storage */
 
-let lastSavedText;
+let mostRecentValue;
+let mostRecentSavedValue;
 
 chrome.storage.sync.get(["value", "size", "font", "mode"], result => {
   textarea.value = result.value || "";
-  lastSavedText = textarea.value;
+  mostRecentValue = textarea.value;
+  mostRecentSavedValue = textarea.value;
 
   textarea.style.fontSize = (result.size || defaultSize) + "%";
   textarea.style.fontFamily = result.font.fontFamily;
@@ -94,6 +96,39 @@ function isTab(event) {
 function isShift(event) {
   return event.shiftKey;
 }
+
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function () {
+    var context = this,
+      args = arguments;
+    var later = function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
+function saveText() {
+  if (mostRecentValue === mostRecentSavedValue) {
+    return;
+  }
+
+  const value = textarea.value;
+  chrome.storage.sync.set({ value: value }, function () {
+    mostRecentSavedValue = value;
+  });
+}
+
+const saveTextDebounce = debounce(saveText, 1000, true);
 
 textarea.addEventListener("keydown", (event) => {
   if (isTab(event)) {
@@ -139,15 +174,15 @@ textarea.addEventListener("keyup", (event) => {
   }
 
   // Do not save text if unchanged (Ctrl, Alt, Shift, Arrow keys)
-  if (lastSavedText === textarea.value) {
+  if (mostRecentValue === textarea.value) {
     return;
   }
 
-  chrome.storage.sync.set({ value: textarea.value }, function () {
-    lastSavedText = textarea.value;
-  });
-
+  mostRecentValue = textarea.value;
   setPlaceholder();
+  saveTextDebounce();
 });
+
+window.addEventListener("beforeunload", saveText);
 
 })(); // IIFE
