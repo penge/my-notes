@@ -30,11 +30,25 @@ h3 {
   font-size: 80%;
 }
 
-#comment {
+.comment {
   font-size: 70%;
-  padding-top: 80px;
+  padding-top: 30px;
   line-height: 150%;
   opacity: .5;
+}
+
+#mode {
+  padding-top: 40px;
+}
+
+#light {
+  background: white;
+  color: black;
+}
+
+#dark {
+  background: #36393f;
+  color: white;
 }
 
 @media only screen and (max-width: 600px) {

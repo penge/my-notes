@@ -4,7 +4,7 @@
 
 /* global chrome */
 
-/* Elements */
+/* Font elements */
 
 var generics = [
   document.getElementById("serif"),
@@ -18,8 +18,13 @@ var fonts = [
   document.getElementById("monospace-fonts")
 ];
 
-var checkboxes = document.getElementsByName("font");
+var fontCheckboxes = document.getElementsByName("font");
 var currentFontName = document.getElementById("current-font-name");
+
+
+/* Mode elements */
+
+var modeCheckboxes = document.getElementsByName("mode");
 
 
 /* Helpers */
@@ -28,8 +33,8 @@ function setCurrentFontNameText(fontName) {
   currentFontName.innerText = fontName;
 }
 
-function checkCurrentFontCheckbox(fontId) {
-  document.getElementById(fontId).checked = true;
+function checkCheckboxById(id) {
+  document.getElementById(id).checked = true;
 }
 
 function displayGeneric(id) {
@@ -53,10 +58,9 @@ generics.forEach(generic => {
   });
 });
 
-
-checkboxes.forEach(checkbox => {
+fontCheckboxes.forEach(checkbox => {
   checkbox.addEventListener("click", function () {
-    var font = {
+    const font = {
       id: this.id,
       name: this.value,
       genericFamily: this.dataset.generic,
@@ -68,10 +72,19 @@ checkboxes.forEach(checkbox => {
   });
 });
 
+modeCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener("click", function () {
+    const mode = this.id;
+    document.body.id = mode;
+    chrome.storage.sync.set({ mode: mode });
+  });
+});
+
 
 /* Storage */
 
-chrome.storage.sync.get(["font"], result => {
+chrome.storage.sync.get(["font", "mode"], result => {
+  // 1 FONT
   var currentFont = result.font; // see background.js
   var currentGeneric = currentFont.genericFamily;
 
@@ -79,10 +92,15 @@ chrome.storage.sync.get(["font"], result => {
   setCurrentFontNameText(currentFont.name);
 
   // Check the current font
-  checkCurrentFontCheckbox(currentFont.id);
+  checkCheckboxById(currentFont.id);
 
   // Underline the generic and display its fonts
   displayGeneric(currentGeneric);
+
+
+  // 2 MODE
+  checkCheckboxById(result.mode);
+  document.body.id = result.mode;
 });
 
 })(); // IIFE

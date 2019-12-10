@@ -28,6 +28,7 @@ body {
   position: fixed;
   font-size: 300%;
   font-family: monospace;
+  font-weight: bold;
   bottom: 0;
   right: 5px;
   padding: 20px;
@@ -36,23 +37,12 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-#mode {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
 #minus, #plus {
   display: inline-block;
 }
 
 #minus {
   font-size: 75%;
-}
-
-#plus {
-  font-weight: bold;
 }
 
 
@@ -68,10 +58,6 @@ body {
   color: silver;
 }
 
-#light #mode {
-  background: black;
-}
-
 
 /* Dark mode */
 
@@ -83,8 +69,4 @@ body {
 
 #dark #textarea::placeholder {
   color: #e0e0e0;
-}
-
-#dark #mode {
-  background: white;
 }
