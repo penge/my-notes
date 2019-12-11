@@ -7,6 +7,7 @@
 /* Elements */
 
 const textarea = document.getElementById("textarea");
+const page = document.getElementById("page");
 const minus = document.getElementById("minus");
 const plus = document.getElementById("plus");
 
@@ -39,9 +40,13 @@ const setSize = (size) => {
   currentSize = size;
 };
 
-const saveSize = () => {
+const saveSize = (onlyKeys) => {
   if (currentSize === savedSize) {
     return;
+  }
+
+  if (onlyKeys) {
+    return { size: currentSize };
   }
 
   chrome.storage.sync.set({ size: currentSize });
@@ -62,21 +67,67 @@ plus.addEventListener("click", function () {
 });
 
 
+/* Page */
+
+let savedNotes;
+let savedIndex;
+
+let currentNotes;
+let currentIndex;
+
+const setPage = (notes, index) => {
+  page.innerText = (index + 1) + "/" + notes.length;
+  textarea.value = notes[index];
+}
+
+const saveIndex = (onlyKeys) => {
+  if (currentIndex === savedIndex) {
+    return;
+  }
+
+  if (onlyKeys) {
+    return { index: currentIndex };
+  }
+
+  chrome.storage.sync.set({ index: currentIndex });
+};
+
+page.addEventListener("click", function () {
+  currentIndex += 1;
+  if (currentIndex === currentNotes.length) {
+    currentIndex = 0;
+  }
+  setPage(currentNotes, currentIndex);
+});
+
+chrome.commands.onCommand.addListener(function(command) {
+  if (command.startsWith("page-")) {
+    const pageNumber = command.split("page-")[1];
+    const newIndex = parseInt(pageNumber) - 1;
+    if (currentIndex === newIndex) {
+      return;
+    }
+    currentIndex = newIndex;
+    setPage(currentNotes, currentIndex);
+    return;
+  }
+});
+
+
 /* Storage */
 
-let mostRecentValue;
-let mostRecentSavedValue;
-
-chrome.storage.sync.get(["value", "size", "font", "mode"], result => {
-  textarea.value = result.value || "";
-  mostRecentValue = textarea.value;
-  mostRecentSavedValue = textarea.value;
-
+chrome.storage.sync.get(["notes", "index", "size", "font", "mode"], result => {
+  savedNotes = result.notes.slice();
+  savedIndex = result.index;
   savedSize = result.size;
+
+  currentNotes = result.notes.slice();
+  currentIndex = result.index;
 
   setFont(result.font.fontFamily);
   setSize(result.size);
   setPlaceholder();
+  setPage(currentNotes, currentIndex);
 
   document.body.id = result.mode;
 });
@@ -94,18 +145,29 @@ function isShift(event) {
   return event.shiftKey;
 }
 
-function saveText() {
-  if (mostRecentValue === mostRecentSavedValue) {
+function saveNotes(onlyKeys) {
+  let changed = false;
+  for (let i = 0; i < savedNotes.length; i++) {
+    if (savedNotes[i] !== currentNotes[i]) {
+      changed = true;
+      break;
+    }
+  }
+
+  if (!changed) {
     return;
   }
 
-  const value = textarea.value;
-  chrome.storage.sync.set({ value: value }, function () {
-    mostRecentSavedValue = value;
+  if (onlyKeys) {
+    return { notes: currentNotes };
+  }
+
+  chrome.storage.sync.set({ notes: currentNotes }, function () {
+    savedNotes = currentNotes.slice();
   });
 }
 
-const saveTextDebounce = chrome.extension.getBackgroundPage().debounce(saveText, 1000, true);
+const saveNotesDebounce = chrome.extension.getBackgroundPage().debounce(saveNotes, 1000, true);
 
 textarea.addEventListener("keydown", (event) => {
   if (isTab(event)) {
@@ -151,18 +213,24 @@ textarea.addEventListener("keyup", (event) => {
   }
 
   // Do not save text if unchanged (Ctrl, Alt, Shift, Arrow keys)
-  if (mostRecentValue === textarea.value) {
+  if (currentNotes[currentIndex] === textarea.value) {
     return;
   }
 
-  mostRecentValue = textarea.value;
+  currentNotes[currentIndex] = textarea.value;
   setPlaceholder();
-  saveTextDebounce();
+  saveNotesDebounce();
 });
 
 window.addEventListener("beforeunload", function () {
-  saveText();
-  saveSize();
+  const notes = saveNotes(true);
+  const size = saveSize(true);
+  const index = saveIndex(true);
+
+  const keyValues = Object.assign({}, notes, size, index);
+  if (Object.keys(keyValues).length > 0) {
+    chrome.storage.sync.set(keyValues);
+  }
 });
 
 })(); // IIFE

@@ -12,6 +12,9 @@ const defaultFont = {
 const defaultMode = "light"; // "light", "dark"
 const defaultSize = 200;
 
+const defaultNotes = ["", "", ""];
+const defaultIndex = 0;
+
 chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.sync.set({
     // Font is set upon installation of the plugin.
@@ -19,6 +22,8 @@ chrome.runtime.onInstalled.addListener(function () {
     // in unspecified order. At that point, the font must be set.
     font: defaultFont,
     mode: defaultMode,
-    size: defaultSize
+    size: defaultSize,
+    notes: defaultNotes,
+    index: defaultIndex
   });
 });
