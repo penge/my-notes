@@ -173,7 +173,17 @@ function saveNotes(onlyKeys) {
   });
 }
 
-const saveNotesDebounce = chrome.extension.getBackgroundPage().debounce(saveNotes, 1000, true);
+let _saveNotesDebounce;
+const saveNotesDebounce = function () {
+  if (!_saveNotesDebounce) {
+    chrome.runtime.getBackgroundPage(function (backgroundPage) {
+      _saveNotesDebounce = backgroundPage.debounce(saveNotes, 1000);
+      _saveNotesDebounce();
+    });
+  } else {
+    _saveNotesDebounce();
+  }
+}
 
 textarea.addEventListener("keydown", (event) => {
   if (isTab(event)) {
@@ -223,9 +233,9 @@ textarea.addEventListener("keyup", (event) => {
     return;
   }
 
-  currentNotes[currentIndex] = textarea.value;
+  currentNotes[currentIndex] = textarea.value; // save notes locally
   setPlaceholder();
-  saveNotesDebounce();
+  saveNotesDebounce(); // save notes to the storage
 });
 
 window.addEventListener("beforeunload", function () {
