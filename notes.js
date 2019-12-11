@@ -11,7 +11,7 @@ const minus = document.getElementById("minus");
 const plus = document.getElementById("plus");
 
 
-/* Helpers */
+/* Placeholder */
 
 const setPlaceholder = () => {
   if (textarea.value === "") {
@@ -19,33 +19,45 @@ const setPlaceholder = () => {
   }
 };
 
-const currentSize = () => {
-  return parseInt(textarea.style.fontSize.replace("%", ""), 10);
-};
 
-const changeSize = (size) => {
-  textarea.style.fontSize = size + "%";
-  chrome.storage.sync.set({ size: size });
-};
+/* Font */
+
+const setFont = (font) => {
+  textarea.style.fontFamily = font;
+}
 
 
-/* Font size */
+/* Size */
 
 const minSize = 100;
 const maxSize = 600;
-const defaultSize = 200;
+let savedSize;
+let currentSize;
+
+const setSize = (size) => {
+  textarea.style.fontSize = size + "%";
+  currentSize = size;
+};
+
+const saveSize = () => {
+  if (currentSize === savedSize) {
+    return;
+  }
+
+  chrome.storage.sync.set({ size: currentSize });
+};
 
 minus.addEventListener("click", function () {
-  const size = currentSize() - 25;
+  const size = currentSize - 25;
   if (size >= minSize) {
-    changeSize(size);
+    setSize(size);
   }
 });
 
 plus.addEventListener("click", function () {
-  const size = currentSize() + 25;
+  const size = currentSize + 25;
   if (size <= maxSize) {
-    changeSize(size);
+    setSize(size);
   }
 });
 
@@ -60,10 +72,12 @@ chrome.storage.sync.get(["value", "size", "font", "mode"], result => {
   mostRecentValue = textarea.value;
   mostRecentSavedValue = textarea.value;
 
-  textarea.style.fontSize = (result.size || defaultSize) + "%";
-  textarea.style.fontFamily = result.font.fontFamily;
+  savedSize = result.size;
 
+  setFont(result.font.fontFamily);
+  setSize(result.size);
   setPlaceholder();
+
   document.body.id = result.mode;
 });
 
@@ -146,6 +160,9 @@ textarea.addEventListener("keyup", (event) => {
   saveTextDebounce();
 });
 
-window.addEventListener("beforeunload", saveText);
+window.addEventListener("beforeunload", function () {
+  saveText();
+  saveSize();
+});
 
 })(); // IIFE

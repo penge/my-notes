@@ -10,6 +10,7 @@ const defaultFont = {
 };
 
 const defaultMode = "light"; // "light", "dark"
+const defaultSize = 200;
 
 chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.sync.set({
@@ -17,6 +18,7 @@ chrome.runtime.onInstalled.addListener(function () {
     // The reason: You may visit My Notes, or My Notes Options page
     // in unspecified order. At that point, the font must be set.
     font: defaultFont,
-    mode: defaultMode
+    mode: defaultMode,
+    size: defaultSize
   });
 });
