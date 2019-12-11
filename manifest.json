@@ -12,5 +12,35 @@
   },
   "chrome_url_overrides": {
     "newtab": "notes.html"
+  },
+  "commands": {
+    "page-1": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+1",
+        "mac": "Alt+1"
+      },
+      "description": "Set page 1"
+    },
+    "page-2": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+2",
+        "mac": "Alt+2"
+      },
+      "description": "Set page 2"
+    },
+    "page-3": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+3",
+        "mac": "Alt+3"
+      },
+      "description": "Set page 3"
+    },
+    "focus": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Alt+F"
+      },
+      "description": "Toggle focus mode"
+    }
   }
 }

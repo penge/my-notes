@@ -37,12 +37,20 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-#minus, #plus {
+#page, #minus, #plus {
   display: inline-block;
+}
+
+#page {
+  font-size: 50%;
 }
 
 #minus {
   font-size: 75%;
+}
+
+.hide {
+  display: none;
 }
 
 
