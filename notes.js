@@ -7,7 +7,6 @@
 /* Elements */
 
 const textarea = document.getElementById("textarea");
-const mode = document.getElementById("mode");
 const minus = document.getElementById("minus");
 const plus = document.getElementById("plus");
 
@@ -27,11 +26,6 @@ const currentSize = () => {
 const changeSize = (size) => {
   textarea.style.fontSize = size + "%";
   chrome.storage.sync.set({ size: size });
-};
-
-const setMode = (mode) => {
-  document.body.id = mode;
-  chrome.storage.sync.set({ mode: mode });
 };
 
 
@@ -56,17 +50,6 @@ plus.addEventListener("click", function () {
 });
 
 
-/* Mode */
-
-const defaultMode = "light";
-let currentMode = "light";
-
-mode.addEventListener("click", function () {
-  currentMode = currentMode === "light" ? "dark" : "light";
-  setMode(currentMode);
-});
-
-
 /* Storage */
 
 let mostRecentValue;
@@ -81,7 +64,7 @@ chrome.storage.sync.get(["value", "size", "font", "mode"], result => {
   textarea.style.fontFamily = result.font.fontFamily;
 
   setPlaceholder();
-  setMode(result.mode || defaultMode);
+  document.body.id = result.mode;
 });
 
 
@@ -97,26 +80,6 @@ function isShift(event) {
   return event.shiftKey;
 }
 
-// Returns a function, that, as long as it continues to be invoked, will not
-// be triggered. The function will be called after it stops being called for
-// N milliseconds. If `immediate` is passed, trigger the function on the
-// leading edge, instead of the trailing.
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function () {
-    var context = this,
-      args = arguments;
-    var later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-}
-
 function saveText() {
   if (mostRecentValue === mostRecentSavedValue) {
     return;
@@ -128,7 +91,7 @@ function saveText() {
   });
 }
 
-const saveTextDebounce = debounce(saveText, 1000, true);
+const saveTextDebounce = chrome.extension.getBackgroundPage().debounce(saveText, 1000, true);
 
 textarea.addEventListener("keydown", (event) => {
   if (isTab(event)) {

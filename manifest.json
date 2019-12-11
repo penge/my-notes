@@ -7,7 +7,7 @@
   "options_page": "options.html",
   "permissions": ["storage"],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["debounce.js", "background.js"],
     "persistent": false
   },
   "chrome_url_overrides": {
