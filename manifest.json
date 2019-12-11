@@ -34,6 +34,13 @@
         "mac": "Alt+3"
       },
       "description": "Set page 3"
+    },
+    "focus": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Alt+F"
+      },
+      "description": "Toggle focus mode"
     }
   }
 }

@@ -7,6 +7,7 @@
 /* Elements */
 
 const textarea = document.getElementById("textarea");
+const settings = document.getElementById("settings");
 const page = document.getElementById("page");
 const minus = document.getElementById("minus");
 const plus = document.getElementById("plus");
@@ -109,6 +110,11 @@ chrome.commands.onCommand.addListener(function(command) {
     }
     currentIndex = newIndex;
     setPage(currentNotes, currentIndex);
+    return;
+  }
+
+  if (command === "focus") {
+    settings.classList.toggle("hide");
     return;
   }
 });
