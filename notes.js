@@ -9,8 +9,7 @@
 const textarea = document.getElementById("textarea");
 const settings = document.getElementById("settings");
 const page = document.getElementById("page");
-const minus = document.getElementById("minus");
-const plus = document.getElementById("plus");
+const fontSize = document.getElementById("font-size");
 
 
 /* Placeholder */
@@ -31,28 +30,18 @@ const setFont = (font) => {
 
 /* Size */
 
-const minSize = 100;
-const maxSize = 600;
-let currentSize;
-
 const setSize = (size, store) => {
-  if (size < minSize || size > maxSize) {
-    return;
-  }
-  currentSize = size;
   textarea.style.fontSize = size + "%";
+  if (fontSize.value != size) {
+    fontSize.value = size;
+  }
   if (store) {
     chrome.storage.local.set({ size: size });
   }
 };
 
-minus.addEventListener("click", () => {
-  setSize(currentSize - 25, true);
-});
-
-plus.addEventListener("click", () => {
-  setSize(currentSize + 25, true);
-});
+fontSize.oninput = function () { setSize(this.value); };
+fontSize.onchange = function () { setSize(this.value, true); };
 
 
 /* Page */

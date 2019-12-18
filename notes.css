@@ -37,16 +37,9 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-#page, #minus, #plus {
-  display: inline-block;
-}
-
 #page {
-  font-size: 50%;
-}
-
-#minus {
-  font-size: 75%;
+  font-size: 65%;
+  text-align: right;
 }
 
 .hide {
@@ -77,4 +70,39 @@ body {
 
 #dark #textarea::placeholder {
   color: #e0e0e0;
+}
+
+
+/* Slider */
+
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: #d3d3d3;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: black;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: black;
+  cursor: pointer;
 }
