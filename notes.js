@@ -12,15 +12,6 @@ const page = document.getElementById("page");
 const fontSize = document.getElementById("font-size");
 
 
-/* Placeholder */
-
-const setPlaceholder = () => {
-  if (textarea.value === "") {
-    textarea.placeholder = "Type your notes here.";
-  }
-};
-
-
 /* Font */
 
 const setFont = (font) => {
@@ -95,7 +86,6 @@ chrome.storage.local.get(["index", "font", "size", "mode"], local => {
     currentIndex = local.index;
 
     setPage(currentNotes, currentIndex);
-    setPlaceholder();
   });
 
   setFont(local.font.fontFamily);
@@ -195,7 +185,6 @@ textarea.addEventListener("keyup", (event) => {
   }
 
   currentNotes[currentIndex] = textarea.value; // save notes locally
-  setPlaceholder();
   saveNotesDebounce(); // save notes to the storage
 });
 
