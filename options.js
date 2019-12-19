@@ -67,7 +67,7 @@ fontCheckboxes.forEach(checkbox => {
       fontFamily: [this.value, this.dataset.generic].join(',')
     };
 
-    chrome.storage.sync.set({ font: font });
+    chrome.storage.local.set({ font: font });
     setCurrentFontNameText(font.name);
   });
 });
@@ -76,14 +76,14 @@ modeCheckboxes.forEach(checkbox => {
   checkbox.addEventListener("click", function () {
     const mode = this.id;
     document.body.id = mode;
-    chrome.storage.sync.set({ mode: mode });
+    chrome.storage.local.set({ mode: mode });
   });
 });
 
 
 /* Storage */
 
-chrome.storage.sync.get(["font", "mode"], result => {
+chrome.storage.local.get(["font", "mode"], result => {
   // 1 FONT
   var currentFont = result.font; // see background.js
   var currentGeneric = currentFont.genericFamily;

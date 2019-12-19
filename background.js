@@ -2,6 +2,9 @@
 
 /* global chrome */
 
+const defaultNotes = ["", "", ""];
+const defaultIndex = 0;
+
 const defaultFont = {
   id: "courier-new",
   name: "Courier New",
@@ -9,21 +12,18 @@ const defaultFont = {
   fontFamily: "Courier New,monospace" // fallback is always the generic
 };
 
-const defaultMode = "light"; // "light", "dark"
 const defaultSize = 200;
-
-const defaultNotes = ["", "", ""];
-const defaultIndex = 0;
+const defaultMode = "light"; // "light", "dark"
 
 chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.sync.set({
-    // Font is set upon installation of the plugin.
-    // The reason: You may visit My Notes, or My Notes Options page
-    // in unspecified order. At that point, the font must be set.
+    notes: defaultNotes
+  });
+
+  chrome.storage.local.set({
+    index: defaultIndex,
     font: defaultFont,
-    mode: defaultMode,
     size: defaultSize,
-    notes: defaultNotes,
-    index: defaultIndex
+    mode: defaultMode
   });
 });
