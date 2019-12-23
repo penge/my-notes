@@ -13,9 +13,9 @@
   <h2>Font</h2>
   <p>Current font: <span id="current-font-name"></span></p>
 
-  <h3>
-    <span id="serif" class="font-generic">Serif</span><span class="divider">/</span
-    ><span id="sans-serif" class="font-generic">Sans-serif</span><span class="divider">/</span
+  <h3 id="generics">
+    <span id="serif" class="font-generic">Serif</span><span class="slash">/</span
+    ><span id="sans-serif" class="font-generic">Sans-serif</span><span class="slash">/</span
     ><span id="monospace" class="font-generic">Monospace</span>
   </h3>
 
@@ -99,33 +99,78 @@
   </div>
 
   <p class="comment">
-    You may select your new font from the selection above.<br>
-    The look of the font may depend on the compatibility of your browser.
+    * The look of the font may depend on the compatibility of your browser.
   </p>
 
 
-  <h2 id="mode">Mode</h2>
+  <h2>Mode</h2>
   <div>
     <div class="selection">
       <input type="radio" id="light" name="mode" value="light">
-      <label for="light">Light mode</label>
+      <label for="light" id="light-mode-label">Light mode</label>
     </div>
     <div class="selection">
       <input type="radio" id="dark" name="mode" value="dark">
-      <label for="dark">Dark mode</label>
+      <label for="dark" id="dark-mode-label">Dark mode</label>
     </div>
   </div>
 
   <p class="comment">
-    Light mode has white background with dark text.<br>
-    Dark mode has dark background with white text.<br>
-    To see the changes, you may need to refresh My Notes page.
+    * To see the changes, you may need to refresh My Notes page.
   </p>
 
 
+  <h2>Keyboard Shortcuts</h2>
+  <div>
+    <h3>Windows or Linux</h3>
+    <table>
+      <tr>
+        <td class="shortcut">Ctrl + Shift + 1</td>
+        <td>Open page 1</td>
+      </tr>
+      <tr>
+        <td class="shortcut">Ctrl + Shift + 2</td>
+        <td>Open page 2</td>
+      </tr>
+      <tr>
+        <td class="shortcut">Ctrl + Shift + F</td>
+        <td>Open page 3</td>
+      </tr>
+      <tr>
+        <td class="shortcut">Ctrl + Shift + F</td>
+        <td>Toggle focus mode</td>
+      </tr>
+    </table>
+    <h3>Mac</h3>
+    <table>
+      <tr>
+        <td class="shortcut">Option + 1</td>
+        <td>Open page 1</td>
+      </tr>
+      <tr>
+        <td class="shortcut">Option + 2</td>
+        <td>Open page 2</td>
+      </tr>
+      <tr>
+        <td class="shortcut">Option + 3</td>
+        <td>Open page 3</td>
+      </tr>
+      <tr>
+        <td class="shortcut">Option + F</td>
+        <td>Toggle focus mode</td>
+      </tr>
+    </table>
+  </div>
+
   <p class="comment">
-    <br><br><br><br>
-    If you have any ideas or requests, do not hesitate to contact me at:<br>
+    * You can also change the page by clicking the page number in the corner.
+  </p>
+
+
+  <h2>Support</h2>
+  <p>
+    Having ideas or requests?<br>
+    Contact me at:<br>
     <strong>bucka.pavel@gmail.com</strong>
   </p>
 

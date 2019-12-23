@@ -4,8 +4,12 @@ body {
   font-size: 150%;
 }
 
-h3 {
+h2 {
   padding-top: 50px;
+}
+
+h3#generics {
+  padding-top: 20px;
 }
 
 #current-font-name {
@@ -17,7 +21,7 @@ h3 {
   cursor: pointer;
 }
 
-.divider {
+.slash {
   padding: 0 12px;
 }
 
@@ -37,16 +41,23 @@ h3 {
   opacity: .5;
 }
 
-#mode {
-  padding-top: 40px;
+.shortcut {
+  font-weight: bold;
+  padding-right: 20px;
 }
 
-#light {
+#light-mode-label, #dark-mode-label {
+  padding: 10px 8px;
+  margin-left: 10px;
+  border-radius: 3px;
+}
+
+#light, #light-mode-label {
   background: white;
   color: black;
 }
 
-#dark {
+#dark, #dark-mode-label {
   background: #36393f;
   color: white;
 }
