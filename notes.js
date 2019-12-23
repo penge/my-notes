@@ -2,7 +2,7 @@
 
 (function () {
 
-/* global chrome */
+/* global chrome, localStorage */
 
 /* Elements */
 
@@ -37,36 +37,45 @@ fontSize.onchange = function () { setSize(this.value, true); };
 
 /* Page */
 
-let savedNotes;
-
 let currentNotes;
 let currentIndex;
 
-const setPage = (notes, index, store) => {
-  if (index >= notes.length || index < 0) {
-    index = 0;
+const mergeNotes = (currentNotes) => {
+  const notesToSave = JSON.parse(localStorage.getItem('notesToSave'));
+  if (!notesToSave) {
+    return false;
   }
+  const notes = currentNotes.map((value, index) =>
+    typeof notesToSave[index] === "string" ? notesToSave[index] : value
+  );
+  return notes;
+};
+
+const setPage = (notes, index, store, update) => {
+  if (currentIndex === index && !update) {
+    return;
+  }
+  currentNotes = mergeNotes(notes) || notes;
   currentIndex = index;
-  page.innerText = (index + 1) + "/" + notes.length;
-  textarea.value = notes[index];
+  if (currentIndex >= currentNotes.length || currentIndex < 0) {
+    currentIndex = 0;
+  }
+  page.innerText = (currentIndex + 1) + "/" + currentNotes.length;
+  textarea.value = currentNotes[currentIndex];
   if (store) {
-    chrome.storage.local.set({ index: index });
+    chrome.storage.local.set({ index: currentIndex });
   }
 };
 
-page.addEventListener("click", function () {
+page.addEventListener("click", () => {
   setPage(currentNotes, currentIndex + 1, true);
 });
 
-chrome.commands.onCommand.addListener(function(command) {
+chrome.commands.onCommand.addListener(command => {
   if (command.startsWith("page-")) {
     const pageNumber = command.split("page-")[1];
-    const newIndex = parseInt(pageNumber, 10) - 1;
-    if (currentIndex === newIndex) {
-      return;
-    }
-    currentIndex = newIndex;
-    setPage(currentNotes, currentIndex, true);
+    const index = parseInt(pageNumber, 10) - 1;
+    setPage(currentNotes, index, true);
     return;
   }
 
@@ -81,16 +90,19 @@ chrome.commands.onCommand.addListener(function(command) {
 
 chrome.storage.local.get(["index", "font", "size", "mode"], local => {
   chrome.storage.sync.get(["notes"], sync => {
-    savedNotes = sync.notes.slice();
-    currentNotes = sync.notes.slice();
-    currentIndex = local.index;
-
-    setPage(currentNotes, currentIndex);
+    setPage(sync.notes, local.index);
   });
-
   setFont(local.font.fontFamily);
   setSize(local.size);
   document.body.id = local.mode;
+});
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  const notes = areaName === "sync" && changes["notes"] && changes["notes"].newValue;
+  if (!notes) { return; }
+  const needUpdate = notes.some((note, index) => currentNotes[index] !== note);
+  if (!needUpdate) { return; }
+  setPage(notes, currentIndex, false, true);
 });
 
 
@@ -106,33 +118,23 @@ function isShift(event) {
   return event.shiftKey;
 }
 
-function saveNotes() {
-  let changed = false;
-  for (let i = 0; i < savedNotes.length; i++) {
-    if (savedNotes[i] !== currentNotes[i]) {
-      changed = true;
-      break;
-    }
-  }
-
-  if (!changed) {
-    return;
-  }
-
-  chrome.storage.sync.set({ notes: currentNotes }, function () {
-    savedNotes = currentNotes.slice();
-  });
-}
+const saveNotes = (notes, flush) => {
+  const notesToSave = mergeNotes(notes);
+  if (!notesToSave) { return; }
+  if (flush) { localStorage.removeItem('notesToSave'); }
+  currentNotes = notesToSave;
+  chrome.storage.sync.set({ notes: notesToSave });
+};
 
 let _saveNotesDebounce;
-const saveNotesDebounce = function () {
+const saveNotesDebounce = function (notes) {
   if (!_saveNotesDebounce) {
     chrome.runtime.getBackgroundPage(function (backgroundPage) {
       _saveNotesDebounce = backgroundPage.debounce(saveNotes, 1000);
-      _saveNotesDebounce();
+      _saveNotesDebounce(notes);
     });
   } else {
-    _saveNotesDebounce();
+    _saveNotesDebounce(notes);
   }
 };
 
@@ -147,36 +149,37 @@ textarea.addEventListener("keyup", (event) => {
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
 
-    if (start === end) {
-      let before = textarea.value.substring(0, start);
-      let after = textarea.value.substring(start);
-      let movement = isShift(event) ? (TAB.length * -1) : TAB.length;
-      let change = false;
+    if (start !== end) {
+      return;
+    }
 
-      if (movement > 0) { // only TAB
-        before = before + TAB;
-        change = true;
+    let before = textarea.value.substring(0, start);
+    let after = textarea.value.substring(start);
+    let movement = isShift(event) ? (TAB.length * -1) : TAB.length;
+    let change = false;
 
-      }
-      else { // SHIFT + TAB
-        for (let i = 1; i <= Math.abs(movement); i++) {
-          if (before.endsWith(" ")) {
-            before = before.substring(0, before.length - 1);
-            change = true;
-          }
-          else {
-            movement = (i - 1) * -1;
-            break;
-          }
+    if (movement > 0) { // only TAB
+      before = before + TAB;
+      change = true;
+    } else { // SHIFT + TAB
+      for (let i = 1; i <= Math.abs(movement); i++) {
+        if (before.endsWith(" ")) {
+          before = before.substring(0, before.length - 1);
+          change = true;
+        } else {
+          movement = (i - 1) * -1;
+          break;
         }
       }
-
-      if (change) {
-        textarea.value = before + after;
-        textarea.selectionStart = start + movement;
-        textarea.selectionEnd = end + movement;
-      }
     }
+
+    if (!change) {
+      return;
+    }
+
+    textarea.value = before + after;
+    textarea.selectionStart = start + movement;
+    textarea.selectionEnd = end + movement;
   }
 
   // Do not save text if unchanged (Ctrl, Alt, Shift, Arrow keys)
@@ -184,10 +187,15 @@ textarea.addEventListener("keyup", (event) => {
     return;
   }
 
-  currentNotes[currentIndex] = textarea.value; // save notes locally
-  saveNotesDebounce(); // save notes to the storage
+  let notesToSave = JSON.parse(localStorage.getItem('notesToSave')) || [];
+  notesToSave[currentIndex] = textarea.value;
+  localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
+
+  saveNotesDebounce(currentNotes);
 });
 
-window.addEventListener("beforeunload", saveNotes);
+window.addEventListener("beforeunload", () => {
+  saveNotes(currentNotes, true);
+});
 
 })(); // IIFE
