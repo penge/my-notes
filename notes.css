@@ -106,3 +106,19 @@ body {
   background: black;
   cursor: pointer;
 }
+
+#dark .slider {
+  background: white;
+}
+
+#dark .slider::-webkit-slider-thumb {
+  background: white;
+  width: 12px;
+  height: 12px;
+}
+
+#dark .slider::-moz-range-thumb {
+  background: white;
+  width: 12px;
+  height: 12px;
+}
