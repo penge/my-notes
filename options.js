@@ -6,25 +6,25 @@
 
 /* Font elements */
 
-var generics = [
+const generics = [
   document.getElementById("serif"),
   document.getElementById("sans-serif"),
   document.getElementById("monospace")
 ];
 
-var fonts = [
+const fonts = [
   document.getElementById("serif-fonts"),
   document.getElementById("sans-serif-fonts"),
   document.getElementById("monospace-fonts")
 ];
 
-var fontCheckboxes = document.getElementsByName("font");
-var currentFontName = document.getElementById("current-font-name");
+const fontCheckboxes = document.getElementsByName("font");
+const currentFontName = document.getElementById("current-font-name");
 
 
 /* Mode elements */
 
-var modeCheckboxes = document.getElementsByName("mode");
+const modeCheckboxes = document.getElementsByName("mode");
 
 
 /* Helpers */
@@ -39,12 +39,12 @@ function checkCheckboxById(id) {
 
 function displayGeneric(id) {
   generics.forEach(generic => {
-    var decoration = generic.id === id ? "underline" : "";
+    const decoration = generic.id === id ? "underline" : "";
     generic.style.textDecoration = decoration;
   });
 
   fonts.forEach(font => {
-    var display = (font.id === id + '-fonts') ? "block" : "none";
+    const display = (font.id === id + '-fonts') ? "block" : "none";
     font.style.display = display;
   });
 }
@@ -85,8 +85,8 @@ modeCheckboxes.forEach(checkbox => {
 
 chrome.storage.local.get(["font", "mode"], result => {
   // 1 FONT
-  var currentFont = result.font; // see background.js
-  var currentGeneric = currentFont.genericFamily;
+  const currentFont = result.font; // see background.js
+  const currentGeneric = currentFont.genericFamily;
 
   // Display the name of the current font
   setCurrentFontNameText(currentFont.name);
