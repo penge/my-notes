@@ -98,11 +98,31 @@ chrome.storage.local.get(["index", "font", "size", "mode"], local => {
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  const notes = areaName === "sync" && changes["notes"] && changes["notes"].newValue;
-  if (!notes) { return; }
-  const needUpdate = notes.some((note, index) => currentNotes[index] !== note);
-  if (!needUpdate) { return; }
-  setPage(notes, currentIndex, false, true);
+  if (areaName === "local") {
+    if (changes["mode"]) {
+      const mode = changes["mode"].newValue;
+      document.body.id = mode;
+    }
+
+    if (changes["font"]) {
+      const font = changes["font"].newValue;
+      setFont(font.fontFamily);
+    }
+
+    return;
+  }
+
+  if (areaName === "sync") {
+    if (changes["notes"]) {
+      const notes = changes["notes"].newValue;
+      const needUpdate = notes.some((note, index) => currentNotes[index] !== note);
+      if (needUpdate) {
+        setPage(notes, currentIndex, false, true);
+      }
+    }
+
+    return;
+  }
 });
 
 
