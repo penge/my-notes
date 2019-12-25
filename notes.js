@@ -41,7 +41,7 @@ let currentNotes;
 let currentIndex;
 
 const mergeNotes = (currentNotes) => {
-  const notesToSave = JSON.parse(localStorage.getItem('notesToSave'));
+  const notesToSave = JSON.parse(localStorage && localStorage.getItem('notesToSave'));
   if (!notesToSave) {
     return false;
   }
@@ -141,7 +141,7 @@ function isShift(event) {
 const saveNotes = (notes, flush) => {
   const notesToSave = mergeNotes(notes);
   if (!notesToSave) { return; }
-  if (flush) { localStorage.removeItem('notesToSave'); }
+  if (flush) { localStorage && localStorage.removeItem('notesToSave'); }
   currentNotes = notesToSave;
   chrome.storage.sync.set({ notes: notesToSave });
 };
@@ -207,9 +207,9 @@ textarea.addEventListener("keyup", (event) => {
     return;
   }
 
-  let notesToSave = JSON.parse(localStorage.getItem('notesToSave')) || [];
+  let notesToSave = JSON.parse(localStorage && localStorage.getItem('notesToSave')) || [];
   notesToSave[currentIndex] = textarea.value;
-  localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
+  localStorage && localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
 
   saveNotesDebounce(currentNotes);
 });
