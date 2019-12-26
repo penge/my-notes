@@ -1,4 +1,5 @@
 body {
+  margin: 0;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -20,7 +21,7 @@ body {
   outline: none;
   resize: none;
   box-sizing: border-box;
-  padding: 5px;
+  padding: 13px;
 }
 
 #settings {
@@ -30,8 +31,8 @@ body {
   font-family: monospace;
   font-weight: bold;
   bottom: 0;
-  right: 5px;
-  padding: 20px;
+  right: 0;
+  padding: 20px 25px 20px 20px;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
