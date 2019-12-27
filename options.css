@@ -9,26 +9,8 @@ h2 {
   padding-top: 50px;
 }
 
-h3#generics {
-  padding-top: 20px;
-}
 
-#current-font-name {
-  padding: 0px 8px;
-  font-weight: bold;
-}
-
-.font-generic {
-  cursor: pointer;
-}
-
-.slash {
-  padding: 0 12px;
-}
-
-.fonts {
-  display: none;
-}
+/* Common */
 
 .selection {
   padding: 10px 0px;
@@ -42,9 +24,82 @@ h3#generics {
   opacity: .5;
 }
 
-.shortcut {
+.slash {
+  padding: 0 12px;
+}
+
+
+/* Font */
+
+h3#generics {
+  padding-top: 20px;
+}
+
+#current-font-name {
+  padding: 0px 8px;
   font-weight: bold;
-  padding-right: 20px;
+}
+
+.font-generic {
+  cursor: pointer;
+}
+
+.fonts {
+  display: none;
+}
+
+
+/* Size */
+
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: #d3d3d3;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: black;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: black;
+  cursor: pointer;
+}
+
+
+/* Mode */
+
+#dark .slider {
+  background: white;
+}
+
+#dark .slider::-webkit-slider-thumb {
+  background: white;
+  width: 12px;
+  height: 12px;
+}
+
+#dark .slider::-moz-range-thumb {
+  background: white;
+  width: 12px;
+  height: 12px;
 }
 
 #light-mode-label, #dark-mode-label {
@@ -62,6 +117,17 @@ h3#generics {
   background: #36393f;
   color: white;
 }
+
+
+/* Keyboard Shortcuts */
+
+.shortcut {
+  font-weight: bold;
+  padding-right: 20px;
+}
+
+
+/* Media Queries */
 
 @media only screen and (max-width: 600px) {
   .font-generic {

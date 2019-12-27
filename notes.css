@@ -1,12 +1,12 @@
 body {
   margin: 0;
+  padding: 0;
+  opacity: 0;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  opacity: 0;
-  transition: opacity .3s ease-in-out;
 }
 
 #light, #dark {
@@ -16,31 +16,27 @@ body {
 #textarea {
   width: 100%;
   height: 100%;
-  font-size: 200%;
   border: 0;
   outline: none;
   resize: none;
   box-sizing: border-box;
-  padding: 13px;
 }
 
 #settings {
   z-index: 100;
   position: fixed;
-  font-size: 300%;
-  font-family: monospace;
   font-weight: bold;
   bottom: 0;
   right: 0;
-  padding: 20px 25px 20px 20px;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-#page {
-  font-size: 65%;
-  text-align: right;
+#textarea, #settings {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 25px;
 }
 
 .hide {
@@ -71,55 +67,4 @@ body {
 
 #dark #textarea::placeholder {
   color: #e0e0e0;
-}
-
-
-/* Slider */
-
-.slidecontainer {
-  width: 100%;
-}
-
-.slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 3px;
-  border-radius: 3px;
-  background: #d3d3d3;
-  outline: none;
-}
-
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: black;
-  cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: black;
-  cursor: pointer;
-}
-
-#dark .slider {
-  background: white;
-}
-
-#dark .slider::-webkit-slider-thumb {
-  background: white;
-  width: 12px;
-  height: 12px;
-}
-
-#dark .slider::-moz-range-thumb {
-  background: white;
-  width: 12px;
-  height: 12px;
 }
