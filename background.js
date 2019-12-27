@@ -12,42 +12,32 @@ const defaultFont = {
   fontFamily: "Courier New,monospace" // fallback is always the generic
 };
 
-const defaultSize = 200;
+const defaultSize = 150;
 const defaultMode = "light"; // "light", "dark"
-
-const setNotes = (notes) => {
-  chrome.storage.sync.set({
-    notes: notes
-  });
-};
 
 chrome.runtime.onInstalled.addListener(function () {
   // Try to load notes from prior versions (order matters)
   chrome.storage.sync.get(["newtab", "value", "notes"], sync => {
-    // 1.4, 1.3, 1.2
-    if (sync.value) {
-      setNotes([sync.value, "", ""]);
-      chrome.storage.sync.remove(["value", "newtab"]);
+    // sync.value:string => 1.4, 1.3, 1.2
+    // sync.newtab:string => 1.1.1, 1.1, 1.0
+    // sync.notes:array => 2.x
+    let notes = sync.value || sync.newtab || sync.notes || defaultNotes;
 
-    // 1.1.1, 1.1, 1.0
-    } else if (sync.newtab) {
-      setNotes([sync.newtab, "", ""]);
-      chrome.storage.sync.remove(["newtab"]);
-
-    // 2.x
-    } else if (sync.notes) {
-      setNotes(sync.notes);
-
-    // No prior version installed
-    } else {
-      setNotes(defaultNotes);
+    // < 2.x
+    if (typeof notes === "string") {
+      notes = [notes, "", ""];
     }
+
+    chrome.storage.sync.remove(["newtab", "value"]);
+    chrome.storage.sync.set({ notes: notes });
   });
 
-  chrome.storage.local.set({
-    index: defaultIndex,
-    font: defaultFont,
-    size: defaultSize,
-    mode: defaultMode
+  chrome.storage.local.get(["index", "font", "size", "mode"], local => {
+    chrome.storage.local.set({
+      index: (local.index || defaultIndex),
+      font: (local.font || defaultFont),
+      size: (local.size || defaultSize),
+      mode: (local.mode || defaultMode)
+    });
   });
 });
