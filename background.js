@@ -14,6 +14,7 @@ const defaultFont = {
 
 const defaultSize = 150;
 const defaultMode = "light"; // "light", "dark"
+const defaultFocus = false;
 
 chrome.runtime.onInstalled.addListener(function () {
   // Try to load notes from prior versions (order matters)
@@ -32,12 +33,13 @@ chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.sync.set({ notes: notes });
   });
 
-  chrome.storage.local.get(["index", "font", "size", "mode"], local => {
+  chrome.storage.local.get(["index", "font", "size", "mode", "focus"], local => {
     chrome.storage.local.set({
       index: (local.index || defaultIndex),
       font: (local.font || defaultFont),
       size: (local.size || defaultSize),
-      mode: (local.mode || defaultMode)
+      mode: (local.mode || defaultMode),
+      focus: (local.focus || defaultFocus),
     });
   });
 });

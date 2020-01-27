@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  padding: 50px;
+  padding: 2em;
   font-family: Calibri, Arial;
   font-size: 150%;
 }
@@ -9,19 +9,20 @@ h2 {
   padding-top: 50px;
 }
 
-
-/* Common */
+label {
+  padding: 10px 8px;
+  font-weight: bold;
+}
 
 .selection {
   padding: 10px 0px;
-  font-size: 80%;
 }
 
 .comment {
-  font-size: 70%;
+  font-size: 80%;
   padding-top: 30px;
   line-height: 150%;
-  opacity: .5;
+  color: #9E9E9E;
 }
 
 .slash {
@@ -48,8 +49,20 @@ h3#generics {
   display: none;
 }
 
+.fonts .selection {
+  font-size: 80%;
+}
+
+.fonts .selection label {
+  font-weight: normal;
+}
+
 
 /* Size */
+
+#current-size {
+  color: #9E9E9E;
+}
 
 .slidecontainer {
   width: 100%;
@@ -103,7 +116,6 @@ h3#generics {
 }
 
 #light-mode-label, #dark-mode-label {
-  padding: 10px 8px;
   margin-left: 10px;
   border-radius: 3px;
 }
@@ -114,7 +126,7 @@ h3#generics {
 }
 
 #dark, #dark-mode-label {
-  background: #36393f;
+  background: #121212;
   color: white;
 }
 

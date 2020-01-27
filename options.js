@@ -18,18 +18,24 @@ const fonts = [
   document.getElementById("monospace-fonts")
 ];
 
-const fontCheckboxes = document.getElementsByName("font");
+const fontRadios = document.getElementsByName("font");
 const currentFontName = document.getElementById("current-font-name");
 
 
 /* Size elements */
 
 const size = document.getElementById("size");
+const currentSize = document.getElementById("current-size");
 
 
 /* Mode elements */
 
-const modeCheckboxes = document.getElementsByName("mode");
+const modeRadios = document.getElementsByName("mode");
+
+
+/* Focus elements */
+
+const focusRadio = document.getElementById("focus");
 
 
 /* Helpers */
@@ -38,7 +44,7 @@ function setCurrentFontNameText(fontName) {
   currentFontName.innerText = fontName;
 }
 
-function checkCheckboxById(id) {
+function checkById(id) {
   document.getElementById(id).checked = true;
 }
 
@@ -65,8 +71,8 @@ generics.forEach(generic => {
   });
 });
 
-fontCheckboxes.forEach(checkbox => {
-  checkbox.addEventListener("click", function () {
+fontRadios.forEach(radio => {
+  radio.addEventListener("click", function () {
     const font = {
       id: this.id, // "courier-new"
       name: this.value, // "Courier New"
@@ -79,22 +85,30 @@ fontCheckboxes.forEach(checkbox => {
   });
 });
 
+size.oninput = function () {
+  currentSize.innerText = this.value;
+};
+
 size.onchange = function () {
   chrome.storage.local.set({ size: this.value });
 };
 
-modeCheckboxes.forEach(checkbox => {
-  checkbox.addEventListener("click", function () {
+modeRadios.forEach(radio => {
+  radio.addEventListener("click", function () {
     const mode = this.id; // "light", "dark"
     document.body.id = mode;
     chrome.storage.local.set({ mode: mode });
   });
 });
 
+focusRadio.addEventListener("click", function () {
+  chrome.storage.local.set({ focus: this.checked });
+})
+
 
 /* Storage */
 
-chrome.storage.local.get(["font", "size", "mode"], local => {
+chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
   // 1 FONT
   const currentFont = local.font; // see background.js
   const currentGeneric = currentFont.genericFamily;
@@ -103,17 +117,21 @@ chrome.storage.local.get(["font", "size", "mode"], local => {
   setCurrentFontNameText(currentFont.name);
 
   // Check the current font
-  checkCheckboxById(currentFont.id);
+  checkById(currentFont.id);
 
   // Underline the generic and display its fonts
   displayGeneric(currentGeneric);
 
   // 2 SIZE
   size.value = local.size;
+  currentSize.innerText = local.size;
 
   // 3 MODE
-  checkCheckboxById(local.mode);
+  checkById(local.mode);
   document.body.id = local.mode;
+
+  // 4 FOCUS
+  focusRadio.checked = local.focus;
 });
 
 })(); // IIFE

@@ -7,11 +7,12 @@
 /* Elements */
 
 const textarea = document.getElementById("textarea");
-const settings = document.getElementById("settings");
+const panel = document.getElementById("panel");
+const options = document.getElementById("options");
 const page = document.getElementById("page");
 
 
-/* Font, Size, Mode */
+/* Font, Size, Mode, Focus */
 
 const setFont = (fontFamily) => {
   document.body.style.fontFamily = fontFamily;
@@ -24,6 +25,18 @@ const setSize = (fontSize) => {
 const setMode = (mode) => {
   document.body.id = mode;
 };
+
+const setFocus = (focus) => {
+  panel.classList.toggle("hide", focus);
+};
+
+
+/* Options */
+
+options.addEventListener("click", (event) => {
+  event.preventDefault();
+  chrome.tabs.create({ "url": "/options.html" });
+});
 
 
 /* Page */
@@ -58,7 +71,8 @@ const setPage = (notes, index, store, update) => {
   }
 };
 
-page.addEventListener("click", () => {
+page.addEventListener("click", (event) => {
+  event.preventDefault();
   setPage(currentNotes, currentIndex + 1, true);
 });
 
@@ -75,7 +89,9 @@ chrome.commands.onCommand.addListener(command => {
   }
 
   if (command === "focus") {
-    settings.classList.toggle("hide");
+    chrome.storage.local.get(["focus"] , local => {
+      chrome.storage.local.set({ focus: !local.focus });
+    });
     return;
   }
 });
@@ -83,10 +99,11 @@ chrome.commands.onCommand.addListener(command => {
 
 /* Storage */
 
-chrome.storage.local.get(["index", "font", "size", "mode"], local => {
+chrome.storage.local.get(["index", "font", "size", "mode", "focus"], local => {
   // No need to wait for "notes". Can set "font" and "size" upfront.
   setFont(local.font.fontFamily);
   setSize(local.size);
+  setFocus(local.focus);
 
   chrome.storage.sync.get(["notes"], sync => {
     setPage(sync.notes, local.index); // Set "notes" first.
@@ -113,6 +130,11 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     if (changes["mode"]) {
       const mode = changes["mode"].newValue;
       setMode(mode);
+    }
+
+    if (changes["focus"]) {
+      const focus = changes["focus"].newValue;
+      setFocus(focus);
     }
 
     return;
@@ -188,13 +210,17 @@ const saveNotesDebounce = function (notes) {
   }
 };
 
+let typing = false;
 textarea.addEventListener("keydown", (event) => {
+  typing = true;
   if (isTab(event)) {
     event.preventDefault();
   }
 });
 
 textarea.addEventListener("keyup", (event) => {
+  if (!typing) { return; } // Pressed Tab from browser's address bar
+  typing = false;
   if (isTab(event)) {
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
