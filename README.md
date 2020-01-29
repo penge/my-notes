@@ -10,11 +10,37 @@
 
 - And! It is Synchronized across every Chrome window you have open
 
+<br>
+
 ## Image
 
 ![My Notes](image.png)
 
+<br>
+
+## Context Menu
+
+After selecting a text on any website, you can use the context menu
+to save the note.
+
+<br>
+
+![Context Menu](context-menu.png)
+
+There are 2 options available, one saves the note to your machine,
+the second option saves the note to Chrome Sync,
+so it can be picked up from any other machine of yours
+(requirement: logged into Google Account).
+
+<br>
+
 ## Install
+
+To install My Notes, open:
+
+https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop
+
+To install My Notes manually, follow these instructions:
 
 1. Click on **"Clone or download"** and then **"Download ZIP"**
 2. Extract the downloaded **ZIP**
