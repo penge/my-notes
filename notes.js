@@ -7,11 +7,12 @@
 /* Elements */
 
 const textarea = document.getElementById("textarea");
-const settings = document.getElementById("settings");
+const panel = document.getElementById("panel");
+const options = document.getElementById("options");
 const page = document.getElementById("page");
 
 
-/* Font, Size, Mode */
+/* Font, Size, Mode, Focus */
 
 const setFont = (fontFamily) => {
   document.body.style.fontFamily = fontFamily;
@@ -25,6 +26,18 @@ const setMode = (mode) => {
   document.body.id = mode;
 };
 
+const setFocus = (focus) => {
+  panel.classList.toggle("hide", focus);
+};
+
+
+/* Options */
+
+options.addEventListener("click", (event) => {
+  event.preventDefault();
+  chrome.tabs.create({ "url": "/options.html" });
+});
+
 
 /* Page */
 
@@ -32,7 +45,7 @@ let currentNotes;
 let currentIndex;
 
 const mergeNotes = (currentNotes) => {
-  const notesToSave = JSON.parse(localStorage && localStorage.getItem("notesToSave"));
+  const notesToSave = JSON.parse(localStorage.getItem("notesToSave"));
   if (!notesToSave) {
     return false;
   }
@@ -46,7 +59,7 @@ const setPage = (notes, index, store, update) => {
   if (currentIndex === index && !update) {
     return;
   }
-  currentNotes = mergeNotes(notes) || notes;
+  currentNotes = notes;
   currentIndex = index;
   if (currentIndex >= currentNotes.length || currentIndex < 0) {
     currentIndex = 0;
@@ -58,7 +71,8 @@ const setPage = (notes, index, store, update) => {
   }
 };
 
-page.addEventListener("click", () => {
+page.addEventListener("click", (event) => {
+  event.preventDefault();
   setPage(currentNotes, currentIndex + 1, true);
 });
 
@@ -75,7 +89,9 @@ chrome.commands.onCommand.addListener(command => {
   }
 
   if (command === "focus") {
-    settings.classList.toggle("hide");
+    chrome.storage.local.get(["focus"] , local => {
+      chrome.storage.local.set({ focus: !local.focus });
+    });
     return;
   }
 });
@@ -83,19 +99,18 @@ chrome.commands.onCommand.addListener(command => {
 
 /* Storage */
 
-chrome.storage.local.get(["index", "font", "size", "mode"], local => {
+chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus"], local => {
   // No need to wait for "notes". Can set "font" and "size" upfront.
   setFont(local.font.fontFamily);
   setSize(local.size);
+  setFocus(local.focus);
 
-  chrome.storage.sync.get(["notes"], sync => {
-    setPage(sync.notes, local.index); // Set "notes" first.
-    setMode(local.mode);
-    // Setting "mode" sets body opacity to 1.
-    // Make sure to set "mode" after "notes" are set,
-    // otherwise "Type your notes here." placeholder would
-    // flicker on fast page refresh.
-  });
+  setPage(local.notes, local.index); // Set "notes" first.
+  setMode(local.mode);
+  // Setting "mode" sets body opacity to 1.
+  // Make sure to set "mode" after "notes" are set,
+  // otherwise "Type your notes here." placeholder would
+  // flicker on fast page refresh.
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -115,21 +130,33 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       setMode(mode);
     }
 
-    return;
-  }
+    if (changes["focus"]) {
+      const focus = changes["focus"].newValue;
+      setFocus(focus);
+    }
 
-  if (areaName === "sync") {
     if (changes["notes"]) {
       const notes = changes["notes"].newValue;
       const needUpdate = notes.some((note, index) => currentNotes[index] !== note);
       if (needUpdate) {
-        // Except the current tab that saved "currentNotes",
+        // Except the current tab that saved the "currentNotes",
         // update "currentNotes" in every other My Notes tab.
         setPage(notes, currentIndex, false, true);
       }
     }
+  }
 
-    return;
+  if (areaName === "sync") {
+    if (changes["selection"]) {
+      const selection = changes["selection"].newValue;
+      if (!selection) { return; }
+      chrome.storage.local.get(["token"], local => {
+        if (selection.sender === local.token) { return; }
+        const notes = [...currentNotes];
+        notes[0] = selection.text + notes[0];
+        chrome.storage.local.set({ notes: notes });
+      });
+    }
   }
 });
 
@@ -146,7 +173,7 @@ function isShift(event) {
   return event.shiftKey;
 }
 
-const saveNotes = (notes, flush) => {
+const saveNotes = (notes) => {
   const notesToSave = mergeNotes(notes);
 
   // "notesToSave" are no longer in localStorage.
@@ -161,17 +188,12 @@ const saveNotes = (notes, flush) => {
   // This will save "notesToSave" just once, and
   // prevent other My Notes tabs to call the same
   // saving repeatedly.
-  if (flush) {
-    localStorage && localStorage.removeItem("notesToSave");
-  }
+  localStorage.removeItem("notesToSave");
 
-  // "currentNotes" are set before they are saved.
-  // Reason why "currentNotes" are not set in the callback is due to
-  // "chrome.storage.onChanged" listener which gets called BEFORE
-  // "notes" are saved. We need most recent "currentNotes" at that point,
-  // so listener can update other open My Notes tabs/windows.
+  // "currentNotes" are updated before they are saved, so
+  // listener updates ONLY other open My Notes Tabs/Windows
   currentNotes = notesToSave;
-  chrome.storage.sync.set({ notes: notesToSave });
+  chrome.storage.local.set({ notes: notesToSave });
 };
 
 let _saveNotesDebounce;
@@ -188,13 +210,17 @@ const saveNotesDebounce = function (notes) {
   }
 };
 
+let typing = false;
 textarea.addEventListener("keydown", (event) => {
+  typing = true;
   if (isTab(event)) {
     event.preventDefault();
   }
 });
 
 textarea.addEventListener("keyup", (event) => {
+  if (!typing) { return; } // Pressed Tab from browser's address bar
+  typing = false;
   if (isTab(event)) {
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -241,12 +267,12 @@ textarea.addEventListener("keyup", (event) => {
   // "notesToSave" can be set/updated by different My Notes tabs.
   // In other words, different My Notes tabs can edit different pages.
   // "notesToSave" is then used to save all the changes across all pages/tabs.
-  let notesToSave = JSON.parse(localStorage && localStorage.getItem("notesToSave")) || [];
+  let notesToSave = JSON.parse(localStorage.getItem("notesToSave")) || [];
   notesToSave[currentIndex] = textarea.value;
-  localStorage && localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
+  localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
 
   // Save "notes" (as a merge of "currentNotes" and "notesToSave")
-  // to "chrome.storage.sync".
+  // to "chrome.storage.local".
   saveNotesDebounce(currentNotes);
 });
 
@@ -256,7 +282,7 @@ window.addEventListener("beforeunload", () => {
   // "saveNotes" might be called multiple times (multiple My Notes tabs were closed).
   // Before "notes" are saved, "notesToSave" will be removed from localStorage,
   // to prevent saving the same notes multiple times.
-  saveNotes(currentNotes, true);
+  saveNotes(currentNotes);
 });
 
 })(); // IIFE
