@@ -99,20 +99,18 @@ chrome.commands.onCommand.addListener(command => {
 
 /* Storage */
 
-chrome.storage.local.get(["index", "font", "size", "mode", "focus"], local => {
+chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus"], local => {
   // No need to wait for "notes". Can set "font" and "size" upfront.
   setFont(local.font.fontFamily);
   setSize(local.size);
   setFocus(local.focus);
 
-  chrome.storage.sync.get(["notes"], sync => {
-    setPage(sync.notes, local.index); // Set "notes" first.
-    setMode(local.mode);
-    // Setting "mode" sets body opacity to 1.
-    // Make sure to set "mode" after "notes" are set,
-    // otherwise "Type your notes here." placeholder would
-    // flicker on fast page refresh.
-  });
+  setPage(local.notes, local.index); // Set "notes" first.
+  setMode(local.mode);
+  // Setting "mode" sets body opacity to 1.
+  // Make sure to set "mode" after "notes" are set,
+  // otherwise "Type your notes here." placeholder would
+  // flicker on fast page refresh.
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -137,21 +135,15 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       setFocus(focus);
     }
 
-    return;
-  }
-
-  if (areaName === "sync") {
     if (changes["notes"]) {
       const notes = changes["notes"].newValue;
       const needUpdate = notes.some((note, index) => currentNotes[index] !== note);
       if (needUpdate) {
-        // Except the current tab that saved "currentNotes",
+        // Except the current tab that saved the "currentNotes",
         // update "currentNotes" in every other My Notes tab.
         setPage(notes, currentIndex, false, true);
       }
     }
-
-    return;
   }
 });
 
@@ -193,7 +185,7 @@ const saveNotes = (notes, flush) => {
   // "notes" are saved. We need most recent "currentNotes" at that point,
   // so listener can update other open My Notes tabs/windows.
   currentNotes = notesToSave;
-  chrome.storage.sync.set({ notes: notesToSave });
+  chrome.storage.local.set({ notes: notesToSave });
 };
 
 let _saveNotesDebounce;
@@ -272,7 +264,7 @@ textarea.addEventListener("keyup", (event) => {
   localStorage && localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
 
   // Save "notes" (as a merge of "currentNotes" and "notesToSave")
-  // to "chrome.storage.sync".
+  // to "chrome.storage.local".
   saveNotesDebounce(currentNotes);
 });
 

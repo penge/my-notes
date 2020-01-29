@@ -21,16 +21,20 @@ chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.sync.get(["newtab", "value", "notes"], sync => {
     // sync.value:string => 1.4, 1.3, 1.2
     // sync.newtab:string => 1.1.1, 1.1, 1.0
-    // sync.notes:array => 2.x
-    let notes = sync.value || sync.newtab || sync.notes || defaultNotes;
+    // sync.notes:array => 2.0, 2.0.1, 2.0.2, 2.1
+    // local.notes:array => >= 2.2
 
-    // < 2.x
-    if (typeof notes === "string") {
-      notes = [notes, "", ""];
-    }
+    chrome.storage.local.get(["notes"], local => {
+      let notes = sync.value || sync.newtab || sync.notes || local.notes || defaultNotes;
 
-    chrome.storage.sync.remove(["newtab", "value"]);
-    chrome.storage.sync.set({ notes: notes });
+      // < 2.x
+      if (typeof notes === "string") {
+        notes = [notes, "", ""];
+      }
+
+      chrome.storage.sync.remove(["newtab", "value", "notes"]);
+      chrome.storage.local.set({ notes: notes });
+    });
   });
 
   chrome.storage.local.get(["index", "font", "size", "mode", "focus"], local => {
