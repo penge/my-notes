@@ -45,7 +45,7 @@ let currentNotes;
 let currentIndex;
 
 const mergeNotes = (currentNotes) => {
-  const notesToSave = JSON.parse(localStorage && localStorage.getItem("notesToSave"));
+  const notesToSave = JSON.parse(localStorage.getItem("notesToSave"));
   if (!notesToSave) {
     return false;
   }
@@ -59,7 +59,7 @@ const setPage = (notes, index, store, update) => {
   if (currentIndex === index && !update) {
     return;
   }
-  currentNotes = mergeNotes(notes) || notes;
+  currentNotes = notes;
   currentIndex = index;
   if (currentIndex >= currentNotes.length || currentIndex < 0) {
     currentIndex = 0;
@@ -145,6 +145,19 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       }
     }
   }
+
+  if (areaName === "sync") {
+    if (changes["selection"]) {
+      const selection = changes["selection"].newValue;
+      if (!selection) { return; }
+      chrome.storage.local.get(["token"], local => {
+        if (selection.sender === local.token) { return; }
+        const notes = [...currentNotes];
+        notes[0] = selection.text + notes[0];
+        chrome.storage.local.set({ notes: notes });
+      });
+    }
+  }
 });
 
 
@@ -160,7 +173,7 @@ function isShift(event) {
   return event.shiftKey;
 }
 
-const saveNotes = (notes, flush) => {
+const saveNotes = (notes) => {
   const notesToSave = mergeNotes(notes);
 
   // "notesToSave" are no longer in localStorage.
@@ -175,15 +188,10 @@ const saveNotes = (notes, flush) => {
   // This will save "notesToSave" just once, and
   // prevent other My Notes tabs to call the same
   // saving repeatedly.
-  if (flush) {
-    localStorage && localStorage.removeItem("notesToSave");
-  }
+  localStorage.removeItem("notesToSave");
 
-  // "currentNotes" are set before they are saved.
-  // Reason why "currentNotes" are not set in the callback is due to
-  // "chrome.storage.onChanged" listener which gets called BEFORE
-  // "notes" are saved. We need most recent "currentNotes" at that point,
-  // so listener can update other open My Notes tabs/windows.
+  // "currentNotes" are updated before they are saved, so
+  // listener updates ONLY other open My Notes Tabs/Windows
   currentNotes = notesToSave;
   chrome.storage.local.set({ notes: notesToSave });
 };
@@ -259,9 +267,9 @@ textarea.addEventListener("keyup", (event) => {
   // "notesToSave" can be set/updated by different My Notes tabs.
   // In other words, different My Notes tabs can edit different pages.
   // "notesToSave" is then used to save all the changes across all pages/tabs.
-  let notesToSave = JSON.parse(localStorage && localStorage.getItem("notesToSave")) || [];
+  let notesToSave = JSON.parse(localStorage.getItem("notesToSave")) || [];
   notesToSave[currentIndex] = textarea.value;
-  localStorage && localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
+  localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
 
   // Save "notes" (as a merge of "currentNotes" and "notesToSave")
   // to "chrome.storage.local".
@@ -274,7 +282,7 @@ window.addEventListener("beforeunload", () => {
   // "saveNotes" might be called multiple times (multiple My Notes tabs were closed).
   // Before "notes" are saved, "notesToSave" will be removed from localStorage,
   // to prevent saving the same notes multiple times.
-  saveNotes(currentNotes, true);
+  saveNotes(currentNotes);
 });
 
 })(); // IIFE

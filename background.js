@@ -16,7 +16,61 @@ const defaultSize = 150;
 const defaultMode = "light"; // "light", "dark"
 const defaultFocus = false;
 
-chrome.runtime.onInstalled.addListener(function () {
+const getRandomToken = () => {
+  const randomPool = new Uint8Array(32);
+  crypto.getRandomValues(randomPool);
+  let hex = "";
+  for (let i = 0; i < randomPool.length; i += 1) {
+    hex += randomPool[i].toString(16);
+  }
+  return hex;
+};
+
+const createContextMenu = () => {
+  chrome.contextMenus.create({
+    id: "my-notes",
+    title: "My Notes",
+    contexts: ["selection"],
+  }, () => {
+    chrome.contextMenus.create({
+      parentId: "my-notes",
+      id: "my-notes-save",
+      title: "Save selection",
+      contexts: ["selection"],
+    });
+    chrome.contextMenus.create({
+      parentId: "my-notes",
+      id: "my-notes-send",
+      title: "Save selection to other devices",
+      contexts: ["selection"],
+    });
+  });
+
+  chrome.contextMenus.onClicked.addListener((info) => {
+    const { pageUrl, selectionText } = info;
+    const textToSave = `// ${pageUrl}\r\n${selectionText}\r\n\r\n`;
+
+    if (info.menuItemId === "my-notes-save") {
+      chrome.storage.local.get(["notes"], local => {
+        const notes = local.notes;
+        notes[0] = textToSave + notes[0];
+        chrome.storage.local.set({ notes: notes });
+      });
+    }
+
+    if (info.menuItemId === "my-notes-send") {
+      chrome.storage.local.get(["token"], local => {
+        const selection = {
+          text: textToSave,
+          sender: local.token,
+        };
+        chrome.storage.sync.set({ selection: selection });
+      });
+    }
+  });
+};
+
+chrome.runtime.onInstalled.addListener(() => {
   // Try to load notes from prior versions (order matters)
   chrome.storage.sync.get(["newtab", "value", "notes"], sync => {
     // sync.value:string => 1.4, 1.3, 1.2
@@ -46,4 +100,10 @@ chrome.runtime.onInstalled.addListener(function () {
       focus: (local.focus || defaultFocus),
     });
   });
+
+  const token = getRandomToken();
+  chrome.storage.local.set({ token: token });
+
+  createContextMenu();
 });
+
