@@ -45,29 +45,6 @@ const createContextMenu = () => {
       contexts: ["selection"],
     });
   });
-
-  chrome.contextMenus.onClicked.addListener((info) => {
-    const { pageUrl, selectionText } = info;
-    const textToSave = `// ${pageUrl}\r\n${selectionText}\r\n\r\n`;
-
-    if (info.menuItemId === "my-notes-save") {
-      chrome.storage.local.get(["notes"], local => {
-        const notes = local.notes;
-        notes[0] = textToSave + notes[0];
-        chrome.storage.local.set({ notes: notes });
-      });
-    }
-
-    if (info.menuItemId === "my-notes-send") {
-      chrome.storage.local.get(["token"], local => {
-        const selection = {
-          text: textToSave,
-          sender: local.token,
-        };
-        chrome.storage.sync.set({ selection: selection });
-      });
-    }
-  });
 };
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -107,3 +84,25 @@ chrome.runtime.onInstalled.addListener(() => {
   createContextMenu();
 });
 
+chrome.contextMenus.onClicked.addListener((info) => {
+  const { pageUrl, selectionText } = info;
+  const textToSave = `// ${pageUrl}\r\n${selectionText}\r\n\r\n`;
+
+  if (info.menuItemId === "my-notes-save") {
+    chrome.storage.local.get(["notes"], local => {
+      const notes = local.notes;
+      notes[0] = textToSave + notes[0];
+      chrome.storage.local.set({ notes: notes });
+    });
+  }
+
+  if (info.menuItemId === "my-notes-send") {
+    chrome.storage.local.get(["token"], local => {
+      const selection = {
+        text: textToSave,
+        sender: local.token,
+      };
+      chrome.storage.sync.set({ selection: selection });
+    });
+  }
+});
