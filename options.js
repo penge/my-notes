@@ -35,7 +35,7 @@ const modeRadios = document.getElementsByName("mode");
 
 /* Focus elements */
 
-const focusRadio = document.getElementById("focus");
+const focusCheckbox = document.getElementById("focus");
 
 
 /* Helpers */
@@ -101,7 +101,7 @@ modeRadios.forEach(radio => {
   });
 });
 
-focusRadio.addEventListener("click", function () {
+focusCheckbox.addEventListener("click", function () {
   chrome.storage.local.set({ focus: this.checked });
 })
 
@@ -131,7 +131,16 @@ chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
   document.body.id = local.mode;
 
   // 4 FOCUS
-  focusRadio.checked = local.focus;
+  focusCheckbox.checked = local.focus;
+});
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === "local") {
+    if (changes["focus"]) {
+      const focus = changes["focus"].newValue;
+      focusCheckbox.checked = focus;
+    }
+  }
 });
 
 })(); // IIFE
