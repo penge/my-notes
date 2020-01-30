@@ -24,7 +24,7 @@ const currentFontName = document.getElementById("current-font-name");
 
 /* Size elements */
 
-const size = document.getElementById("size");
+const sizeRange = document.getElementById("size-range");
 const currentSize = document.getElementById("current-size");
 
 
@@ -85,11 +85,11 @@ fontRadios.forEach(radio => {
   });
 });
 
-size.oninput = function () {
+sizeRange.oninput = function () {
   currentSize.innerText = this.value;
 };
 
-size.onchange = function () {
+sizeRange.onchange = function () {
   chrome.storage.local.set({ size: this.value });
 };
 
@@ -103,14 +103,13 @@ modeRadios.forEach(radio => {
 
 focusCheckbox.addEventListener("click", function () {
   chrome.storage.local.set({ focus: this.checked });
-})
+});
 
 
-/* Storage */
+/* Storage helpers */
 
-chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
-  // 1 FONT
-  const currentFont = local.font; // see background.js
+const applyFont = (font) => {
+  const currentFont = font; // see background.js
   const currentGeneric = currentFont.genericFamily;
 
   // Display the name of the current font
@@ -121,25 +120,45 @@ chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
 
   // Underline the generic and display its fonts
   displayGeneric(currentGeneric);
+};
 
-  // 2 SIZE
-  size.value = local.size;
-  currentSize.innerText = local.size;
+const applySize = (size) => {
+  sizeRange.value = size;
+  currentSize.innerText = size;
+};
 
-  // 3 MODE
-  checkById(local.mode);
-  document.body.id = local.mode;
+const applyMode = (mode) => {
+  checkById(mode);
+  document.body.id = mode;
+};
 
-  // 4 FOCUS
-  focusCheckbox.checked = local.focus;
+const applyFocus = (focus) => {
+  focusCheckbox.checked = focus;
+};
+
+
+/* Storage */
+
+chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
+  const { font, size, mode, focus } = local;
+  applyFont(font);
+  applySize(size);
+  applyMode(mode);
+  applyFocus(focus);
 });
+
+const apply = (change, applyHandler) => {
+  if (change) {
+    applyHandler(change.newValue);
+  }
+};
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local") {
-    if (changes["focus"]) {
-      const focus = changes["focus"].newValue;
-      focusCheckbox.checked = focus;
-    }
+    apply(changes["font"], applyFont);
+    apply(changes["size"], applySize);
+    apply(changes["mode"], applyMode);
+    apply(changes["focus"], applyFocus);
   }
 });
 

@@ -14,8 +14,8 @@ const page = document.getElementById("page");
 
 /* Font, Size, Mode, Focus */
 
-const setFont = (fontFamily) => {
-  document.body.style.fontFamily = fontFamily;
+const setFont = (font) => {
+  document.body.style.fontFamily = font.fontFamily;
 };
 
 const setSize = (fontSize) => {
@@ -35,7 +35,7 @@ const setFocus = (focus) => {
 
 options.addEventListener("click", (event) => {
   event.preventDefault();
-  chrome.tabs.create({ "url": "/options.html" });
+  chrome.tabs.create({ url: "/options.html" });
 });
 
 
@@ -101,7 +101,7 @@ chrome.commands.onCommand.addListener(command => {
 
 chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus"], local => {
   // No need to wait for "notes". Can set "font" and "size" upfront.
-  setFont(local.font.fontFamily);
+  setFont(local.font);
   setSize(local.size);
   setFocus(local.focus);
 
@@ -113,27 +113,18 @@ chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus"], lo
   // flicker on fast page refresh.
 });
 
+const apply = (change, applyHandler) => {
+  if (change) {
+    applyHandler(change.newValue);
+  }
+};
+
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local") {
-    if (changes["font"]) {
-      const font = changes["font"].newValue;
-      setFont(font.fontFamily);
-    }
-
-    if (changes["size"]) {
-      const size = changes["size"].newValue;
-      setSize(size);
-    }
-
-    if (changes["mode"]) {
-      const mode = changes["mode"].newValue;
-      setMode(mode);
-    }
-
-    if (changes["focus"]) {
-      const focus = changes["focus"].newValue;
-      setFocus(focus);
-    }
+    apply(changes["font"], setFont);
+    apply(changes["size"], setSize);
+    apply(changes["mode"], setMode);
+    apply(changes["focus"], setFocus);
 
     if (changes["notes"]) {
       const notes = changes["notes"].newValue;
@@ -159,19 +150,6 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     }
   }
 });
-
-
-/* Typing */
-
-const TAB = "  ";
-
-function isTab(event) {
-  return event.keyCode === 9 || event.which === 9 || event.key === "Tab";
-}
-
-function isShift(event) {
-  return event.shiftKey;
-}
 
 const saveNotes = (notes) => {
   const notesToSave = mergeNotes(notes);
@@ -209,6 +187,19 @@ const saveNotesDebounce = function (notes) {
     _saveNotesDebounce(notes);
   }
 };
+
+
+/* Typing */
+
+const TAB = "  ";
+
+function isTab(event) {
+  return event.keyCode === 9 || event.which === 9 || event.key === "Tab";
+}
+
+function isShift(event) {
+  return event.shiftKey;
+}
 
 let typing = false;
 textarea.addEventListener("keydown", (event) => {
