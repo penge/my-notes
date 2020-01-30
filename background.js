@@ -106,3 +106,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
     });
   }
 });
+
+chrome.browserAction.onClicked.addListener(() => {
+  chrome.tabs.create({ url: "/notes.html" });
+});
