@@ -38,6 +38,11 @@ const modeRadios = document.getElementsByName("mode");
 const focusCheckbox = document.getElementById("focus");
 
 
+/* Override elements */
+
+const overrideCheckbox = document.getElementById("override");
+
+
 /* Helpers */
 
 function setCurrentFontNameText(fontName) {
@@ -105,6 +110,10 @@ focusCheckbox.addEventListener("click", function () {
   chrome.storage.local.set({ focus: this.checked });
 });
 
+overrideCheckbox.addEventListener("click", function () {
+  chrome.storage.local.set({ override: this.checked });
+});
+
 
 /* Storage helpers */
 
@@ -136,15 +145,20 @@ const applyFocus = (focus) => {
   focusCheckbox.checked = focus;
 };
 
+const applyOverride = (override) => {
+  overrideCheckbox.checked = override;
+};
+
 
 /* Storage */
 
-chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
-  const { font, size, mode, focus } = local;
+chrome.storage.local.get(["font", "size", "mode", "focus", "override"], local => {
+  const { font, size, mode, focus, override } = local;
   applyFont(font);
   applySize(size);
   applyMode(mode);
   applyFocus(focus);
+  applyOverride(override);
 });
 
 const apply = (change, applyHandler) => {
@@ -159,6 +173,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     apply(changes["size"], applySize);
     apply(changes["mode"], applyMode);
     apply(changes["focus"], applyFocus);
+    apply(changes["override"], applyOverride);
   }
 });
 

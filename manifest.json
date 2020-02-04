@@ -5,7 +5,7 @@
   "version": "2.2.1",
   "icons": { "128": "icon128.png" },
   "options_page": "options.html",
-  "permissions": ["storage", "contextMenus"],
+  "permissions": ["storage", "contextMenus", "tabs"],
   "background": {
     "scripts": ["debounce.js", "background.js"],
     "persistent": false
