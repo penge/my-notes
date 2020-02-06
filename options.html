@@ -13,94 +13,34 @@
   <h2>Font</h2>
   <p>Current font: <span id="current-font-name"></span></p>
 
-  <h3 id="generics">
-    <span id="serif" class="font-generic">Serif</span><span class="slash">/</span
-    ><span id="sans-serif" class="font-generic">Sans-serif</span><span class="slash">/</span
-    ><span id="monospace" class="font-generic">Monospace</span>
+  <h3 class="pad">
+    <span id="serif" class="font-category">Serif</span><span class="separator">/</span
+    ><span id="sans-serif" class="font-category">Sans Serif</span><span class="separator">/</span
+    ><span id="monospace" class="font-category">Monospace</span><span class="separator">/</span
+    ><span id="googlefonts" class="font-category">Google Fonts</span>
   </h3>
 
+  <div id="commonfonts">
+    <!--
+      See options.js -> renderCommonFonts()
 
-  <div id="serif-fonts" class="fonts">
-    <div class="selection">
-      <input type="radio" id="times" name="font" value="Times" data-generic="serif">
-      <label for="times" style="font-family:Times,serif;">The quick brown fox jumps over the lazy dog (Times)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="times-new-roman" name="font" value="Times New Roman" data-generic="serif">
-      <label for="times-new-roman" style="font-family:Times New Roman,serif;">The quick brown fox jumps over the lazy dog (Times New Roman)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="georgia" name="font" value="Georgia" data-generic="serif">
-      <label for="georgia" style="font-family:Georgia,serif;">The quick brown fox jumps over the lazy dog (Georgia)</label>
-    </div>
+      <div class="font-area" id="serif-area">
+      <div class="font-area" id="sans-serif-area">
+      <div class="font-area" id="monospace-area">
+    -->
+    <template id="font-area-template">
+      <div class="font-area" id="">
+        <div class="selection">
+          <input type="radio" id="" name="font" value="" data-generic="" style="">
+          <label for="" style="">The quick brown fox jumps over the lazy dog (<span>fontName</span>)</label>
+        </div>
+      </div>
+    </template>
   </div>
-
-
-  <div id="sans-serif-fonts" class="fonts">
-    <div class="selection">
-      <input type="radio" id="arial" name="font" value="Arial" data-generic="sans-serif">
-      <label for="arial" style="font-family:Arial,sans-serif;">The quick brown fox jumps over the lazy dog (Arial)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="arial-black" name="font" value="Arial Black" data-generic="sans-serif">
-      <label for="arial-black" style="font-family:Arial Black,sans-serif;">The quick brown fox jumps over the lazy dog (Arial Black)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="verdana" name="font" value="Verdana" data-generic="sans-serif">
-      <label for="verdana" style="font-family:Verdana,sans-serif;">The quick brown fox jumps over the lazy dog (Verdana)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="tahoma" name="font" value="Tahoma" data-generic="sans-serif">
-      <label for="tahoma" style="font-family:Tahoma,sans-serif;">The quick brown fox jumps over the lazy dog (Tahoma)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="comic-sans-ms" name="font" value="Comic Sans MS" data-generic="sans-serif">
-      <label for="comic-sans-ms" style="font-family:Comic Sans MS,sans-serif;">The quick brown fox jumps over the lazy dog (Comic Sans)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="impact" name="font" value="Impact" data-generic="sans-serif">
-      <label for="impact" style="font-family:Impact,sans-serif;">The quick brown fox jumps over the lazy dog (Impact)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="roboto" name="font" value="Roboto" data-generic="sans-serif">
-      <label for="roboto" style="font-family:Roboto,sans-serif;">The quick brown fox jumps over the lazy dog (Roboto)</label>
-    </div>
+  <div class="font-area" id="googlefonts-area">
+    <input type="text" placeholder="Font Name (E.g. Roboto Mono)" id="font-name-input">
+    <input type="submit" value="Apply" class="heavy" id="submit">
   </div>
-
-
-  <div id="monospace-fonts" class="fonts">
-    <div class="selection">
-      <input type="radio" id="courier" name="font" value="Courier" data-generic="monospace">
-      <label for="courier" style="font-family:Courier,monospace;">The quick brown fox jumps over the lazy dog (Courier)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="courier-new" name="font" value="Courier New" data-generic="monospace">
-      <label for="courier-new" style="font-family:Courier New,monospace;">The quick brown fox jumps over the lazy dog (Courier New)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="lucida-console" name="font" value="Lucida Console" data-generic="monospace">
-      <label for="lucida-console" style="font-family:Lucida Console,monospace;">The quick brown fox jumps over the lazy dog (Lucida Console)</label>
-    </div>
-
-    <div class="selection">
-      <input type="radio" id="monaco" name="font" value="Monaco" data-generic="monospace">
-      <label for="monaco" style="font-family:Monaco,monospace;">The quick brown fox jumps over the lazy dog (Monaco)</label>
-    </div>
-  </div>
-
-  <p class="comment">
-    * The look of the font may depend on the compatibility of your browser.
-  </p>
 
 
   <h2>Size <span id="current-size"></span></h2>
@@ -113,11 +53,11 @@
   <div>
     <div class="selection">
       <input type="radio" id="light" name="mode" value="light">
-      <label for="light" id="light-mode-label">Light mode</label>
+      <label for="light" id="light-mode-label" class="heavy">Light mode</label>
     </div>
     <div class="selection">
       <input type="radio" id="dark" name="mode" value="dark">
-      <label for="dark" id="dark-mode-label">Dark mode</label>
+      <label for="dark" id="dark-mode-label" class="heavy">Dark mode</label>
     </div>
   </div>
 
@@ -169,11 +109,11 @@
   <div>
     <div class="selection">
       <input type="checkbox" id="focus" name="focus">
-      <label for="focus">Focus by default</label>
+      <label for="focus" class="heavy">Focus by default</label>
     </div>
     <div class="selection">
       <input type="checkbox" id="override" name="override">
-      <label for="override">Override New Tab</label>
+      <label for="override" class="heavy">Override New Tab</label>
     </div>
   </div>
 

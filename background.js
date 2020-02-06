@@ -9,7 +9,7 @@ const defaultFont = {
   id: "courier-new",
   name: "Courier New",
   genericFamily: "monospace",
-  fontFamily: "Courier New,monospace" // fallback is always the generic
+  fontFamily: '"Courier New",monospace',
 };
 
 const defaultSize = 150;

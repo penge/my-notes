@@ -10,11 +10,13 @@ const textarea = document.getElementById("textarea");
 const panel = document.getElementById("panel");
 const options = document.getElementById("options");
 const page = document.getElementById("page");
+const googlefonts = document.getElementById("googlefonts");
 
 
 /* Font, Size, Mode, Focus */
 
 const setFont = (font) => {
+  if (font.href) { googlefonts.href = font.href };
   document.body.style.fontFamily = font.fontFamily;
 };
 
@@ -89,7 +91,7 @@ chrome.commands.onCommand.addListener(command => {
   }
 
   if (command === "focus") {
-    chrome.storage.local.get(["focus"] , local => {
+    chrome.storage.local.get(["focus"], local => {
       chrome.storage.local.set({ focus: !local.focus });
     });
     return;
