@@ -275,4 +275,10 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 });
 
+const setVersion = () => {
+  const version = chrome.runtime.getManifest().version;
+  document.getElementById("version").innerText = version;
+};
+setVersion();
+
 })(); // IIFE

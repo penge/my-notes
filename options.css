@@ -46,6 +46,15 @@ input, select {
   display: none !important;
 }
 
+#contact, #see-whats-new {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#see-whats-new {
+  margin-left: 1em;
+}
+
 
 /* Font */
 
@@ -133,6 +142,29 @@ input, select {
   opacity: 1;
 }
 
+#light-mode-label, #dark-mode-label {
+  margin-left: 10px;
+  border-radius: 3px;
+}
+
+#light, #light-mode-label {
+  background: white;
+  color: black;
+}
+
+#light a {
+  color: black;
+}
+
+#dark, #dark-mode-label {
+  background: #121212;
+  color: white;
+}
+
+#dark a {
+  color: white;
+}
+
 #dark .slider {
   background: white;
 }
@@ -147,21 +179,6 @@ input, select {
   background: white;
   width: 12px;
   height: 12px;
-}
-
-#light-mode-label, #dark-mode-label {
-  margin-left: 10px;
-  border-radius: 3px;
-}
-
-#light, #light-mode-label {
-  background: white;
-  color: black;
-}
-
-#dark, #dark-mode-label {
-  background: #121212;
-  color: white;
 }
 
 
