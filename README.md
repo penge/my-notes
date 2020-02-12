@@ -1,10 +1,10 @@
 # My Notes
 
-**Chrome Extension** that turns your **"New Tab"** into **a note taking tool.**
+My Notes is a Chrome Extension that turns your **New Tab** into a note-taking tool.
 
 - Great for Notes, Todos, and sharing text (Copy/Paste)
 
-- It works immediately after you open a **"New Tab"**
+- It works immediately after you open a **New Tab**
 
 - Every edit and paste is saved (and waiting for you once you come back)
 
@@ -12,35 +12,53 @@
 
 <br>
 
-## Image
+## My Notes
 
 ![My Notes](image.png)
 
+My Notes can be open with **1 click on the icon**, or it can replace New Tab if set by **Options**.
+
+Font in the picture above is **Courier Prime** and is available via **Google Fonts**.
+Font can be easily changed in **Options**.
+
 <br>
 
-## Context Menu
+## Context menu
 
-After selecting a text on any website, you can use the context menu
-to save the note.
+After selecting a text on a website, you can use the context menu (right click)
+to save the selection to My Notes.
 
 <br>
 
 ![Context Menu](context-menu.png)
 
-There are 2 options available, one saves the note to your machine,
-the second option saves the note to Chrome Sync,
-so it can be picked up from any other machine of yours
-(requirement: logged into Google Account).
+
+Available options:
+
+- **Save selection** to save the selection to your computer
+- **Save selection to other devices** to save the selection to your other computer(s)
+where you are logged in with the same Google Account
 
 <br>
 
-## Install
+Saved selection is added to the top of **page 1** in the following format:
 
-To install My Notes, open:
+```
+// URL (where the text comes from)
+TEXT
+```
+
+<br>
+
+## Installation
+
+My Notes can be installed from **Web Store** (preferred):
 
 https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop
 
-To install My Notes manually, follow these instructions:
+<br>
+
+My Notes can be installed manually:
 
 1. Click on **"Clone or download"** and then **"Download ZIP"**
 2. Extract the downloaded **ZIP**
