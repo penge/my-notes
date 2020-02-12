@@ -6,11 +6,39 @@
 
 /* Elements */
 
+const googlefonts = document.getElementById("googlefonts");
 const textarea = document.getElementById("textarea");
 const panel = document.getElementById("panel");
 const options = document.getElementById("options");
 const page = document.getElementById("page");
-const googlefonts = document.getElementById("googlefonts");
+
+
+/* Notification */
+
+const showNotification = (notification) => {
+  if (!notification) { return; }
+
+  let node;
+  if (notification.type === "UPDATE") {
+    const template = document.getElementById("update-notification");
+    node = template.content.cloneNode(true);
+
+    // <div>New version <span id="version"></span> has been installed.</div>
+    const version = node.getElementById("version");
+    version.innerText = notification.version;
+  }
+
+  // <a href="#" id="close">Close</a>
+  const close = node.getElementById("close");
+  close.addEventListener("click", (event) => {
+    event.preventDefault();
+    const element = document.getElementById("notification");
+    element && document.body.removeChild(element);
+    chrome.storage.local.remove("notification");
+  });
+
+  document.body.prepend(node);
+};
 
 
 /* Font, Size, Mode, Focus */
@@ -101,13 +129,14 @@ chrome.commands.onCommand.addListener(command => {
 
 /* Storage */
 
-chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus"], local => {
+chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus", "notification"], local => {
   // No need to wait for "notes". Can set "font" and "size" upfront.
   setFont(local.font);
   setSize(local.size);
   setFocus(local.focus);
 
   setPage(local.notes, local.index); // Set "notes" first.
+  showNotification(local.notification);
   setMode(local.mode);
   // Setting "mode" sets body opacity to 1.
   // Make sure to set "mode" after "notes" are set,

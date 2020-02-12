@@ -15,6 +15,14 @@ body {
   opacity: 1;
 }
 
+#notification {
+  padding: 1em;
+}
+
+#notification a {
+  font-weight: bold;
+}
+
 #textarea {
   width: 100%;
   height: 100%;
@@ -52,6 +60,10 @@ a {
   color: black;
 }
 
+#light #notification {
+  border-bottom: 1px solid silver;
+}
+
 #light #textarea::placeholder {
   color: silver;
 }
@@ -74,10 +86,6 @@ a {
 
 #dark #textarea::placeholder {
   color: #e0e0e0;
-}
-
-#dark #panel {
-  border: none;
 }
 
 #dark a {

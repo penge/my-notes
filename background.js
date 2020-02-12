@@ -124,3 +124,13 @@ chrome.tabs.onCreated.addListener((tab) => {
     }
   });
 });
+
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "update") {
+    const notification = {
+      type: "UPDATE",
+      version: chrome.runtime.getManifest().version,
+    };
+    chrome.storage.local.set({ notification: notification });
+  }
+});
