@@ -3,15 +3,24 @@ body {
   padding: 2em;
   font-family: Calibri, Arial;
   font-size: 150%;
+  opacity: 0;
 }
 
 h2 {
   padding-top: 50px;
 }
 
+h3.pad {
+  padding-top: 20px;
+}
+
 label {
   padding: 10px 8px;
-  font-weight: bold;
+}
+
+input, select {
+  font-family: inherit;
+  font-size: inherit;
 }
 
 .selection {
@@ -25,36 +34,66 @@ label {
   color: #9E9E9E;
 }
 
-.slash {
+.separator {
   padding: 0 12px;
+}
+
+.heavy {
+  font-weight: bold;
+}
+
+.hide {
+  display: none !important;
+}
+
+#contact, #see-whats-new {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#see-whats-new {
+  margin-left: 1em;
 }
 
 
 /* Font */
-
-h3#generics {
-  padding-top: 20px;
-}
 
 #current-font-name {
   padding: 0px 8px;
   font-weight: bold;
 }
 
-.font-generic {
+#submit {
+  opacity: .3;
+}
+
+.font-category {
   cursor: pointer;
 }
 
-.fonts {
-  display: none;
+.font-category.active {
+  text-decoration: underline;
 }
 
-.fonts .selection {
+#submit.active {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.font-area .selection {
   font-size: 80%;
 }
 
-.fonts .selection label {
-  font-weight: normal;
+#googlefonts-area {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+
+#googlefonts-area input {
+  outline: none;
+  border: 1px solid silver;
+  padding: 12px;
 }
 
 
@@ -99,6 +138,33 @@ h3#generics {
 
 /* Mode */
 
+#light, #dark {
+  opacity: 1;
+}
+
+#light-mode-label, #dark-mode-label {
+  margin-left: 10px;
+  border-radius: 3px;
+}
+
+#light, #light-mode-label {
+  background: white;
+  color: black;
+}
+
+#light a {
+  color: black;
+}
+
+#dark, #dark-mode-label {
+  background: #121212;
+  color: white;
+}
+
+#dark a {
+  color: white;
+}
+
 #dark .slider {
   background: white;
 }
@@ -115,21 +181,6 @@ h3#generics {
   height: 12px;
 }
 
-#light-mode-label, #dark-mode-label {
-  margin-left: 10px;
-  border-radius: 3px;
-}
-
-#light, #light-mode-label {
-  background: white;
-  color: black;
-}
-
-#dark, #dark-mode-label {
-  background: #121212;
-  color: white;
-}
-
 
 /* Keyboard Shortcuts */
 
@@ -142,11 +193,11 @@ h3#generics {
 /* Media Queries */
 
 @media only screen and (max-width: 600px) {
-  .font-generic {
+  .font-category {
     display: block;
   }
 
-  .slash {
+  .separator {
     display: none;
   }
 }

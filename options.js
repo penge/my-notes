@@ -4,72 +4,141 @@
 
 /* global chrome */
 
-/* Font elements */
+const commonFonts = {
+  "serif": [
+    "Georgia",
+    "Palatino Linotype",
+    "Times New Roman",
+    "Times",
+  ],
+  "sans-serif": [
+    "Arial",
+    "Arial Black",
+    "Comic Sans MS",
+    "Impact",
+    "Lucida Sans Unicode",
+    "Roboto",
+    "Tahoma",
+    "Trebuchet MS",
+    "Verdana",
+  ],
+  "monospace": [
+    "Courier",
+    "Courier New",
+    "Lucida Console",
+    "Monaco",
+  ],
+};
 
-const generics = [
-  document.getElementById("serif"),
-  document.getElementById("sans-serif"),
-  document.getElementById("monospace")
-];
+const getFontId = (fontName) =>
+  fontName.toLowerCase().replace(" ", "-");
 
-const fonts = [
-  document.getElementById("serif-fonts"),
-  document.getElementById("sans-serif-fonts"),
-  document.getElementById("monospace-fonts")
-];
+const getFontFamily = (fontName) => {
+  const span = document.createElement("span");
+  span.style.fontFamily = fontName; // '"Roboto Mono"'
+  return span.style.fontFamily;
+};
 
+const getGoogleFontHref = (fontName) => {
+  const family = fontName.replace(" ", "+");
+  const href = `https://fonts.googleapis.com/css?family=${family}:400,700&display=swap`;
+  return href;
+};
+
+// Renders commonFonts into #commonfonts
+// Rendering is based on <template> in options.html
+const renderCommonFonts = () => {
+  const generics = Object.keys(commonFonts);
+  const fragment = document.createDocumentFragment();
+  const template = document.getElementById("font-area-template");
+  for (const generic of generics) {
+    const node = template.content.cloneNode(true);
+    const fontArea = node.children[0];
+    fontArea.id = generic + "-area"; // "monospace-area"
+
+    const selections = document.createDocumentFragment();
+    for (const fontName of commonFonts[generic]) {
+      const selection = fontArea.children[0].cloneNode(true);
+      const input = selection.children[0];
+      const label = selection.children[1];
+
+      // "Courier New" -> "courier-new"
+      const fontId = getFontId(fontName);
+
+      // "Courier New,monospace"
+      const fontFamily = [fontName,generic].join(",");
+
+      // <input type="radio" id="" name="font" value="" data-generic="" style="">
+      input.id = fontId;
+      input.value = fontName;
+      input.dataset.generic = generic;
+      input.style.fontFamily = fontFamily;
+
+      // <label for="" style="">The quick brown fox jumps over the lazy dog (<span>fontName</span>)</label>
+      label.htmlFor = fontId;
+      label.style.fontFamily = fontFamily;
+      label.children[0].innerText = fontName;
+
+      selections.appendChild(selection);
+    }
+    fontArea.removeChild(fontArea.children[0]);
+    fontArea.appendChild(selections);
+    fragment.appendChild(node);
+  }
+  document.getElementById("commonfonts").appendChild(fragment);
+};
+renderCommonFonts();
+
+
+/* Elements */
+
+const fontCategories = document.getElementsByClassName("font-category");
+const fontAreas = document.getElementsByClassName("font-area");
 const fontRadios = document.getElementsByName("font");
 const currentFontName = document.getElementById("current-font-name");
+const fontNameInput = document.getElementById("font-name-input");
+const submit = document.getElementById("submit");
 
-
-/* Size elements */
-
-const size = document.getElementById("size");
+const sizeRange = document.getElementById("size-range");
 const currentSize = document.getElementById("current-size");
-
-
-/* Mode elements */
 
 const modeRadios = document.getElementsByName("mode");
 
-
-/* Focus elements */
-
 const focusCheckbox = document.getElementById("focus");
+const overrideCheckbox = document.getElementById("override");
 
 
 /* Helpers */
 
-function setCurrentFontNameText(fontName) {
-  currentFontName.innerText = fontName;
+function setCurrentFontNameText(font) {
+  currentFontName.innerText = font.name;
+  fontNameInput.value = font.href ? font.name : "";
 }
 
 function checkById(id) {
-  document.getElementById(id).checked = true;
+  const element = document.getElementById(id);
+  // Radio does not exist in case of "Google Fonts"
+  if (element) { element.checked = true; }
 }
 
-function displayGeneric(id) {
-  // Underline current generic only
-  generics.forEach(generic => {
-    const decoration = generic.id === id ? "underline" : "";
-    generic.style.textDecoration = decoration;
-  });
+function displayFontCategory(id) {
+  for (const category of fontCategories) {
+    category.classList.toggle("active", category.id === id);
+  };
 
-  // Display current generic fonts only
-  fonts.forEach(font => {
-    const display = (font.id === id + '-fonts') ? "block" : "none";
-    font.style.display = display;
-  });
+  for (const area of fontAreas) {
+    area.classList.toggle("hide", area.id !== id + "-area");
+  };
 }
 
 
 /* Events */
 
-generics.forEach(generic => {
-  generic.addEventListener("click", function () {
-    displayGeneric(this.id); // "serif", "sans-serif", "monospace"
+for (const category of fontCategories) {
+  category.addEventListener("click", function () {
+    displayFontCategory(this.id);
   });
-});
+};
 
 fontRadios.forEach(radio => {
   radio.addEventListener("click", function () {
@@ -77,19 +146,58 @@ fontRadios.forEach(radio => {
       id: this.id, // "courier-new"
       name: this.value, // "Courier New"
       genericFamily: this.dataset.generic, // "monospace"
-      fontFamily: [this.value, this.dataset.generic].join(',') // "Courier New,monospace"
+      fontFamily: this.style.fontFamily, // '"Courier New", monospace'
     };
 
     chrome.storage.local.set({ font: font });
-    setCurrentFontNameText(font.name);
+    setCurrentFontNameText(font);
   });
 });
 
-size.oninput = function () {
+const validFormNameInput = () => {
+  const fontName = fontNameInput.value.trim();
+  const isSet = fontName.length > 0;
+  const isNotSame = currentFontName.innerText !== fontName;
+  return isSet && isNotSame;
+};
+
+fontNameInput.oninput = function () {
+  submit.value = "Apply";
+  submit.classList.toggle("active", validFormNameInput());
+};
+
+submit.addEventListener("click", function () {
+  if (!validFormNameInput()) { return; }
+  const fontName = fontNameInput.value.trim();
+  // In case of commonFonts, "fontId" is used to check the radio button
+  // of the current font (upon opening Options).
+  // In case of googlefonts, this attribute is not necessary.
+  const fontId = getFontId(fontName);
+  const fontFamily = getFontFamily(fontName);
+  const fontHref = getGoogleFontHref(fontName);
+
+  fetch(fontHref, { method: "HEAD" }).then(() => {
+    const font = {
+      id: fontId, // "roboto-mono"
+      name: fontName, // "Roboto Mono"
+      fontFamily: fontFamily, // '"Roboto Mono"'
+      href: fontHref,
+    };
+    submit.value= "Applied";
+    chrome.storage.local.set({ font: font });
+    setCurrentFontNameText(font);
+  })
+  .catch(() => {
+    submit.classList.remove("active");
+    submit.value= "Font Name Doesn't Exist";
+  });
+});
+
+sizeRange.oninput = function () {
   currentSize.innerText = this.value;
 };
 
-size.onchange = function () {
+sizeRange.onchange = function () {
   chrome.storage.local.set({ size: this.value });
 };
 
@@ -103,44 +211,74 @@ modeRadios.forEach(radio => {
 
 focusCheckbox.addEventListener("click", function () {
   chrome.storage.local.set({ focus: this.checked });
-})
+});
+
+overrideCheckbox.addEventListener("click", function () {
+  chrome.storage.local.set({ override: this.checked });
+});
+
+
+/* Storage helpers */
+
+const applyFont = (font) => {
+  // Display the name of the current font
+  setCurrentFontNameText(font);
+
+  // Check the current font (except "Google Fonts" where is no radio button)
+  checkById(font.id);
+
+  // Underline the generic and display its fonts
+  displayFontCategory(font.genericFamily || "googlefonts");
+};
+
+const applySize = (size) => {
+  sizeRange.value = size;
+  currentSize.innerText = size;
+};
+
+const applyMode = (mode) => {
+  checkById(mode);
+  document.body.id = mode;
+};
+
+const applyFocus = (focus) => {
+  focusCheckbox.checked = focus;
+};
+
+const applyOverride = (override) => {
+  overrideCheckbox.checked = override;
+};
 
 
 /* Storage */
 
-chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
-  // 1 FONT
-  const currentFont = local.font; // see background.js
-  const currentGeneric = currentFont.genericFamily;
-
-  // Display the name of the current font
-  setCurrentFontNameText(currentFont.name);
-
-  // Check the current font
-  checkById(currentFont.id);
-
-  // Underline the generic and display its fonts
-  displayGeneric(currentGeneric);
-
-  // 2 SIZE
-  size.value = local.size;
-  currentSize.innerText = local.size;
-
-  // 3 MODE
-  checkById(local.mode);
-  document.body.id = local.mode;
-
-  // 4 FOCUS
-  focusCheckbox.checked = local.focus;
+chrome.storage.local.get(["font", "size", "mode", "focus", "override"], local => {
+  const { font, size, mode, focus, override } = local;
+  applyFont(font);
+  applySize(size);
+  applyMode(mode);
+  applyFocus(focus);
+  applyOverride(override);
 });
+
+const apply = (change, applyHandler) => {
+  if (change) { applyHandler(change.newValue); }
+};
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local") {
-    if (changes["focus"]) {
-      const focus = changes["focus"].newValue;
-      focusCheckbox.checked = focus;
-    }
+    apply(changes["font"], applyFont);
+    apply(changes["size"], applySize);
+    apply(changes["mode"], applyMode);
+    apply(changes["focus"], applyFocus);
+    apply(changes["override"], applyOverride);
   }
 });
+
+const setVersion = () => {
+  const version = chrome.runtime.getManifest().version;
+  document.getElementById("version").innerText = version;
+};
+setVersion();
 
 })(); // IIFE

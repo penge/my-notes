@@ -6,16 +6,46 @@
 
 /* Elements */
 
+const googlefonts = document.getElementById("googlefonts");
 const textarea = document.getElementById("textarea");
 const panel = document.getElementById("panel");
 const options = document.getElementById("options");
 const page = document.getElementById("page");
 
 
+/* Notification */
+
+const showNotification = (notification) => {
+  if (!notification) { return; }
+
+  let node;
+  if (notification.type === "UPDATE") {
+    const template = document.getElementById("update-notification");
+    node = template.content.cloneNode(true);
+
+    // <div>New version <span id="version"></span> has been installed.</div>
+    const version = node.getElementById("version");
+    version.innerText = notification.version;
+  }
+
+  // <a href="#" id="close">Close</a>
+  const close = node.getElementById("close");
+  close.addEventListener("click", (event) => {
+    event.preventDefault();
+    const element = document.getElementById("notification");
+    element && document.body.removeChild(element);
+    chrome.storage.local.remove("notification");
+  });
+
+  document.body.prepend(node);
+};
+
+
 /* Font, Size, Mode, Focus */
 
-const setFont = (fontFamily) => {
-  document.body.style.fontFamily = fontFamily;
+const setFont = (font) => {
+  if (font.href) { googlefonts.href = font.href };
+  document.body.style.fontFamily = font.fontFamily;
 };
 
 const setSize = (fontSize) => {
@@ -35,7 +65,7 @@ const setFocus = (focus) => {
 
 options.addEventListener("click", (event) => {
   event.preventDefault();
-  chrome.tabs.create({ "url": "/options.html" });
+  chrome.tabs.create({ url: "/options.html" });
 });
 
 
@@ -89,7 +119,7 @@ chrome.commands.onCommand.addListener(command => {
   }
 
   if (command === "focus") {
-    chrome.storage.local.get(["focus"] , local => {
+    chrome.storage.local.get(["focus"], local => {
       chrome.storage.local.set({ focus: !local.focus });
     });
     return;
@@ -99,13 +129,14 @@ chrome.commands.onCommand.addListener(command => {
 
 /* Storage */
 
-chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus"], local => {
+chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus", "notification"], local => {
   // No need to wait for "notes". Can set "font" and "size" upfront.
-  setFont(local.font.fontFamily);
+  setFont(local.font);
   setSize(local.size);
   setFocus(local.focus);
 
   setPage(local.notes, local.index); // Set "notes" first.
+  showNotification(local.notification);
   setMode(local.mode);
   // Setting "mode" sets body opacity to 1.
   // Make sure to set "mode" after "notes" are set,
@@ -113,27 +144,18 @@ chrome.storage.local.get(["notes", "index", "font", "size", "mode", "focus"], lo
   // flicker on fast page refresh.
 });
 
+const apply = (change, applyHandler) => {
+  if (change) {
+    applyHandler(change.newValue);
+  }
+};
+
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local") {
-    if (changes["font"]) {
-      const font = changes["font"].newValue;
-      setFont(font.fontFamily);
-    }
-
-    if (changes["size"]) {
-      const size = changes["size"].newValue;
-      setSize(size);
-    }
-
-    if (changes["mode"]) {
-      const mode = changes["mode"].newValue;
-      setMode(mode);
-    }
-
-    if (changes["focus"]) {
-      const focus = changes["focus"].newValue;
-      setFocus(focus);
-    }
+    apply(changes["font"], setFont);
+    apply(changes["size"], setSize);
+    apply(changes["mode"], setMode);
+    apply(changes["focus"], setFocus);
 
     if (changes["notes"]) {
       const notes = changes["notes"].newValue;
@@ -159,19 +181,6 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     }
   }
 });
-
-
-/* Typing */
-
-const TAB = "  ";
-
-function isTab(event) {
-  return event.keyCode === 9 || event.which === 9 || event.key === "Tab";
-}
-
-function isShift(event) {
-  return event.shiftKey;
-}
 
 const saveNotes = (notes) => {
   const notesToSave = mergeNotes(notes);
@@ -209,6 +218,19 @@ const saveNotesDebounce = function (notes) {
     _saveNotesDebounce(notes);
   }
 };
+
+
+/* Typing */
+
+const TAB = "  ";
+
+function isTab(event) {
+  return event.keyCode === 9 || event.which === 9 || event.key === "Tab";
+}
+
+function isShift(event) {
+  return event.shiftKey;
+}
 
 let typing = false;
 textarea.addEventListener("keydown", (event) => {

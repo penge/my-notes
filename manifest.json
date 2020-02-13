@@ -1,17 +1,17 @@
 {
   "manifest_version": 2,
   "name": "My Notes",
-  "description": "Chrome Extension that turns your \"New Tab\" into a note taking tool.",
-  "version": "2.2.1",
+  "description": "Turn your New Tab into a note-taking tool.",
+  "version": "2.3",
   "icons": { "128": "icon128.png" },
   "options_page": "options.html",
-  "permissions": ["storage", "contextMenus"],
+  "permissions": ["storage", "contextMenus", "tabs"],
   "background": {
     "scripts": ["debounce.js", "background.js"],
     "persistent": false
   },
-  "chrome_url_overrides": {
-    "newtab": "notes.html"
+  "browser_action": {
+    "default_icon": "icon128.png"
   },
   "commands": {
     "page-1": {
