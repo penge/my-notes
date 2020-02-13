@@ -71,12 +71,12 @@ chrome.runtime.onInstalled.addListener(() => {
 
   chrome.storage.local.get(["index", "font", "size", "mode", "focus", "override"], local => {
     chrome.storage.local.set({
-      index: (local.index || defaultIndex),
+      index: (local.index !== "undefined" ? local.index : defaultIndex),
       font: (local.font || defaultFont),
       size: (local.size || defaultSize),
       mode: (local.mode || defaultMode),
-      focus: (local.focus || defaultFocus),
-      override: (local.override || defaultOverride),
+      focus: (local.focus !== "undefined" ? local.focus : defaultFocus),
+      override: (local.override !== "undefined" ? local.override : defaultOverride),
     });
   });
 
