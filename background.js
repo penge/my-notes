@@ -15,7 +15,6 @@ const defaultFont = {
 const defaultSize = 150;
 const defaultMode = "light"; // "light", "dark"
 const defaultFocus = false;
-const defaultOverride = true;
 
 const getRandomToken = () => {
   const randomPool = new Uint8Array(32);
@@ -69,14 +68,13 @@ chrome.runtime.onInstalled.addListener(() => {
     });
   });
 
-  chrome.storage.local.get(["index", "font", "size", "mode", "focus", "override"], local => {
+  chrome.storage.local.get(["index", "font", "size", "mode", "focus"], local => {
     chrome.storage.local.set({
       index: (local.index !== "undefined" ? local.index : defaultIndex),
       font: (local.font || defaultFont),
       size: (local.size || defaultSize),
       mode: (local.mode || defaultMode),
       focus: (local.focus !== "undefined" ? local.focus : defaultFocus),
-      override: (local.override !== "undefined" ? local.override : defaultOverride),
     });
   });
 
@@ -111,18 +109,6 @@ chrome.contextMenus.onClicked.addListener((info) => {
 
 chrome.browserAction.onClicked.addListener(() => {
   chrome.tabs.create({ url: "/notes.html" });
-});
-
-chrome.tabs.onCreated.addListener((tab) => {
-  chrome.storage.local.get(["override"], local => {
-    if (!local.override) {
-      return;
-    }
-    // pendingUrl available since Chrome 79; use url as fallback
-    if (tab.pendingUrl === "chrome://newtab/" || tab.url === "chrome://newtab/") {
-      chrome.tabs.update(tab.id, { url: "/notes.html" });
-    }
-  });
 });
 
 chrome.runtime.onInstalled.addListener((details) => {

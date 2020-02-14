@@ -4,7 +4,7 @@ My Notes is a Chrome Extension that turns your **New Tab** into a note-taking to
 
 - Great for Notes, Todos, and sharing text (Copy/Paste)
 
-- It works immediately after you open a **New Tab**
+- It works immediately after you click My Notes icon (located in toolbar)
 
 - Every edit and paste is saved (and waiting for you once you come back)
 
@@ -16,10 +16,10 @@ My Notes is a Chrome Extension that turns your **New Tab** into a note-taking to
 
 ![My Notes](image.png)
 
-My Notes can be open with **1 click on the icon**, or it can replace New Tab if set by **Options**.
+My Notes can be open with **1 click on the icon.**
 
-Font in the picture above is **Courier Prime** and is available via **Google Fonts**.
-Font can be easily changed in **Options**.
+Font in the picture above is **Courier Prime** and is available via **Google Fonts.**
+Font can be easily changed in **Options.**
 
 <br>
 
