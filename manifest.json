@@ -2,10 +2,10 @@
   "manifest_version": 2,
   "name": "My Notes",
   "description": "Turn your New Tab into a note-taking tool.",
-  "version": "2.3",
+  "version": "2.3.1",
   "icons": { "128": "icon128.png" },
   "options_page": "options.html",
-  "permissions": ["storage", "contextMenus", "tabs"],
+  "permissions": ["storage", "contextMenus"],
   "background": {
     "scripts": ["debounce.js", "background.js"],
     "persistent": false
