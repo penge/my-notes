@@ -1,48 +1,35 @@
 {
   "manifest_version": 2,
   "name": "My Notes",
-  "description": "Turn your New Tab into a note-taking app.",
-  "version": "2.4",
+  "description": "My Notes — Chrome extension for note-taking in a New Tab.",
+  "version": "3.0",
   "homepage_url": "https://github.com/penge/my-notes",
-  "icons": { "128": "icon128.png" },
+  "icons": { "128": "images/icon128.png" },
   "options_page": "options.html",
   "permissions": ["storage", "contextMenus"],
-  "optional_permissions": ["tabs"],
+  "optional_permissions": ["tabs", "identity"],
+  "oauth2": {
+    "client_id": "813847979218-unbbh8m0el8vjdi74rnqdarm1mhv3985.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
   "background": {
-    "scripts": ["debounce.js", "background.js"],
+    "page": "background.html",
     "persistent": false
   },
   "browser_action": {
-    "default_icon": "icon128.png"
+    "default_icon": "images/icon128.png"
   },
   "commands": {
-    "page-1": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+1",
-        "mac": "Alt+1"
-      },
-      "description": "Set page 1"
-    },
-    "page-2": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+2",
-        "mac": "Alt+2"
-      },
-      "description": "Set page 2"
-    },
-    "page-3": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+3",
-        "mac": "Alt+3"
-      },
-      "description": "Set page 3"
-    },
     "focus": {
       "suggested_key": {
         "default": "Ctrl+Shift+F",
         "mac": "Alt+F"
       },
-      "description": "Toggle focus mode"
+      "description": "Toggle Focus mode"
     }
-  }
+  },
+  "minimum_chrome_version": "61",
+  "offline_enabled": true
 }

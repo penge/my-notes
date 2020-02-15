@@ -1,104 +1,71 @@
 body {
   margin: 0;
   padding: 2em;
-  font-family: Calibri, Arial;
+  font-family: Helvetica, Calibri, Arial, sans-serif;
   font-size: 150%;
   opacity: 0;
 }
 
-h2 {
-  padding-top: 50px;
-}
+/* Generic styles */
 
-h3.pad {
-  padding-top: 20px;
-}
+h2 { padding-top: 50px; }
+h3 { padding-top: 20px; }
+a { font-weight: bold; text-decoration: underline; }
 
-label {
-  padding: 10px 8px;
-}
-
+label { padding: 10px 8px; }
 input, select {
   font-family: inherit;
   font-size: inherit;
 }
 
-.selection {
-  padding: 10px 0px;
-}
+.separator { padding: 0 12px; }
+.bold { font-weight: bold; }
+.hide { display: none !important; }
+.space-right { margin-right: 1em; }
 
+/* Radio or Checkbox selection */
+
+.selection { padding: 10px 0px; }
 .comment {
-  font-size: 80%;
+  font-size: 90%;
   font-weight: normal;
-  font-style: italic;
-  user-select: none;
   opacity: .8;
 }
 
-.separator {
-  padding: 0 12px;
-}
-
-.heavy {
-  font-weight: bold;
-}
-
-.hide {
-  display: none !important;
-}
-
-a {
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-a#see-whats-new {
-  margin-left: 1em;
-}
-
-
-/* Font */
+/* Font type */
 
 #current-font-name {
   padding: 0px 8px;
   font-weight: bold;
 }
 
-#submit {
-  opacity: .3;
-}
+.font-category { cursor: pointer; }
+.font-category.active { text-decoration: underline; }
 
-.font-category {
-  cursor: pointer;
-}
-
-.font-category.active {
-  text-decoration: underline;
-}
-
-#submit.active {
-  opacity: 1;
-  cursor: pointer;
-}
+#submit { opacity: .3; }
+#submit.active { opacity: 1; cursor: pointer; }
 
 .font-area .selection {
   font-size: 80%;
 }
 
-#googlefonts-area {
+#google-fonts-area {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
 }
 
-#googlefonts-area input {
+#google-fonts-area ol { margin-top: 0; }
+#google-fonts-area ol li { padding: 10px 0; }
+
+#google-fonts-area input {
+  max-width: 500px;
+  box-sizing: content-box;
   outline: none;
   border: 1px solid silver;
   padding: 12px;
 }
 
-
-/* Size */
+/* Font size */
 
 #current-size {
   color: #9E9E9E;
@@ -136,19 +103,37 @@ a#see-whats-new {
   cursor: pointer;
 }
 
+/* With comment */
 
-/* Mode */
+.selection.with-comment {
+  display: flex;
+  align-items: baseline;
+}
+
+.selection.with-comment .comment {
+  margin: 15px 35px 30px 35px;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+/* Sync */
+
+#sync-folder-location {
+  word-break: break-all;
+}
+
+/* Light theme */
 
 #light, #dark {
   opacity: 1;
 }
 
-#light-mode-label, #dark-mode-label {
+#light-theme-label, #dark-theme-label {
   margin-left: 10px;
   border-radius: 3px;
 }
 
-#light, #light-mode-label {
+#light, #light-theme-label {
   background: white;
   color: black;
 }
@@ -157,7 +142,13 @@ a#see-whats-new {
   color: black;
 }
 
-#dark, #dark-mode-label {
+#light .selection.with-comment .comment {
+  background: #d6d6d6;
+}
+
+/* Dark theme */
+
+#dark, #dark-theme-label {
   background: #121212;
   color: white;
 }
@@ -182,26 +173,9 @@ a#see-whats-new {
   height: 12px;
 }
 
-
-/* Keyboard Shortcuts */
-
-.shortcut {
-  font-weight: bold;
-  padding-right: 20px;
+#dark .selection.with-comment .comment {
+  background: #222;
 }
-
-
-/* Options */
-
-.selection.with-comment {
-  display: flex;
-  align-items: baseline;
-}
-
-.selection .comment {
-  padding: 12px 8px 20px 8px;
-}
-
 
 /* Media Queries */
 
