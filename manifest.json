@@ -6,6 +6,7 @@
   "icons": { "128": "icon128.png" },
   "options_page": "options.html",
   "permissions": ["storage", "contextMenus"],
+  "optional_permissions": ["tabs"],
   "background": {
     "scripts": ["debounce.js", "background.js"],
     "persistent": false

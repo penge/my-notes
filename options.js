@@ -105,6 +105,7 @@ const currentSize = document.getElementById("current-size");
 const modeRadios = document.getElementsByName("mode");
 
 const focusCheckbox = document.getElementById("focus");
+const newtabCheckbox = document.getElementById("newtab");
 
 
 /* Helpers */
@@ -212,6 +213,23 @@ focusCheckbox.addEventListener("click", function () {
   chrome.storage.local.set({ focus: this.checked });
 });
 
+newtabCheckbox.addEventListener("click", function () {
+  if (newtabCheckbox.checked) {
+    chrome.permissions.request({ permissions: ["tabs"] }, granted => {
+      newtabCheckbox.checked = granted;
+      chrome.storage.local.set({ newtab: granted });
+    });
+    return;
+  }
+
+  chrome.permissions.remove({ permissions: ["tabs"] }, removed => {
+    if (removed) {
+      newtabCheckbox.checked = false;
+      chrome.storage.local.set({ newtab: false });
+    }
+  });
+});
+
 
 /* Storage helpers */
 
@@ -240,15 +258,20 @@ const applyFocus = (focus) => {
   focusCheckbox.checked = focus;
 };
 
+const applyNewtab = (newtab) => {
+  newtabCheckbox.checked = newtab;
+};
+
 
 /* Storage */
 
-chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
-  const { font, size, mode, focus } = local;
+chrome.storage.local.get(["font", "size", "mode", "focus", "newtab"], local => {
+  const { font, size, mode, focus, newtab } = local;
   applyFont(font);
   applySize(size);
   applyMode(mode);
   applyFocus(focus);
+  applyNewtab(newtab);
 });
 
 const apply = (change, applyHandler) => {
@@ -261,6 +284,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     apply(changes["size"], applySize);
     apply(changes["mode"], applyMode);
     apply(changes["focus"], applyFocus);
+    apply(changes["newtab"], applyNewtab);
   }
 });
 
