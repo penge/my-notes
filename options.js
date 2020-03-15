@@ -105,6 +105,7 @@ const currentSize = document.getElementById("current-size");
 const modeRadios = document.getElementsByName("mode");
 
 const focusCheckbox = document.getElementById("focus");
+const newtabCheckbox = document.getElementById("newtab");
 
 
 /* Helpers */
@@ -118,6 +119,12 @@ function checkById(id) {
   const element = document.getElementById(id);
   // Radio does not exist in case of "Google Fonts"
   if (element) { element.checked = true; }
+}
+
+function uncheckAll(radios) {
+  for (const radio of radios) {
+    radio.checked = false;
+  };
 }
 
 function displayFontCategory(id) {
@@ -182,9 +189,10 @@ submit.addEventListener("click", function () {
       fontFamily: fontFamily, // '"Roboto Mono"'
       href: fontHref,
     };
+    uncheckAll(fontRadios);
+    setCurrentFontNameText(font);
     submit.value= "Applied";
     chrome.storage.local.set({ font: font });
-    setCurrentFontNameText(font);
   })
   .catch(() => {
     submit.classList.remove("active");
@@ -210,6 +218,23 @@ modeRadios.forEach(radio => {
 
 focusCheckbox.addEventListener("click", function () {
   chrome.storage.local.set({ focus: this.checked });
+});
+
+newtabCheckbox.addEventListener("click", function () {
+  if (newtabCheckbox.checked) {
+    chrome.permissions.request({ permissions: ["tabs"] }, granted => {
+      newtabCheckbox.checked = granted;
+      chrome.storage.local.set({ newtab: granted });
+    });
+    return;
+  }
+
+  chrome.permissions.remove({ permissions: ["tabs"] }, removed => {
+    if (removed) {
+      newtabCheckbox.checked = false;
+      chrome.storage.local.set({ newtab: false });
+    }
+  });
 });
 
 
@@ -240,15 +265,20 @@ const applyFocus = (focus) => {
   focusCheckbox.checked = focus;
 };
 
+const applyNewtab = (newtab) => {
+  newtabCheckbox.checked = newtab;
+};
+
 
 /* Storage */
 
-chrome.storage.local.get(["font", "size", "mode", "focus"], local => {
-  const { font, size, mode, focus } = local;
+chrome.storage.local.get(["font", "size", "mode", "focus", "newtab"], local => {
+  const { font, size, mode, focus, newtab } = local;
   applyFont(font);
   applySize(size);
   applyMode(mode);
   applyFocus(focus);
+  applyNewtab(newtab);
 });
 
 const apply = (change, applyHandler) => {
@@ -261,6 +291,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     apply(changes["size"], applySize);
     apply(changes["mode"], applyMode);
     apply(changes["focus"], applyFocus);
+    apply(changes["newtab"], applyNewtab);
   }
 });
 

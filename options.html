@@ -106,23 +106,41 @@
 
 
   <h2>Options</h2>
-  <div id="options">
-    <div class="selection">
+  <div>
+    <div class="selection with-comment">
       <input type="checkbox" id="focus" name="focus">
       <div>
         <label for="focus" class="heavy">Focus mode</label>
         <div class="comment">
           Focus mode hides bottom panel (Options link and page number) to give you more editing space.<br>
-          To change this option back, visit Options (right-click on My Notes icon in browser's toolbar),
+          To change this back, visit Options (right-click on My Notes icon in the browser's toolbar),
           or press "Toggle Focus mode" keyboard shortcut.
         </div>
       </div>
     </div>
+    <div class="selection with-comment">
+      <input type="checkbox" id="newtab" name="newtab">
+      <div>
+        <label for="newtab" class="heavy">Open in every new tab</label>
+        <div class="comment">
+          If enabled, My Notes will be open in every new tab.<br>
+          A permission will be requested during the process.
+        </div>
+      </div>
+    </div>
+    <div class="selection with-comment">
+      <input type="checkbox" id="backup" name="backup" disabled="disabled">
+      <div>
+        <label for="backup" class="heavy">Backup to Google Drive (coming in My Notes 3.0)</label>
+        <div class="comment">
+          Creates and maintains a backup of My Notes in your Google Drive under the folder My Notes.<br>
+          A permission will be requested during the process.<br>
+          If there is a backup left by a previous installation, it will be used.
+          If you had some local notes already, they will be added to the backup.
+        </div>
+      </div>
+    </div>
   </div>
-
-
-  <h2>Support</h2>
-  <p><span id="contact">bucka.pavel@gmail.com</span></p>
 
 
   <h2>Version</h2>
@@ -130,6 +148,16 @@
     <strong id="version"></strong>
     <a id="see-whats-new" href="https://github.com/penge/my-notes/releases" target="_blank">See what's new</a>
   </p>
+
+
+  <h2>Resources</h2>
+  <div>
+    <a href="https://github.com/penge/my-notes/blob/master/SUPPORT.md" target="_blank">Support</a>
+    <a href="https://github.com/penge/my-notes/blob/master/CONTRIBUTING.md" target="_blank">Contributing</a>
+    <a href="https://github.com/penge/my-notes/blob/master/PERMISSIONS.md" target="_blank">Permissions</a>
+    <a href="https://github.com/penge/my-notes" target="_blank">Repository</a>
+  </div>
+
 
   <script src="options.js"></script>
 </body>

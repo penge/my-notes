@@ -31,8 +31,8 @@ input, select {
   font-size: 80%;
   font-weight: normal;
   font-style: italic;
-  color: #9E9E9E;
   user-select: none;
+  opacity: .8;
 }
 
 .separator {
@@ -47,12 +47,12 @@ input, select {
   display: none !important;
 }
 
-#contact, #see-whats-new {
+a {
   font-weight: bold;
   text-decoration: underline;
 }
 
-#see-whats-new {
+a#see-whats-new {
   margin-left: 1em;
 }
 
@@ -193,13 +193,13 @@ input, select {
 
 /* Options */
 
-#options .selection {
+.selection.with-comment {
   display: flex;
   align-items: baseline;
 }
 
-#options .selection .comment {
-  padding: 10px 8px;
+.selection .comment {
+  padding: 12px 8px 20px 8px;
 }
 
 

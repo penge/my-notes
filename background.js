@@ -15,6 +15,7 @@ const defaultFont = {
 const defaultSize = 150;
 const defaultMode = "light"; // "light", "dark"
 const defaultFocus = false;
+const defaultNewtab = false;
 
 const getRandomToken = () => {
   const randomPool = new Uint8Array(32);
@@ -68,13 +69,14 @@ chrome.runtime.onInstalled.addListener(() => {
     });
   });
 
-  chrome.storage.local.get(["index", "font", "size", "mode", "focus"], local => {
+  chrome.storage.local.get(["index", "font", "size", "mode", "focus", "newtab"], local => {
     chrome.storage.local.set({
       index: (typeof local.index !== "undefined" ? local.index : defaultIndex),
       font: (local.font || defaultFont),
       size: (local.size || defaultSize),
       mode: (local.mode || defaultMode),
       focus: (typeof local.focus !== "undefined" ? local.focus : defaultFocus),
+      newtab: (typeof local.newtab !== "undefined" ? local.newtab : defaultNewtab),
     });
   });
 
@@ -109,6 +111,26 @@ chrome.contextMenus.onClicked.addListener((info) => {
 
 chrome.browserAction.onClicked.addListener(() => {
   chrome.tabs.create({ url: "/notes.html" });
+});
+
+chrome.tabs.onCreated.addListener((tab) => {
+  chrome.storage.local.get(["newtab"], local => {
+    if (!local.newtab) {
+      return;
+    }
+
+    chrome.permissions.contains({ permissions: ["tabs"] }, (result) => {
+      if (!result) {
+        chrome.storage.local.set({ newtab: false });
+        return;
+      }
+
+      // pendingUrl available since Chrome 79; url is fallback
+      if (tab.pendingUrl === "chrome://newtab/" || tab.url === "chrome://newtab/") {
+        chrome.tabs.update(tab.id, { url: "/notes.html" });
+      }
+    });
+  });
 });
 
 chrome.runtime.onInstalled.addListener((details) => {
