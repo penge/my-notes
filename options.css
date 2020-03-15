@@ -47,12 +47,12 @@ input, select {
   display: none !important;
 }
 
-#contact, #see-whats-new {
+a {
   font-weight: bold;
   text-decoration: underline;
 }
 
-#see-whats-new {
+a#see-whats-new {
   margin-left: 1em;
 }
 
