@@ -1,8 +1,9 @@
 {
   "manifest_version": 2,
   "name": "My Notes",
-  "description": "Turn your New Tab into a note-taking tool.",
-  "version": "2.3.2",
+  "description": "Turn your New Tab into a note-taking app.",
+  "version": "2.4",
+  "homepage_url": "https://github.com/penge/my-notes",
   "icons": { "128": "icon128.png" },
   "options_page": "options.html",
   "permissions": ["storage", "contextMenus"],
