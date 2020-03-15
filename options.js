@@ -121,6 +121,12 @@ function checkById(id) {
   if (element) { element.checked = true; }
 }
 
+function uncheckAll(radios) {
+  for (const radio of radios) {
+    radio.checked = false;
+  };
+}
+
 function displayFontCategory(id) {
   for (const category of fontCategories) {
     category.classList.toggle("active", category.id === id);
@@ -183,9 +189,10 @@ submit.addEventListener("click", function () {
       fontFamily: fontFamily, // '"Roboto Mono"'
       href: fontHref,
     };
+    uncheckAll(fontRadios);
+    setCurrentFontNameText(font);
     submit.value= "Applied";
     chrome.storage.local.set({ font: font });
-    setCurrentFontNameText(font);
   })
   .catch(() => {
     submit.classList.remove("active");
