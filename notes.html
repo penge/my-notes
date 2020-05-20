@@ -5,19 +5,81 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Notes</title>
-  <link rel="stylesheet" href="" id="googlefonts">
+  <link rel="stylesheet" href="" id="google-fonts">
   <link rel="stylesheet" href="notes.css">
 </head>
 
 <body>
-  <textarea id="textarea" placeholder="Type your notes here."></textarea>
-  <div id="panel">
-    <a id="options" href="#">Options</a>
-    <a id="page" href="#"></a>
+  <div id="panel" class="hide">
+    <div class="note-name" id="note-name"><!-- Name of the active note --></div>
+    <div class="note-options" id="note-options">
+      <svg class="dropdown-toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"/></svg>
+      <div class="dropdown">
+        <div class="rename action">Rename</div>
+        <div class="delete action">Delete</div>
+      </div>
+    </div>
   </div>
 
-  <template id="update-notification">
-    <div id="notification">
+  <div id="notes" class="hide">
+    <div id="existing-notes"><!-- Render #note-tile-template for each note --></div>
+    <div class="bottom">
+      <a href="#" id="create-note">New note</a>
+      <a href="#" id="open-options">Options</a>
+    </div>
+    <div class="bottom" id="sync-container">
+      <a href="#" id="sync-now" title="Notes are synchronized with Google Drive automatically on every Open/Close/Refresh of My Notes.
+
+Click &#34;Sync Now&#34; button if you would like to synchronize the notes now.
+
+This is useful if you plan to continue your work on a second computer, to make sure the notes were synchronized before signing off.
+
+&#34;Last sync&#34; will be updated once finished.">Sync Now</a>
+      <div id="sync-details">
+        <div>Last sync: <span id="last-sync" class="bold"></span></div>
+        <div><a href="#" id="open-in-google-drive" class="bold" target="_blank">Open in Google Drive</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div contenteditable="true" id="content" placeholder="Type your notes here."><!-- Content of the active note --></div>
+  <div id="toolbar">
+    <div class="group">
+      <div id="B" class="bold" title="Bold">B</div>
+      <div id="I" class="italic" title="Italic">I</div>
+      <div id="U" class="underline" title="Underline">U</div>
+      <div id="S" class="line-through" title="Strike-through">S</div>
+    </div>
+    <div class="bold group">
+      <div id="H2" title="Heading 2">H2</div>
+      <div id="H3" title="Heading 3">H<span>3</span></div>
+      <div id="P" title="Paragraph">¶</div>
+    </div>
+    <div class="bold group">
+      <div id="HR" title="Horizontal Rule">―</div>
+      <div id="UL" title="Unordered List">•</div>
+      <div id="OL" title="Ordered List">#</div
+    </div>
+  </div>
+
+  <template id="note-tile-template">
+    <div class="note-tile">
+      <div class="note-content"></div>
+      <div class="row">
+        <div class="note-name"></div>
+        <div class="note-options">
+          <svg class="dropdown-toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"/></svg>
+          <div class="dropdown">
+            <div class="rename action">Rename</div>
+            <div class="delete action">Delete</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="new-version-notification-template">
+    <div id="notification" class="bold">
       <div>New version <span id="version"></span> has been installed.</div>
       <div>
         <a href="https://github.com/penge/my-notes/releases" target="_blank">See what's new</a><span>,</span>
@@ -26,7 +88,7 @@
     </div>
   </template>
 
-  <script src="notes.js"></script>
+  <script type="module" src="notes.js"></script>
 </body>
 
 </html>

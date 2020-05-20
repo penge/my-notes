@@ -1,115 +1,197 @@
-# My Notes
-
-**My Notes** is a _Chrome Extension_ that turns your **New Tab** into a note-taking app.
-
-- It is great for writing down notes, todos, thoughts, and adding a temporary text (Copy/Paste)
-
-- It works immediately after you click My Notes icon (located in the browser's toolbar)
-and it can be open in every new tab if enabled (see **Options**)
-
-- Every edit and paste is saved and ready when you come back
-
-- Every edit is synchronized in other windows you have open
-
-- **Context menu** can be used to send a text to your other computers if using
-the same Google Account and having My Notes open
+![My Notes](images/my-notes.png)
 
 <br>
 
-## My Notes
-
-![My Notes](image.png)
-
-My Notes can be open with 1 click on the icon (located in the browser's toolbar)
-or it can be open in every new tab if enabled (see **Options**).
-
-The font used in the picture above is **Courier Prime**, available via **Google Fonts**.
-See **Options** to change the font.
+My Notes — _Chrome extension_ for note-taking in a **New Tab.**
 
 <br>
 
-## Options
+## Key features
 
-Options can be open with a click on Options link (in the bottom panel of My Notes), or with a right-click on My Notes icon (in the browser's toolbar) and selecting Options.
+- Notes, Todos, [**Clipboard**](#clipboard), Ideas, any writing — all quickly accessible in a New Tab
 
-**Options allow you to:**
+- Move the Text between the computers (see [**Context menu**](#context-menu) or [**Google Drive Sync**](#google-drive-sync))
 
-- set Font type (Serif, Sans Serif, Monospace, Google Fonts)
-- set Font size (using the slider)
-- change the color mode (light mode or dark mode)
-- see Keyboard Shortcuts that you may use (Windows, Linux, Mac)
-- enable Focus mode (can be enabled with a checkbox, or toggled with a keyboard shortcut)
-- open My Notes in every new tab if granted (see [**Permissions**](PERMISSIONS.md))
-- see the version number and what's new
-- see the important resources – Support, Contributing, Permissions, Repository
+- Autosaved & Autoupdated in every Open window
 
-<br>
+- [**Google Drive Sync**](#google-drive-sync) – Store the notes to your Google Drive, with an automatic synchronization
 
-## Context menu
-
-After selecting a text on a website, you can right-click and use My Notes Context menu to save the selection to My Notes.
-
-<br>
-
-![Context Menu](context-menu.png)
-
-Available options:
-
-- **Save selection** to save the selection to My Notes in the current computer
-- **Save selection to other devices** to save the selection to My Notes in your other computer(s) where you are logged-in under the same Google Account and have My Notes open
-
-<br>
-
-Saved selection is added to the top of **page 1** in the following format:
-
-```
-// URL (where the text comes from)
-TEXT
-```
+- Works offline
 
 <br>
 
 ## Installation
 
-My Notes can be installed from **Web Store** (preferred):
-
 https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop
 
 <br>
 
-My Notes can be installed manually:
+## How to open
 
-1. Click on **"Clone or download"** and then **"Download ZIP"**
-2. Extract the downloaded **ZIP**
-3. In Chrome, go to **Extensions** from the menu or visit [chrome://extensions](chrome://extensions) from a new tab
-4. In Chrome Extensions, click the **"Load unpacked"** button
-5. Navigate to the plugin folder (from the second step) and click the **"Open"** button
+To open, click the icon (added to the toolbar).
+To open automatically in every New Tab, see [**Options**](#options).
 
 <br>
 
-## Storage
+## Options
 
-My Notes is stored in:
-
-- **Chrome Storage**, which comes down to:
-  - **Chrome Storage Local** as a storage for notes and options (font type, font size, etc.), limited to 5MB
-  - **Chrome Storage Sync** as a storage for the text saved by My Notes Context Menu -> **Save selection to other devices**, limited to 100KB
-
-- **localStorage** to optimize the saving of notes
-
-Notes are saved every **1 second** if changed.
-
-If you accidentally uninstall My Notes extension and don't have a backup, data will be lost.
-Consider doing a backup first.
-
-Version 3.0 will introduce **Google Drive** backup as a prevention to data loss.
-If enabled, My Notes can have an ongoing backup to your Google Drive.
+- Font type (Serif, Sans Serif, Monospace, Google Fonts)
+- Font size
+- Theme (Light or Dark)
+- Keyboard Shortcuts
+- Enable Focus mode
+- Open My Notes in every New Tab (see [**Permissions**](PERMISSIONS.md))
+- Enable Google Drive Sync (see [**Permissions**](PERMISSIONS.md))
 
 <br>
 
-## Resources
+## Clipboard
 
-- [**Support**](SUPPORT.md)
-- [**Contributing**](CONTRIBUTING.md)
-- [**Permissions**](PERMISSIONS.md)
-- **Repository** – you are right here
+**Clipboard** — a special note that can receive the text sent by [**Context menu**](#context-menu).
+It can also be edited just like any other note, but cannot be renamed or deleted.
+
+<br>
+
+## Context menu
+
+**Context menu** — created to quickly Copy and Paste the selected text to [**Clipboard**](#clipboard).
+
+<img src="images/context-menu.png" width="700">
+
+**Save selection** — Saves the selected text to [**Clipboard**](#clipboard) in your current computer
+
+**Save selection to other devices** —
+Saves the selected text to [**Clipboard**](#clipboard) in your other computers (My Notes is needed to be open, same Google Account is needed to be used)
+
+<br>
+
+## Backup
+
+To backup the notes, or to transfer them to a second computer, see [**Google Drive Sync**](#google-drive-sync).
+
+<br>
+
+## Google Drive Sync
+
+**Google Drive Sync** (see [**Options**](#options)) is an automatic two-way synchronization of your notes between My Notes and your Google Drive.
+
+This gives you:
+
+- backup (notes can be restored in future)
+- can modify the notes in both sources (Google Drive, My Notes, and vice versa)
+- can modify the notes from other computers (by installing My Notes and using the same Google Account)
+
+### Destination
+
+Notes are uploaded to your Google Drive to the folder **My Notes**. This folder is created automatically.
+If the folder exists from a previous installation, it is restored, notes are downloaded and uploaded, and the synchronization continues.
+
+### Synchronization
+
+Notes are synchronized immediately after you enable **Google Drive Sync**.
+Then on every My Notes **Open/Close/Refresh**, or with the **"Sync Now"** button.
+Synchronization works in both ways — to Google Drive, from Google Drive.
+
+### Access
+
+My Notes can only access the files it created.
+It cannot see the other files in your Google Drive.
+
+<br>
+
+## Implementation
+
+Implemented in **JavaScript**.
+_Lightweight_. Zero external dependencies.
+No minification or transpiling in the process — the code you see here, is the same you get; there is no
+obfuscation.
+
+Created using modern approach:
+
+- JavaScript Modules (available since Chrome 61)
+
+- ECMAScript Proxy (data to UI updates)
+
+- Event Driven Background Script (run in background, unloaded when not needed)
+
+Data is stored in:
+
+- `chrome.storage`
+  - `chrome.storage.local` — Notes and Options (Font type, Font size, etc.), 5MB limit
+  - `chrome.storage.sync` — Text sent with [**Context menu**](#context-menu), 100KB limit
+
+- `localStorage` — Collected changes before saving (for optimized saving)
+
+<br>
+
+## Folder structure
+
+```
+background/
+  google-drive/   # Everything related to Google Drive Sync
+                    # - File operations (List, Create, Get, Update, Delete)
+                    # - Synchronization (to Google Drive, from Google Drive)
+                    # - Queries (find My Notes folder, list files in My Notes folder)
+                    # - Multipart bodies (create My Notes folder, create file, update file)
+                    # - Tests
+
+  init/           # Run when My Notes is installed/updated
+                    # - Sets a Unique ID for My Notes installation (used by Context menu), if not already set
+                    # - Migrates notes and options
+                    # - Creates Context menu and attaches the events
+                    # - Creates a Notification when My Notes is installed/updated
+                    # - Registers the ways to open My Notes (icon click, in every New Tab)
+                    # - Registers events to trigger Google Drive Sync from My Notes
+
+images/           # Images and icons used in My Notes or README
+
+notes/            # Everything related to Notes
+                    # - Create/Rename/Delete notes; Note editing, Note saving
+                    # - Toolbar
+                    # - Every UI init and update when data changes
+                    # - Registers commands (Toggle Focus mode - can be enabled in Options)
+
+options/          # Everything related to Options
+                    # - Font type, Font size, Theme, etc.
+                    # - Every UI init and update when data changes
+
+shared/           # Everything common (used at more places)
+                    # - Date formatting (Last sync)
+                    # - Managing the permissions (Requesting, Removing, Checking)
+                    # - Helpers for Chrome Storage
+                    # - Default values (Notes, Options)
+
+tests/            # Entrypoint for tests
+                    # - Runs every __tests__/index.html in the project
+                    # - Prints "net::ERR_FILE_NOT_FOUND" if the test file is not found
+                    # - Prints "Assertion failed: console.assert" if any assertion failed
+
+
+.eslintrc         # To enforce code quality and same coding style
+.gitignore        # To exclude any generated files (only .DS_Store at this point)
+
+LICENSE           # MIT
+manifest.json     # Main extension file
+
+
+background.html   # Entrypoint for background script
+background.js
+
+notes.html        # Entrypoint for notes
+notes.css
+notes.js
+
+options.html      # Entrypoint for options
+options.css
+options.js
+
+
+README.md
+SUPPORT.md
+CONTRIBUTING.md
+PERMISSIONS.md
+```
+
+<br><br><br>
+
+[**Support**](SUPPORT.md)&nbsp;&nbsp;&nbsp;[**Contributing**](CONTRIBUTING.md)&nbsp;&nbsp;&nbsp;[**Permissions**](PERMISSIONS.md)

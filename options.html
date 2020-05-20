@@ -13,34 +13,37 @@
   <h2>Font</h2>
   <p>Current font: <span id="current-font-name"></span></p>
 
-  <h3 class="pad">
+  <h3>
     <span id="serif" class="font-category">Serif</span><span class="separator">/</span
     ><span id="sans-serif" class="font-category">Sans Serif</span><span class="separator">/</span
     ><span id="monospace" class="font-category">Monospace</span><span class="separator">/</span
-    ><span id="googlefonts" class="font-category">Google Fonts</span>
+    ><span id="google-fonts" class="font-category">Google Fonts</span>
   </h3>
 
   <div id="commonfonts">
     <!--
-      See options.js -> renderCommonFonts()
-
       <div class="font-area" id="serif-area">
       <div class="font-area" id="sans-serif-area">
       <div class="font-area" id="monospace-area">
     -->
-    <template id="font-area-template">
-      <div class="font-area" id="">
-        <div class="selection">
-          <input type="radio" id="" name="font" value="" data-generic="" style="">
-          <label for="" style="">The quick brown fox jumps over the lazy dog (<span>fontName</span>)</label>
-        </div>
-      </div>
-    </template>
   </div>
-  <div class="font-area" id="googlefonts-area">
+  <div class="font-area" id="google-fonts-area">
+    <ol>
+      <li>Open <a href="https://fonts.google.com" target="_blank">https://fonts.google.com</a> to see the available fonts</li>
+      <li>Type in the Font Name, e.g.: <b>Roboto Mono</b></li>
+      <li>Click <b>Apply</b> to use the font</li>
+    </ol>
     <input type="text" placeholder="Font Name (E.g. Roboto Mono)" id="font-name-input">
-    <input type="submit" value="Apply" class="heavy" id="submit">
+    <input type="submit" value="Apply" class="bold" id="submit">
   </div>
+  <template id="font-area-template">
+    <div class="font-area" id="">
+      <div class="selection">
+        <input type="radio" id="" name="font" value="" data-generic="" style="font-family: inherit;">
+        <label for="" style="font-family: inherit;">The quick brown fox jumps over the lazy dog (<span>fontName</span>)</label>
+      </div>
+    </div>
+  </template>
 
 
   <h2>Size <span id="current-size"></span></h2>
@@ -49,59 +52,22 @@
   </div>
 
 
-  <h2>Mode</h2>
+  <h2>Theme</h2>
   <div>
     <div class="selection">
-      <input type="radio" id="light" name="mode" value="light">
-      <label for="light" id="light-mode-label" class="heavy">Light mode</label>
+      <input type="radio" id="light" name="theme" value="light">
+      <label for="light" id="light-theme-label" class="bold">Light</label>
     </div>
     <div class="selection">
-      <input type="radio" id="dark" name="mode" value="dark">
-      <label for="dark" id="dark-mode-label" class="heavy">Dark mode</label>
+      <input type="radio" id="dark" name="theme" value="dark">
+      <label for="dark" id="dark-theme-label" class="bold">Dark</label>
     </div>
   </div>
 
 
   <h2>Keyboard Shortcuts</h2>
   <div>
-    <h3>Windows or Linux</h3>
-    <table>
-      <tr>
-        <td class="shortcut">Ctrl + Shift + 1</td>
-        <td>Open page 1</td>
-      </tr>
-      <tr>
-        <td class="shortcut">Ctrl + Shift + 2</td>
-        <td>Open page 2</td>
-      </tr>
-      <tr>
-        <td class="shortcut">Ctrl + Shift + 3</td>
-        <td>Open page 3</td>
-      </tr>
-      <tr>
-        <td class="shortcut">Ctrl + Shift + F</td>
-        <td>Toggle Focus mode</td>
-      </tr>
-    </table>
-    <h3>Mac</h3>
-    <table>
-      <tr>
-        <td class="shortcut">Option + 1</td>
-        <td>Open page 1</td>
-      </tr>
-      <tr>
-        <td class="shortcut">Option + 2</td>
-        <td>Open page 2</td>
-      </tr>
-      <tr>
-        <td class="shortcut">Option + 3</td>
-        <td>Open page 3</td>
-      </tr>
-      <tr>
-        <td class="shortcut">Option + F</td>
-        <td>Toggle Focus mode</td>
-      </tr>
-    </table>
+    Open <b>chrome://extensions/shortcuts</b> in a New Tab to configure the shortcuts.
   </div>
 
 
@@ -110,33 +76,43 @@
     <div class="selection with-comment">
       <input type="checkbox" id="focus" name="focus">
       <div>
-        <label for="focus" class="heavy">Focus mode</label>
+        <label for="focus" class="bold">Enable Focus mode</label>
         <div class="comment">
-          Focus mode hides bottom panel (Options link and page number) to give you more editing space.<br>
-          To change this back, visit Options (right-click on My Notes icon in the browser's toolbar),
-          or press "Toggle Focus mode" keyboard shortcut.
+          Hides the note title and toolbar, to give you more editing space.<br>
+          To toggle, you can use the assigned <b>keyboard shortcut</b>.
         </div>
       </div>
     </div>
     <div class="selection with-comment">
       <input type="checkbox" id="newtab" name="newtab">
       <div>
-        <label for="newtab" class="heavy">Open in every new tab</label>
+        <label for="newtab" class="bold">Open My Notes in every New Tab</label>
         <div class="comment">
-          If enabled, My Notes will be open in every new tab.<br>
-          A permission will be requested during the process.
+          My Notes will require a permission to enable this feature.
         </div>
       </div>
     </div>
     <div class="selection with-comment">
-      <input type="checkbox" id="backup" name="backup" disabled="disabled">
+      <input type="checkbox" id="sync" name="sync">
       <div>
-        <label for="backup" class="heavy">Backup to Google Drive (coming in My Notes 3.0)</label>
+        <label for="sync" class="bold">Enable Google Drive Sync</label>
         <div class="comment">
-          Creates and maintains a backup of My Notes in your Google Drive under the folder My Notes.<br>
-          A permission will be requested during the process.<br>
-          If there is a backup left by a previous installation, it will be used.
-          If you had some local notes already, they will be added to the backup.
+          Stores the notes to your Google Drive in the folder <b>My Notes</b> (created automatically, once),
+          and synchronizes the changes in both ways — to Google Drive, from Google Drive — on every My Notes <b>Open/Close/Refresh</b>,
+          or with the <b>"Sync Now"</b> button.<br><br>
+
+          This gives you:<br>
+          <ul>
+            <li>backup (notes can be restored in future)</li>
+            <li>can modify the notes in both sources (Google Drive, My Notes, and vice versa)</li>
+            <li>can modify the notes from other computers (by installing My Notes and using the same Google Account)</li>
+          </ul>
+
+          My Notes can only access the files it created. It cannot see the other files in your Google Drive.<br>
+          My Notes will require a permission to enable this feature.<br><br>
+
+          <b>Location: </b><a id="sync-folder-location" class="bold" href="" target="_blank"></a><br>
+          <b>Last sync: </b><span id="sync-last-sync" class="bold"></span>
         </div>
       </div>
     </div>
@@ -144,22 +120,14 @@
 
 
   <h2>Version</h2>
-  <p>
-    <strong id="version"></strong>
-    <a id="see-whats-new" href="https://github.com/penge/my-notes/releases" target="_blank">See what's new</a>
-  </p>
-
-
-  <h2>Resources</h2>
   <div>
-    <a href="https://github.com/penge/my-notes/blob/master/SUPPORT.md" target="_blank">Support</a>
-    <a href="https://github.com/penge/my-notes/blob/master/CONTRIBUTING.md" target="_blank">Contributing</a>
-    <a href="https://github.com/penge/my-notes/blob/master/PERMISSIONS.md" target="_blank">Permissions</a>
-    <a href="https://github.com/penge/my-notes" target="_blank">Repository</a>
+    <strong id="version" class="space-right"></strong>
+    <a href="https://github.com/penge/my-notes/releases" target="_blank" class="space-right">See what's new</a>
+    <a href="https://github.com/penge/my-notes" target="_blank">See Repository</a>
   </div>
 
 
-  <script src="options.js"></script>
+  <script type="module" src="options.js"></script>
 </body>
 
 </html>

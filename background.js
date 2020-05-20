@@ -1,144 +1,30 @@
-"use strict";
-
 /* global chrome */
 
-const defaultNotes = ["", "", ""];
-const defaultIndex = 0;
+import {
+  setId,
+  migrations,
+  contextMenu,
+  notifications,
+  open,
 
-const defaultFont = {
-  id: "courier-new",
-  name: "Courier New",
-  genericFamily: "monospace",
-  fontFamily: '"Courier New",monospace',
-};
+  googleDrive,
+} from "./background/init/index.js";
 
-const defaultSize = 150;
-const defaultMode = "light"; // "light", "dark"
-const defaultFocus = false;
-const defaultNewtab = false;
-
-const getRandomToken = () => {
-  const randomPool = new Uint8Array(32);
-  crypto.getRandomValues(randomPool);
-  let hex = "";
-  for (let i = 0; i < randomPool.length; i += 1) {
-    hex += randomPool[i].toString(16);
-  }
-  return hex;
-};
-
-const createContextMenu = () => {
-  chrome.contextMenus.create({
-    id: "my-notes",
-    title: "My Notes",
-    contexts: ["selection"],
-  }, () => {
-    chrome.contextMenus.create({
-      parentId: "my-notes",
-      id: "my-notes-save",
-      title: "Save selection",
-      contexts: ["selection"],
-    });
-    chrome.contextMenus.create({
-      parentId: "my-notes",
-      id: "my-notes-send",
-      title: "Save selection to other devices",
-      contexts: ["selection"],
-    });
-  });
-};
-
+// Run when Installed or Updated
 chrome.runtime.onInstalled.addListener(() => {
-  // Try to load notes from prior versions (order matters)
-  chrome.storage.sync.get(["newtab", "value", "notes"], sync => {
-    // sync.value:string => 1.4, 1.3, 1.2
-    // sync.newtab:string => 1.1.1, 1.1, 1.0
-    // sync.notes:array => 2.0, 2.0.1, 2.0.2, 2.1
-    // local.notes:array => >= 2.2
-
-    chrome.storage.local.get(["notes"], local => {
-      let notes = sync.value || sync.newtab || sync.notes || local.notes || defaultNotes;
-
-      // < 2.x
-      if (typeof notes === "string") {
-        notes = [notes, "", ""];
-      }
-
-      chrome.storage.sync.remove(["newtab", "value", "notes"]);
-      chrome.storage.local.set({ notes: notes });
-    });
-  });
-
-  chrome.storage.local.get(["index", "font", "size", "mode", "focus", "newtab"], local => {
-    chrome.storage.local.set({
-      index: (typeof local.index !== "undefined" ? local.index : defaultIndex),
-      font: (local.font || defaultFont),
-      size: (local.size || defaultSize),
-      mode: (local.mode || defaultMode),
-      focus: (typeof local.focus !== "undefined" ? local.focus : defaultFocus),
-      newtab: (typeof local.newtab !== "undefined" ? local.newtab : defaultNewtab),
-    });
-  });
-
-  const token = getRandomToken();
-  chrome.storage.local.set({ token: token });
-
-  createContextMenu();
+  setId(); // Set unique My Notes ID, if not set before
+  migrations.run(); // Migrate notes and options (font type, font size, etc.)
+  contextMenu.create(); // Create Context menu
 });
 
-chrome.contextMenus.onClicked.addListener((info) => {
-  const { pageUrl, selectionText } = info;
-  const textToSave = `// ${pageUrl}\r\n${selectionText}\r\n\r\n`;
+// Context menu ("Save selection", "Save selection to other devices")
+contextMenu.attach();
 
-  if (info.menuItemId === "my-notes-save") {
-    chrome.storage.local.get(["notes"], local => {
-      const notes = local.notes;
-      notes[0] = textToSave + notes[0];
-      chrome.storage.local.set({ notes: notes });
-    });
-  }
+// Notifications (NEW VERSION installed)
+notifications.attach();
 
-  if (info.menuItemId === "my-notes-send") {
-    chrome.storage.local.get(["token"], local => {
-      const selection = {
-        text: textToSave,
-        sender: local.token,
-      };
-      chrome.storage.sync.set({ selection: selection });
-    });
-  }
-});
+// Click My Notes icon, "Open My Notes in every New Tab" (see Options)
+open.attach();
 
-chrome.browserAction.onClicked.addListener(() => {
-  chrome.tabs.create({ url: "/notes.html" });
-});
-
-chrome.tabs.onCreated.addListener((tab) => {
-  chrome.storage.local.get(["newtab"], local => {
-    if (!local.newtab) {
-      return;
-    }
-
-    chrome.permissions.contains({ permissions: ["tabs"] }, (result) => {
-      if (!result) {
-        chrome.storage.local.set({ newtab: false });
-        return;
-      }
-
-      // pendingUrl available since Chrome 79; url is fallback
-      if (tab.pendingUrl === "chrome://newtab/" || tab.url === "chrome://newtab/") {
-        chrome.tabs.update(tab.id, { url: "/notes.html" });
-      }
-    });
-  });
-});
-
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === "update") {
-    const notification = {
-      type: "UPDATE",
-      version: chrome.runtime.getManifest().version,
-    };
-    chrome.storage.local.set({ notification: notification });
-  }
-});
+// Google Drive Sync
+googleDrive.attach();

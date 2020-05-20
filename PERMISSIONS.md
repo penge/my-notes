@@ -1,20 +1,25 @@
 # Permissions
 
-My Notes needs permissions to provide the required functionality.
+They are listed in [**manifest.json**](manifest.json) and can be organized into two groups — **required** and **optional**.
 
-These permissions are listed in [**manifest.json**](manifest.json):
+<br>
 
-- **"storage"** – required to save notes and options (font type, font size, etc.) to Chrome Storage
+## Required
 
-- **"contextMenus"** – required to create Context menu
+Required permissions are needed at all times. These are:
 
-- **"tabs"** – required to open My Notes in every new tab, if enabled
+- **"storage"** — required to save the notes and options (font type, font size, etc.) to _Chrome Storage_
 
-Among these permissions, **"tabs"** requires to be granted when you click
-**"Open in every new tab"** in Options.
+- **"contextMenus"** — required to create _My Notes Context menu_
 
-Because **"tabs"** is a more powerful permission, the displayed warning
-may contain an unrelated message – `It can: Read your Browsing history`.
+<br>
 
-Do not panic. My Notes really doesn't read your browsing history.
-The message just comes with the permission and cannot be changed.
+## Optional
+
+Optional permissions are needed only when enabling additional functionality, that depends on one or more such permissions. These are:
+
+- **"tabs"** — required by **Open My Notes in every New Tab** (see **Options**)
+
+- **"identity"** — required by **Enable Google Drive Sync** (see **Options**)
+
+**"tabs"** is a more powerful permission — the displayed warning may contain an unrelated message — `It can: Read your Browsing history`.

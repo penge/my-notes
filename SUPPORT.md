@@ -1,18 +1,10 @@
+<img src="images/icon.svg" width="80" height="80">
+
 # Support
 
-If you need any help, consider first:
-
-- [**README**](README.md) – see if the answer is there
-- [**Issues**](https://github.com/penge/my-notes/issues) – see if the issue was reported and if not, create a new one
+Do you have any questions? Send me a message to `bucka.pavel@gmail.com`.
 
 <br>
 
-### Slack
-
-Join Slack channel, where we can chat. The link is **http://bit.ly/hellopenge**
-
-<br>
-
-### Email
-
-My email address is **<bucka.pavel@gmail.com>**
+Do you have a feature request? Something needs to be fixed? Open a new _issue_ in [**Issues**](https://github.com/penge/my-notes/issues)
+(or reply to an existing _issue_).
