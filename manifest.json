@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "My Notes",
   "description": "My Notes — Chrome extension for note-taking in a New Tab.",
-  "version": "3.0",
+  "version": "3.0.1",
   "homepage_url": "https://github.com/penge/my-notes",
   "icons": { "128": "images/icon128.png" },
   "options_page": "options.html",
