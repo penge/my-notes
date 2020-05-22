@@ -6,18 +6,18 @@ import state from "./notes/state/index.js";
 import { noteName, createNote, openOptions, syncNow, lastSync, content } from "./notes/view/elements.js";
 import typing from "./notes/typing.js";
 import toolbar from "./notes/toolbar.js";
-import commands from "./notes/commands.js";
 import { saveNotes, syncNotes } from "./notes/saving.js";
+import hotkeys from "./notes/hotkeys.js";
 
 let tabId; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
   // set as a "string" to quickly compare with localStorage.getItem("notesChangedBy")
   tabId = String(tab.id);
 
-  // Typing, Toolbar, Commands
+  // Typing, Toolbar, Commands, Hotkeys
   typing.initialize(content, tabId);
   toolbar.initialize(content, tabId);
-  commands.register(state);
+  hotkeys.register(state);
 });
 
 // Go back to Main page
