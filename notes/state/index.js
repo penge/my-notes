@@ -1,4 +1,4 @@
-/* global Proxy, localStorage */
+/* global Proxy, chrome */
 
 import history from "../history.js";
 
@@ -44,7 +44,7 @@ const handler = {
       } else {
         view.setPage("notes");
       }
-      localStorage.setItem("lastActive", value);
+      chrome.storage.local.set({ active: value });
     }
     if (prop === "notification") {
       view.showNotification(value);

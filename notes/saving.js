@@ -46,19 +46,8 @@ const syncNotes = (force) => {
   }
 };
 
-const saveLastActive = () => {
-  const lastActive = localStorage.getItem("lastActive");
-  if (lastActive === undefined) {
-    return;
-  }
-  localStorage.removeItem("lastActive");
-  chrome.storage.local.set({ active: lastActive });
-};
-
 export {
   saveNotes,
   saveNotesDebounce,
   syncNotes,
-
-  saveLastActive,
 };

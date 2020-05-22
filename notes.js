@@ -7,7 +7,7 @@ import { noteName, createNote, openOptions, syncNow, lastSync, content } from ".
 import typing from "./notes/typing.js";
 import toolbar from "./notes/toolbar.js";
 import commands from "./notes/commands.js";
-import { saveNotes, saveLastActive, syncNotes } from "./notes/saving.js";
+import { saveNotes, syncNotes } from "./notes/saving.js";
 
 let tabId; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
@@ -142,7 +142,4 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 window.addEventListener("beforeunload", () => {
   // Save the most recent version of notes (notes are synchronized across Tabs)
   saveNotes(state.notes, syncNotes); // syncNotes without "force" => syncs notes only if changed
-
-  // Save the last active note if any (a note to open on a next My Notes visit)
-  saveLastActive();
 });
