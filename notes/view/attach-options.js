@@ -55,9 +55,7 @@ export default function attachOptions(noteName, { noteOptions, noteTile, renameN
       }
       const newName = prompt("Type a new unique name:", noteName);
       reset({ noteTile });
-      if (newName && newName !== noteName) {
-        renameNote(noteName, newName);
-      }
+      renameNote(noteName, newName);
     }
     window.requestAnimationFrame(callback);
   };
