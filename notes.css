@@ -138,13 +138,6 @@ hr {
   overflow-y: auto;
 }
 
-#content:empty:not(:focus):before{
-  content: attr(placeholder);
-  color: #e3e3e3;
-  cursor: text;
-  font-style: italic;
-}
-
 #content ul, #content ol {
   list-style-position: inside;
   margin: 0;
