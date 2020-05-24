@@ -2,17 +2,19 @@
 
 <br>
 
-My Notes — _Chrome extension_ for note-taking in a **New Tab.**
+**My Notes** — Chrome Extension for note-taking in a New Tab.
 
 <br>
 
-## Key features
+## Features
 
-- Notes, Todos, [**Clipboard**](#clipboard), Ideas, any writing — all quickly accessible in a New Tab
+- Notes, Todos, [**Clipboard**](#clipboard), Ideas, and more — All quickly accessible in a New Tab
 
-- Move the Text between the computers (see [**Context menu**](#context-menu) or [**Google Drive Sync**](#google-drive-sync))
+- Saved automatically
 
-- Autosaved & Autoupdated in every Open window
+- Updated in every open window
+
+- Copy a text between computers (see [**Context menu**](#context-menu) or [**Google Drive Sync**](#google-drive-sync))
 
 - [**Google Drive Sync**](#google-drive-sync) – Store the notes to your Google Drive, with an automatic synchronization
 
@@ -26,10 +28,17 @@ https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabm
 
 <br>
 
+## Icon
+
+<img src="images/icon.svg" width="32" height="32">
+
+<br>
+
 ## How to open
 
-To open, click the icon (added to the toolbar).
-To open automatically in every New Tab, see [**Options**](#options).
+1. Click on the icon (right click to get to [**Options**](#options))
+2. Automatically in every New Tab (see [**Options**](#options))
+3. Keyboard shortcut (see `chrome://extensions/shortcuts` for **Activate the extension**, e.g.: `Cmd + Shift + M`)
 
 <br>
 
@@ -37,8 +46,8 @@ To open automatically in every New Tab, see [**Options**](#options).
 
 - Font type (Serif, Sans Serif, Monospace, Google Fonts)
 - Font size
-- Theme (Light or Dark)
-- Keyboard Shortcuts
+- Theme (Light, or Dark)
+- Hotkeys
 - Enable Focus mode
 - Open My Notes in every New Tab (see [**Permissions**](PERMISSIONS.md))
 - Enable Google Drive Sync (see [**Permissions**](PERMISSIONS.md))
@@ -47,27 +56,21 @@ To open automatically in every New Tab, see [**Options**](#options).
 
 ## Clipboard
 
-**Clipboard** — a special note that can receive the text sent by [**Context menu**](#context-menu).
-It can also be edited just like any other note, but cannot be renamed or deleted.
+**Clipboard** — note that can receive the text sent by [**Context menu**](#context-menu).
+Can be edited just like any other note, but cannot be renamed or deleted.
 
 <br>
 
 ## Context menu
 
-**Context menu** — created to quickly Copy and Paste the selected text to [**Clipboard**](#clipboard).
+**Context menu** — displayed only when a text is selected to quickly Copy and Paste to [**Clipboard**](#clipboard).
 
 <img src="images/context-menu.png" width="700">
 
-**Save selection** — Saves the selected text to [**Clipboard**](#clipboard) in your current computer
+**Save selection** — Saves the text to [**Clipboard**](#clipboard) in your current computer
 
-**Save selection to other devices** —
-Saves the selected text to [**Clipboard**](#clipboard) in your other computers (My Notes is needed to be open, same Google Account is needed to be used)
-
-<br>
-
-## Backup
-
-To backup the notes, or to transfer them to a second computer, see [**Google Drive Sync**](#google-drive-sync).
+**Save selection to other devices** — Saves the text to [**Clipboard**](#clipboard) in your other computer
+(My Notes needs to be open, same Google Account needs to be used)
 
 <br>
 
@@ -81,7 +84,7 @@ This gives you:
 - can modify the notes in both sources (Google Drive, My Notes, and vice versa)
 - can modify the notes from other computers (by installing My Notes and using the same Google Account)
 
-### Destination
+### Location
 
 Notes are uploaded to your Google Drive to the folder **My Notes**. This folder is created automatically.
 If the folder exists from a previous installation, it is restored, notes are downloaded and uploaded, and the synchronization continues.
@@ -101,20 +104,24 @@ It cannot see the other files in your Google Drive.
 
 ## Implementation
 
-Implemented in **JavaScript**.
-_Lightweight_. Zero external dependencies.
-No minification or transpiling in the process — the code you see here, is the same you get; there is no
-obfuscation.
+My Notes is implemented in **JavaScript**.
+The focus is on simplicity and providing an interface that just works — the magic happens behind the scenes.
 
-Created using modern approach:
+It is lightweight and very fast. Zero external dependencies.
+No minification or transpiling in used in the process (the code you see here, is the code you get; there is no
+obfuscation).
+
+**Created using:**
 
 - JavaScript Modules (available since Chrome 61)
 
-- ECMAScript Proxy (data to UI updates)
+- ECMAScript `Proxy` (UI updates)
 
-- Event Driven Background Script (run in background, unloaded when not needed)
+- Event Driven Background Script (run in background, unloaded when not used)
 
-Data is stored in:
+- `await` / `async`
+
+**Storage:**
 
 - `chrome.storage`
   - `chrome.storage.local` — Notes and Options (Font type, Font size, etc.), 5MB limit

@@ -1,18 +1,10 @@
-/* global Proxy, localStorage */
-
-import history from "../history.js";
+/* global Proxy, chrome */
 
 import createNote from "./create-note.js";
 import renameNote from "./rename-note.js";
 import deleteNote from "./delete-note.js";
 
 import view from "../view/index.js";
-
-const state = {
-  createNote,
-  renameNote,
-  deleteNote,
-};
 
 let stateProxy;
 
@@ -21,6 +13,32 @@ const activateNote = (noteName) => {
     stateProxy.active = noteName;
   } else {
     stateProxy.active = null;
+  }
+};
+
+const state = {
+  createNote,
+  renameNote,
+  deleteNote,
+
+  previousNote: () => {
+    const notes = Object.keys(stateProxy.notes);
+    const currentIndex = notes.indexOf(stateProxy.active);
+    if (currentIndex === -1) {
+      return;
+    }
+    const newIndex = currentIndex === 0 ? (notes.length - 1) : currentIndex - 1;
+    activateNote(notes[newIndex]);
+  },
+
+  nextNote: () => {
+    const notes = Object.keys(stateProxy.notes);
+    const currentIndex = notes.indexOf(stateProxy.active);
+    if (currentIndex === -1) {
+      return;
+    }
+    const newIndex = currentIndex === (notes.length - 1) ? 0 : currentIndex + 1;
+    activateNote(notes[newIndex]);
   }
 };
 
@@ -38,13 +56,11 @@ const handler = {
     if (prop === "active") {
       if (value in state.notes) {
         view.setActive(value, state.notes[value].content, { renameNote, deleteNote });
-        history.push(value);
-        history.onpop(activateNote);
         view.setPage("content");
       } else {
         view.setPage("notes");
       }
-      localStorage.setItem("lastActive", value);
+      chrome.storage.local.set({ active: value });
     }
     if (prop === "notification") {
       view.showNotification(value);

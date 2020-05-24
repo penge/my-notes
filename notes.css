@@ -95,10 +95,6 @@ hr {
   cursor: pointer;
 }
 
-.reserved {
-  color: #d6a462;
-}
-
 /* Bottom */
 
 .bottom {
@@ -140,13 +136,6 @@ hr {
   font-size: inherit;
   padding: 1em;
   overflow-y: auto;
-}
-
-#content:empty:not(:focus):before{
-  content: attr(placeholder);
-  color: #e3e3e3;
-  cursor: text;
-  font-style: italic;
 }
 
 #content ul, #content ol {

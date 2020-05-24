@@ -56,18 +56,52 @@
   <div>
     <div class="selection">
       <input type="radio" id="light" name="theme" value="light">
-      <label for="light" id="light-theme-label" class="bold">Light</label>
+      <label for="light" id="light-theme-label" class="bold theme-label">Light</label>
     </div>
     <div class="selection">
       <input type="radio" id="dark" name="theme" value="dark">
-      <label for="dark" id="dark-theme-label" class="bold">Dark</label>
+      <label for="dark" id="dark-theme-label" class="bold theme-label">Dark</label>
+    </div>
+    <div class="selection">
+      <input type="radio" id="custom" name="theme" value="custom" disabled>
+      <label for="custom" id="custom-theme-label" class="bold theme-label">Custom</label><span class="info">(coming in version <b>3.1</b>)</span>
     </div>
   </div>
 
 
-  <h2>Keyboard Shortcuts</h2>
+  <h2>Hotkeys</h2>
   <div>
-    Open <b>chrome://extensions/shortcuts</b> in a New Tab to configure the shortcuts.
+    <span>Open <b>chrome://extensions/shortcuts</b> in a tab to configure:</span>
+    <ul>
+      <li>
+        <b>Activate the extension</b>
+        <span class="info">Open My Notes, e.g.: <span class="hotkey">Cmd + Shift + M</span></span>
+      </li>
+    </ul>
+    <span>Other keys:</span>
+    <ul>
+      <li>
+        <b>Toggle Focus mode</b>
+        <span class="info">
+          <span class="hotkey">Cmd + Shift + F</span> or
+          <span class="hotkey">Ctrl + Shift + F</span>
+        </span>
+      </li>
+      <li>
+        <b>Go to Previous note</b>
+        <span class="info">
+          <span class="hotkey">Cmd + [</span> or
+          <span class="hotkey">Ctrl + [</span>
+        </span>
+      </li>
+      <li>
+        <b>Go to Next note</b>
+        <span class="info">
+          <span class="hotkey">Cmd + ]</span> or
+          <span class="hotkey">Ctrl + ]</span>
+        </span>
+      </li>
+    </ul>
   </div>
 
 
@@ -78,8 +112,8 @@
       <div>
         <label for="focus" class="bold">Enable Focus mode</label>
         <div class="comment">
-          Hides the note title and toolbar, to give you more editing space.<br>
-          To toggle, you can use the assigned <b>keyboard shortcut</b>.
+          Hides the note title and toolbar, to get more editing space.<br>
+          Can toggle with <b>"Toggle Focus mode"</b> keyboard shortcut.
         </div>
       </div>
     </div>
@@ -122,8 +156,8 @@
   <h2>Version</h2>
   <div>
     <strong id="version" class="space-right"></strong>
-    <a href="https://github.com/penge/my-notes/releases" target="_blank" class="space-right">See what's new</a>
-    <a href="https://github.com/penge/my-notes" target="_blank">See Repository</a>
+    <a href="https://github.com/penge/my-notes/releases" target="_blank" class="space-right">Changelog</a>
+    <a href="https://github.com/penge/my-notes" target="_blank">Repository</a>
   </div>
 
 

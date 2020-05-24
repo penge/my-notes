@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "My Notes",
-  "description": "My Notes — Chrome extension for note-taking in a New Tab.",
-  "version": "3.0.1",
+  "description": "Note–taking in a New Tab. Simple. Fast.",
+  "version": "3.0.2",
   "homepage_url": "https://github.com/penge/my-notes",
   "icons": { "128": "images/icon128.png" },
   "options_page": "options.html",
@@ -20,15 +20,6 @@
   },
   "browser_action": {
     "default_icon": "images/icon128.png"
-  },
-  "commands": {
-    "focus": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+F",
-        "mac": "Alt+F"
-      },
-      "description": "Toggle Focus mode"
-    }
   },
   "minimum_chrome_version": "61",
   "offline_enabled": true

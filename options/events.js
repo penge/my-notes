@@ -33,6 +33,8 @@ import {
 import { requestPermission, removePermission } from "../shared/permissions/index.js";
 import { setItem } from "../shared/storage/index.js";
 
+import { THEMES } from "../shared/storage/default-values.js";
+
 function attachFontCategories() {
   for (const category of fontCategories) {
     category.addEventListener("click", function () {
@@ -116,8 +118,10 @@ function attachThemeRadios() {
   themeRadios.forEach(radio => {
     radio.addEventListener("click", function () {
       const theme = this.id; // "light", "dark"
-      document.body.id = theme;
-      chrome.storage.local.set({ theme: theme });
+      if (THEMES.includes(theme)) {
+        document.body.id = theme;
+        chrome.storage.local.set({ theme: theme });
+      }
     });
   });
 }

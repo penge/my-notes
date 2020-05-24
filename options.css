@@ -11,8 +11,9 @@ body {
 h2 { padding-top: 50px; }
 h3 { padding-top: 20px; }
 a { font-weight: bold; text-decoration: underline; }
+a:hover { text-decoration: none; }
 
-label { padding: 10px 8px; }
+label, li { padding: 0 8px; line-height: 1.5em; }
 input, select {
   font-family: inherit;
   font-size: inherit;
@@ -22,10 +23,15 @@ input, select {
 .bold { font-weight: bold; }
 .hide { display: none !important; }
 .space-right { margin-right: 1em; }
+.info {
+  display: inline-block;
+  margin-left: 1em;
+  font-style: italic;
+}
 
 /* Radio or Checkbox selection */
 
-.selection { padding: 10px 0px; }
+.selection { padding: 10px 0; }
 .comment {
   font-size: 90%;
   font-weight: normal;
@@ -35,7 +41,7 @@ input, select {
 /* Font type */
 
 #current-font-name {
-  padding: 0px 8px;
+  padding: 0 8px;
   font-weight: bold;
 }
 
@@ -55,7 +61,7 @@ input, select {
 }
 
 #google-fonts-area ol { margin-top: 0; }
-#google-fonts-area ol li { padding: 10px 0; }
+#google-fonts-area ol li { line-height: 2em; }
 
 #google-fonts-area input {
   max-width: 500px;
@@ -114,6 +120,43 @@ input, select {
   margin: 15px 35px 30px 35px;
   padding: 20px;
   border-radius: 6px;
+  line-height: 1.5em;
+}
+
+/* Labels */
+
+.theme-label {
+  display: inline-block;
+  margin: 5px 0;
+  padding: 10px 8px;
+  border-radius: 3px;
+}
+
+#light-theme-label {
+  border: 1px dashed #121212;
+  background: white;
+  color: #121212;
+}
+
+#dark-theme-label {
+  border: 1px solid #121212;
+  background: #121212;
+  color: white;
+}
+
+#custom-theme-label {
+  border: 1px solid #FF9800;
+  background: #FF9800;
+  color: white;
+  font-style: italic;
+}
+
+/* Hotkeys */
+
+.hotkey {
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-weight: bold;
 }
 
 /* Sync */
@@ -122,18 +165,15 @@ input, select {
   word-break: break-all;
 }
 
-/* Light theme */
+/* Themes */
 
 #light, #dark {
   opacity: 1;
 }
 
-#light-theme-label, #dark-theme-label {
-  margin-left: 10px;
-  border-radius: 3px;
-}
+/* Light theme */
 
-#light, #light-theme-label {
+#light {
   background: white;
   color: black;
 }
@@ -146,11 +186,20 @@ input, select {
   background: #d6d6d6;
 }
 
-/* Dark theme */
-
-#dark, #dark-theme-label {
+#light .hotkey {
   background: #121212;
   color: white;
+}
+
+/* Dark theme */
+
+#dark {
+  background: #121212;
+  color: white;
+}
+
+#dark #light-theme-label {
+  border-style: solid;
 }
 
 #dark a {
@@ -175,6 +224,11 @@ input, select {
 
 #dark .selection.with-comment .comment {
   background: #222;
+}
+
+#dark .hotkey {
+  background: #222;
+  color: white;
 }
 
 /* Media Queries */
