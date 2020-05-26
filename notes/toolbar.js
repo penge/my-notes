@@ -19,6 +19,10 @@ const controls = [
   [get("HR"), () => exec("insertHorizontalRule")],
   [get("UL"), () => exec("insertUnorderedList")],
   [get("OL"), () => exec("insertOrderedList")],
+
+  [get("CL"), () => exec("justifyLeft")],
+  [get("CC"), () => exec("justifyCenter")],
+  [get("CR"), () => exec("justifyRight")],
 ];
 
 const initialize = (content, tabId) => {
