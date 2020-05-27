@@ -21,6 +21,11 @@ const register = (state) => document.addEventListener("keydown", (event) => {
     state.active && toggleFocus(); // toggle focus only when a note is open
     return;
   }
+
+  if ((event.metaKey || event.ctrlKey) && event.shiftKey && (event.key === "O" || event.key === "o")) {
+    chrome.tabs.create({ url: "/options.html" });
+    return;
+  }
 });
 
 export default { register };
