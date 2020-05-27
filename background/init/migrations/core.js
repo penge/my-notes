@@ -7,6 +7,7 @@ import defaultValues, {
   // Options
   validFocus,
   validNewtab,
+  validTab,
 } from "../../../shared/storage/default-values.js";
 
 export default (sync, local) => {
@@ -53,5 +54,6 @@ export default (sync, local) => {
     // Options
     focus: validFocus(local.focus) ? local.focus : defaultValues.focus,
     newtab: validNewtab(local.newtab) ? local.newtab : defaultValues.newtab,
+    tab: validTab(local.tab) ? local.tab : defaultValues.tab,
   };
 };

@@ -5,6 +5,7 @@ import {
   sizeRange,
   focusCheckbox,
   newtabCheckbox,
+  tabCheckbox,
   syncCheckbox,
   syncFolderLocation,
   syncLastSync,
@@ -48,6 +49,10 @@ const setNewtab = (newtab) => {
   newtabCheckbox.checked = newtab;
 };
 
+const setTab = (tab) => {
+  tabCheckbox.checked = tab;
+};
+
 const setSync = (sync) => {
   if (!sync) {
     syncCheckbox.checked = false;
@@ -84,6 +89,7 @@ export {
   setTheme,
   setFocus,
   setNewtab,
+  setTab,
   setSync,
 
   setChange,

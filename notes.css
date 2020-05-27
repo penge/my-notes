@@ -120,7 +120,7 @@ hr {
 }
 
 #content, .note-tile .note-content {
-  white-space: pre-wrap;
+  white-space: break-spaces;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

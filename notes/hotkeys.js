@@ -7,6 +7,12 @@ const toggleFocus = () => {
 };
 
 const register = (state) => document.addEventListener("keydown", (event) => {
+  if (state.tab && event.key === "Tab") {
+    event.preventDefault();
+    document.execCommand("insertHTML", false, "&#009");
+    return;
+  }
+
   if ((event.metaKey || event.ctrlKey) && event.key === "[") {
     state.previousNote();
     return;

@@ -18,6 +18,7 @@ const themeRadios = document.getElementsByName("theme");
 // Checkboxes
 const focusCheckbox = document.getElementById("focus");
 const newtabCheckbox = document.getElementById("newtab");
+const tabCheckbox = document.getElementById("tab");
 const syncCheckbox = document.getElementById("sync");
 
 // Sync
@@ -46,6 +47,7 @@ export {
   // Checkboxes
   focusCheckbox,
   newtabCheckbox,
+  tabCheckbox,
   syncCheckbox,
 
   // Sync

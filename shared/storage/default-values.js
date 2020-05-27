@@ -29,6 +29,7 @@ export default {
   // Options
   focus: false,
   newtab: false,
+  tab: false,
 };
 
 export const validFont = (font) => typeof font === "object" && (
@@ -42,3 +43,4 @@ export const validTheme = (theme) => THEMES.includes(theme);
 
 export const validFocus = (focus) => typeof focus === "boolean";
 export const validNewtab = (newtab) => typeof newtab === "boolean";
+export const validTab = (tab) => typeof tab === "boolean";
