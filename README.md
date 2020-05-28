@@ -2,21 +2,27 @@
 
 <br>
 
-**My Notes** — Chrome Extension for note-taking in a New Tab.
+**My Notes** — Note-taking in a New Tab. Simple. Fast. Available on [_Web Store_](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 
 <br>
 
 ## Features
 
-- Notes, Todos, [**Clipboard**](#clipboard), Ideas, and more — All quickly accessible in a New Tab
+- All notes quickly accessible (see [_How to open_](#how-to-open))
 
-- Saved automatically
+- All notes saved automatically
 
-- Updated in every open window
+- Edited notes updated in every open window
 
-- Copy a text between computers (see [**Context menu**](#context-menu) or [**Google Drive Sync**](#google-drive-sync))
+- Can paste HTML
 
-- [**Google Drive Sync**](#google-drive-sync) – Store the notes to your Google Drive, with an automatic synchronization
+- Great as a [_Clipboard_](#clipboard)
+
+- Can send text between computers (see [_Context menu_](#context-menu) or [_Google Drive Sync_](#google-drive-sync))
+
+- Can store notes to Google Drive (see [_Google Drive Sync_](#google-drive-sync))
+
+- Can edit notes from other computers (see [_Google Drive Sync_](#google-drive-sync))
 
 - Works offline
 
@@ -24,59 +30,79 @@
 
 ## Installation
 
-https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop
+Available on [_Web Store_](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 
 <br>
 
 ## Icon
 
-<img src="images/icon.svg" width="32" height="32">
+<img src="images/icon.svg" width="48" height="48">
 
 <br>
 
 ## How to open
 
-1. Click on the icon (right click to get to [**Options**](#options))
-2. Automatically in every New Tab (see [**Options**](#options))
-3. Keyboard shortcut (see `chrome://extensions/shortcuts` for **Activate the extension**, e.g.: `Cmd + Shift + M`)
+There are 3 ways to open **My Notes:**
+
+1. Click on the icon (added to the toolbar)
+2. In every new tab (see [_Options_](#options))
+3. Keyboard shortcut (see [_Options_](#options))
 
 <br>
 
 ## Options
 
+There are 3 ways to open **Options:**
+
+1. Right click on the icon (added to the toolbar) and select Options
+2. Click on Options link in the main page
+3. Keyboard shortcut (see [_Options_](#options))
+
+**Options on Appearance:**
+
 - Font type (Serif, Sans Serif, Monospace, Google Fonts)
 - Font size
 - Theme (Light, or Dark)
-- Hotkeys
 - Enable Focus mode
-- Open My Notes in every New Tab (see [**Permissions**](PERMISSIONS.md))
-- Enable Google Drive Sync (see [**Permissions**](PERMISSIONS.md))
+
+**Options on Convenience:**
+
+- Hotkeys
+
+**Options on Behavior:**
+
+- Open My Notes in every New Tab (see [_Permissions_](PERMISSIONS.md))
+- Indent text on Tab
+
+**Options on Additional functionality:**
+
+- Enable Google Drive Sync (see [_Permissions_](PERMISSIONS.md))
 
 <br>
 
 ## Clipboard
 
-**Clipboard** — note that can receive the text sent by [**Context menu**](#context-menu).
-Can be edited just like any other note, but cannot be renamed or deleted.
+**Clipboard** — a note that can receive the text sent by the [_Context menu_](#context-menu).
+Can be edited just like any other note as well, but cannot be renamed or deleted because of its function.
 
 <br>
 
 ## Context menu
 
-**Context menu** — displayed only when a text is selected to quickly Copy and Paste to [**Clipboard**](#clipboard).
+**Context menu** — installed with My Notes and displayed only when a text is selected to quickly Copy and Paste the text to [_Clipboard_](#clipboard).
 
-<img src="images/context-menu.png" width="700">
+![Context menu](images/context-menu.png)
 
-**Save selection** — Saves the text to [**Clipboard**](#clipboard) in your current computer
+**Save selection** — Saves the text to [_Clipboard_](#clipboard) in your current computer
 
-**Save selection to other devices** — Saves the text to [**Clipboard**](#clipboard) in your other computer
+**Save selection to other devices** — Saves the text to [_Clipboard_](#clipboard) in your other computer
 (My Notes needs to be open, same Google Account needs to be used)
 
 <br>
 
 ## Google Drive Sync
 
-**Google Drive Sync** (see [**Options**](#options)) is an automatic two-way synchronization of your notes between My Notes and your Google Drive.
+**Google Drive Sync** (see [_Options_](#options)) is an automatic two-way synchronization of your notes between My Notes and your Google Drive.
 
 This gives you:
 
@@ -104,12 +130,10 @@ It cannot see the other files in your Google Drive.
 
 ## Implementation
 
-My Notes is implemented in **JavaScript**.
-The focus is on simplicity and providing an interface that just works — the magic happens behind the scenes.
-
+My Notes is implemented in **JavaScript**. The focus is on simplicity and providing an interface that just works.
 It is lightweight and very fast. Zero external dependencies.
-No minification or transpiling in used in the process (the code you see here, is the code you get; there is no
-obfuscation).
+No minification or transpiling is used in the process to avoid any obfuscation.
+The files you see here, are the same files you get in the extension.
 
 **Created using:**
 
@@ -125,7 +149,7 @@ obfuscation).
 
 - `chrome.storage`
   - `chrome.storage.local` — Notes and Options (Font type, Font size, etc.), 5MB limit
-  - `chrome.storage.sync` — Text sent with [**Context menu**](#context-menu), 100KB limit
+  - `chrome.storage.sync` — Text sent with [_Context menu_](#context-menu), 100KB limit
 
 - `localStorage` — Collected changes before saving (for optimized saving)
 
