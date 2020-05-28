@@ -15,6 +15,7 @@ import {
   focusCheckbox,
   newtabCheckbox,
   syncCheckbox,
+  tabCheckbox,
 } from "./elements.js";
 
 import {
@@ -149,7 +150,7 @@ function attachNewtabCheckbox() {
   });
 }
 
-function attachBackupCheckbox() {
+function attachSyncCheckbox() {
   syncCheckbox.addEventListener("click", function () {
     // Check => Request access
     if (syncCheckbox.checked === true) {
@@ -170,6 +171,12 @@ function attachBackupCheckbox() {
   });
 }
 
+function attachTabCheckbox() {
+  tabCheckbox.addEventListener("click", function () {
+    chrome.storage.local.set({ tab: this.checked });
+  });
+}
+
 const attachEvents = () => {
   // Appearance
   attachFontCategories();
@@ -182,7 +189,8 @@ const attachEvents = () => {
   // Options
   attachFocusCheckbox();
   attachNewtabCheckbox();
-  attachBackupCheckbox();
+  attachSyncCheckbox();
+  attachTabCheckbox();
 };
 
 export { attachEvents };

@@ -14,19 +14,21 @@ import {
   setTheme,
   setFocus,
   setNewtab,
+  setTab,
   setSync,
 
   setChange,
   setVersion,
 } from "./options/state.js";
 
-chrome.storage.local.get(["font", "size", "theme", "focus", "newtab", "sync"], local => {
-  const { font, size, theme, focus, newtab, sync } = local;
+chrome.storage.local.get(["font", "size", "theme", "focus", "newtab", "tab", "sync"], local => {
+  const { font, size, theme, focus, newtab, tab, sync } = local;
   setFont(font);
   setSize(size);
   setTheme(theme);
   setFocus(focus);
   setNewtab(newtab);
+  setTab(tab);
   setSync(sync);
 });
 
@@ -38,6 +40,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     setChange(changes["theme"], setTheme);
     setChange(changes["focus"], setFocus);
     setChange(changes["newtab"], setNewtab);
+    setChange(changes["tab"], setTab);
     setChange(changes["sync"], setSync);
   }
 });

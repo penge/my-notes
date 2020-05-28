@@ -120,7 +120,7 @@ hr {
 }
 
 #content, .note-tile .note-content {
-  white-space: pre-wrap;
+  white-space: break-spaces;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -179,19 +179,15 @@ hr {
 
 /* Toolbar */
 
-#toolbar, #toolbar .group {
+#toolbar {
   display: flex;
   flex-wrap: wrap;
-}
-
-#toolbar {
   padding: .5em 0;
   margin: 0 1em;
   user-select: none;
-  color: #D9D9D9;
 }
 
-#toolbar .group > div {
+#toolbar .control {
   margin: .3em .5em 0 0;
   font-size: .7em;
   padding: .2em;
@@ -199,23 +195,20 @@ hr {
   cursor: pointer;
 }
 
-#toolbar .group > div:hover {
-  background: #222;
-  color: white;
-}
+#toolbar .control:first-child { margin-left: -.2em; }
 
-#toolbar .group > div > span {
-  font-size: .8em;
-}
+#toolbar .control > svg { height: .7em; }
 
-#toolbar .group:first-child {
-  margin-right: 2em;
-  margin-left: -.2em;
-}
+#toolbar .control .two { font-size: .9em; font-weight: bold; }
+#toolbar .control .three { font-size: .7em; font-weight: bold; }
 
-#toolbar .group:first-child > div:first-child {
-  margin-left: 0;
-}
+#toolbar .control { color: #222; }
+#toolbar .control > svg { fill: #222; }
+
+#toolbar .control:hover { background: #222; color: white; }
+#toolbar .control:hover > svg { fill: white; }
+
+#toolbar #S { margin-right: 2.5em; }
 
 /* Overlay */
 
@@ -276,9 +269,11 @@ body.focus #toolbar {
   color: white;
 }
 
-#dark #toolbar {
-  color: #626262;
-}
+#dark #toolbar .control { color: #626262; }
+#dark #toolbar .control > svg { fill: #626262; }
+
+#dark #toolbar .control:hover { color: white; }
+#dark #toolbar .control:hover > svg { fill: white; }
 
 #dark .note-tile { border-color: #3c3c3c; }
 #dark .note-tile:hover { border-color: #8e8e8e; }

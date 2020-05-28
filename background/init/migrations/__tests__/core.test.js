@@ -3,11 +3,14 @@
 import migrate from "../core.js";
 import runTests from "../../../../tests/run-tests.js";
 
+const assertItems = (items) => {
+  console.assert(Object.keys(items).length === 8);
+  console.assert(["font", "size", "theme", "notes", "active", "focus", "newtab", "tab"].every(key => key in items));
+};
+
 const testDefaultValues = (myItems) => {
   const items = myItems || migrate({}, {});
-
-  console.assert(Object.keys(items).length === 7);
-  console.assert(["font", "size", "theme", "notes", "active", "focus", "newtab"].every(key => key in items));
+  assertItems(items);
 
   // font
   console.assert(items.font.id === "helvetica");
@@ -43,6 +46,9 @@ const testDefaultValues = (myItems) => {
 
   // newtab
   console.assert(items.newtab === false);
+
+  // tab
+  console.assert(items.tab === false);
 };
 
 const testCustomValues = () => {
@@ -91,10 +97,10 @@ const testCustomValues = () => {
     active: "Todo",
     focus: true,
     newtab: true,
+    tab: true,
   });
 
-  console.assert(Object.keys(items).length === 7);
-  console.assert(["font", "size", "theme", "notes", "active", "focus", "newtab"].every(key => key in items));
+  assertItems(items);
 
   // font
   console.assert(items.font.id === "roboto-mono");
@@ -144,6 +150,9 @@ const testCustomValues = () => {
 
   // newtab
   console.assert(items.newtab === true);
+
+  // tab
+  console.assert(items.tab === true);
 };
 
 const testValidValues = () => { // any invalid value should fallback to a default
@@ -157,6 +166,7 @@ const testValidValues = () => { // any invalid value should fallback to a defaul
     active: "Todo", // must be in "notes"
     focus: 1,       // must be boolean
     newtab: 1,      // must be boolean
+    tab: 1,         // must be boolean
   });
 
   testDefaultValues(items); // every wrong attribute in "items" should fallback to a default

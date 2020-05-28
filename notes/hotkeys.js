@@ -7,6 +7,12 @@ const toggleFocus = () => {
 };
 
 const register = (state) => document.addEventListener("keydown", (event) => {
+  if (state.tab && event.key === "Tab") {
+    event.preventDefault();
+    document.execCommand("insertHTML", false, "&#009");
+    return;
+  }
+
   if ((event.metaKey || event.ctrlKey) && event.key === "[") {
     state.previousNote();
     return;
@@ -19,6 +25,11 @@ const register = (state) => document.addEventListener("keydown", (event) => {
 
   if ((event.metaKey || event.ctrlKey) && event.shiftKey && (event.key === "F" || event.key === "f")) {
     state.active && toggleFocus(); // toggle focus only when a note is open
+    return;
+  }
+
+  if ((event.metaKey || event.ctrlKey) && event.shiftKey && (event.key === "O" || event.key === "o")) {
+    chrome.tabs.create({ url: "/options.html" });
     return;
   }
 });

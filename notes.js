@@ -46,9 +46,9 @@ syncNow.addEventListener("click", (event) => {
 });
 
 chrome.storage.local.get([
-  "font", "size", "theme", "notes", "active", "focus", "notification", "sync"
+  "font", "size", "theme", "notes", "active", "focus", "tab", "notification", "sync"
 ], local => {
-  const { font, size, theme, notes, active, focus, notification, sync } = local;
+  const { font, size, theme, notes, active, focus, tab, notification, sync } = local;
 
   // Appearance
   state.font = font;
@@ -61,6 +61,7 @@ chrome.storage.local.get([
 
   // Options
   state.focus = focus;
+  state.tab = tab;
   state.notification = notification; // shows a notification if any
 
   // Sync
@@ -74,6 +75,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     if (changes["size"]) { state.size = changes["size"].newValue; }
     if (changes["theme"]) { state.theme = changes["theme"].newValue; }
     if (changes["focus"]) { state.focus = changes["focus"].newValue; }
+    if (changes["tab"]) { state.tab = changes["tab"].newValue; }
     if (changes["sync"]) { state.sync = changes["sync"].newValue; }
 
     if (changes["notes"]) {
