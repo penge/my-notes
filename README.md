@@ -2,7 +2,8 @@
 
 <br>
 
-**My Notes** — Note-taking in a New Tab. Simple. Fast. Available on [_Web Store_](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+**My Notes** — Chrome extension for simple note taking.
+Available on [_Web Store_](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 
 <br>
 

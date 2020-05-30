@@ -10,14 +10,8 @@ export default function setActive(name, html, { renameNote, deleteNote }) {
   noteName.innerText = name;
   noteName.classList.toggle("reserved", isReserved(name));
 
-  content.style.caretColor = "transparent";
   content.innerHTML = html;
-  setTimeout(function() {
-    content.focus();
-    document.execCommand("selectAll", false, null);
-    document.getSelection().collapseToEnd();
-    content.style.caretColor = "";
-  }, 0);
+  content.blur();
 
   attachOptions(name, { noteOptions, renameNote, deleteNote });
 }
