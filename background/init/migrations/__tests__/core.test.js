@@ -4,8 +4,18 @@ import migrate from "../core.js";
 import runTests from "../../../../tests/run-tests.js";
 
 const assertItems = (items) => {
-  console.assert(Object.keys(items).length === 8);
-  console.assert(["font", "size", "theme", "notes", "active", "focus", "newtab", "tab"].every(key => key in items));
+  console.assert(Object.keys(items).length === 9);
+  console.assert([
+    "font",
+    "size",
+    "theme",
+    "customTheme",
+    "notes",
+    "active",
+    "focus",
+    "newtab",
+    "tab",
+  ].every(key => key in items));
 };
 
 const testDefaultValues = (myItems) => {
@@ -24,6 +34,11 @@ const testDefaultValues = (myItems) => {
 
   // theme
   console.assert(items.theme === "light");
+
+  // custom theme
+  console.assert(Object.keys(items.customTheme).length === 2);
+  console.assert(items.customTheme.background === "#35363a");
+  console.assert(items.customTheme.text === "#ffffff");
 
   // notes
   console.assert(Object.keys(items.notes).length === 4);
@@ -61,6 +76,10 @@ const testCustomValues = () => {
     },
     size: 340,
     theme: "dark",
+    customTheme: {
+      background: "#545454",
+      text: "#ffffff",
+    },
     notes: {
       Todo: {
         content: "buy milk",
@@ -115,6 +134,11 @@ const testCustomValues = () => {
   // theme
   console.assert(items.theme === "dark");
 
+  // customTheme
+  console.assert(Object.keys(items.customTheme).length === 2);
+  console.assert(items.customTheme.background === "#545454");
+  console.assert(items.customTheme.text === "#ffffff");
+
   // notes
   console.assert(Object.keys(items.notes).length === 3);
 
@@ -162,6 +186,7 @@ const testValidValues = () => { // any invalid value should fallback to a defaul
     },
     size: "large",  // must be number
     theme: "green", // must be "light" or "dark"
+    customTheme: { background: "#ffffff" }, // must be valid object
     notes: null,    // must be object
     active: "Todo", // must be in "notes"
     focus: 1,       // must be boolean

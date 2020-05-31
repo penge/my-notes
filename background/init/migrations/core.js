@@ -3,6 +3,7 @@ import defaultValues, {
   validFont,
   validSize,
   validTheme,
+  validCustomTheme,
 
   // Options
   validFocus,
@@ -46,6 +47,7 @@ export default (sync, local) => {
     font: validFont(local.font) ? local.font : defaultValues.font,
     size: validSize(local.size) ? local.size : defaultValues.size,
     theme: validTheme(local.theme) ? local.theme : defaultValues.theme,
+    customTheme: validCustomTheme(local.customTheme) ? local.customTheme : defaultValues.customTheme,
 
     // Notes
     notes: notes, // already migrated to [3.x]
