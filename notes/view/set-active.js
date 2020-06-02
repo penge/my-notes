@@ -1,4 +1,4 @@
-/* global document, setTimeout */
+/* global document */
 
 import { noteName, noteOptions, content } from "./elements.js";
 import { isReserved } from "../reserved.js";
@@ -11,7 +11,6 @@ export default function setActive(name, html, { renameNote, deleteNote }) {
   noteName.classList.toggle("reserved", isReserved(name));
 
   content.innerHTML = html;
-  content.blur();
 
   attachOptions(name, { noteOptions, renameNote, deleteNote });
 }
