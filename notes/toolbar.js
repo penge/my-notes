@@ -1,6 +1,7 @@
 /* global document */
 
 import edit from "./edit.js";
+import { changeStyle } from "./view/dom.js";
 
 const get = id => document.getElementById(id);
 
@@ -23,6 +24,8 @@ const controls = [
   [get("CL"), () => exec("justifyLeft")],
   [get("CC"), () => exec("justifyCenter")],
   [get("CR"), () => exec("justifyRight")],
+  [get("RTL"), () => changeStyle({'direction': 'rtl', 'text-align': 'right'})],
+  [get("LTR"), () => changeStyle({'direction': 'ltr', 'text-align': 'left' })],
 ];
 
 const initialize = (content, tabId) => {

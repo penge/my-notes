@@ -209,6 +209,7 @@ hr {
 #toolbar .control:hover > svg { fill: white; }
 
 #toolbar #S { margin-right: 2.5em; }
+#toolbar #LTR.control { margin-left: 2.5em; }
 
 /* Overlay */
 
