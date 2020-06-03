@@ -101,14 +101,6 @@ input, select {
   cursor: pointer;
 }
 
-.slider::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: black;
-  cursor: pointer;
-}
-
 /* With comment */
 
 .selection.with-comment {
@@ -211,12 +203,6 @@ input, select {
 }
 
 #dark .slider::-webkit-slider-thumb {
-  background: white;
-  width: 12px;
-  height: 12px;
-}
-
-#dark .slider::-moz-range-thumb {
   background: white;
   width: 12px;
   height: 12px;
