@@ -73,31 +73,23 @@ input, select {
 
 /* Font size */
 
-#current-size {
-  color: #9E9E9E;
-}
-
 .slidecontainer {
   width: 100%;
 }
 
 .slider {
   -webkit-appearance: none;
-  appearance: none;
   width: 100%;
   height: 3px;
   border-radius: 3px;
-  background: #d3d3d3;
   outline: none;
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  appearance: none;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: black;
   cursor: pointer;
 }
 
@@ -115,7 +107,7 @@ input, select {
   line-height: 1.5em;
 }
 
-/* Labels */
+/* Theme labels */
 
 .theme-label {
   display: inline-block;
@@ -125,7 +117,7 @@ input, select {
 }
 
 #light-theme-label {
-  border: 1px dashed #121212;
+  border: 1px solid white;
   background: white;
   color: #121212;
 }
@@ -188,6 +180,7 @@ input[name="custom"] {
   border-radius: 3px;
   padding: 3px 8px;
   font-weight: bold;
+  display: inline-block;
 }
 
 /* Sync */
@@ -213,14 +206,12 @@ input[name="custom"] {
   color: black;
 }
 
-#light .selection.with-comment .comment {
-  background: #d6d6d6;
+#light .hotkey {
+  color: #121212;
 }
 
-#light .hotkey {
-  background: #121212;
-  color: white;
-}
+#light .slider { background: #d3d3d3; }
+#light .slider::-webkit-slider-thumb { background: black; }
 
 /* Dark theme */
 
@@ -229,11 +220,11 @@ input[name="custom"] {
   color: white;
 }
 
-#dark #light-theme-label {
-  border-style: solid;
+#dark a {
+  color: white;
 }
 
-#dark a {
+#dark .hotkey {
   color: white;
 }
 
@@ -247,13 +238,28 @@ input[name="custom"] {
   height: 12px;
 }
 
-#dark .selection.with-comment .comment {
-  background: #222;
+/* Custom theme */
+
+#custom {
+  background: var(--background);
+  color: var(--text);
 }
 
-#dark .hotkey {
-  background: #222;
-  color: white;
+#custom a {
+  color: var(--text);
+}
+
+#custom .slider,
+#custom .slider::-webkit-slider-thumb {
+  background: var(--text);
+}
+
+/* Any theme */
+
+.hotkey,
+#custom-theme,
+.selection.with-comment .comment {
+  backdrop-filter: invert(.4) opacity(.3);
 }
 
 /* Media Queries */

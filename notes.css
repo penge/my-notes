@@ -289,6 +289,30 @@ body.focus #toolbar {
 #dark #toolbar .control:hover { color: white; background: #222; }
 #dark #toolbar .control:hover > svg { fill: white; }
 
+/* Custom theme */
+
+#custom {
+  background: var(--background);
+  color: var(--text);
+}
+
+#custom a { color: var(--text); }
+
+#custom .note-tile { border-color: var(--text); }
+
+#custom .note-options .dropdown-toggle { fill: var(--text); opacity: .6; }
+#custom .note-options .dropdown {
+  background: var(--background);
+  color: var(--text);
+  border: 1px solid var(--text);
+}
+
+#custom #toolbar .control { color: var(--text); }
+#custom #toolbar .control > svg { fill: var(--text); }
+
+#custom #toolbar .control:hover { color: var(--background); background: var(--text); }
+#custom #toolbar .control:hover > svg { fill: var(--background); }
+
 /* Media Queries */
 
 @media (max-width: 800px) {
