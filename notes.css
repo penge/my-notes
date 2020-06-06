@@ -49,6 +49,10 @@ hr {
   font-weight: bold;
 }
 
+#notification a:hover {
+  text-decoration: underline;
+}
+
 /* Main page */
 
 #notes {
@@ -62,7 +66,7 @@ hr {
   display: inline-block;
   box-sizing: border-box;
   width: 48%;
-  border: 1px solid #dfe1e5;
+  border: 1px solid transparent;
   border-radius: 3px;
   cursor: pointer;
   margin: 0 2% 2% 0;
@@ -202,12 +206,6 @@ hr {
 #toolbar .control .two { font-size: .9em; font-weight: bold; }
 #toolbar .control .three { font-size: .7em; font-weight: bold; }
 
-#toolbar .control { color: #222; }
-#toolbar .control > svg { fill: #222; }
-
-#toolbar .control:hover { background: #222; color: white; }
-#toolbar .control:hover > svg { fill: white; }
-
 #toolbar #S { margin-right: 2.5em; }
 
 /* Overlay */
@@ -258,6 +256,12 @@ body.focus #toolbar {
   border: 1px solid #1a73e8;
 }
 
+#light #toolbar .control { color: #222; }
+#light #toolbar .control > svg { fill: #222; }
+
+#light #toolbar .control:hover { color: white; background: #222; }
+#light #toolbar .control:hover > svg { fill: white; }
+
 /* Dark theme */
 
 #dark, #dark #content {
@@ -269,12 +273,6 @@ body.focus #toolbar {
   color: white;
 }
 
-#dark #toolbar .control { color: #626262; }
-#dark #toolbar .control > svg { fill: #626262; }
-
-#dark #toolbar .control:hover { color: white; }
-#dark #toolbar .control:hover > svg { fill: white; }
-
 #dark .note-tile { border-color: #3c3c3c; }
 #dark .note-tile:hover { border-color: #8e8e8e; }
 
@@ -284,6 +282,12 @@ body.focus #toolbar {
   color: white;
   border: 1px solid #dfe1e5;
 }
+
+#dark #toolbar .control { color: #626262; }
+#dark #toolbar .control > svg { fill: #626262; }
+
+#dark #toolbar .control:hover { color: white; background: #222; }
+#dark #toolbar .control:hover > svg { fill: white; }
 
 /* Media Queries */
 
