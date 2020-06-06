@@ -143,6 +143,45 @@ input, select {
   font-style: italic;
 }
 
+/* Custom theme settings */
+
+input[name="custom"] {
+  visibility: hidden;
+}
+
+#custom-theme {
+  margin: 15px 35px 30px 35px;
+  padding: 20px;
+  border-radius: 6px;
+  line-height: 1.5em;
+  display: inline-block;
+}
+
+#custom-theme .setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#custom-theme .setting > span {
+  margin-right: 1em;
+  font-size: 90%;
+  font-weight: bold;
+  text-align: right;
+  flex-grow: 1;
+}
+
+#custom-theme .setting > label {
+  padding: 0;
+  border-radius: 3px;
+  border: 2px solid #121212;
+  height: 1em;
+  width: 2em;
+  margin-left: auto;
+  display: inline-block;
+  cursor: pointer;
+}
+
 /* Hotkeys */
 
 .hotkey {
@@ -159,7 +198,7 @@ input, select {
 
 /* Themes */
 
-#light, #dark {
+#light, #dark, #custom {
   opacity: 1;
 }
 
