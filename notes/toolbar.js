@@ -1,4 +1,4 @@
-/* global document */
+/* global document, prompt */
 
 import edit from "./edit.js";
 
@@ -23,6 +23,13 @@ const controls = [
   [get("CL"), () => exec("justifyLeft")],
   [get("CC"), () => exec("justifyCenter")],
   [get("CR"), () => exec("justifyRight")],
+
+  [get("IMG"), () => {
+    const url = prompt("Image URL:");
+    if (url.length > 0) {
+      exec("insertImage", url);
+    }
+  }],
 ];
 
 const initialize = (content, tabId) => {
