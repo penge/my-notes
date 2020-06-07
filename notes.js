@@ -9,6 +9,7 @@ import toolbar from "./notes/toolbar.js";
 import { saveNotes, syncNotes } from "./notes/saving.js";
 import hotkeys from "./notes/hotkeys.js";
 import { initCustomTheme } from "../themes/custom.js";
+import { newNoteModal } from "./notes/modals.js";
 
 let tabId; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
@@ -29,8 +30,9 @@ noteName.addEventListener("click", () => {
 // Create a New note
 createNote.addEventListener("click", (event) => {
   event.preventDefault();
-  const name = prompt("Type a unique name:");
-  name && state.createNote(name);
+  newNoteModal((name) => {
+    state.createNote(name);
+  });
 });
 
 // Open Options

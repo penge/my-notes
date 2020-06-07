@@ -233,7 +233,6 @@ hr {
   padding: .5em;
   border-radius: 5px;
   transform: translate(calc(-50% - .5em), calc(-50% - .5em));
-  backdrop-filter: invert(.4) opacity(.3);
 }
 
 #modal input {
@@ -245,7 +244,7 @@ hr {
   padding: 12px;
 }
 
-#modal input[type="text"] {
+#modal #input {
   width: 100%;
   background: white;
 }
@@ -297,6 +296,8 @@ body.focus #toolbar {
 #light #toolbar .control:hover { color: white; background: #222; }
 #light #toolbar .control:hover > svg { fill: white; }
 
+#light #modal { background: white; border: 1px solid #dfe1e5; }
+#light #modal #input { border: 1px solid #dfe1e5; }
 #light #modal #buttons input {
   background: #222;
   color: white;
@@ -329,6 +330,7 @@ body.focus #toolbar {
 #dark #toolbar .control:hover { color: white; background: #222; }
 #dark #toolbar .control:hover > svg { fill: white; }
 
+#dark #modal { background: #222; border: 1px solid #3c3c3c; }
 #dark #modal #buttons input {
   background: white;
   color: #121212;
@@ -358,6 +360,8 @@ body.focus #toolbar {
 #custom #toolbar .control:hover { color: var(--background); background: var(--text); }
 #custom #toolbar .control:hover > svg { fill: var(--background); }
 
+#custom #modal { background: var(--background); border: 1px solid var(--text); }
+#custom #modal #input { border: 1px solid var(--text); }
 #custom #modal #buttons input {
   background: var(--text);
   color: var(--background);
