@@ -224,6 +224,41 @@ hr {
 .to-delete { background: rgba(255,0,0,.6); }
 .to-delete.note-tile { border-color: transparent !important; }
 
+/* Modal */
+
+#modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  padding: .5em;
+  border-radius: 5px;
+  transform: translate(calc(-50% - .5em), calc(-50% - .5em));
+  backdrop-filter: invert(.4) opacity(.3);
+}
+
+#modal input {
+  max-width: 500px;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  padding: 12px;
+}
+
+#modal input[type="text"] {
+  width: 100%;
+  background: white;
+}
+
+#modal #buttons {
+  text-align: right;
+}
+
+#modal #buttons input {
+  cursor: pointer;
+  font-size: 1rem;
+}
+
 /* Focus */
 
 body.focus #panel,
@@ -262,6 +297,11 @@ body.focus #toolbar {
 #light #toolbar .control:hover { color: white; background: #222; }
 #light #toolbar .control:hover > svg { fill: white; }
 
+#light #modal #buttons input {
+  background: #222;
+  color: white;
+}
+
 /* Dark theme */
 
 #dark, #dark #content {
@@ -289,6 +329,11 @@ body.focus #toolbar {
 #dark #toolbar .control:hover { color: white; background: #222; }
 #dark #toolbar .control:hover > svg { fill: white; }
 
+#dark #modal #buttons input {
+  background: white;
+  color: #121212;
+}
+
 /* Custom theme */
 
 #custom {
@@ -312,6 +357,11 @@ body.focus #toolbar {
 
 #custom #toolbar .control:hover { color: var(--background); background: var(--text); }
 #custom #toolbar .control:hover > svg { fill: var(--background); }
+
+#custom #modal #buttons input {
+  background: var(--text);
+  color: var(--background);
+}
 
 /* Media Queries */
 

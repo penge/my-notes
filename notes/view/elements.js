@@ -26,6 +26,7 @@ const toolbar = _get("toolbar");
 // Templates
 const noteTileTemplate = _get("note-tile-template");
 const newVersionNotificationTemplate = _get("new-version-notification-template");
+const insertImageModalTemplate = _get("insert-image-modal-template");
 
 export {
   googleFonts,
@@ -50,4 +51,5 @@ export {
   // Templates
   noteTileTemplate,
   newVersionNotificationTemplate,
+  insertImageModalTemplate,
 };
