@@ -5,9 +5,13 @@ export const showOverlay = (clazz) => {
   overlay.id = "overlay";
   overlay.className = clazz; // "to-rename" or "to-delete"
   document.body.appendChild(overlay);
+  document.body.classList.add("with-overlay");
 };
 
 export const removeOverlay = () => {
   const overlay = document.getElementById("overlay");
-  overlay && overlay.remove();
+  if (overlay) {
+    overlay.remove();
+    document.body.classList.remove("with-overlay");
+  }
 };
