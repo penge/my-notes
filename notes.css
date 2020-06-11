@@ -13,7 +13,7 @@ body {
 
 /* Themes */
 
-#light, #dark {
+#light, #dark, #custom {
   opacity: 1;
 }
 
@@ -49,6 +49,10 @@ hr {
   font-weight: bold;
 }
 
+#notification a:hover {
+  text-decoration: underline;
+}
+
 /* Main page */
 
 #notes {
@@ -62,7 +66,7 @@ hr {
   display: inline-block;
   box-sizing: border-box;
   width: 48%;
-  border: 1px solid #dfe1e5;
+  border: 1px solid transparent;
   border-radius: 3px;
   cursor: pointer;
   margin: 0 2% 2% 0;
@@ -202,12 +206,6 @@ hr {
 #toolbar .control .two { font-size: .9em; font-weight: bold; }
 #toolbar .control .three { font-size: .7em; font-weight: bold; }
 
-#toolbar .control { color: #222; }
-#toolbar .control > svg { fill: #222; }
-
-#toolbar .control:hover { background: #222; color: white; }
-#toolbar .control:hover > svg { fill: white; }
-
 #toolbar #S { margin-right: 2.5em; }
 
 /* Overlay */
@@ -225,6 +223,59 @@ hr {
 
 .to-delete { background: rgba(255,0,0,.6); }
 .to-delete.note-tile { border-color: transparent !important; }
+
+/* Modal */
+
+#modal {
+  position: fixed;
+  padding: .5em;
+  border-radius: 5px;
+}
+
+#modal input {
+  max-width: 500px;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  padding: 12px;
+}
+
+#modal #input {
+  width: 100%;
+  background: white;
+}
+
+#modal #buttons {
+  text-align: right;
+}
+
+#modal #buttons input {
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+body.with-overlay #modal {
+  border: none !important;
+}
+
+/* Modal position */
+
+#modal.center {
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% - .5em), calc(-50% - .5em));
+}
+
+#modal.top {
+  top: 0;
+  left: 50%;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-style: none !important;
+  min-width: 30%;
+  transform: translate(calc(-50% - .5em), 0);
+}
 
 /* Focus */
 
@@ -258,6 +309,19 @@ body.focus #toolbar {
   border: 1px solid #1a73e8;
 }
 
+#light #toolbar .control { color: #222; }
+#light #toolbar .control > svg { fill: #222; }
+
+#light #toolbar .control:hover { color: white; background: #222; }
+#light #toolbar .control:hover > svg { fill: white; }
+
+#light #modal { background: white; border: 1px solid #dfe1e5; }
+#light #modal #input { border: 1px solid #dfe1e5; }
+#light #modal #buttons input {
+  background: #222;
+  color: white;
+}
+
 /* Dark theme */
 
 #dark, #dark #content {
@@ -269,12 +333,6 @@ body.focus #toolbar {
   color: white;
 }
 
-#dark #toolbar .control { color: #626262; }
-#dark #toolbar .control > svg { fill: #626262; }
-
-#dark #toolbar .control:hover { color: white; }
-#dark #toolbar .control:hover > svg { fill: white; }
-
 #dark .note-tile { border-color: #3c3c3c; }
 #dark .note-tile:hover { border-color: #8e8e8e; }
 
@@ -283,6 +341,49 @@ body.focus #toolbar {
   background: #121212;
   color: white;
   border: 1px solid #dfe1e5;
+}
+
+#dark #toolbar .control { color: #626262; }
+#dark #toolbar .control > svg { fill: #626262; }
+
+#dark #toolbar .control:hover { color: white; background: #222; }
+#dark #toolbar .control:hover > svg { fill: white; }
+
+#dark #modal { background: #222; border: 1px solid #3c3c3c; }
+#dark #modal #buttons input {
+  background: white;
+  color: #121212;
+}
+
+/* Custom theme */
+
+#custom {
+  background: var(--background);
+  color: var(--text);
+}
+
+#custom a { color: var(--text); }
+
+#custom .note-tile { border-color: var(--text); }
+
+#custom .note-options .dropdown-toggle { fill: var(--text); opacity: .6; }
+#custom .note-options .dropdown {
+  background: var(--background);
+  color: var(--text);
+  border: 1px solid var(--text);
+}
+
+#custom #toolbar .control { color: var(--text); }
+#custom #toolbar .control > svg { fill: var(--text); }
+
+#custom #toolbar .control:hover { color: var(--background); background: var(--text); }
+#custom #toolbar .control:hover > svg { fill: var(--background); }
+
+#custom #modal { background: var(--background); border: 1px solid var(--text); }
+#custom #modal #input { border: 1px solid var(--text); }
+#custom #modal #buttons input {
+  background: var(--text);
+  color: var(--background);
 }
 
 /* Media Queries */

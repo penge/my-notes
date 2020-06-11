@@ -8,6 +8,8 @@ import typing from "./notes/typing.js";
 import toolbar from "./notes/toolbar.js";
 import { saveNotes, syncNotes } from "./notes/saving.js";
 import hotkeys from "./notes/hotkeys.js";
+import { initCustomTheme } from "../themes/custom.js";
+import { newNoteModal } from "./notes/modals.js";
 
 let tabId; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
@@ -28,8 +30,9 @@ noteName.addEventListener("click", () => {
 // Create a New note
 createNote.addEventListener("click", (event) => {
   event.preventDefault();
-  const name = prompt("Type a unique name:");
-  name && state.createNote(name);
+  newNoteModal((name) => {
+    state.createNote(name);
+  });
 });
 
 // Open Options
@@ -46,14 +49,15 @@ syncNow.addEventListener("click", (event) => {
 });
 
 chrome.storage.local.get([
-  "font", "size", "theme", "notes", "active", "focus", "tab", "notification", "sync"
+  "font", "size", "theme", "customTheme", "notes", "active", "focus", "tab", "notification", "sync"
 ], local => {
-  const { font, size, theme, notes, active, focus, tab, notification, sync } = local;
+  const { font, size, theme, customTheme, notes, active, focus, tab, notification, sync } = local;
 
   // Appearance
   state.font = font;
   state.size = size;
   state.theme = theme;
+  initCustomTheme(customTheme);
 
   // Notes
   state.notes = notes;
@@ -74,6 +78,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     if (changes["font"]) { state.font = changes["font"].newValue; }
     if (changes["size"]) { state.size = changes["size"].newValue; }
     if (changes["theme"]) { state.theme = changes["theme"].newValue; }
+    if (changes["customTheme"]) { initCustomTheme(changes["customTheme"].newValue); }
     if (changes["focus"]) { state.focus = changes["focus"].newValue; }
     if (changes["tab"]) { state.tab = changes["tab"].newValue; }
     if (changes["sync"]) { state.sync = changes["sync"].newValue; }

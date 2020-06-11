@@ -1,6 +1,7 @@
 /* global document */
 
 import edit from "./edit.js";
+import { insertImageModal } from "./modals.js";
 
 const get = id => document.getElementById(id);
 
@@ -23,13 +24,20 @@ const controls = [
   [get("CL"), () => exec("justifyLeft")],
   [get("CC"), () => exec("justifyCenter")],
   [get("CR"), () => exec("justifyRight")],
+
+  [get("IMG"), (content) => {
+    insertImageModal((url) => {
+      content.focus();
+      exec("insertImage", url);
+    });
+  }],
 ];
 
 const initialize = (content, tabId) => {
   for (const control of controls) {
     const [element, handler] = control;
     element.addEventListener("click", () => {
-      handler() && edit(content, tabId);
+      handler(content) && edit(content, tabId);
     });
   }
 };

@@ -12,8 +12,9 @@ const submit = document.getElementById("submit");
 const currentSize = document.getElementById("current-size");
 const sizeRange = document.getElementById("size-range");
 
-// Theme ("light", "dark")
+// Theme ("light", "dark", "custom")
 const themeRadios = document.getElementsByName("theme");
+const customInputs = document.getElementsByName("custom");
 
 // Checkboxes
 const focusCheckbox = document.getElementById("focus");
@@ -42,7 +43,8 @@ export {
   sizeRange,
 
   // Theme
-  themeRadios, // "light", "dark"
+  themeRadios,
+  customInputs,
 
   // Checkboxes
   focusCheckbox,

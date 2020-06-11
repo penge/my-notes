@@ -1,13 +1,14 @@
-/* global document, window, prompt */
+/* global document */
 
 import { isReserved } from "../reserved.js";
 import { closeDropdown, closeDropdowns } from "./dropdown.js";
 import { showOverlay, removeOverlay } from "./overlay.js";
+import { renameNoteModal, deleteNoteModal } from "../modals.js";
 
-const reset = ({ noteTile }) => {
-  if (noteTile) {
-    noteTile.classList.remove("to-rename");
-    noteTile.classList.remove("to-delete");
+export const reset = () => {
+  const tiles = document.getElementsByClassName("note-tile in-action");
+  if (tiles.length === 1) {
+    tiles[0].classList.remove("to-rename", "to-delete", "in-action");
   }
   removeOverlay();
 };
@@ -35,55 +36,22 @@ export default function attachOptions(noteName, { noteOptions, noteTile, renameN
     dropdown.classList.toggle("open", !isOpen);
   };
 
+  const callAction = (clazz, handler) => {
+    closeDropdown(dropdown);
+    if (useTile) { noteTile.classList.add(clazz, "in-action"); }
+    if (useOverlay) { showOverlay(clazz); }
+    handler();
+  };
+
   renameAction.onclick = () => {
-    function callback() {
-      closeDropdown(dropdown);
-      if (useTile) {
-        if (noteTile && !noteTile.classList.contains("to-rename")) {
-          noteTile.classList.add("to-rename");
-          window.requestAnimationFrame(callback);
-          return;
-        }
-      }
-      if (useOverlay) {
-        const overlay = document.getElementById("overlay");
-        if (!overlay || !overlay.classList.contains("to-rename")) {
-          showOverlay("to-rename");
-          window.requestAnimationFrame(callback);
-          return;
-        }
-      }
-      const newName = prompt("Type a new unique name:", noteName);
-      reset({ noteTile });
-      renameNote(noteName, newName);
-    }
-    window.requestAnimationFrame(callback);
+    callAction("to-rename", () => {
+      renameNoteModal(noteName, (newName) => { renameNote(noteName, newName); }, reset);
+    });
   };
 
   deleteAction.onclick = () => {
-    function callback() {
-      closeDropdown(dropdown);
-      if (useTile) {
-        if (noteTile && !noteTile.classList.contains("to-delete")) {
-          noteTile.classList.add("to-delete");
-          window.requestAnimationFrame(callback);
-          return;
-        }
-      }
-      if (useOverlay) {
-        const overlay = document.getElementById("overlay");
-        if (!overlay || !overlay.classList.contains("to-delete")) {
-          showOverlay("to-delete");
-          window.requestAnimationFrame(callback);
-          return;
-        }
-      }
-      const answer = prompt(`Are you sure you want to delete "${noteName}"?\r\n\r\nType "delete" to confirm.`);
-      reset({ noteTile });
-      if (answer === "delete") {
-        deleteNote(noteName);
-      }
-    }
-    window.requestAnimationFrame(callback);
+    callAction("to-delete", () => {
+      deleteNoteModal(noteName, () => { deleteNote(noteName); }, reset);
+    });
   };
 }
