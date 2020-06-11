@@ -2,8 +2,8 @@
 
 <br>
 
-**My Notes** — Chrome extension for simple note taking.
-Available on [_Web Store_](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+**My Notes** — The best way to take notes in a new tab.
+Available on [**Web Store**](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 
 <br>
 
@@ -31,7 +31,7 @@ Available on [_Web Store_](https://chrome.google.com/webstore/detail/my-notes/lk
 
 ## Installation
 
-Available on [_Web Store_](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+Available on [**Web Store**](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 
 <br>
 
@@ -59,23 +59,23 @@ There are 3 ways to open **Options:**
 2. Click on Options link in the main page
 3. Keyboard shortcut (see [_Options_](#options))
 
-**Options on Appearance:**
+**Appearance:**
 
 - Font type (Serif, Sans Serif, Monospace, Google Fonts)
 - Font size
-- Theme (Light, or Dark)
+- Theme (Light, Dark, Custom)
 - Enable Focus mode
 
-**Options on Convenience:**
+**Convenience:**
 
 - Hotkeys
 
-**Options on Behavior:**
+**Behavior:**
 
 - Open My Notes in every New Tab (see [_Permissions_](PERMISSIONS.md))
-- Indent text on Tab
+- Indent text on Tab (by default focuses the address bar)
 
-**Options on Additional functionality:**
+**Additional functionality:**
 
 - Enable Google Drive Sync (see [_Permissions_](PERMISSIONS.md))
 
@@ -142,7 +142,7 @@ The files you see here, are the same files you get in the extension.
 
 - ECMAScript `Proxy` (UI updates)
 
-- Event Driven Background Script (run in background, unloaded when not used)
+- Event Driven Background Script (run in background)
 
 - `await` / `async`
 
@@ -176,6 +176,8 @@ background/
                     # - Registers events to trigger Google Drive Sync from My Notes
 
 images/           # Images and icons used in My Notes or README
+
+themes/           # Initialization of the custom theme for Notes and Options
 
 notes/            # Everything related to Notes
                     # - Create/Rename/Delete notes; Note editing, Note saving
