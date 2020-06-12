@@ -1,8 +1,6 @@
 /* global chrome, document */
 
-import { closeDropdowns } from "./view/dropdown.js";
-import { removeModal } from "./modals.js";
-import { reset } from "./view/attach-options.js";
+import contextMenu from "./context-menu.js";
 
 const toggleFocus = () => {
   chrome.storage.local.get(["focus"], local => {
@@ -10,12 +8,47 @@ const toggleFocus = () => {
   });
 };
 
-const register = (state) => document.addEventListener("keydown", (event) => {
+const keydown = (state) => document.addEventListener("keydown", (event) => {
+  if (event.ctrlKey) {
+    document.body.classList.add("with-command");
+    const hoveredNote = document.querySelector(".note.over");
+    hoveredNote && state.activateNote(hoveredNote.innerText);
+  }
+
   if (event.key === "Escape" || event.keyCode === 27) {
     event.preventDefault();
-    closeDropdowns();
-    removeModal();
-    reset();
+
+    // Hide context menu
+    contextMenu.hide();
+
+    // Close #modal
+    const cancel = document.getElementById("cancel");
+    cancel && cancel.click();
+
+    return;
+  }
+
+  if (event.key === "Enter" || event.keyCode === 13) {
+    // Confirm #modal
+    const confirm = document.getElementById("confirm");
+    confirm && confirm.click();
+  }
+
+  if ((event.metaKey || event.ctrlKey) && (event.key === "S" || event.key === "s")) {
+    event.preventDefault();
+    if (state.focus !== true) {
+      const hasSidebar = document.body.classList.toggle("with-sidebar");
+      chrome.storage.local.set({ sidebar: hasSidebar });
+    }
+    return;
+  }
+
+  if ((event.metaKey || event.ctrlKey) && (event.key === "E" || event.key === "e")) {
+    event.preventDefault();
+    if (state.focus !== true) {
+      const hasToolbar = document.body.classList.toggle("with-toolbar");
+      chrome.storage.local.set({ toolbar: hasToolbar });
+    }
     return;
   }
 
@@ -45,5 +78,14 @@ const register = (state) => document.addEventListener("keydown", (event) => {
     return;
   }
 });
+
+const keyup = () => document.addEventListener("keyup", () => {
+  document.body.classList.remove("with-command");
+});
+
+const register = (state) => {
+  keydown(state);
+  keyup();
+};
 
 export default { register };

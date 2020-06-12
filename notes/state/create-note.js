@@ -27,7 +27,7 @@ export default function createNote(rawName) {
       modifiedTime: time,
     };
 
-    chrome.storage.local.set({ notes: notes }, () => {
+    chrome.storage.local.set({ notes: notes, active: name }, () => {
       console.debug(`CREATE - OK "${name}"`);
     });
   });

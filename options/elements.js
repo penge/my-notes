@@ -14,13 +14,11 @@ const sizeRange = document.getElementById("size-range");
 
 // Theme ("light", "dark", "custom")
 const themeRadios = document.getElementsByName("theme");
-const customInputs = document.getElementsByName("custom");
 
 // Checkboxes
-const focusCheckbox = document.getElementById("focus");
 const newtabCheckbox = document.getElementById("newtab");
-const tabCheckbox = document.getElementById("tab");
 const syncCheckbox = document.getElementById("sync");
+const tabCheckbox = document.getElementById("tab");
 
 // Sync
 const syncFolderLocation = document.getElementById("sync-folder-location");
@@ -44,13 +42,11 @@ export {
 
   // Theme
   themeRadios,
-  customInputs,
 
   // Checkboxes
-  focusCheckbox,
   newtabCheckbox,
-  tabCheckbox,
   syncCheckbox,
+  tabCheckbox,
 
   // Sync
   syncFolderLocation,

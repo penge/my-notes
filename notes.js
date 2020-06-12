@@ -1,63 +1,94 @@
-/* global chrome, window, prompt, Set, localStorage */
+/* global chrome, window, document, Set, localStorage */
 
 // Setting application state and view updates are done via a Proxy
 import state from "./notes/state/index.js";
 
-import { noteName, createNote, openOptions, syncNow, lastSync, content } from "./notes/view/elements.js";
+import { newNote, openOptions, content, syncNow } from "./notes/view/elements.js";
 import typing from "./notes/typing.js";
 import toolbar from "./notes/toolbar.js";
 import { saveNotes, syncNotes } from "./notes/saving.js";
 import hotkeys from "./notes/hotkeys.js";
-import { initCustomTheme } from "../themes/custom.js";
+import sidebar from "./notes/sidebar.js";
 import { newNoteModal } from "./notes/modals.js";
+import contextMenu from "./notes/context-menu.js";
 
 let tabId; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
   // set as a "string" to quickly compare with localStorage.getItem("notesChangedBy")
   tabId = String(tab.id);
 
-  // Typing, Toolbar, Commands, Hotkeys
+  // Typing, Toolbar, Hotkeys, Sidebar
   typing.initialize(content, tabId);
   toolbar.initialize(content, tabId);
   hotkeys.register(state);
-});
-
-// Go back to Main page
-noteName.addEventListener("click", () => {
-  state.active = null;
+  sidebar.register();
 });
 
 // Create a New note
-createNote.addEventListener("click", (event) => {
-  event.preventDefault();
+newNote.addEventListener("click", () => {
   newNoteModal((name) => {
     state.createNote(name);
   });
 });
 
 // Open Options
-openOptions.addEventListener("click", (event) => {
-  event.preventDefault();
+openOptions.addEventListener("click", () => {
   chrome.tabs.create({ url: "/options.html" });
 });
 
 // Sync Now
-syncNow.addEventListener("click", (event) => {
-  event.preventDefault();
-  lastSync.innerText = "In progress...";
+syncNow.addEventListener("click", () => {
+  if (document.body.classList.contains("syncing")) {
+    return;
+  }
   syncNotes(true);
 });
 
+// Hide context menu on click outside
+document.addEventListener("click", () => {
+  contextMenu.hide();
+});
+
 chrome.storage.local.get([
-  "font", "size", "theme", "customTheme", "notes", "active", "focus", "tab", "notification", "sync"
+  // Notifications
+  "notification",
+
+  // Appearance
+  "font",
+  "size",
+  "sidebar",
+  "sidebarWidth",
+  "toolbar",
+  "theme",
+  "customTheme",
+
+  // Notes
+  "notes",
+  "active",
+
+  // Options
+  "focus",
+  "tab",
+
+  // Sync
+  "sync"
 ], local => {
-  const { font, size, theme, customTheme, notes, active, focus, tab, notification, sync } = local;
+  const {
+    notification,
+    font, size, sidebar, sidebarWidth, toolbar, theme, customTheme,
+    notes, active,
+    focus, tab,
+    sync } = local;
+
+  // Notifications
+  state.notification = notification; // shows a notification if any
 
   // Appearance
   state.font = font;
   state.size = size;
-  state.theme = theme;
-  initCustomTheme(customTheme);
+  state.sidebar = { show: sidebar, width: sidebarWidth };
+  state.toolbar = { show: toolbar };
+  state.theme = { name: theme, customTheme };
 
   // Notes
   state.notes = notes;
@@ -66,7 +97,6 @@ chrome.storage.local.get([
   // Options
   state.focus = focus;
   state.tab = tab;
-  state.notification = notification; // shows a notification if any
 
   // Sync
   state.sync = sync; // shows "Sync Now" button and "Last sync" timestamp, if "Google Drive Sync" is enabled
@@ -75,24 +105,62 @@ chrome.storage.local.get([
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local") {
-    if (changes["font"]) { state.font = changes["font"].newValue; }
-    if (changes["size"]) { state.size = changes["size"].newValue; }
-    if (changes["theme"]) { state.theme = changes["theme"].newValue; }
-    if (changes["customTheme"]) { initCustomTheme(changes["customTheme"].newValue); }
-    if (changes["focus"]) { state.focus = changes["focus"].newValue; }
-    if (changes["tab"]) { state.tab = changes["tab"].newValue; }
-    if (changes["sync"]) { state.sync = changes["sync"].newValue; }
+    if (changes["font"]) {
+      state.font = changes["font"].newValue;
+    }
+
+    if (changes["size"]) {
+      state.size = changes["size"].newValue;
+    }
+
+    if (changes["theme"]) {
+      const theme = changes["theme"].newValue;
+      if (theme === "light" || theme === "dark") {
+        state.theme = { name: theme };
+      } else {
+        chrome.storage.local.get(["customTheme"], local => {
+          state.theme = { name: "custom", customTheme: local.customTheme };
+        });
+      }
+    }
+
+    if (changes["customTheme"]) {
+      if (state.theme && state.theme.name === "custom") {
+        state.theme = { name: "custom", customTheme: changes["customTheme"].newValue };
+      }
+    }
+
+    if (changes["focus"]) {
+      state.focus = changes["focus"].newValue;
+    }
+
+    if (changes["tab"]) {
+      state.tab = changes["tab"].newValue;
+    }
+
+    if (changes["sync"]) {
+      state.sync = changes["sync"].newValue;
+      document.body.classList.remove("syncing");
+    }
 
     if (changes["notes"]) {
       const oldNotes = changes["notes"].oldValue;
       const newNotes = changes["notes"].newValue;
       state.notes = newNotes;
 
+      // Autoactivate the created note
+      const newActive = changes["active"] && changes["active"].newValue;
+      if (newActive && newActive in newNotes) {
+        state.active = newActive;
+        return;
+      }
+
+      // This should not happen (fallback)
       if (!state.active) {
         return;
       }
 
-      // Edited note content
+      // Reactivate edited note in other tabs only
       if (
         (state.active in oldNotes) &&
         (state.active in newNotes) &&
@@ -104,20 +172,20 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
         return;
       }
 
-      // Unchanged note
+      // Note is unchanged
       if (state.active in newNotes) {
         return;
       }
 
-      // Deleted note
+      // Activate "Clipboard" if some note was deleted
       const oldSet = new Set(Object.keys(oldNotes));
       const newSet = new Set(Object.keys(newNotes));
       if (oldSet.size > newSet.size) {
-        state.active = null;
+        state.active = "Clipboard";
         return;
       }
 
-      // Renamed note
+      // Reactivate renamed note in other tabs only
       if (newSet.size === oldSet.size) {
         const diff = new Set([...newSet].filter(x => !oldSet.has(x)));
         if (diff.size === 1) {
@@ -142,6 +210,10 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       });
     }
   }
+});
+
+window.addEventListener("blur", () => {
+  document.body.classList.remove("with-command");
 });
 
 // Notes are saved every 1 second by "saveNotesDebounce()"

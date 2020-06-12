@@ -8,36 +8,34 @@ const get = id => document.getElementById(id);
 export const exec = (command, value = null) =>
   document.execCommand(command, false, value);
 
-const controls = [
-  [get("B"), () => exec("bold")],
-  [get("I"), () => exec("italic")],
-  [get("U"), () => exec("underline")],
-  [get("S"), () => exec("strikeThrough")],
+const commands = [
+  [get("B"), (cb) => { exec("bold"); cb(); }],
+  [get("I"), (cb) => { exec("italic"); cb(); }],
+  [get("U"), (cb) => { exec("underline"); cb(); }],
+  [get("S"), (cb) => { exec("strikeThrough"); cb(); }],
 
-  [get("H2"), () => exec("formatBlock", "<h2>")],
-  [get("H3"), () => exec("formatBlock", "<h3>")],
-  [get("P"), () => exec("formatBlock", "<p>")],
-  [get("HR"), () => exec("insertHorizontalRule")],
-  [get("UL"), () => exec("insertUnorderedList")],
-  [get("OL"), () => exec("insertOrderedList")],
+  [get("UL"), (cb) => { exec("insertUnorderedList"); cb(); }],
+  [get("OL"), (cb) => { exec("insertOrderedList"); cb(); }],
 
-  [get("CL"), () => exec("justifyLeft")],
-  [get("CC"), () => exec("justifyCenter")],
-  [get("CR"), () => exec("justifyRight")],
+  [get("CL"), (cb) => { exec("justifyLeft"); cb(); }],
+  [get("CC"), (cb) => { exec("justifyCenter"); cb(); }],
+  [get("CR"), (cb) => { exec("justifyRight"); cb(); }],
 
-  [get("IMG"), (content) => {
+  [get("IMG"), (cb) => {
     insertImageModal((url) => {
-      content.focus();
       exec("insertImage", url);
+      cb();
     });
   }],
 ];
 
 const initialize = (content, tabId) => {
-  for (const control of controls) {
-    const [element, handler] = control;
+  for (const command of commands) {
+    const [element, handler] = command;
     element.addEventListener("click", () => {
-      handler(content) && edit(content, tabId);
+      handler(() => {
+        edit(content, tabId);
+      });
     });
   }
 };

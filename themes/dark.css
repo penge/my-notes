@@ -1,0 +1,87 @@
+:root {
+
+  /* Scrollbar */
+
+  --scrollbar-track-background-color: #121212;
+  --scrollbar-thumb-background-color: #222;
+  --scrollbar-thumb-hover-background-color: #555;
+
+
+  /* Generic */
+
+  --background-color: #121212;
+  --text-color: #bcbcbc;
+  --link-color: white;
+  --svg-fill-color: #626262;
+
+
+  /* Notifications */
+
+  --notification-border-color: transparent;
+
+
+  /* Overlay */
+
+  --to-create-overlay-background-color: #134e82;
+  --to-rename-overlay-background-color: rgba(30, 136, 229, .7);
+  --to-delete-overlay-background-color: rgba(255, 0, 0, .6);
+
+
+  /* Modal */
+
+  --modal-background-color: #222;
+  --modal-border-color: transparent;
+  --modal-input-border-color: transparent;
+  --modal-button-background-color: white;
+  --modal-button-text-color: #121212;
+
+
+  /* Context menu */
+
+  --context-menu-background-color: #626262;
+  --context-menu-text-color: white;
+  --context-menu-border-color: transparent;
+
+
+  /* Sidebar */
+
+  --sidebar-notes-background-color: #121212;
+  --sidebar-notes-text-color: #626262;
+  --sidebar-active-note-background-color: #222;
+  --sidebar-active-note-text-color: white;
+
+
+  /* Drag */
+
+  --drag-border-color: #454545;
+  --drag-resizing-border-color: white;
+
+
+  /* Bar */
+
+  --bar-border-color: #454545;
+
+
+  /* Toolbar */
+
+  --toolbar-button-color: #626262;
+  --toolbar-button-hover-background-color: #222;
+  --toolbar-button-hover-color: white;
+
+
+  /* Only in Options */
+
+  --hotkey-background-color: #222;
+  --hotkey-text-color: white;
+
+  --comment-background-color: #222;
+  --comment-text-color: white;
+
+  --slider-background-color: white;
+  --slider-thumb-background-color: white;
+  --slider-thumb-size: 12px;
+}
+
+body {
+  opacity: 1;
+}

@@ -5,102 +5,71 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Notes</title>
-  <style id="theme-variables"></style>
   <link rel="stylesheet" href="" id="google-fonts">
+  <link rel="stylesheet" href="themes/shared.css">
   <link rel="stylesheet" href="notes.css">
 </head>
 
 <body>
-  <div id="panel" class="hide">
-    <div class="note-name" id="note-name"><!-- Name of the active note --></div>
-    <div class="note-options" id="note-options">
-      <svg class="dropdown-toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"/></svg>
-      <div class="dropdown">
-        <div class="rename action">Rename</div>
-        <div class="delete action">Delete</div>
+  <div id="sidebar">
+    <div id="sidebar-notes" class="notes"></div>
+    <div id="sidebar-buttons" class="bar">
+      <div id="new-note" class="button" title="New note">
+        <svg viewBox="0 0 426.667 426.667">
+            <path d="M256,0H85.333C61.76,0,42.88,19.093,42.88,42.667L42.667,384c0,23.573,18.88,42.667,42.453,42.667h256.213
+              C364.907,426.667,384,407.573,384,384V128L256,0z M234.667,149.333V32L352,149.333H234.667z"/>
+        </svg>
+      </div>
+      <div id="open-options" class="button" title="Options">
+        <svg viewBox="0 0 426.667 426.667">
+          <path d="M416.8,269.44l-45.013-35.307c0.853-6.827,1.493-13.76,1.493-20.8s-0.64-13.973-1.493-20.8l45.12-35.307
+            c4.053-3.2,5.227-8.96,2.56-13.653L376.8,69.653c-2.667-4.587-8.213-6.507-13.013-4.587l-53.12,21.44
+            c-10.987-8.427-23.04-15.573-36.053-21.013l-8-56.533C265.653,3.947,261.28,0,255.947,0h-85.333c-5.333,0-9.707,3.947-10.56,8.96
+            l-8,56.533c-13.013,5.44-25.067,12.48-36.053,21.013l-53.12-21.44c-4.8-1.813-10.347,0-13.013,4.587L7.2,143.573
+            c-2.667,4.587-1.493,10.347,2.56,13.653l45.013,35.307c-0.853,6.827-1.493,13.76-1.493,20.8s0.64,13.973,1.493,20.8L9.76,269.44
+            c-4.053,3.2-5.227,8.96-2.56,13.653l42.667,73.92c2.667,4.587,8.213,6.507,13.013,4.587L116,340.16
+            c10.987,8.427,23.04,15.573,36.053,21.013l8,56.533c0.853,5.013,5.227,8.96,10.56,8.96h85.333c5.333,0,9.707-3.947,10.56-8.96
+            l8-56.533c13.013-5.44,25.067-12.48,36.053-21.013l53.12,21.44c4.8,1.813,10.347,0,13.013-4.587l42.667-73.92
+            C422.027,278.507,420.853,272.747,416.8,269.44z M213.28,288c-41.28,0-74.667-33.387-74.667-74.667S172,138.667,213.28,138.667
+            s74.667,33.387,74.667,74.667S254.56,288,213.28,288z"/>
+        </svg>
+      </div>
+      <div id="sync-now" class="button" title="Click to sync to/from Google Drive now. Sync also happens automatically when My Notes is open or closed.">
+        <svg viewBox="0 0 341.333 341.333">
+            <path d="M341.227,149.333V0l-50.133,50.133C260.267,19.2,217.707,0,170.56,0C76.267,0,0.107,76.373,0.107,170.667
+              s76.16,170.667,170.453,170.667c79.467,0,146.027-54.4,164.907-128h-44.373c-17.6,49.707-64.747,85.333-120.533,85.333
+              c-70.72,0-128-57.28-128-128s57.28-128,128-128c35.307,0,66.987,14.72,90.133,37.867l-68.8,68.8H341.227z"/>
+        </svg>
       </div>
     </div>
-  </div>
-
-  <div id="notes" class="hide">
-    <div id="existing-notes"><!-- Render #note-tile-template for each note --></div>
-    <div class="bottom">
-      <a href="#" id="create-note">New note</a>
-      <a href="#" id="open-options">Options</a>
-    </div>
-    <div class="bottom" id="sync-container">
-      <a href="#" id="sync-now" title="Notes are synchronized with Google Drive automatically on every Open/Close/Refresh of My Notes.
-
-Click &#34;Sync Now&#34; button if you would like to synchronize the notes now.
-
-This is useful if you plan to continue your work on a second computer, to make sure the notes were synchronized before signing off.
-
-&#34;Last sync&#34; will be updated once finished.">Sync Now</a>
-      <div id="sync-details">
-        <div>Last sync: <span id="last-sync" class="bold"></span></div>
-        <div><a href="#" id="open-in-google-drive" class="bold" target="_blank">Open in Google Drive</a></div>
-      </div>
-    </div>
+    <div id="drag"></div>
   </div>
 
   <div contenteditable="true" spellcheck="true" id="content"><!-- Content of the active note --></div>
-  <div id="toolbar">
-    <div id="B" class="bold control" title="Bold">
-      <svg viewBox="0 0 298.667 298.667" style="enable-background:new 0 0 298.667 298.667;">
-        <path d="M218.133,144.853c20.587-14.4,35.2-37.653,35.2-59.52C253.333,37.227,216.107,0,168,0H34.667v298.667h150.187
-          c44.693,0,79.147-36.267,79.147-80.853C264,185.387,245.547,157.76,218.133,144.853z M98.667,53.333h64c17.707,0,32,14.293,32,32
-          s-14.293,32-32,32h-64V53.333z M173.333,245.333H98.667v-64h74.667c17.707,0,32,14.293,32,32S191.04,245.333,173.333,245.333z"/>
-      </svg>
-    </div>
-    <div id="I" class="italic control" title="Italic">
-      <svg viewBox="0 0 298.667 298.667">
-        <polygon points="106.667,0 106.667,64 153.92,64 80.747,234.667 21.333,234.667 21.333,298.667 192,298.667 192,234.667
-          144.747,234.667 217.92,64 277.333,64 277.333,0"/>
-      </svg>
-    </div>
-    <div id="U" class="underline control" title="Underline">
-      <svg viewBox="0 0 384 384">
-        <path d="M192,298.667c70.72,0,128-57.28,128-128V0h-53.333v170.667c0,41.28-33.387,74.667-74.667,74.667
-          s-74.667-33.387-74.667-74.667V0H64v170.667C64,241.387,121.28,298.667,192,298.667z"/>
-        <rect x="42.667" y="341.333" width="298.667" height="42.667"/>
-      </svg>
-    </div>
-    <div id="S" class="line-through control" title="Strike-through">
-      <svg viewBox="0 0 384 384">
-        <path d="M90.347,154.667c1.067,1.92,2.24,3.627,3.307,5.44H192c-13.653-4.693-21.973-9.707-29.973-14.933
-          c-10.453-6.933-15.68-15.573-15.68-25.813c0-4.907,1.067-9.707,3.093-14.08s5.12-8.213,9.173-11.52
-          c4.053-3.307,9.173-5.867,15.36-7.68c6.293-1.813,13.547-2.773,21.973-2.773c8.747,0,16.32,1.067,22.72,3.307
-          c6.4,2.133,11.733,5.333,16,9.28s7.467,8.747,9.493,14.4c2.027,5.547,3.093,11.627,3.093,18.133h64.213
-          c0-13.973-2.667-26.88-8.107-38.613c-5.44-11.84-13.12-21.973-23.147-30.507c-10.027-8.64-22.08-15.253-36.16-20.053
-          c-14.08-4.8-29.76-7.147-47.04-7.147c-16.853,0-32.213,2.133-46.293,6.293c-14.08,4.16-26.133,10.027-36.373,17.6
-          c-10.24,7.573-18.133,16.747-23.787,27.52s-8.427,22.613-8.427,35.627C82.133,132.693,84.907,144.533,90.347,154.667
-          L90.347,154.667z"/>
-        <path d="M0,181.44v42.667h205.333c3.84,1.493,8.533,2.987,11.733,4.373c7.893,3.52,14.08,7.253,18.56,10.88
-          c4.48,3.733,7.467,7.787,9.067,12.053c1.6,4.373,2.347,9.28,2.347,14.613c0,5.013-0.96,9.707-2.88,13.973
-          c-1.92,4.373-4.907,8.107-8.853,11.2c-3.947,3.093-9.067,5.547-15.147,7.36c-6.187,1.813-13.333,2.667-21.653,2.667
-          c-9.28,0-17.707-0.96-25.28-2.773c-7.573-1.813-13.973-4.8-19.307-8.853c-5.333-4.053-9.493-9.387-12.48-15.893
-          C138.453,267.2,136,257.387,136,248H72.533c0,11.733,1.707,24.107,5.013,33.707c3.307,9.6,8,18.24,13.867,25.813
-          c5.867,7.573,12.907,14.08,20.907,19.627c8,5.547,16.64,10.24,26.027,13.867c9.387,3.733,19.093,6.507,29.44,8.213
-          c10.24,1.813,20.587,2.667,30.827,2.667c17.067,0,32.64-1.92,46.507-5.867c13.867-3.947,25.813-9.6,35.627-16.853
-          c9.813-7.36,17.387-16.32,22.827-27.093c5.44-10.773,8-22.933,8-36.587c0-12.8-2.24-24.32-6.613-34.453
-          c-1.067-2.453-2.24-4.8-3.627-7.147H384V181.44H0z"/>
-      </svg>
-    </div>
 
-    <div id="H2" class="control" title="Heading 2"><b>H</b><span class="two">2</span></div>
-    <div id="H3" class="control" title="Heading 3"><b>H</b><span class="three">3</span></div>
-    <div id="P" class="control" title="Paragraph">
-      <svg viewBox="0 0 467.765 467.765">
-        <path d="M409.294 0h-204.647c-80.597 0-146.176 65.579-146.176 146.176s65.579 146.176 146.176 146.176h29.235v175.412h58.471v-409.293h29.235v409.294h58.471v-409.294h29.235zm-175.412 233.882h-29.235c-48.364 0-87.706-39.342-87.706-87.706s39.342-87.706 87.706-87.706h29.235z"/>
+  <div id="toolbar" class="bar">
+    <div id="B" class="bold button" title="Bold">
+      <svg viewBox="0 0 181.395 181.395">
+        <path d="m20.618,181.395v-181.395h62.293c22.506,0 40.074,4.174 52.699,12.521 12.623,8.346 18.936,20.785 18.936,37.313 0,8.639-2.033,16.318-6.104,23.049-4.07,6.729-10.34,11.795-18.813,15.199 10.631,2.408 18.479,7.246 23.547,14.514 5.064,7.268 7.6,15.637 7.6,25.104 0,17.691-5.939,31.064-17.814,40.115-11.879,9.055-28.904,13.58-51.082,13.58h-71.262zm42.235-105.772h20.93c9.551-0.166 16.695-2.014 21.43-5.545 4.734-3.529 7.102-8.699 7.102-15.51 0-7.725-2.41-13.35-7.225-16.881-4.82-3.529-12.211-5.295-22.178-5.295h-20.059v43.231zm0,27.908v45.473h29.027c8.971,0 15.699-1.766 20.184-5.297 4.484-3.529 6.729-8.947 6.729-16.256 0-7.891-1.932-13.85-5.795-17.879-3.861-4.027-10.111-6.041-18.748-6.041h-31.397z"/>
       </svg>
     </div>
-    <div id="HR" class="control" title="Horizontal Rule">
-      <svg viewBox="0 0 83 83">
-        <path d="M81,36.166H2c-1.104,0-2,0.896-2,2v6.668c0,1.104,0.896,2,2,2h79c1.104,0,2-0.896,2-2v-6.668
-          C83,37.062,82.104,36.166,81,36.166z"/>
+    <div id="I" class="italic button" title="Italic">
+      <svg viewBox="0 0 181.5 181.5">
+        <path d="M93.368,181.5H51.856L88.132,0h41.512L93.368,181.5z"/>
       </svg>
     </div>
-    <div id="UL" class="control" title="Unordered List">
+    <div id="U" class="underline button" title="Underline">
+      <svg viewBox="0 0 230 230">
+        <path d="M61.638,164.165C75.236,175.39,93.257,181,115.458,181c21.955,0,39.679-5.61,53.239-16.835 C182.254,152.942,189,137.13,189,116.731V0h-42v116.731c0,11.06-2.501,19.212-8.03,24.454c-5.529,5.244-13.284,7.864-23.524,7.864 c-10.322,0-18.312-2.642-23.965-7.926C85.829,135.841,83,127.711,83,116.731V0H41v116.731C41,137.13,48.039,152.942,61.638,164.165z"/>
+        <rect width="230" y="197" height="33"/>
+      </svg>
+    </div>
+    <div id="S" class="line-through button" title="Strike-through">
+      <svg viewBox="0 0 230 230">
+        <polygon points="230,99 136,99 136,57 183,57 183,25 47,25 47,57 94,57 94,99 0,99 0,132 94,132 94,205 136,205 136,132 230,132 "/>
+      </svg>
+    </div>
+    <div id="UL" class="button" title="Unordered List">
       <svg viewBox="0 0 394.971 394.971">
         <circle cx="56.424" cy="197.486" r="51.2"/>
         <path d="M379.298,187.037H143.151c-5.771,0-10.449,4.678-10.449,10.449s4.678,10.449,10.449,10.449h236.147
@@ -113,7 +82,7 @@ This is useful if you plan to continue your work on a second computer, to make s
           c5.771,0,10.449-4.678,10.449-10.449S385.069,333.322,379.298,333.322z"/>
       </svg>
     </div>
-    <div id="OL" class="control" title="Ordered List">
+    <div id="OL" class="button" title="Ordered List">
       <svg viewBox="0 0 512.003 512.003">
         <path d="M155.003 90.001h342c8.284 0 15-6.716 15-15s-6.716-15-15-15h-342c-8.284 0-15 6.716-15 15s6.716 15 15 15z"/>
         <path d="M497.003 241.001h-342c-8.284 0-15 6.716-15 15s6.716 15 15 15h342c8.284 0 15-6.716 15-15s-6.716-15-15-15z"/>
@@ -123,8 +92,7 @@ This is useful if you plan to continue your work on a second computer, to make s
         <path d="M44.637 372.001c-20.264 0-37.802 14.417-41.702 34.28-1.597 8.129 3.699 16.013 11.828 17.609 8.13 1.595 16.013-3.699 17.609-11.829 1.145-5.829 6.303-10.06 12.265-10.06 6.893 0 12.5 5.607 12.5 12.5s-5.607 12.5-12.5 12.5c-8.284 0-15 6.716-15 15s6.716 15 15 15c6.893 0 12.5 5.607 12.5 12.5s-5.607 12.5-12.5 12.5c-6.202 0-11.524-4.616-12.378-10.736-.081-.58-.122-1.173-.122-1.764 0-8.284-6.716-15-15-15s-15 6.716-15 15c0 1.972.138 3.959.409 5.909 2.911 20.86 21.007 36.591 42.091 36.591 23.435 0 42.5-19.065 42.5-42.5 0-10.481-3.822-20.082-10.134-27.5 6.313-7.418 10.134-17.019 10.134-27.5 0-23.434-19.066-42.5-42.5-42.5z"/>
       </svg>
     </div>
-
-    <div id="CL" class="control" title="Align Left">
+    <div id="CL" class="button" title="Align Left">
       <svg viewBox="0 0 397.061 397.061">
         <rect x="109.714" y="94.041" width="240.327" height="73.143"/>
         <rect x="109.714" y="229.878" width="167.184" height="73.143"/>
@@ -132,7 +100,7 @@ This is useful if you plan to continue your work on a second computer, to make s
           V10.449C67.918,4.678,63.24,0,57.469,0z"/>
       </svg>
     </div>
-    <div id="CC" class="control" title="Align Center">
+    <div id="CC" class="button" title="Align Center">
       <svg viewBox="0 0 397.061 397.061">
         <rect x="78.367" y="94.041" width="104.49" height="73.143"/>
         <rect x="214.204" y="94.041" width="104.49" height="73.143"/>
@@ -142,7 +110,7 @@ This is useful if you plan to continue your work on a second computer, to make s
           V10.449C208.98,4.678,204.301,0,198.531,0z"/>
       </svg>
     </div>
-    <div id="CR" class="control" title="Align Right">
+    <div id="CR" class="button" title="Align Right">
       <svg viewBox="0 0 397.061 397.061">
         <rect x="47.02" y="94.041" width="240.327" height="73.143"/>
         <rect x="120.163" y="229.878" width="167.184" height="73.143"/>
@@ -150,7 +118,7 @@ This is useful if you plan to continue your work on a second computer, to make s
           V10.449C350.041,4.678,345.363,0,339.592,0z"/>
       </svg>
     </div>
-    <div id="IMG" class="control" title="Insert Image">
+    <div id="IMG" class="button" title="Insert Image">
       <svg viewBox="0 -47 425.968 425">
         <path d="m166.960938 56.484375c-26.34375 0-47.699219 21.355469-47.699219 47.699219s21.355469 47.699218 47.699219 47.699218 47.699218-21.355468 47.699218-47.699218c-.027344-26.332032-21.367187-47.667969-47.699218-47.699219zm0 0"/>
         <path d="m395.96875.484375h-365.96875c-16.5625.019531-29.9804688 13.4375-30 30v224.019531l69.699219-46.417968c16.796875-11.109376 38.621093-11.039063 55.347656.179687l50.910156 34.070313c13.351563 8.980468 31.40625 5.796874 40.886719-7.199219l68.101562-92.980469c9.507813-12.980469 24.683594-20.59375 40.777344-20.453125 16.089844.140625 31.132813 8.019531 40.410156 21.167969l59.832032 84.773437v-197.160156c-.019532-16.558594-13.4375-29.980469-29.996094-30zm-229.007812 171.40625c-37.386719 0-67.699219-30.308594-67.699219-67.699219s30.3125-67.699218 67.699219-67.699218c37.390624 0 67.699218 30.308593 67.699218 67.699218-.042968 37.371094-30.328125 67.65625-67.699218 67.699219zm0 0"/>
@@ -159,28 +127,18 @@ This is useful if you plan to continue your work on a second computer, to make s
     </div>
   </div>
 
-  <template id="note-tile-template">
-    <div class="note-tile">
-      <div class="note-content"></div>
-      <div class="row">
-        <div class="note-name"></div>
-        <div class="note-options">
-          <svg class="dropdown-toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"/></svg>
-          <div class="dropdown">
-            <div class="rename action">Rename</div>
-            <div class="delete action">Delete</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </template>
+  <div id="overlay"></div>
+  <div id="context-menu">
+    <div id="rename" class="action">Rename</div>
+    <div id="delete" class="action">Delete</div>
+  </div>
 
   <template id="new-version-notification-template">
-    <div id="notification" class="bold">
-      <div>New version <span id="version"></span> installed.</div>
+    <div class="notification">
+      <div>New version <span class="version"></span> installed.</div>
       <div>
         <a href="https://github.com/penge/my-notes/releases" target="_blank">What's new</a><span>,</span>
-        <a href="#" id="close">Close</a>
+        <a href="#" class="close">Close</a>
       </div>
     </div>
   </template>

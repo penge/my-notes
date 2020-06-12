@@ -1,10 +1,8 @@
 /* global window, document, setTimeout */
 
-import { noteName, noteOptions, content } from "./elements.js";
-import { isReserved } from "../reserved.js";
-import attachOptions from "./attach-options.js";
+import { content } from "./elements.js";
 
-export const autofocus = () => {
+const autofocus = () => {
   setTimeout(() => {
     const selection = window.getSelection();
 
@@ -17,14 +15,18 @@ export const autofocus = () => {
   });
 };
 
-export default function setActive(name, html, { renameNote, deleteNote }) {
+const setActiveInSidebar = (name) => {
+  const notes = document.querySelectorAll("#sidebar-notes .note");
+  notes.forEach(note => {
+    note.classList.toggle("active", note.innerText === name);
+  });
+};
+
+export default function setActive(name, html) {
   document.title = name;
 
-  noteName.innerText = name;
-  noteName.classList.toggle("reserved", isReserved(name));
-
   content.innerHTML = html;
-  autofocus();
 
-  attachOptions(name, { noteOptions, renameNote, deleteNote });
+  setActiveInSidebar(name);
+  autofocus();
 }
