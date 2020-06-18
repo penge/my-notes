@@ -36,9 +36,7 @@ const testDefaultValues = (myItems) => {
   console.assert(items.theme === "light");
 
   // custom theme
-  console.assert(Object.keys(items.customTheme).length === 2);
-  console.assert(items.customTheme.background === "#35363a");
-  console.assert(items.customTheme.text === "#ffffff");
+  console.assert(items.customTheme === "");
 
   // notes
   console.assert(Object.keys(items.notes).length === 4);
@@ -76,10 +74,7 @@ const testCustomValues = () => {
     },
     size: 340,
     theme: "dark",
-    customTheme: {
-      background: "#545454",
-      text: "#ffffff",
-    },
+    customTheme: "my custom theme css",
     notes: {
       Todo: {
         content: "buy milk",
@@ -135,9 +130,7 @@ const testCustomValues = () => {
   console.assert(items.theme === "dark");
 
   // customTheme
-  console.assert(Object.keys(items.customTheme).length === 2);
-  console.assert(items.customTheme.background === "#545454");
-  console.assert(items.customTheme.text === "#ffffff");
+  console.assert(items.customTheme === "my custom theme css");
 
   // notes
   console.assert(Object.keys(items.notes).length === 3);
@@ -186,7 +179,7 @@ const testValidValues = () => { // any invalid value should fallback to a defaul
     },
     size: "large",  // must be number
     theme: "green", // must be "light" or "dark"
-    customTheme: { background: "#ffffff" }, // must be valid object
+    customTheme: { background: "#ffffff" }, // must be string
     notes: null,    // must be object
     active: "Todo", // must be in "notes"
     focus: 1,       // must be boolean
