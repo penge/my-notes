@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Notes</title>
-  <style id="theme-variables"></style>
+  <link rel="stylesheet" href="themes/shared.css">
   <link rel="stylesheet" href="options.css">
 </head>
 
@@ -66,87 +66,72 @@
     <div class="selection">
       <input type="radio" id="custom" name="theme" value="custom">
       <label for="custom" id="custom-theme-label" class="bold theme-label">Custom</label>
-    </div>
-  </div>
-
-
-  <div id="custom-theme">
-    <div class="setting">
-      <span>Background</span>
-      <label>
-        <input type="color" name="custom" data-key="background" id="custom-background">
-      </label>
-    </div>
-    <div class="setting">
-      <span>Text</span>
-      <label>
-        <input type="color" name="custom" data-key="text" id="custom-text">
-      </label>
+      <a href="themes/custom/index.html" target="_blank" class="space-left">Customize</a>
     </div>
   </div>
 
 
   <h2>Hotkeys</h2>
+  <table>
+    <tr>
+      <td class="bold">Open My Notes</td>
+      <td><span class="hotkey">⌘ + Shift + m</span> (open <b>chrome://extensions/shortcuts</b> to configure)</td>
+    </tr>
+    <tr>
+      <td class="bold">Open Options</td>
+      <td><span class="hotkey">⌘ + Shift + o</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Toggle Focus mode</td>
+      <td><span class="hotkey">⌘ + Shift + f</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Toggle Sidebar</td>
+      <td><span class="hotkey">⌘ + s</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Toggle Toolbar</td>
+      <td><span class="hotkey">⌘ + e</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Go to Previous note</td>
+      <td><span class="hotkey">⌘ + [</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Go to Next note</td>
+      <td><span class="hotkey">⌘ + ]</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Open note on mouse hover</td>
+      <td><span class="hotkey">Ctrl</span> (hold the key)</td>
+    </tr>
+    <tr>
+      <td class="bold">Close context menu</td>
+      <td><span class="hotkey">Esc</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Close modal</td>
+      <td><span class="hotkey">Esc</span></td>
+    </tr>
+    <tr>
+      <td class="bold">Confirm modal</td>
+      <td><span class="hotkey">Enter</span></td>
+    </tr>
+  </table>
   <div>
-    <span>Open <b>chrome://extensions/shortcuts</b> in a tab to configure:</span>
-    <ul>
-      <li>
-        <b>Activate the extension</b>
-        <span class="info">Open My Notes, e.g.: <span class="hotkey">Cmd + Shift + M</span></span>
-      </li>
-    </ul>
-    <span>Other keys:</span>
-    <ul>
-      <li>
-        <b>Open Options</b>
-        <span class="info">
-          <span class="hotkey">Cmd + Shift + O</span> or
-          <span class="hotkey">Ctrl + Shift + O</span>
-        </span>
-      </li>
-      <li>
-        <b>Toggle Focus mode</b>
-        <span class="info">
-          <span class="hotkey">Cmd + Shift + F</span> or
-          <span class="hotkey">Ctrl + Shift + F</span>
-        </span>
-      </li>
-      <li>
-        <b>Go to Previous note</b>
-        <span class="info">
-          <span class="hotkey">Cmd + [</span> or
-          <span class="hotkey">Ctrl + [</span>
-        </span>
-      </li>
-      <li>
-        <b>Go to Next note</b>
-        <span class="info">
-          <span class="hotkey">Cmd + ]</span> or
-          <span class="hotkey">Ctrl + ]</span>
-        </span>
-      </li>
-    </ul>
+    <br>
+    <span class="hotkey">⌘</span> and <span class="hotkey">Ctrl</span> work the same.
   </div>
 
 
   <h2>Options</h2>
   <div>
     <div class="selection with-comment">
-      <input type="checkbox" id="focus" name="focus">
-      <div>
-        <label for="focus" class="bold">Enable Focus mode</label>
-        <div class="comment">
-          Hides the note title and toolbar, to get more editing space.<br>
-          Can toggle with <b>"Toggle Focus mode"</b> keyboard shortcut.
-        </div>
-      </div>
-    </div>
-    <div class="selection with-comment">
       <input type="checkbox" id="newtab" name="newtab">
       <div>
         <label for="newtab" class="bold">Open My Notes in every New Tab</label>
         <div class="comment">
-          My Notes will require a permission to enable this feature.
+          My Notes will request a permission in order to enable this feature.
         </div>
       </div>
     </div>
@@ -156,8 +141,8 @@
         <label for="sync" class="bold">Enable Google Drive Sync</label>
         <div class="comment">
           Stores the notes to your Google Drive in the folder <b>My Notes</b> (created automatically, once),
-          and synchronizes the changes in both ways — to Google Drive, from Google Drive — on every My Notes <b>Open/Close/Refresh</b>,
-          or with the <b>"Sync Now"</b> button.<br><br>
+          and synchronizes the changes in both ways — to Google Drive, from Google Drive — on every My Notes <b>Open/Close</b>,
+          or with the <b>"Sync Now"</b> button located in the sidebar.<br><br>
 
           This gives you:<br>
           <ul>
@@ -167,7 +152,7 @@
           </ul>
 
           My Notes can only access the files it created. It cannot see the other files in your Google Drive.<br>
-          My Notes will require a permission to enable this feature.<br><br>
+          My Notes will request a permission in order to enable this feature.<br><br>
 
           <b>Location: </b><a id="sync-folder-location" class="bold" href="" target="_blank"></a><br>
           <b>Last sync: </b><span id="sync-last-sync" class="bold"></span>
@@ -179,7 +164,7 @@
       <div>
         <label for="tab" class="bold">Indent text on <span class="hotkey">Tab</span></label>
         <div class="comment">
-          By default, Tab focuses the address bar. This can be changed to indent text.
+          By default, Tab key focuses the address bar. This can be changed to indent the text instead.
         </div>
       </div>
     </div>
@@ -189,8 +174,8 @@
   <h2>Version</h2>
   <div>
     <strong id="version" class="space-right"></strong>
-    <a href="https://github.com/penge/my-notes/releases" target="_blank" class="space-right">Changelog</a>
-    <a href="https://github.com/penge/my-notes" target="_blank">Repository</a>
+    <a href="https://github.com/penge/my-notes/releases" target="_blank">Changelog</a>
+    <a href="https://github.com/penge/my-notes" target="_blank" class="space-left">Repository</a>
   </div>
 
 

@@ -1,26 +1,34 @@
 /* global document */
 
+import state from "./state/index.js";
 import { modalTemplate } from "./view/elements.js";
 import { isReserved } from "./reserved.js";
+import range from "./range.js";
 
-export const removeModal = (onRemove) => {
+const removeModal = (onRemove) => {
   const modal = document.getElementById("modal");
   if (!modal) {
-    return;
+    return false;
   }
   modal.remove();
   onRemove && onRemove();
+  document.body.classList.remove("with-modal", "with-overlay", "to-rename", "to-create", "to-delete");
+  range.restore();
+  return true;
 };
 
-const createModal = ({ clazz, captionValue, cancelValue, confirmValue, inputValue, validate, onConfirm, onRemove, noInput }) => {
+const createModal = ({ clazz, overlay, captionValue, inputValue, cancelValue, confirmValue, validate, onConfirm, onRemove }) => {
   removeModal();
+  range.save();
 
   const node = modalTemplate.content.cloneNode(true);
   const modal = node.children[0];
-  modal.className = clazz;
+  if (clazz) {
+    modal.className = clazz;
+  }
 
-  const caption = node.getElementById("caption"); caption.innerHTML = captionValue;
-  const input = node.getElementById("input"); if (inputValue) { input.value = inputValue; } if (noInput) { input.className = "hide"; }
+  const caption = node.getElementById("caption"); if (captionValue) { caption.innerHTML = captionValue; } else { caption.className = "hide"; }
+  const input = node.getElementById("input"); if (typeof inputValue === "string") { input.value = inputValue; } else { input.className = "hide"; }
   const cancel = node.getElementById("cancel"); if (cancelValue) { cancel.value = cancelValue; }
   const confirm = node.getElementById("confirm"); if (confirmValue) { confirm.value = confirmValue; }
 
@@ -44,18 +52,25 @@ const createModal = ({ clazz, captionValue, cancelValue, confirmValue, inputValu
     }
   };
 
-  cancel.onclick = () => { removeModal(onRemove); };
+  cancel.onclick = () => {
+    removeModal(onRemove);
+  };
 
-  document.body.appendChild(node);
-  if (input) {
+  document.body.classList.add("with-modal");
+  if (overlay) { document.body.classList.add("with-overlay", overlay); }
+  document.body.prepend(node);
+
+  input.focus();
+  input.onblur = () => {
     input.focus();
-  }
+  };
 };
 
 export const insertImageModal = (onConfirm) => {
   createModal({
-    clazz: "center",
+    clazz: "with-border",
     captionValue: "Image URL",
+    inputValue: "",
     confirmValue: "Insert",
     validate: (inputValue) => inputValue.length > 0,
     onConfirm,
@@ -64,21 +79,22 @@ export const insertImageModal = (onConfirm) => {
 
 export const newNoteModal = (onConfirm) => {
   createModal({
-    clazz: "top",
+    overlay: "to-create",
     captionValue: "New note",
+    inputValue: "",
     confirmValue: "Create",
-    validate: (inputValue) => inputValue.length > 0 && !isReserved(inputValue),
+    validate: (inputValue) => inputValue.length > 0 && !isReserved(inputValue) && !(inputValue in state.notes),
     onConfirm,
   });
 };
 
 export const renameNoteModal = (currentName, onConfirm, onRemove) => {
   createModal({
-    clazz: "top",
-    captionValue: "New name",
+    overlay: "to-rename",
+    captionValue: null,
     confirmValue: "Rename",
     inputValue: currentName,
-    validate: (inputValue) => inputValue.length > 0 && inputValue !== currentName && !isReserved(inputValue),
+    validate: (inputValue) => inputValue.length > 0 && inputValue !== currentName && !isReserved(inputValue) && !(inputValue in state.notes),
     onConfirm,
     onRemove,
   });
@@ -86,12 +102,12 @@ export const renameNoteModal = (currentName, onConfirm, onRemove) => {
 
 export const deleteNoteModal = (noteName, onConfirm, onRemove) => {
   createModal({
-    clazz: "top",
+    overlay: "to-delete",
     captionValue: `Delete ${noteName}?`,
+    inputValue: null,
     cancelValue: "No",
     confirmValue: "Yes",
     onConfirm,
     onRemove,
-    noInput: true,
   });
 };

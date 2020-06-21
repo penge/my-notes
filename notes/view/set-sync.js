@@ -1,17 +1,17 @@
-import { syncContainer, lastSync, openInGoogleDrive } from "./elements.js";
-import { hide, show } from "./visibility.js";
+import { syncNow } from "./elements.js";
 import formatDate from "../../shared/date/format-date.js";
 
+const title = syncNow.title;
+
 export default function setSync(sync) {
-  if (!sync) {
-    hide(syncContainer);
-    lastSync.innerText = "";
-    openInGoogleDrive.href = "";
+  if (typeof sync !== "object") {
+    syncNow.classList.add("hide");
     return;
   }
 
-  lastSync.innerText = sync.lastSync ? formatDate(sync.lastSync) : "In progress...";
-  openInGoogleDrive.href = sync.folderLocation;
-
-  show(syncContainer);
+  syncNow.classList.remove("hide");
+  if (sync.lastSync) {
+    const date = formatDate(sync.lastSync);
+    syncNow.title = title + "\n\n" + "Last sync: " + date;
+  }
 }

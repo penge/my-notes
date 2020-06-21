@@ -1,53 +1,55 @@
 /* global document */
 
-/**
- * Renders an array of notes into #existing-notes as [.note-tile, .note-tile, ...]
- * Used template: #note-tile-template
- */
+import { sidebarNotes } from "./elements.js";
+import contextmenu from "../context-menu.js";
 
-import { existingNotes, noteTileTemplate } from "./elements.js";
-import { isReserved } from "../reserved.js";
-import attachOptions from "./attach-options.js";
+const createSidebarNote = (noteName, { activeNote, activateNote }) => {
+  const oneNote = document.createElement("div");
+  oneNote.className = "note";
+  oneNote.innerText = noteName;
 
-const createNoteTile = (name, content, { activateNote, renameNote, deleteNote }) => {
-  const template = noteTileTemplate.content.cloneNode(true);
-  const noteTile = template.children[0];
+  if (noteName === activeNote) {
+    oneNote.classList.add("active");
+  }
 
-  // Note name
-  const noteName = noteTile.getElementsByClassName("note-name")[0];
-  noteName.classList.toggle("reserved", isReserved(name));
-  noteName.innerText = name;
+  oneNote.addEventListener("click", () => {
+    activateNote(noteName);
+  });
 
-  // Note content
-  const noteContent = noteTile.getElementsByClassName("note-content")[0];
-  noteContent.innerHTML = content;
-
-  // Open note
-  noteTile.addEventListener("click", (event) => {
-    if (["note-tile", "note-name", "note-options"].includes(event.target.className)) {
-      activateNote(name);
+  oneNote.addEventListener("mouseenter", () => {
+    oneNote.classList.add("over");
+    if (document.body.classList.contains("with-command") && !document.body.classList.contains("with-modal")) {
+      activateNote(noteName);
     }
   });
 
-  // Open options
-  const noteOptions = noteTile.getElementsByClassName("note-options")[0];
-  attachOptions(name, { noteOptions, noteTile, renameNote, deleteNote });
+  oneNote.addEventListener("mouseleave", () => {
+    oneNote.classList.remove("over");
+  });
 
-  return noteTile;
+  oneNote.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+    contextmenu.hide();
+    activateNote(noteName);
+
+    const x = event.pageX;
+    const y = event.pageY;
+
+    contextmenu.show(x, y, noteName);
+  });
+
+  return oneNote;
 };
 
-export default function setNotes(notesObject, { activateNote, renameNote, deleteNote }) {
-  const fragment = document.createDocumentFragment();
-  let noteNames = Object.keys(notesObject);
+export default function setNotes(notesObject, { activeNote, activateNote }) {
+  const sidebarNotesFragment = document.createDocumentFragment();
 
-  // Add all note tiles to the fragment
-  for (const name of noteNames) {
-    const content = notesObject[name].content;
-    const noteTile = createNoteTile(name, content, { activateNote, renameNote, deleteNote });
-    fragment.appendChild(noteTile);
+  for (const noteName of Object.keys(notesObject)) {
+    const sidebarNote = createSidebarNote(noteName, { activeNote, activateNote });
+    sidebarNotesFragment.appendChild(sidebarNote);
   }
 
-  // Render note tiles to <div id="existing-notes"></div>
-  existingNotes.innerHTML = "";
-  existingNotes.appendChild(fragment);
+  // <div id="sidebar-notes"></div>
+  sidebarNotes.innerHTML = "";
+  sidebarNotes.appendChild(sidebarNotesFragment);
 }

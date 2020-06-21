@@ -21,10 +21,7 @@ export default {
   },
   size: 300,
   theme: "light", // "light" or "dark"
-  customTheme: {
-    background: "#35363a",
-    text: "#ffffff",
-  },
+  customTheme: "",
 
   // Notes
   notes: () => notes(),
@@ -44,8 +41,7 @@ export const validSize = (size) => typeof size === "number" && size >= 100 && si
 
 export const THEMES = ["light", "dark", "custom"];
 export const validTheme = (theme) => THEMES.includes(theme);
-export const validCustomTheme = (customTheme) => typeof customTheme === "object"
-  && ["background", "text"].every(key => key in customTheme);
+export const validCustomTheme = (customTheme) => typeof customTheme === "string";
 
 export const validFocus = (focus) => typeof focus === "boolean";
 export const validNewtab = (newtab) => typeof newtab === "boolean";

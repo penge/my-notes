@@ -1,7 +1,6 @@
-/* global chrome, localStorage */
+/* global chrome, document, localStorage */
 
 import debounce from "./debounce.js";
-import call from "../background/google-drive/call.js";
 
 const mergeNotes = (currentNotes, notesToSave) => {
   const notes = Object.assign({}, currentNotes);
@@ -42,6 +41,7 @@ const syncNotes = (force) => {
   const changed = localStorage.getItem("notesChangedBy");
   if (changed || force) {
     localStorage.removeItem("notesChangedBy");
+    document.body.classList.add("syncing");
     chrome.runtime.sendMessage({ type: "SYNC" });
   }
 };
