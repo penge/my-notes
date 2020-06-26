@@ -41,7 +41,11 @@ hr {
   z-index: 10;
 }
 
-#sidebar, #drag {
+#drag {
+  z-index: 6;
+}
+
+#sidebar {
   z-index: 5;
 }
 
@@ -150,13 +154,16 @@ body.resizing-sidebar #drag {
   border-color: var(--drag-resizing-border-color);
 }
 
+body.resizing-sidebar #sidebar-notes,
+body.resizing-sidebar #sidebar-buttons,
+body.resizing-sidebar #content,
+body.resizing-sidebar #toolbar {
+  pointer-events: none;
+}
+
 body.resizing-sidebar { cursor: col-resize; }
 body.resizing-sidebar-locked-min { cursor: e-resize; }
 body.resizing-sidebar-locked-max { cursor: w-resize; }
-
-body.resizing-sidebar #sidebar {
-  pointer-events: none;
-}
 
 /* Note */
 
