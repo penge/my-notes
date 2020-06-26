@@ -69,6 +69,13 @@
   --toolbar-button-hover-color: white;
 
 
+  /* Editor */
+
+  --pre-border-color: #454545;
+  --highlight-background-color: yellow;
+  --highlight-text-color: black;
+
+
   /* Only in Options */
 
   --hotkey-background-color: #222;
