@@ -212,6 +212,19 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 });
 
+const openLink = (event) => {
+  if (!document.body.classList.contains("with-command")) {
+    return;
+  }
+
+  event.preventDefault();
+  const href = event.target.tagName.toLowerCase() === "a" && event.target.href;
+  href && window.open(href, "_blank");
+};
+
+content.addEventListener("click", openLink); // Chrome OS, Windows
+content.addEventListener("contextmenu", openLink); // OSX would open Context menu when holding Ctrl
+
 window.addEventListener("blur", () => {
   document.body.classList.remove("with-command");
 });
