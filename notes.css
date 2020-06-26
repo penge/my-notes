@@ -192,7 +192,7 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
 #content pre {
   overflow: auto;
   padding: .5em;
-  border: 1px solid silver;
+  border: 1px solid var(--pre-border-color);
 }
 
 body.with-command #content a {
@@ -200,7 +200,8 @@ body.with-command #content a {
 }
 
 #content .my-notes-highlight {
-  background: yellow;
+  background: var(--highlight-background-color);
+  color: var(--highlight-text-color);
 }
 
 /* Context menu */
