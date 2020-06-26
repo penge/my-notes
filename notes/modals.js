@@ -1,4 +1,4 @@
-/* global document */
+/* global document, setTimeout */
 
 import state from "./state/index.js";
 import { modalTemplate } from "./view/elements.js";
@@ -36,7 +36,9 @@ const createModal = ({ clazz, overlay, captionValue, inputValue, cancelValue, co
     const valid = validate ? validate(input.value) : true;
     if (valid) {
       removeModal(onRemove);
-      onConfirm(input ? input.value : undefined);
+      setTimeout(() => {
+        onConfirm(input ? input.value : undefined);
+      }, 0);
     }
   };
 
@@ -70,6 +72,17 @@ export const insertImageModal = (onConfirm) => {
   createModal({
     clazz: "with-border",
     captionValue: "Image URL",
+    inputValue: "",
+    confirmValue: "Insert",
+    validate: (inputValue) => inputValue.length > 0,
+    onConfirm,
+  });
+};
+
+export const insertLinkModal = (onConfirm) => {
+  createModal({
+    clazz: "with-border",
+    captionValue: "Link URL",
     inputValue: "",
     confirmValue: "Insert",
     validate: (inputValue) => inputValue.length > 0,

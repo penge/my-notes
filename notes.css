@@ -189,6 +189,20 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
 #content ul { margin: 0; }
 #content ol { margin: 0 0 0 1em; }
 
+#content pre {
+  overflow: auto;
+  padding: .5em;
+  border: 1px solid silver;
+}
+
+body.with-command #content a {
+  cursor: pointer;
+}
+
+#content .my-notes-highlight {
+  background: yellow;
+}
+
 /* Context menu */
 
 #context-menu {
@@ -236,10 +250,19 @@ body.with-toolbar #toolbar { transform: translateY(0); }
 #toolbar .button { cursor: pointer; }
 #toolbar #S { margin-right: 2.5em; }
 
-#toolbar #H #headings { display: none }
+#toolbar #H #headings { display: none; }
 #toolbar #H:hover #headings {
- display: block;
+  display: block;
+  position: absolute;
+  bottom: calc(100% - .2em);
+  padding: .2em;
+  margin-left: -.2em;
+  background: var(--toolbar-button-hover-background-color);
 }
+
+#H1 > span { font-size: 1em; }
+#H2 > span { font-size: .85em; }
+#H3 > span { font-size: .65em; }
 
 /* Overlay */
 
