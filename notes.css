@@ -98,6 +98,7 @@ hr {
 
 .bar > .button > svg {
   height: .7em;
+  pointer-events: none;
 }
 
 /* Sidebar */
