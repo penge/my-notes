@@ -78,22 +78,25 @@ hr {
 
 /* Bar (for #sidebar-buttons and #toolbar) */
 
+#toolbar, #sidebar-buttons {
+  font-size: .8em;
+}
+
 .bar {
   display: flex;
   flex-wrap: wrap;
   user-select: none;
   box-sizing: border-box;
-  font-size: .8em;
   border-top: 1px solid var(--bar-border-color);
 }
 
-.bar .button {
+.bar > .button {
   font-weight: bold;
   padding: .2em;
   margin: .2em;
 }
 
-.bar .button svg {
+.bar > .button > svg {
   height: .7em;
 }
 
@@ -236,11 +239,17 @@ body:not(.with-context-menu) #context-menu { display: none; }
   color: var(--toolbar-button-color);
 }
 
+#toolbar .button {
+  color: var(--svg-fill-color);
+}
+
+#toolbar .button.active,
 #toolbar .button:hover {
   background: var(--toolbar-button-hover-background-color);
   color: var(--toolbar-button-hover-color);
 }
 
+#toolbar .button.active > svg,
 #toolbar .button:hover > svg {
   fill: var(--toolbar-button-hover-color);
 }
