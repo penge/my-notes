@@ -371,3 +371,24 @@ body.focus #toolbar {
 body.focus {
   left: 0 !important;
 }
+
+/* Print */
+
+@media print {
+  #sidebar, #toolbar {
+    display: none !important;
+  }
+
+  body {
+    position: static !important;
+    left: 0 !important;
+    font-size: 100% !important;
+    background: white;
+    color: black;
+  }
+
+  #content pre { border: 1px solid black; }
+  #content table { border: none; }
+  #content table td { border: 1px solid black; }
+  #content table td.heading { background: #dddddd; }
+}
