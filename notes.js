@@ -5,7 +5,7 @@ import state from "./notes/state/index.js";
 
 import { newNote, openOptions, content, syncNow } from "./notes/view/elements.js";
 import typing from "./notes/typing.js";
-import toolbar from "./notes/toolbar.js";
+import toolbar from "./notes/toolbar/index.js";
 import { saveNotes, syncNotes } from "./notes/saving.js";
 import hotkeys from "./notes/hotkeys.js";
 import sidebar from "./notes/sidebar.js";

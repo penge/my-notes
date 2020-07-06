@@ -16,12 +16,6 @@ svg {
   fill: var(--svg-fill-color);
 }
 
-hr {
-  height: 0;
-  border: none;
-  border-bottom: 2px solid var(--hr-color);
-}
-
 .bold { font-weight: bold; }
 .underline { text-decoration: underline; }
 .italic { font-style: italic; }
@@ -196,7 +190,24 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
 #content pre {
   overflow: auto;
   padding: .5em;
-  border: 1px solid var(--pre-border-color);
+  border: 1px solid var(--pre-border-color, red);
+}
+
+#content table {
+  border: var(--table-border, 3px solid red);
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+#content table td {
+  padding: .25em;
+  border: var(--table-td-border, 1px solid red);
+  min-width: 1em;
+}
+
+#content table td.heading {
+  background: var(--table-td-heading-background-color, silver);
+  font-weight: bold;
 }
 
 body.with-command #content a {
@@ -204,8 +215,8 @@ body.with-command #content a {
 }
 
 #content .my-notes-highlight {
-  background: var(--highlight-background-color);
-  color: var(--highlight-text-color);
+  background: var(--highlight-background-color, yellow);
+  color: var(--highlight-text-color, black);
 }
 
 /* Context menu */
@@ -259,21 +270,24 @@ body:not(.with-toolbar) #toolbar { display: none; }
 body.with-toolbar #toolbar { transform: translateY(0); }
 
 #toolbar .button { cursor: pointer; }
-#toolbar #S { margin-right: 2.5em; }
-
-#toolbar #H #headings { display: none; }
-#toolbar #H:hover #headings {
-  display: block;
-  position: absolute;
-  bottom: calc(100% - .2em);
-  padding: .2em;
-  margin-left: -.2em;
-  background: var(--toolbar-button-hover-background-color);
-}
+#toolbar .button.wide { margin-right: 1.5em; }
+#toolbar .button.rotate90 > svg { transform: rotate(90deg); }
 
 #H1 > span { font-size: 1em; }
 #H2 > span { font-size: .85em; }
 #H3 > span { font-size: .65em; }
+
+#toolbar .button .menu {
+  position: absolute;
+  bottom: calc(100% + 1px);
+  background: var(--toolbar-submenu-background-color);
+  left: 0;
+  right: 0;
+}
+
+#toolbar .button:not(.active) .menu {
+  display: none;
+}
 
 /* Overlay */
 

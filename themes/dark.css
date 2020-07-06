@@ -67,6 +67,7 @@
   --toolbar-button-color: #626262;
   --toolbar-button-hover-background-color: #222;
   --toolbar-button-hover-color: white;
+  --toolbar-submenu-background-color: #121212;
 
 
   /* Editor */
@@ -74,6 +75,9 @@
   --pre-border-color: #454545;
   --highlight-background-color: yellow;
   --highlight-text-color: black;
+  --table-border: 3px solid #454545;
+  --table-td-border: 1px solid #222;
+  --table-td-heading-background-color: #222;
 
 
   /* Only in Options */

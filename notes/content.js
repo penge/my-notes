@@ -2,16 +2,6 @@
 
 const CONTENT_ID = "content";
 
-export const getRange = () => {
-  const selection = document.getSelection();
-  if (selection.rangeCount === 0) {
-    return null;
-  }
-
-  const range = selection.getRangeAt(0);
-  return range;
-};
-
 const createIterator = (range) => {
   const root = range.commonAncestorContainer;
   const whatToShow = NodeFilter.SHOW_TEXT;
@@ -27,6 +17,10 @@ const createIterator = (range) => {
 };
 
 export const getNodes = (range) => {
+  if (!range) {
+    return [];
+  }
+
   const iterator = createIterator(range);
   const nodes = [];
 
