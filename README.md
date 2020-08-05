@@ -1,27 +1,38 @@
-![My Notes](images/my-notes.png)
+<p align="center"></p>
+<h1 align="center">My Notes — <a href="https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop">Web Store</a></h1>
+<p align="center">
+  <img src="https://badgen.net/github/release/penge/my-notes" />
+  <img src="https://badgen.net/github/license/penge/my-notes" />
+  <img src="https://badgen.net/chrome-web-store/users/lkeeogfaiembcblonahillacpaabmiop" />
+  <br><br>
+  <img src="images/my-notes.png" width="800" /><br>
+  My Notes is a Chrome extension for simple and fast note-taking.<br><br>
+  Write down your ideas, notes, todos, clipboard, articles, and other, all effortlessly in a Chrome's New Tab.
+</p>
 
-**My Notes** is a note-taking app directly in Chrome.
-Available on [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+<br><br>
 
 ## Features
 
-- Quickly accessible (see [How to open](#how-to-open))
+→ &nbsp; All notes available inside your Chrome ([_How to open_](#how-to-open))
 
-- Saved automatically
+→ &nbsp; All notes saved automatically
 
-- Updated in every open window
+→ &nbsp; All notes synchronized in every open window as you edit them
 
-- HTML (bold, italic, underline, etc.)
+→ &nbsp; Can use HTML
 
-- Transfer text to another computer (see [Context menu](#context-menu))
+→ &nbsp; Great as a Clipboard
 
-- Google Drive Sync, to backup, share, and sync the notes between computers (see [Google Drive Sync](#google-drive-sync))
+→ &nbsp; Can send text between computers ([_Context menu_](#context-menu))
 
-- Themes (Light, Dark, Custom)
+→ &nbsp; Can store notes to Google Drive and edit them from other devices ([_Google Drive Sync_](#google-drive-sync))
 
-- Hotkeys
+→ &nbsp; Themes (Light, Dark, Custom)
 
-- Works offline
+→ &nbsp; Hotkeys
+
+→ &nbsp; Works offline
 
 <br>
 
@@ -29,70 +40,68 @@ Available on [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkee
 
 **My Notes:**
 
-- Click on My Notes icon in Chrome toolbar
-- In every new tab (see Options)
-- Hotkey (see Options)
+<ol type="A">
+  <li>Click on My Notes icon in Chrome toolbar</li>
+  <li>In every new tab (see Options)</li>
+  <li>Use Hotkey (see Options)</li>
+</ol>
 
 **Options:**
 
-- Click on the gear icon
-- Right-click on My Notes icon in Chrome toolbar and select Options
-- Hotkey (see Options)
+<ol type="A">
+  <li>Click on the gear icon in the bottom left corner</li>
+  <li>Right-click on My Notes icon in the Chrome toolbar and select Options</li>
+  <li>Use Hotkey (see Options)</li>
+</ol>
 
-<br>
-
-## Options
-
-- Font type (Serif, Sans Serif, Monospace, Google Fonts)
-- Font size
-- Theme (Light, Dark, Custom)
-- Hotkeys
-- Open My Notes in every New Tab
-- Enable Google Drive Sync
-- Indent text on Tab
-
-<br>
+<br><br>
 
 ## Context menu
 
-Allows you to quickly save the selected text to My Notes Clipboard (a special note in My Notes).
+Context menu allows you to quickly save the selected text to My Notes Clipboard (a special note in My Notes).
 
-![Context menu](images/context-menu.png)
+<img src="images/context-menu.png" width="800" />
 
-**Save selection** — Saves the selected text to My Notes Clipboard in your current computer.
+### Save selection
 
-**Save selection to other devices** — Saves the selected text to My Notes Clipboard in your other computer(s).
-**Condition:** My Notes needs to be open, same Google Account needs to be used.
+Saves the selected text to My Notes Clipboard in your current computer.
+My Notes doesn't have to be open.
 
-<br>
+### Save selection to other devices
+
+Saves the selected text to My Notes Clipboard in your other computer(s).
+My Notes needs to be open in the second computer and same Google Account needs to be used.
+
+<br><br>
 
 ## Google Drive Sync
 
-**Google Drive Sync** automatically syncs your notes between My Notes and your Google Drive, in both directions (from Google Drive, to Google Drive).
+Google Drive Sync (see Options) saves your notes to Google Drive and synchronizes the changes between your local My Notes and your Google Drive
+every time you hit the Sync button (bottom left corner).
 
-This gives you:
+Benefits:
 
-- a backup (notes can be restored in the future)
-- can modify the notes in Google Drive, My Notes, and vice versa
-- can modify the notes from other computers (by installing My Notes and using the same Google Account)
+- backup of notes in your Google Drive
+- notes can be restored in the future if My Notes is re-installed, by re-enabling Google Drive Sync
+- notes can be edited from Google Drive if needed (or from other devices that have access to Google Drive)
+- notes can be edited from other computers where My Notes is installed and Google Drive Sync is enabled (using same Google Account is needed)
 
 ### Location
 
 Notes are uploaded to your Google Drive to the folder **My Notes**. This folder is created automatically.
-If the folder exists from a previous installation, it is restored, notes are downloaded and uploaded, and the synchronization continues.
+If the folder exists from a previous installation, notes are downloaded and uploaded.
 
 ### Synchronization
 
-Notes are synchronized immediately after you enable **Google Drive Sync**.
-Then on every My Notes **Open/Close/Refresh**, or with the **"Sync Now"** button.
+Notes are synchronized every time you hit the Sync button (bottom left corner).
 Synchronization works in both ways — to Google Drive, from Google Drive.
 
 ### Access
 
-My Notes can only access the files it created.
-It cannot see the other files in your Google Drive.
+My Notes has only access to the folder **My Notes**.
+It cannot see any other files in your Google Drive.
 
-<br>
+<br><br>
 
 ## Folder structure
 
@@ -146,7 +155,7 @@ LICENSE           # MIT
 manifest.json     # Main extension file
 
 
-background.html   # Entrypoint for background script
+background.html   # Entrypoint for background page
 background.js
 
 notes.html        # Entrypoint for notes
@@ -161,9 +170,11 @@ options.js
 README.md
 ```
 
-<br>
+<br><br>
 
 ## Permissions
+
+My Notes has the permissions listed in `manifest.json`.
 
 **Required:**
 
@@ -176,3 +187,9 @@ README.md
 - `"identity"` — used by **Enable Google Drive Sync** (see **Options**)
 
 `"tabs"` is a more powerful permission — the displayed warning may contain an unrelated message — `It can: Read your Browsing history`.
+
+<br><br>
+
+---
+
+<p align="center"><code>Created with ❤ in 2019.</code></p>
