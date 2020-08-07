@@ -45,9 +45,9 @@
 
   /* Sidebar */
 
-  --sidebar-notes-background-color: white;
+  --sidebar-notes-background-color: #f5f5f5;
   --sidebar-notes-text-color: black;
-  --sidebar-active-note-background-color: #e1e1e1;
+  --sidebar-active-note-background-color: #bdbdbd;
   --sidebar-active-note-text-color: black;
 
 
@@ -67,7 +67,7 @@
   --toolbar-button-color: black;
   --toolbar-button-hover-background-color: #222;
   --toolbar-button-hover-color: white;
-  --toolbar-submenu-background-color: #f1f1f1;
+  --toolbar-submenu-background-color: #f5f5f5;
 
 
   /* Editor */
