@@ -20,30 +20,29 @@ const mergeNotes = (currentNotes, notesToSave) => {
 // Can be called multiple times when multiple My Notes tabs/windows are closed
 // Make sure the actual saving is run only once
 // All changes across tabs/windows are in "notesToSave"
-const saveNotes = (currentNotes, callback) => {
+const saveNotes = (currentNotes) => {
   const notesToSave = JSON.parse(localStorage.getItem("notesToSave"));
   if (!notesToSave || typeof notesToSave !== "object") {
-    if (callback) { callback(); }
     return; // no changes made or already saved
   }
   localStorage.removeItem("notesToSave");
 
   const notes = mergeNotes(currentNotes, notesToSave);
-  chrome.storage.local.set({ notes: notes }, () => {
-    if (callback) { callback(); }
-  });
+  chrome.storage.local.set({ notes: notes });
 };
 
 // Saves notes after 1 second of inactivity
 const saveNotesDebounce = debounce(saveNotes, 1000);
 
-const syncNotes = (force) => {
-  const changed = localStorage.getItem("notesChangedBy");
-  if (changed || force) {
-    localStorage.removeItem("notesChangedBy");
-    document.body.classList.add("syncing");
-    chrome.runtime.sendMessage({ type: "SYNC" });
+const syncNotes = (state) => {
+  // Cannot Sync if already in progress
+  const canSync = document.body.classList.contains("syncing") === false && typeof state.sync === "object";
+  if (!canSync) {
+    return;
   }
+
+  document.body.classList.add("syncing");
+  chrome.runtime.sendMessage({ type: "SYNC" });
 };
 
 export {

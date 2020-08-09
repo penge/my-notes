@@ -92,6 +92,10 @@ svg {
   border-radius: 3px;
 }
 
+.bar > .button.disabled {
+  opacity: .4;
+}
+
 .bar > .button > svg {
   height: .8em;
   pointer-events: none;

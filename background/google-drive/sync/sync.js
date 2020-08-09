@@ -1,4 +1,4 @@
-/* global navigator, console */
+/* global chrome, navigator, console */
 
 import { havingPermission } from "../../../shared/permissions/index.js";
 import { getItem, setItem } from "../../../shared/storage/index.js";
@@ -69,6 +69,7 @@ const runPreconditions = async (PREFIX) => {
 const sync = async () => {
   const fulfilled = await runPreconditions("SYNC");
   if (!fulfilled) {
+    chrome.runtime.sendMessage({ type: "SYNC_FAIL" });
     return;
   }
 
@@ -76,11 +77,15 @@ const sync = async () => {
   const notes = await getItem("notes");
 
   console.log("SYNC - START");
+  chrome.runtime.sendMessage({ type: "SYNC_START" });
+
   const notesAfterPull = await pull(notes, files, { getFile });
   const notesAfterPush = await push(folderId, notesAfterPull, files, { createFile, updateFile });
   await setItem("notes", notesAfterPush);
   await setItem("sync", { folderId, folderLocation, files, lastSync: new Date().toISOString() });
+
   console.log("SYNC - DONE");
+  chrome.runtime.sendMessage({ type: "SYNC_STOP" });
 
   return true;
 };

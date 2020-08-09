@@ -1,4 +1,4 @@
-/* global chrome, window, document, Set, localStorage */
+/* global chrome, window, document, Set, localStorage, setTimeout */
 
 // Setting application state and view updates are done via a Proxy
 import state from "./notes/state/index.js";
@@ -37,11 +37,12 @@ openOptions.addEventListener("click", () => {
 });
 
 // Sync Now
-syncNow.addEventListener("click", () => {
-  if (document.body.classList.contains("syncing")) {
-    return;
+syncNow.addEventListener("click", () => syncNotes(state));
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === "SYNC_STOP" || message.type === "SYNC_FAIL") {
+    document.body.classList.remove("syncing");
   }
-  syncNotes(true);
 });
 
 // Hide context menu on click outside
@@ -99,8 +100,7 @@ chrome.storage.local.get([
   state.tab = tab;
 
   // Sync
-  state.sync = sync; // shows "Sync Now" button and "Last sync" timestamp, if "Google Drive Sync" is enabled
-  syncNotes(true); // downloads New and Edited notes from Google Drive
+  state.sync = sync;
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -232,6 +232,6 @@ window.addEventListener("blur", () => {
 // Notes are saved every 1 second by "saveNotesDebounce()"
 // When the window is closed sooner, save the notes immediately, if changed
 window.addEventListener("beforeunload", () => {
-  // Save the most recent version of notes (notes are synchronized across Tabs)
-  saveNotes(state.notes, syncNotes); // syncNotes without "force" => syncs notes only if changed
+  // Save the most recent version of notes (changes are gathered across Tabs)
+  saveNotes(state.notes);
 });
