@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "My Notes",
-  "description": "Simple Note-taking app. Auto-saved. Auto-synced.",
-  "version": "3.4",
+  "description": "Simple and fast note-taking.",
+  "version": "3.4.1",
   "homepage_url": "https://github.com/penge/my-notes",
   "icons": { "128": "images/icon128.png" },
   "options_page": "options.html",
