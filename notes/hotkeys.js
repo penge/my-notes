@@ -29,9 +29,14 @@ const keydown = (state) => document.addEventListener("keydown", (event) => {
   }
 
   if (event.key === "Enter" || event.keyCode === 13) {
-    // Confirm #modal
+    // Look for #confirm in #modal
     const confirm = document.getElementById("confirm");
-    confirm && confirm.click();
+    if (confirm) {
+      // if modal is open and thefore can be confirmed and closed with Enter,
+      // prevent default behaviour of Enter
+      event.preventDefault();
+      confirm.click();
+    }
   }
 
   if ((event.metaKey || event.ctrlKey) && (event.key === "S" || event.key === "s")) {
@@ -59,21 +64,25 @@ const keydown = (state) => document.addEventListener("keydown", (event) => {
   }
 
   if ((event.metaKey || event.ctrlKey) && event.key === "[") {
+    event.preventDefault();
     state.previousNote();
     return;
   }
 
   if ((event.metaKey || event.ctrlKey) && event.key === "]") {
+    event.preventDefault();
     state.nextNote();
     return;
   }
 
   if ((event.metaKey || event.ctrlKey) && event.shiftKey && (event.key === "F" || event.key === "f")) {
+    event.preventDefault();
     state.active && toggleFocus(); // toggle focus only when a note is open
     return;
   }
 
   if ((event.metaKey || event.ctrlKey) && event.shiftKey && (event.key === "O" || event.key === "o")) {
+    event.preventDefault();
     chrome.tabs.create({ url: "/options.html" });
     return;
   }

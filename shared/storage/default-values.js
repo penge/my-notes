@@ -19,9 +19,9 @@ export default {
     genericFamily: "sans-serif",
     fontFamily: "Helvetica, sans-serif",
   },
-  size: 300,
-  theme: "light", // "light" or "dark"
-  customTheme: "",
+  size: 190,
+  theme: "light", // "light", "dark", "custom"
+  customTheme: "", // css string
 
   // Notes
   notes: () => notes(),
