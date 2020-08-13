@@ -63,18 +63,6 @@ const keydown = (state) => document.addEventListener("keydown", (event) => {
     return;
   }
 
-  if ((event.metaKey || event.ctrlKey) && event.key === "[") {
-    event.preventDefault();
-    state.previousNote();
-    return;
-  }
-
-  if ((event.metaKey || event.ctrlKey) && event.key === "]") {
-    event.preventDefault();
-    state.nextNote();
-    return;
-  }
-
   if ((event.metaKey || event.ctrlKey) && event.shiftKey && (event.key === "F" || event.key === "f")) {
     event.preventDefault();
     state.active && toggleFocus(); // toggle focus only when a note is open

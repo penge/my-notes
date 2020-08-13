@@ -1,4 +1,4 @@
-/* global chrome, window, document, Set, localStorage, setTimeout */
+/* global chrome, window, document, Set, localStorage */
 
 // Setting application state and view updates are done via a Proxy
 import state from "./notes/state/index.js";
@@ -11,6 +11,8 @@ import hotkeys from "./notes/hotkeys.js";
 import sidebar from "./notes/sidebar.js";
 import { newNoteModal } from "./notes/modals.js";
 import contextMenu from "./notes/context-menu.js";
+
+import notesHistory from "./notes/history.js";
 
 let tabId; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
@@ -77,7 +79,7 @@ chrome.storage.local.get([
   const {
     notification,
     font, size, sidebar, sidebarWidth, toolbar, theme, customTheme,
-    notes, active,
+    notes, active : lastActive,
     focus, tab,
     sync } = local;
 
@@ -93,7 +95,12 @@ chrome.storage.local.get([
 
   // Notes
   state.notes = notes;
-  state.active = (active in notes) ? active : null;
+  const activeFromUrl = window.location.search.startsWith("?") && window.location.search.substring(1); // Bookmark
+  const activeCandidate = activeFromUrl || lastActive || "Clipboard";
+  state.active = (activeCandidate in notes) ? activeCandidate : null;
+  if (state.active && !activeFromUrl) {
+    notesHistory.replace(activeCandidate);
+  }
 
   // Options
   state.focus = focus;
@@ -152,6 +159,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       const newActive = changes["active"] && changes["active"].newValue;
       if (newActive && newActive in newNotes) {
         state.active = newActive;
+        notesHistory.push(newActive);
         return;
       }
 
@@ -169,6 +177,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       ) {
         const newActive = state.active;
         state.active = newActive;
+        notesHistory.replace(newActive);
         return;
       }
 
@@ -182,6 +191,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       const newSet = new Set(Object.keys(newNotes));
       if (oldSet.size > newSet.size) {
         state.active = "Clipboard";
+        notesHistory.replace("Clipboard");
         return;
       }
 
@@ -191,6 +201,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
         if (diff.size === 1) {
           const newActive = diff.values().next().value;
           state.active = newActive;
+          notesHistory.replace(newActive);
         }
       }
     }
@@ -228,6 +239,9 @@ content.addEventListener("contextmenu", openLink); // OSX would open Context men
 window.addEventListener("blur", () => {
   document.body.classList.remove("with-command");
 });
+
+// History
+notesHistory.attach(state);
 
 // Notes are saved every 1 second by "saveNotesDebounce()"
 // When the window is closed sooner, save the notes immediately, if changed

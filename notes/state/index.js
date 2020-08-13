@@ -6,6 +6,8 @@ import deleteNote from "./delete-note.js";
 
 import view from "../view/index.js";
 
+import notesHistory from "../history.js";
+
 let stateProxy;
 
 const activateNote = (noteName) => {
@@ -15,6 +17,7 @@ const activateNote = (noteName) => {
 
   if (noteName in stateProxy.notes) {
     stateProxy.active = noteName;
+    notesHistory.push(noteName);
   } else {
     stateProxy.active = null;
   }
