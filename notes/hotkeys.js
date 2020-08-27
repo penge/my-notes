@@ -10,7 +10,7 @@ const toggleFocus = () => {
 
 const keydown = (state) => document.addEventListener("keydown", (event) => {
   if (event.ctrlKey) {
-    document.body.classList.add("with-command");
+    document.body.classList.add("with-control");
     const hoveredNote = document.querySelector(".note.over");
     hoveredNote && state.activateNote(hoveredNote.innerText);
   }
@@ -32,7 +32,7 @@ const keydown = (state) => document.addEventListener("keydown", (event) => {
     // Look for #confirm in #modal
     const confirm = document.getElementById("confirm");
     if (confirm) {
-      // if modal is open and thefore can be confirmed and closed with Enter,
+      // if modal is open and therefore can be confirmed and closed with Enter,
       // prevent default behaviour of Enter
       event.preventDefault();
       confirm.click();
@@ -77,7 +77,7 @@ const keydown = (state) => document.addEventListener("keydown", (event) => {
 });
 
 const keyup = () => document.addEventListener("keyup", () => {
-  document.body.classList.remove("with-command");
+  document.body.classList.remove("with-control");
 });
 
 const register = (state) => {

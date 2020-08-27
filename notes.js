@@ -155,7 +155,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       const newNotes = changes["notes"].newValue;
       state.notes = newNotes;
 
-      // Autoactivate the created note
+      // Auto-activate the created note
       const newActive = changes["active"] && changes["active"].newValue;
       if (newActive && newActive in newNotes) {
         state.active = newActive;
@@ -224,7 +224,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 });
 
 const openLink = (event) => {
-  if (!document.body.classList.contains("with-command")) {
+  if (!document.body.classList.contains("with-control")) {
     return;
   }
 
@@ -237,7 +237,7 @@ content.addEventListener("click", openLink); // Chrome OS, Windows
 content.addEventListener("contextmenu", openLink); // OSX would open Context menu when holding Ctrl
 
 window.addEventListener("blur", () => {
-  document.body.classList.remove("with-command");
+  document.body.classList.remove("with-control");
 });
 
 // History

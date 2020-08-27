@@ -18,7 +18,7 @@ const createSidebarNote = (noteName, { activeNote, activateNote }) => {
 
   oneNote.addEventListener("mouseenter", () => {
     oneNote.classList.add("over");
-    if (document.body.classList.contains("with-command") && !document.body.classList.contains("with-modal")) {
+    if (document.body.classList.contains("with-control") && !document.body.classList.contains("with-modal")) {
       activateNote(noteName);
     }
   });

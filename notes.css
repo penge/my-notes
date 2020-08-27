@@ -219,7 +219,7 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
   font-weight: bold;
 }
 
-body.with-command #content a {
+body.with-control #content a {
   cursor: pointer;
 }
 
