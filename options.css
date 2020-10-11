@@ -130,16 +130,6 @@ input, select {
 
 /* Hotkeys */
 
-.hotkey {
-  border-radius: 3px;
-  padding: 3px 8px;
-  font-weight: bold;
-  display: inline-block;
-  font-family: "Courier New", Courier, monospace;
-  background: var(--hotkey-background-color);
-  color: var(--hotkey-text-color);
-}
-
 table .hotkey {
   margin-left: 2em;
 }
