@@ -17,14 +17,20 @@ const removeModal = (onRemove) => {
   return true;
 };
 
-const createModal = ({ clazz, overlay, captionValue, inputValue, cancelValue, confirmValue, validate, onConfirm, onRemove }) => {
+const createModal = ({ clazz, overlay, captionValue, inputValue, cancelValue, confirmValue, descriptionId, validate, onConfirm, onRemove }) => {
   removeModal();
   range.save();
 
   const node = modalTemplate.content.cloneNode(true);
-  const modal = node.children[0];
+  const modal = node.getElementById("modal");
+
   if (clazz) {
     modal.className = clazz;
+  }
+
+  if (descriptionId) {
+    const modalDescription = node.getElementById(descriptionId);
+    modal.append(modalDescription);
   }
 
   const caption = node.getElementById("caption"); if (captionValue) { caption.innerHTML = captionValue; } else { caption.className = "hide"; }
@@ -60,7 +66,7 @@ const createModal = ({ clazz, overlay, captionValue, inputValue, cancelValue, co
 
   document.body.classList.add("with-modal");
   if (overlay) { document.body.classList.add("with-overlay", overlay); }
-  document.body.prepend(node);
+  document.body.prepend(modal);
 
   input.focus();
   input.onblur = () => {
@@ -85,6 +91,7 @@ export const insertLinkModal = (onConfirm) => {
     captionValue: "Link URL",
     inputValue: "",
     confirmValue: "Insert",
+    descriptionId: "insert-link-modal-description",
     validate: (inputValue) => inputValue.length > 0,
     onConfirm,
   });

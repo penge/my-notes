@@ -117,7 +117,6 @@ body.with-sidebar { left: 25%; }
 body:not(.with-sidebar) { left: 0 !important; }
 
 #sidebar-notes {
-  margin-right: 1px; /* Drag */
   padding: .5em;
   overflow-y: auto;
   flex-grow: 1;
@@ -220,7 +219,7 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
   font-weight: bold;
 }
 
-body.with-command #content a {
+body.with-control #content a {
   cursor: pointer;
 }
 
@@ -365,6 +364,11 @@ body.with-modal #toolbar {
   cursor: pointer;
   background: var(--modal-button-background-color);
   color: var(--modal-button-text-color);
+}
+
+#modal .modal-description {
+  font-size: .75em;
+  margin-top: 1.5em;
 }
 
 body.with-overlay #modal {

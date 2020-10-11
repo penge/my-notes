@@ -28,3 +28,16 @@ a:hover {
 .hide {
   display: none !important;
 }
+
+.hotkey, .hotlink {
+  border-radius: 3px;
+  padding: 3px 8px;
+  display: inline-block;
+  font-family: "Courier New", Courier, monospace;
+  background: var(--hotkey-background-color);
+  color: var(--hotkey-text-color);
+}
+
+.hotkey {
+  font-weight: bold;
+}
