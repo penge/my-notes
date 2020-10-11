@@ -76,8 +76,7 @@ My Notes needs to be open in the second computer and same Google Account needs t
 
 ## Google Drive Sync
 
-Google Drive Sync (see Options) saves your notes to Google Drive and synchronizes the changes between your local My Notes and your Google Drive
-every time you hit the Sync button (bottom left corner).
+Google Drive Sync (see Options) saves your notes to your personal Google Drive and synchronizes the changes between your local My Notes and your Google Drive every time you hit the Sync button (bottom left corner).
 
 Benefits:
 
@@ -88,18 +87,23 @@ Benefits:
 
 ### Location
 
-Notes are uploaded to your Google Drive to the folder **My Notes**. This folder is created automatically.
-If the folder exists from a previous installation, notes are downloaded and uploaded.
+Notes are uploaded to your Google Drive to the folder "My Notes". This folder is created automatically.
+If the folder exists from a previous installation, notes are downloaded and uploaded and the synchronization continues.
 
 ### Synchronization
 
-Notes are synchronized every time you hit the Sync button (bottom left corner).
 Synchronization works in both ways — to Google Drive, from Google Drive.
+
+Notes are synchronized every time you hit the Sync button.
+While the synchronization is in progress, Sync button will spin.
+Sync button tooltip shows the time of the most recent synchronization.
 
 ### Access
 
-My Notes has only access to the folder **My Notes**.
-It cannot see any other files in your Google Drive.
+My Notes has only access to the folder "My Notes" and only to the files it created in this folder.
+It cannot see, access or modify any other files in your Google Drive.
+
+Google Drive Sync works only if the extension is installed from Web Store.
 
 <br><br>
 
@@ -148,6 +152,7 @@ tests/            # Entrypoint for tests
                     # - Prints "Assertion failed: console.assert" if any assertion failed
 
 
+.editorconfig     # To enforce same editor configuration
 .eslintrc         # To enforce code quality and same coding style
 .gitignore        # To exclude any generated files (only .DS_Store at this point)
 
@@ -172,6 +177,25 @@ README.md
 
 <br><br>
 
+## Browser support
+
+My Notes has full support in Google Chrome only. Although it may be possible to install it in other browsers, the support is not complete.
+
+Support for other Chromium-based browsers will be added if possible.
+
+<br><br>
+
+## Security and Privacy
+
+My Notes doesn't collect any personal information or data.
+All your notes are stored locally in your browser.
+If you use Google Drive Sync, My Notes can backup the notes to your personal Google Drive.
+
+To provide Google Drive functionality, My Notes has an application in Google Cloud.
+The sole purpose of this application is to authenticate you securely towards the Google Drive and to allow the synchronization of notes.
+
+<br><br>
+
 ## Permissions
 
 My Notes has the permissions listed in `manifest.json`.
@@ -181,12 +205,20 @@ My Notes has the permissions listed in `manifest.json`.
 - `"storage"` — used to save the notes and options to Chrome Storage
 - `"contextMenus"` — used to create My Notes Context menu
 
+Required permissions are shown to the user before installing the extension, and are needed at all times to provide the basic functionality.
+
 **Optional:**
 
-- `"tabs"` — used by **Open My Notes in every New Tab** (see **Options**)
-- `"identity"` — used by **Enable Google Drive Sync** (see **Options**)
+- `"tabs"` — needed for "Open My Notes in every New Tab" (see Options)
+- `"identity"` — needed for "Enable Google Drive Sync" (see Options)
 
-`"tabs"` is a more powerful permission — the displayed warning may contain an unrelated message — `It can: Read your Browsing history`.
+Optional permissions are needed only to provide additional functionality that can be enabled via a checkbox in Options.
+
+User has the choice to either approve or deny the permissions.
+
+`"tabs"` is a more powerful permission and browsers usually display a generic, in this case unrelated warning as `It can: Read your Browsing history`.
+My Notes doesn't read your browsing history. The permission is only needed to enable "Open My Notes in every New Tab".
+To read more about the warnings, see the [offical documentation](https://developer.chrome.com/extensions/permission_warnings).
 
 <br><br>
 
