@@ -1,6 +1,7 @@
 /* global chrome, document */
 
 import contextMenu from "./context-menu.js";
+import { getToolbarButton } from "./toolbar/index.js";
 
 const isMac = (os) => os === "mac";
 
@@ -102,6 +103,36 @@ const registerIndentOnTab = (event, { state }) => {
   }
 };
 
+const registerUnderline = (event, { os }) => {
+  if (isMac(os) && event.metaKey && (event.key === "U" || event.key === "u")) {
+    event.preventDefault();
+    const U = getToolbarButton("U");
+    U && U.click();
+  }
+};
+
+const registerStrikethrough = (event, { os }) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "X" || event.key === "x")) ||
+    (!isMac(os) && event.altKey && event.shiftKey && event.key === "5")
+  ) {
+    event.preventDefault();
+    const S = getToolbarButton("S");
+    S && S.click();
+  }
+};
+
+const registerRemoveFormat = (event, { os }) => {
+  if (
+    (isMac(os) && event.metaKey && event.key === "\\") ||
+    (!isMac(os) && event.ctrlKey && event.key === "\\")
+  ) {
+    event.preventDefault();
+    const RF = getToolbarButton("RF");
+    RF && RF.click();
+  }
+};
+
 const keydown = (state, os) => document.addEventListener("keydown", (event) => {
   registerOpenOptions(event, { os });
   registerToggleFocusMode(event, { os, state });
@@ -116,6 +147,11 @@ const keydown = (state, os) => document.addEventListener("keydown", (event) => {
   registerCloseModal(event);
   registerConfirmModal(event);
   registerIndentOnTab(event, { state });
+
+  // Formatting
+  registerUnderline(event, { os });
+  registerStrikethrough(event, { os });
+  registerRemoveFormat(event, { os });
 });
 
 const keyup = () => document.addEventListener("keyup", () => {

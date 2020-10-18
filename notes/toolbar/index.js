@@ -9,6 +9,9 @@ import highlight from "./highlight.js";
 
 const get = id => document.getElementById(id);
 
+// Alias to use from outside (in hotkeys.js)
+export const getToolbarButton = get;
+
 export const exec = (command, value = null) =>
   document.execCommand(command, false, value);
 
