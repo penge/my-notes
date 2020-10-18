@@ -135,6 +135,10 @@ input, select {
   display: none;
 }
 
+#hotkeys td {
+  vertical-align: baseline;
+}
+
 #hotkeys .description {
   font-weight: bold;
   padding-right: 2em;
