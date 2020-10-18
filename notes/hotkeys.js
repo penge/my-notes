@@ -133,6 +133,28 @@ const registerRemoveFormat = (event, { os }) => {
   }
 };
 
+const registerBulletedList = (event, { os }) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && event.key === "7") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.key === "7")
+  ) {
+    event.preventDefault();
+    const UL = getToolbarButton("UL");
+    UL && UL.click();
+  }
+};
+
+const registerNumberedList = (event, { os }) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && event.key === "8") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.key === "8")
+  ) {
+    event.preventDefault();
+    const OL = getToolbarButton("OL");
+    OL && OL.click();
+  }
+};
+
 const keydown = (state, os) => document.addEventListener("keydown", (event) => {
   registerOpenOptions(event, { os });
   registerToggleFocusMode(event, { os, state });
@@ -152,6 +174,10 @@ const keydown = (state, os) => document.addEventListener("keydown", (event) => {
   registerUnderline(event, { os });
   registerStrikethrough(event, { os });
   registerRemoveFormat(event, { os });
+
+  // Lists
+  registerBulletedList(event, { os });
+  registerNumberedList(event, { os });
 });
 
 const keyup = () => document.addEventListener("keyup", () => {
