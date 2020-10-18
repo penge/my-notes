@@ -36,8 +36,8 @@ const registerToggleFocusMode = (event, { os, state }) => {
 
 const registerToggleSidebar = (event, { os, state }) => {
   if (
-    (isMac(os) && event.metaKey && (event.key === "S" || event.key === "s")) ||
-    (!isMac(os) && event.ctrlKey && (event.key === "S" || event.key === "s"))
+    (isMac(os) && event.metaKey && (event.key === "S" || event.key === "s") && !event.shiftKey) ||
+    (!isMac(os) && event.ctrlKey && (event.key === "S" || event.key === "s") && !event.shiftKey)
   ) {
     event.preventDefault();
     // Toggle Sidebar only if not in focus mode
@@ -153,6 +153,16 @@ const registerNumberedList = (event, { os }) => {
   }
 };
 
+const registerSyncNotes = (event, { os }) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "S" || event.key === "s")) ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "S" || event.key === "s"))
+  ) {
+    event.preventDefault();
+    getAndClick("sync-now");
+  }
+};
+
 const keydown = (state, os) => document.addEventListener("keydown", (event) => {
   registerOpenOptions(event, { os });
   registerToggleFocusMode(event, { os, state });
@@ -176,6 +186,9 @@ const keydown = (state, os) => document.addEventListener("keydown", (event) => {
   // Lists
   registerBulletedList(event, { os });
   registerNumberedList(event, { os });
+
+  // Sync notes
+  registerSyncNotes(event, { os });
 });
 
 const keyup = () => document.addEventListener("keyup", () => {
