@@ -1,7 +1,11 @@
 /* global chrome, document */
 
 import contextMenu from "./context-menu.js";
-import { getToolbarButton } from "./toolbar/index.js";
+
+const getAndClick = id => {
+  const elem = document.getElementById(id);
+  elem && elem.click();
+};
 
 const isMac = (os) => os === "mac";
 
@@ -41,7 +45,6 @@ const registerToggleSidebar = (event, { os, state }) => {
       const hasSidebar = document.body.classList.toggle("with-sidebar");
       chrome.storage.local.set({ sidebar: hasSidebar });
     }
-    return;
   }
 };
 
@@ -106,8 +109,7 @@ const registerIndentOnTab = (event, { state }) => {
 const registerUnderline = (event, { os }) => {
   if (isMac(os) && event.metaKey && (event.key === "U" || event.key === "u")) {
     event.preventDefault();
-    const U = getToolbarButton("U");
-    U && U.click();
+    getAndClick("U");
   }
 };
 
@@ -117,8 +119,7 @@ const registerStrikethrough = (event, { os }) => {
     (!isMac(os) && event.altKey && event.shiftKey && event.key === "5")
   ) {
     event.preventDefault();
-    const S = getToolbarButton("S");
-    S && S.click();
+    getAndClick("S");
   }
 };
 
@@ -128,8 +129,7 @@ const registerRemoveFormat = (event, { os }) => {
     (!isMac(os) && event.ctrlKey && event.key === "\\")
   ) {
     event.preventDefault();
-    const RF = getToolbarButton("RF");
-    RF && RF.click();
+    getAndClick("RF");
   }
 };
 
@@ -139,8 +139,7 @@ const registerBulletedList = (event, { os }) => {
     (!isMac(os) && event.ctrlKey && event.shiftKey && event.key === "7")
   ) {
     event.preventDefault();
-    const UL = getToolbarButton("UL");
-    UL && UL.click();
+    getAndClick("UL");
   }
 };
 
@@ -150,8 +149,7 @@ const registerNumberedList = (event, { os }) => {
     (!isMac(os) && event.ctrlKey && event.shiftKey && event.key === "8")
   ) {
     event.preventDefault();
-    const OL = getToolbarButton("OL");
-    OL && OL.click();
+    getAndClick("OL");
   }
 };
 
