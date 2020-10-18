@@ -19,7 +19,7 @@ export default {
     genericFamily: "sans-serif",
     fontFamily: "Helvetica, sans-serif",
   },
-  size: 190,
+  size: 200,
   theme: "light", // "light", "dark", "custom"
   customTheme: "", // css string
 

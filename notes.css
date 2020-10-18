@@ -2,6 +2,10 @@
   --default-sidebar-width: 25%;
 }
 
+html {
+  font-size: 12px;
+}
+
 body, #sidebar {
   display: flex;
   flex-direction: column;
