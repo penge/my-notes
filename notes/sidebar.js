@@ -14,7 +14,7 @@ function resize(e) {
     return;
   }
 
-  const min = ((width / 100) * 15); // 15%
+  const min = ((width / 100) * .3); // .3%
   if (m_pos <= min) {
     document.body.classList.add("resizing-sidebar-locked-min");
     return;
