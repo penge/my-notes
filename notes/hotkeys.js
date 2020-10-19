@@ -54,7 +54,7 @@ const registerToggleToolbar = (event, { os, state }) => {
     (!isMac(os) && event.ctrlKey && (event.key === "E" || event.key === "e"))
   ) {
     event.preventDefault();
-    // oggle Toolbar only if not in focus mode
+    // Toggle Toolbar only if not in focus mode
     if (!state.focus) {
       const hasToolbar = document.body.classList.toggle("with-toolbar");
       chrome.storage.local.set({ toolbar: hasToolbar });
@@ -116,7 +116,7 @@ const registerUnderline = (event, { os }) => {
 const registerStrikethrough = (event, { os }) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && (event.key === "X" || event.key === "x")) ||
-    (!isMac(os) && event.altKey && event.shiftKey && event.key === "5")
+    (!isMac(os) && event.altKey && event.shiftKey && (event.key === "5" || event.keyCode === 53 || event.code === "Digit5"))
   ) {
     event.preventDefault();
     getAndClick("S");
@@ -135,8 +135,8 @@ const registerRemoveFormat = (event, { os }) => {
 
 const registerBulletedList = (event, { os }) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.key === "7") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.key === "7")
+    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "7" || event.keyCode === 55 || event.code === "Digit7")) ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "7" || event.keyCode === 55 || event.code === "Digit7"))
   ) {
     event.preventDefault();
     getAndClick("UL");
@@ -145,8 +145,8 @@ const registerBulletedList = (event, { os }) => {
 
 const registerNumberedList = (event, { os }) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.key === "8") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.key === "8")
+    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "8" || event.keyCode === 56 || event.code === "Digit8")) ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "8" || event.keyCode === 56 || event.code === "Digit8"))
   ) {
     event.preventDefault();
     getAndClick("OL");
