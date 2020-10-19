@@ -55,5 +55,10 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 });
 
+chrome.runtime.getPlatformInfo((platformInfo) => {
+  const os = platformInfo.os === "mac" ? "mac" : "other";
+  document.body.classList.add(`os-${os}`);
+});
+
 const version = chrome.runtime.getManifest().version;
 setVersion(version);

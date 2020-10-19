@@ -1,3 +1,11 @@
+:root {
+  --default-sidebar-width: 25%;
+}
+
+html {
+  font-size: 12px;
+}
+
 body, #sidebar {
   display: flex;
   flex-direction: column;
@@ -105,7 +113,7 @@ svg {
 
 #sidebar {
   max-width: 50% !important;
-  width: 25%;
+  width: var(--default-sidebar-width);
   box-sizing: border-box;
   user-select: none;
   overflow: hidden;
@@ -113,7 +121,7 @@ svg {
 }
 
 body.with-sidebar #sidebar { transform: translateX(0); }
-body.with-sidebar { left: 25%; }
+body.with-sidebar { left: var(--default-sidebar-width); }
 body:not(.with-sidebar) { left: 0 !important; }
 
 #sidebar-notes {

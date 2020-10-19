@@ -130,8 +130,28 @@ input, select {
 
 /* Hotkeys */
 
-table .hotkey {
-  margin-left: 2em;
+#hotkeys,
+#hotkeys .hotkey {
+  display: none;
+}
+
+#hotkeys td {
+  vertical-align: baseline;
+}
+
+#hotkeys .description {
+  font-weight: bold;
+  padding-right: 2em;
+}
+
+body.os-mac #hotkeys,
+body.os-other #hotkeys {
+  display: block;
+}
+
+body.os-mac #hotkeys .hotkey.os-mac,
+body.os-other #hotkeys .hotkey.os-other {
+  display: inline-block;
 }
 
 /* Sync */

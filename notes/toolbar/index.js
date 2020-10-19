@@ -1,4 +1,4 @@
-/* global document */
+/* global chrome, document */
 
 import { toolbar } from "../view/elements.js";
 import { insertImageModal, insertLinkModal } from "../modals.js";
@@ -79,7 +79,39 @@ const commands = [
   }],
 ];
 
-const initialize = (content, tabId) => {
+const tooltips = {
+  "B": {
+    mac: "Bold (⌘ + B)",
+    other: "Bold (Ctrl + B)"
+  },
+  "I": {
+    mac: "Italic (⌘ + I)",
+    other: "Italic (Ctrl + I)"
+  },
+  "U": {
+    mac: "Underline (⌘ + U)",
+    other: "Underline (Ctrl + U)"
+  },
+  "S": {
+    mac: "Strikethrough (⌘ + Shift + X)",
+    other: "Strikethrough (Alt + Shift + 5)"
+  },
+  "RF": {
+    mac: "Remove Format (⌘ + \\)",
+    other: "Remove Format (Ctrl + \\)"
+  },
+  "UL": {
+    mac: "Bulleted List (⌘ + Shift + 7)",
+    other: "Bulleted List (Ctrl + Shift + 7)"
+  },
+  "OL": {
+    mac: "Numbered List (⌘ + Shift + 8)",
+    other: "Numbered List (Ctrl + Shift + 8)"
+  }
+};
+
+const initialize = (content, tabId) => chrome.runtime.getPlatformInfo((platformInfo) => {
+  const os = platformInfo.os === "mac" ? "mac" : "other";
   const cb = () => {
     edit(content, tabId);
   };
@@ -89,7 +121,12 @@ const initialize = (content, tabId) => {
     element.addEventListener("click", (ev) => {
       handler({ ev, cb });
     });
+
+    const tooltip = tooltips[element.id] && tooltips[element.id][os];
+    if (tooltip) {
+      element.title = tooltip;
+    }
   }
-};
+});
 
 export default { initialize };

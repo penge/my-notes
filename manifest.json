@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "My Notes",
   "description": "Simple and fast note-taking.",
-  "version": "3.4.2",
+  "version": "3.4.3",
   "homepage_url": "https://github.com/penge/my-notes",
   "icons": { "128": "images/icon128.png" },
   "options_page": "options.html",

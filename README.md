@@ -222,6 +222,72 @@ To read more about the warnings, see the [offical documentation](https://develop
 
 <br><br>
 
+## QA
+
+**1. Where is My Notes published? What is the process behind publishing My Notes?**
+
+My Notes is published to [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop), a store for Google Chrome extensions.
+When publishing a new version, I first make a [new release](https://github.com/penge/my-notes/releases) here on GitHub.
+Then, I download the zip file of the new release and send it to Web Store for a review.
+The review usually takes between 24 hours and a few days.
+After a successful review, the new version is available on Web Store.
+
+<br>
+
+**2. Can I install My Notes manually by downloading it from GitHub?**
+
+Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [Web Store]((https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop)).
+To install My Notes manually, download the zip file of the latest version which you can find at https://github.com/penge/my-notes/releases, then, unpack the downloaded file.
+Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive.
+
+<br>
+
+**3. Google Drive Sync isn't working. What's the cause?**
+
+Google Drive Sync works only if My Notes is installed from Web Store and in Google Chrome.
+The reasons for this are two.
+First, Google Chrome provides an "identity" API that My Notes relies on.
+Second, for security reasons, Google Drive Sync works only if My Notes has an ID equal to **"lkeeogfaiembcblonahillacpaabmiop"**, which is the ID it has on Web Store (also in the URL).
+When My Notes is installed manually, it gets an ID that is different to the one on Web Store.
+
+<br>
+
+**4. What browsers and operating systems are supported?**
+
+Currently, only Google Chrome is supported.
+Other Chromium-based browsers are next to come, if possible.
+Any common OS (Windows, Linux, OSX) is supported.
+Chromebooks are supported as well.
+
+<br>
+
+**5. How can I open or edit notes from my phone?**
+
+If Google Drive Sync is enabled, My Notes will sync your notes to/from your personal Google Drive into a folder **"My Notes"**.
+
+To get access to your Google Drive from a phone, install Google Drive application.
+To open the note, click on in from the list.
+To edit the note, click on the three-circles icon next to the note, and select "Open with" from the context menu.
+You can then chose a preferred editor from the list.
+
+<br>
+
+**6. What is the size limit for my notes?**
+
+Notes are limited to 5MB in total.
+
+This limit comes with the default setting of the browser.
+In case of interest, future versions of My Notes could be having a new optional **"unlimitedStorage"** permission, which if enabled, would increase the storage infinitely (as your hard drive allows).
+
+<br>
+
+**7. Is My Notes for free?**
+
+My Notes is available as open-source, free to download, install, and use.
+Preferred way to install My Notes is from [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+
+<br><br>
+
 ---
 
 <p align="center"><code>Created with ❤ in 2019.</code></p>
