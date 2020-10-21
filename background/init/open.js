@@ -8,7 +8,12 @@ const iconClick = () => chrome.browserAction.onClicked.addListener(() => {
   chrome.tabs.create({ url: "/notes.html" });
 });
 
-// Open My Notes in every new tab if enabled in Options -> "Open My Notes in every new tab"
+// It can be:
+// - in Chrome as "chrome://newtab/"
+// - in Edge as "edge://newtab/"
+const NEW_TAB_PATH = "://newtab";
+
+// Open My Notes in every New Tab if enabled in Options / "Open My Notes in every New Tab"
 const newtab = () => chrome.tabs.onCreated.addListener(async (tab) => {
   const newtab = await getItem("newtab");
   if (!newtab) {
@@ -22,7 +27,7 @@ const newtab = () => chrome.tabs.onCreated.addListener(async (tab) => {
   }
 
   // pendingUrl is available since Chrome 79; url is a fallback
-  if (tab.pendingUrl === "chrome://newtab/" || tab.url === "chrome://newtab/") {
+  if (tab.pendingUrl.includes(NEW_TAB_PATH) || tab.url.includes(NEW_TAB_PATH)) {
     chrome.tabs.update(tab.id, { url: "/notes.html" });
   }
 });
