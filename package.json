@@ -1,0 +1,14 @@
+{
+  "name": "my-notes",
+  "version": "3.4.4",
+  "description": "Simple and fast note-taking.",
+  "author": "Pavel Bucka",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/penge/my-notes.git"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  }
+}
