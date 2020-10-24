@@ -30,7 +30,7 @@ const testDefaultValues = (myItems) => {
   console.assert(Object.keys(items.font).length === 4);
 
   // size
-  console.assert(items.size === 300);
+  console.assert(items.size === 200);
 
   // theme
   console.assert(items.theme === "light");
