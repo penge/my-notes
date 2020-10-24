@@ -4,10 +4,18 @@
   "description": "Simple and fast note-taking.",
   "version": "3.4.4",
   "homepage_url": "https://github.com/penge/my-notes",
-  "icons": { "128": "images/icon128.png" },
+  "icons": {
+    "128": "images/icon128.png"
+  },
   "options_page": "options.html",
-  "permissions": ["storage", "contextMenus"],
-  "optional_permissions": ["tabs", "identity"],
+  "permissions": [
+    "storage",
+    "contextMenus"
+  ],
+  "optional_permissions": [
+    "tabs",
+    "identity"
+  ],
   "oauth2": {
     "client_id": "813847979218-unbbh8m0el8vjdi74rnqdarm1mhv3985.apps.googleusercontent.com",
     "scopes": [
