@@ -5,7 +5,7 @@
   <img src="https://badgen.net/github/license/penge/my-notes" />
   <img src="https://badgen.net/chrome-web-store/users/lkeeogfaiembcblonahillacpaabmiop" />
   <br><br>
-  <img src="images/my-notes.png" width="800" /><br>
+  <img src="static/images/my-notes.png" width="800" /><br>
   My Notes is a Chrome extension for simple and fast note-taking.<br><br>
   Write down your ideas, notes, todos, clipboard, articles, and other, all effortlessly in a Chrome's New Tab.
 </p>
@@ -60,7 +60,7 @@
 
 Context menu allows you to quickly save the selected text to My Notes Clipboard (a special note in My Notes).
 
-<img src="images/context-menu.png" width="800" />
+<img src="static/images/context-menu.png" width="800" />
 
 ### Save selection
 
@@ -110,67 +110,71 @@ Google Drive Sync works only if the extension is installed from Web Store.
 ## Folder structure
 
 ```
-background/
-  google-drive/   # Everything related to Google Drive Sync
-                    # - File operations (List, Create, Get, Update, Delete)
-                    # - Synchronization (to Google Drive, from Google Drive)
-                    # - Queries (find My Notes folder, list files in My Notes folder)
-                    # - Multipart bodies (create My Notes folder, create file, update file)
-                    # - Tests
+env/              # Helpers for environment variables
 
-  init/           # Run when My Notes is installed/updated
-                    # - Sets a Unique ID for My Notes installation (used by Context menu), if not already set
-                    # - Migrates notes and options
-                    # - Creates Context menu and attaches the events
-                    # - Creates a Notification when My Notes is installed/updated
-                    # - Registers the ways to open My Notes (icon click, in every New Tab)
-                    # - Registers events to trigger Google Drive Sync from My Notes
+out/              # Bundled My Notes (excluded from Git)
 
-images/           # Images and icons used in My Notes or README
+src/
+  background/
+    google-drive/   # Everything related to Google Drive Sync
+                      # - File operations (List, Create, Get, Update, Delete)
+                      # - Synchronization (to Google Drive, from Google Drive)
+                      # - Queries (find My Notes folder, list files in My Notes folder)
+                      # - Multipart bodies (create My Notes folder, create file, update file)
+                      # - Tests
 
-themes/           # Light, Dark, Custom
+    init/           # Run when My Notes is installed/updated
+                      # - Sets a Unique ID for My Notes installation (used by Context menu), if not already set
+                      # - Migrates notes and options
+                      # - Creates Context menu and attaches the events
+                      # - Creates a Notification when My Notes is installed/updated
+                      # - Registers the ways to open My Notes (icon click, in every New Tab)
+                      # - Registers events to trigger Google Drive Sync from My Notes
 
-notes/            # Everything related to Notes
-                    # - Create/Rename/Delete notes; Note editing, Note saving
-                    # - Toolbar
-                    # - Every UI init and update when data changes
-                    # - Registers commands (Toggle Focus mode - can be enabled in Options)
+  dom/              # Helpers to get DOM elements
 
-options/          # Everything related to Options
-                    # - Font type, Font size, Theme, etc.
-                    # - Every UI init and update when data changes
+  integration/      # Integration tests for Google Drive Sync
 
-shared/           # Everything common (used at more places)
-                    # - Date formatting (Last sync)
-                    # - Managing the permissions (Requesting, Removing, Checking)
-                    # - Helpers for Chrome Storage
-                    # - Default values (Notes, Options)
+  messages/         # Communication between My Notes and background script
 
-tests/            # Entrypoint for tests
-                    # - Runs every __tests__/index.html in the project
-                    # - Prints "net::ERR_FILE_NOT_FOUND" if the test file is not found
-                    # - Prints "Assertion failed: console.assert" if any assertion failed
+  notes/            # Everything related to Notes
+                      # - Create/Rename/Delete notes; Note editing, Note saving
+                      # - Toolbar
+                      # - Every UI init and update when data changes
+                      # - Registers commands (Toggle Focus mode - can be enabled in Options)
+
+  options/          # Everything related to Options
+                      # - Font type, Font size, Theme, etc.
+                      # - Every UI init and update when data changes
+
+  shared/           # Everything common (used at more places)
+                      # - Date formatting (Last sync)
+                      # - Managing the permissions (Requesting, Removing, Checking)
+                      # - Helpers for Chrome Storage
+                      # - Default values (Notes, Options)
+
+  themes/           # Light, Dark, Custom
+
+  background.js     # Main script for background page
+  notes.js          # Main script for notes
+  options.js        # Main script for options
+
+static/           # All static files (images, icons, HTML, CSS) copied to out/
 
 
 .editorconfig     # To enforce same editor configuration
-.eslintrc         # To enforce code quality and same coding style
-.gitignore        # To exclude any generated files (only .DS_Store at this point)
+.eslintrc         # To enforce code quality and same coding style with ESLint
+.eslintignore     # Files excluded from ESLint checking
+.gitignore        # Files excluded from Git
+
+jest.config.js    # Jest configuration
+tsconfig.json     # Typescript configuration
+
+package-lock.json
+package.json
 
 LICENSE           # MIT
 manifest.json     # Main extension file
-
-
-background.html   # Entrypoint for background page
-background.js
-
-notes.html        # Entrypoint for notes
-notes.css
-notes.js
-
-options.html      # Entrypoint for options
-options.css
-options.js
-
 
 README.md
 ```
