@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Notes</title>
+  <link rel="stylesheet" href="themes/shared.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+  <h1>My Notes</h1>
+  <h2>Font</h2>
+  <p>Current font: <span id="current-font-name"></span></p>
+
+  <h3>
+    <span id="serif" class="font-category">Serif</span><span class="separator">/</span
+    ><span id="sans-serif" class="font-category">Sans Serif</span><span class="separator">/</span
+    ><span id="monospace" class="font-category">Monospace</span><span class="separator">/</span
+    ><span id="google-fonts" class="font-category">Google Fonts</span>
+  </h3>
+
+  <div id="commonfonts">
+    <!--
+      <div class="font-area" id="serif-area">
+      <div class="font-area" id="sans-serif-area">
+      <div class="font-area" id="monospace-area">
+    -->
+  </div>
+  <div class="font-area" id="google-fonts-area">
+    <ol>
+      <li>Open <a href="https://fonts.google.com" target="_blank">https://fonts.google.com</a> to see the available fonts</li>
+      <li>Type in the Font Name, e.g.: <b>Roboto Mono</b></li>
+      <li>Click <b>Apply</b> to use the font</li>
+    </ol>
+    <input type="text" placeholder="Font Name (E.g. Roboto Mono)" id="font-name-input">
+    <input type="submit" value="Apply" class="bold" id="submit">
+  </div>
+  <template id="font-area-template">
+    <div class="font-area" id="">
+      <div class="selection">
+        <input type="radio" id="" name="font" value="" data-generic="" style="font-family: inherit;">
+        <label for="" style="font-family: inherit;">The quick brown fox jumps over the lazy dog (<span>fontName</span>)</label>
+      </div>
+    </div>
+  </template>
+
+
+  <h2>Size <span id="current-size"></span></h2>
+  <div class="slidecontainer">
+    <input type="range" min="100" max="600" step="10" class="slider" id="size-range">
+  </div>
+
+
+  <h2>Theme</h2>
+  <div>
+    <div class="selection">
+      <input type="radio" id="light" name="theme" value="light">
+      <label for="light" id="light-theme-label" class="bold theme-label">Light</label>
+    </div>
+    <div class="selection">
+      <input type="radio" id="dark" name="theme" value="dark">
+      <label for="dark" id="dark-theme-label" class="bold theme-label">Dark</label>
+    </div>
+    <div class="selection">
+      <input type="radio" id="custom" name="theme" value="custom">
+      <label for="custom" id="custom-theme-label" class="bold theme-label">Custom</label>
+      <a href="themes/custom/index.html" target="_blank" class="space-left">Customize</a>
+    </div>
+  </div>
+
+
+  <h2>Hotkeys</h2>
+  <table id="hotkeys">
+    <tr>
+      <td class="description">Open My Notes</td>
+      <td>
+        e.g.
+        <span class="hotkey os-mac">⌘ + Shift + M</span>
+        <span class="hotkey os-other">Ctrl + Shift + M</span>
+        <span>(open <span class="hotlink">chrome://extensions/shortcuts</span> to configure)</span>
+    </td>
+    </tr>
+    <tr>
+      <td class="description">Open Options</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Shift + O</span>
+        <span class="hotkey os-other">Ctrl + Shift + O</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Sync notes to and from Google Drive</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Shift + S</span>
+        <span class="hotkey os-other">Ctrl + Shift + S</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Toggle Focus mode</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Shift + F</span>
+        <span class="hotkey os-other">Ctrl + Shift + F</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Toggle Sidebar</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + S</span>
+        <span class="hotkey os-other">Ctrl + S</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Toggle Toolbar</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + E</span>
+        <span class="hotkey os-other">Ctrl + E</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Open previous note</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + [</span>
+        <span class="hotkey os-other">Alt + Left</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Open next note</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + ]</span>
+        <span class="hotkey os-other">Alt + Right</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Open note on mouse hover</td>
+      <td>
+        hold
+        <span class="hotkey os-mac">⌘</span>
+        <span class="hotkey os-other">Ctrl</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Open link in a New Tab</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Click</span>
+        <span class="hotkey os-other">Ctrl + Click</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Open link in a New Tab and make it active</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Shift + Click</span>
+        <span class="hotkey os-other">Ctrl + Shift+ Click</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Close context menu</td>
+      <td>
+        <span class="hotkey os-mac">Esc</span>
+        <span class="hotkey os-other">Esc</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Close modal</td>
+      <td>
+        <span class="hotkey os-mac">Esc</span>
+        <span class="hotkey os-other">Esc</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Confirm modal</td>
+      <td>
+        <span class="hotkey os-mac">Enter</span>
+        <span class="hotkey os-other">Enter</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Bold</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + B</span>
+        <span class="hotkey os-other">Ctrl + B</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Italic</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + I</span>
+        <span class="hotkey os-other">Ctrl + I</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Underline</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + U</span>
+        <span class="hotkey os-other">Ctrl + U</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Strikethrough</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Shift + X</span>
+        <span class="hotkey os-other">Alt + Shift + 5</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Remove Format</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + \</span>
+        <span class="hotkey os-other">Ctrl + \</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Bulleted List</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Shift + 7</span>
+        <span class="hotkey os-other">Ctrl + Shift + 7</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="description">Numbered List</td>
+      <td>
+        <span class="hotkey os-mac">⌘ + Shift + 8</span>
+        <span class="hotkey os-other">Ctrl + Shift + 8</span>
+      </td>
+    </tr>
+  </table>
+
+
+  <h2>Options</h2>
+  <div>
+    <div class="selection with-comment">
+      <input type="checkbox" id="newtab" name="newtab">
+      <div>
+        <label for="newtab" class="bold">Open My Notes in every New Tab</label>
+        <div class="comment">
+          My Notes will request permission to enable this feature.
+        </div>
+      </div>
+    </div>
+    <div class="selection with-comment">
+      <input type="checkbox" id="sync" name="sync">
+      <div>
+        <label for="sync" class="bold">Enable Google Drive Sync</label>
+        <div class="comment">
+          Creates a folder <b>My Notes</b> (automatically, once) in your Google Drive, and uses it to store the notes.
+          Notes are synchronized to and from Google Drive once enabled, and then on every click on the <b>Sync now</b> button in the sidebar.<br><br>
+
+          <b>Benefits:</b><br>
+          <ul>
+            <li>having a backup of notes (notes can be restored in the future)</li>
+            <li>can edit the notes from other sources (Google Drive, My Notes, vice versa)</li>
+            <li>can sync the notes and edit them from other computers (by installing My Notes and using the same Google Account)</li>
+          </ul>
+
+          My Notes can only access the files it created. It cannot see the other files in your Google Drive.<br>
+          My Notes will request permission to enable this feature.<br><br>
+
+          <b>Location: </b><a id="sync-folder-location" class="bold" href="" target="_blank"></a><br>
+          <b>Last sync: </b><span id="sync-last-sync" class="bold"></span>
+        </div>
+      </div>
+    </div>
+    <div class="selection with-comment">
+      <input type="checkbox" id="tab" name="tab">
+      <div>
+        <label for="tab" class="bold">Indent text on <span class="hotkey">Tab</span></label>
+        <div class="comment">
+          By default, Tab key focuses the address bar. This can be changed to indent the text instead.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <h2>Version</h2>
+  <div>
+    <strong id="version" class="space-right"></strong>
+    <a href="https://github.com/penge/my-notes/releases" target="_blank">Changelog</a>
+    <a href="https://github.com/penge/my-notes" target="_blank" class="space-left">Repository</a>
+  </div>
+
+
+  <script src="options.js"></script>
+</body>
+
+</html>

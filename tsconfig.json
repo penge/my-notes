@@ -1,0 +1,27 @@
+{
+  "include": ["./src/**/*"],
+
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "es2015",
+    "sourceMap": true,
+    "outDir": "./out",
+    "rootDir": "./src",
+
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "alwaysStrict": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+
+    "baseUrl": "./src",
+
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
