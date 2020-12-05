@@ -38,7 +38,8 @@ const create = (): void => {
 
 const attach = (): void => chrome.contextMenus.onClicked.addListener((info) => {
   const { pageUrl, selectionText } = info;
-  const textToSave = `${selectionText}<br><b>${pageUrl}</b><br><br>`;
+  const pageUrlLink = pageUrl.startsWith("http") ? `<a href="${pageUrl}" target="_blank">${pageUrl}</a>` : pageUrl;
+  const textToSave = `${selectionText}<br><b>(${pageUrlLink})</b><br><br>`;
 
   if (info.menuItemId === "my-notes-save") {
     saveToClipboard(textToSave);

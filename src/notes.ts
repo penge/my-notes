@@ -235,11 +235,9 @@ const openLink = (event: MouseEvent) => {
 
   event.preventDefault();
   const target = event.target as HTMLLinkElement;
-  if (!target || !target.href) {
-    return;
+  if (target && target.href && target.href.startsWith("http")) {
+    window.open(target.href, "_blank");
   }
-
-  window.open(target.href, "_blank");
 };
 
 content.addEventListener("click", openLink); // Chrome OS, Windows
