@@ -8,6 +8,7 @@ import { SetThemeOptions } from "themes/set-theme";
 import createNote from "./create-note";
 import renameNote from "./rename-note";
 import deleteNote from "./delete-note";
+import useAsClipboard from "./use-as-clipboard";
 
 import view from "../view/index";
 
@@ -16,7 +17,9 @@ import notesHistory from "../history";
 interface Actions {
   createNote: (rawName: string) => void
   renameNote: (rawOldName: string, rawNewName: string) => void
-  deleteNote: (noteNameToDelete: string) => void; activateNote: (noteName: string) => void
+  deleteNote: (noteNameToDelete: string) => void
+  activateNote: (noteName: string) => void
+  useAsClipboard: (noteName: string) => void
 }
 
 export type State = {
@@ -91,6 +94,7 @@ const state: State = {
   renameNote,
   deleteNote,
   activateNote,
+  useAsClipboard,
 };
 
 const handler: ProxyHandler<State> = {

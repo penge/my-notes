@@ -1,7 +1,7 @@
 import state from "./state/index";
 import range from "./range";
 
-import { contextMenu, renameAction, deleteAction } from "./view/elements";
+import { contextMenu, renameAction, deleteAction, useAsClipboardAction } from "./view/elements";
 import { renameNoteModal, deleteNoteModal } from "./modals";
 
 const hide = (): void => {
@@ -17,6 +17,10 @@ const show = (x: number, y: number, noteName: string): void => {
 
   contextMenu.style.left = x + "px";
   contextMenu.style.top = `calc(${y}px + 1em)`;
+
+  useAsClipboardAction.onclick = () => {
+    state.useAsClipboard(noteName);
+  };
 
   renameAction.onclick = () => {
     renameNoteModal(noteName, (newName: string) => {
