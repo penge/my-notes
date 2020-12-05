@@ -7,7 +7,7 @@ export default function renameNote(rawOldName: string, rawNewName: string): void
     return;
   }
 
-  chrome.storage.local.get(["notes"], local => {
+  chrome.storage.local.get(["notes", "clipboard"], local => {
     const notes = { ...local.notes };
 
     // newName must be available
@@ -32,7 +32,10 @@ export default function renameNote(rawOldName: string, rawNewName: string): void
       modifiedTime: new Date().toISOString(),
     };
 
-    chrome.storage.local.set({ notes: notes }, () => {
+    // New clipboard
+    const clipboard = local.clipboard === oldName ? newName : local.clipboard;
+
+    chrome.storage.local.set({ notes, clipboard }, () => {
       console.debug(`RENAME - OK ("${oldName}" => "${newName}")`);
     });
   });

@@ -72,6 +72,7 @@ chrome.storage.local.get([
   // Notes
   "notes",
   "active",
+  "clipboard",
 
   // Options
   "focus",
@@ -83,7 +84,7 @@ chrome.storage.local.get([
   const {
     notification,
     font, size, sidebar, sidebarWidth, toolbar, theme, customTheme,
-    notes, active : lastActive,
+    notes, active : lastActive, clipboard,
     focus, tab,
     sync } = local;
 
@@ -105,6 +106,7 @@ chrome.storage.local.get([
   if (state.active !== activeFromUrl) {
     notesHistory.replace(state.active || "");
   }
+  state.clipboard = clipboard;
 
   // Options
   state.focus = focus;
@@ -159,6 +161,8 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       const newNotes: NotesObject = changes["notes"].newValue;
       state.notes = newNotes;
 
+      state.clipboard = changes["clipboard"] ? changes["clipboard"].newValue : state.clipboard;
+
       // Auto-activate the created note
       const newActive = changes["active"] && changes["active"].newValue;
       if (newActive && newActive in newNotes) {
@@ -177,11 +181,12 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       }
 
       // Reactivate edited note in other tabs only
+      // Reactive clipboard if edited from background using Context menu
       if (
         (state.active in oldNotes) &&
         (state.active in newNotes) &&
         (newNotes[state.active].content !== oldNotes[state.active].content) &&
-        (localStorage.getItem("notesChangedBy") !== tabId)
+        ((localStorage.getItem("notesChangedBy") !== tabId) || changes["clipboard"])
       ) {
         const newActive = state.active;
         state.active = newActive;
@@ -213,6 +218,10 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
           notesHistory.replace(newActive);
         }
       }
+    }
+
+    if (changes["clipboard"]) {
+      state.clipboard = changes["clipboard"].newValue;
     }
   }
 

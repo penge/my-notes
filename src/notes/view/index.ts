@@ -12,6 +12,7 @@ import setTheme from "../../themes/set-theme";
 // Notes
 import setNotes from "./set-notes";
 import setActive from "./set-active";
+import setClipboard from "./set-clipboard";
 
 // Sync
 import setSync from "./set-sync";
@@ -31,6 +32,7 @@ export default {
   // Notes
   setNotes,
   setActive,
+  setClipboard,
 
   // Sync
   setSync,

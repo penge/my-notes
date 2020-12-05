@@ -44,6 +44,7 @@ export type State = {
   // Notes
   notes: NotesObject
   active: string | null
+  clipboard: string | null
 
   // Options
   focus: boolean
@@ -86,6 +87,7 @@ const state: State = {
   },
   notes: {},
   active: null,
+  clipboard: null,
   focus: defaults.focus,
   newtab: defaults.newtab,
   tab: defaults.tab,
@@ -133,6 +135,9 @@ const handler: ProxyHandler<State> = {
         view.setActive(value as string, state.notes[value as string].content);
       }
       chrome.storage.local.set({ active: value });
+    }
+    if (prop === "clipboard") {
+      view.setClipboard(value as string);
     }
 
     // Sync

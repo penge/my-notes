@@ -8,6 +8,8 @@ type NotesToSave = {
   }
 }
 
+let notesChangedByTimeout: number;
+
 export default (content: HTMLElement, tabId: string): void => {
   if (!state.active) {
     return;
@@ -28,7 +30,9 @@ export default (content: HTMLElement, tabId: string): void => {
     modifiedTime: new Date().toISOString(),
   };
   localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
+  clearTimeout(notesChangedByTimeout);
   localStorage.setItem("notesChangedBy", tabId);
+  notesChangedByTimeout = window.setTimeout(() => localStorage.removeItem("notesChangedBy"), 2000);
 
   saveNotesDebounce(state.notes);
 };

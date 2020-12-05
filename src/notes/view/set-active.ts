@@ -16,18 +16,18 @@ const autofocus = () => {
   });
 };
 
-const setActiveInSidebar = (name: string) => {
+const setActiveInSidebar = (noteName: string) => {
   const notes = document.querySelectorAll<HTMLElement>("#sidebar-notes .note");
   notes.forEach((note) => {
-    note.classList.toggle("active", note.innerText === name);
+    note.classList.toggle("active", note.innerText === noteName);
   });
 };
 
-export default function setActive(name: string, html: string): void {
-  document.title = name;
+export default function setActive(noteName: string, html: string): void {
+  document.title = noteName;
 
   content.innerHTML = html;
 
-  setActiveInSidebar(name);
+  setActiveInSidebar(noteName);
   autofocus();
 }
