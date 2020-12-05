@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(() => {
   contextMenu.create(); // Create Context menu
 });
 
-// Context menu ("Save selection", "Save selection to other devices")
+// Context menu ("Save selected text to Clipboard", "Save selected text to Clipboard in other devices")
 contextMenu.attach();
 
 // Notifications (NEW VERSION installed)

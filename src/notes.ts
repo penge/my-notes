@@ -11,7 +11,8 @@ import { newNoteModal } from "./notes/modals";
 import contextMenu from "./notes/context-menu";
 
 import notesHistory from "./notes/history";
-import { NotesObject, Message, MessageType, ContextMenuSelection } from "shared/storage/schema";
+import { Message, MessageType, ContextMenuSelection } from "shared/storage/schema";
+import { sendMessage } from "messages/index";
 
 let tabId: string; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
@@ -213,14 +214,10 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "sync") {
     if (changes["selection"]) {
       const selection = changes["selection"].newValue as ContextMenuSelection;
-      if (!selection) { return; }
+      if (!selection || !selection.text) { return; }
       chrome.storage.local.get(["id"], local => {
         if (selection.sender === local.id) { return; }
-        const notes: NotesObject = { ...state.notes };
-        if ("Clipboard" in notes) {
-          notes["Clipboard"].content = selection.text + notes["Clipboard"].content;
-          chrome.storage.local.set({ notes: notes });
-        }
+        sendMessage(MessageType.SAVE_TO_CLIPBOARD, selection.text);
       });
     }
   }

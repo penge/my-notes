@@ -93,7 +93,8 @@ export enum MessageType {
   SYNC_START,
   SYNC_DONE,
   SYNC_STOP,
-  SYNC_DELETE_FILE
+  SYNC_DELETE_FILE,
+  SAVE_TO_CLIPBOARD,
 }
 
 export interface Message {
