@@ -54,6 +54,7 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     // Notes
     notes: notes as NotesObject, // already migrated to [3.x]
     active: ((local.active as string) in (notes as NotesObject)) ? local.active as string : defaultValues.active,
+    clipboard: ((local.clipboard as string) in (notes as NotesObject)) ? local.clipboard as string : defaultValues.clipboard,
 
     // Options
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,

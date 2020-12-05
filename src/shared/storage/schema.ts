@@ -70,6 +70,7 @@ export interface Storage {
   // Notes
   notes: NotesObject
   active: string | null
+  clipboard: string | null
 
   // Options
   focus: boolean

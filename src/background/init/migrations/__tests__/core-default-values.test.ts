@@ -11,6 +11,7 @@ export const expectItems = (items: Record<string, unknown>): void => {
     "customTheme",
     "notes",
     "active",
+    "clipboard",
     "focus",
     "newtab",
     "tab",
@@ -63,6 +64,9 @@ const expectDefaultValues = (myItems?: Record<string, unknown>) => {
   // active
   expect(items.active).toBe(null);
 
+  // clipboard
+  expect(items.clipboard).toBe(null);
+
   // focus
   expect(items.focus).toBe(false);
 
@@ -89,6 +93,7 @@ it("fallbacks to default values", () => {
     customTheme: { background: "#ffffff" }, // must be string
     notes: null,    // must be object
     active: "Todo", // must be in "notes"
+    clipboard: "a", // must be in "notes"
     focus: 1,       // must be boolean
     newtab: 1,      // must be boolean
     tab: 1,         // must be boolean
