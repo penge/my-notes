@@ -1,5 +1,4 @@
 import { Note, NotesObject, GoogleDriveFile } from "shared/storage/schema";
-import { isReserved } from "../../../notes/reserved";
 
 const LOG_LEVEL = process.env.LOG_LEVEL;
 export const canLog = LOG_LEVEL !== "SILENT";
@@ -19,10 +18,6 @@ export default async (notes: NotesObject, files: GoogleDriveFile[], { getFile }:
     const note = updatedNotes[noteName];
     const fileId = noteFileId(note);
     const toDelete = fileId && files.find(file => file.id === fileId) === undefined;
-    if (toDelete && isReserved(noteName)) {
-      delete updatedNotes[noteName].sync;
-      return false;
-    }
     return toDelete;
   });
   notesToDelete.forEach(name => {
@@ -50,11 +45,6 @@ export default async (notes: NotesObject, files: GoogleDriveFile[], { getFile }:
   );
   for (const file of filesToGet) {
     const previousNoteName = (file.id in mappedFiles ? mappedFiles[file.id].noteName : undefined) || (file.name in updatedNotes ? file.name : undefined);
-    if (previousNoteName && (previousNoteName !== file.name) && (isReserved(previousNoteName) || isReserved(file.name))) { // cannot rename "Clipboard", cannot rename to "Clipboard"
-      canLog && console.log(`%cSYNC - IN - UNLINKING NOTE - ${previousNoteName} (cannot rename to ${file.name})`, "color: orange");
-      delete updatedNotes[previousNoteName].sync; // unlink
-      continue;
-    }
     if (previousNoteName) {
       canLog && console.log(`%cSYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName})`, "color: blue");
     } else {

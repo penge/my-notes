@@ -1,10 +1,8 @@
-import { isReserved } from "../reserved";
-
 export default function renameNote(rawOldName: string, rawNewName: string): void {
   const oldName = rawOldName.trim();
   const newName = rawNewName.trim();
 
-  if (!oldName || !newName || (oldName === newName) || isReserved(oldName) || isReserved(newName)) { // cannot rename "Clipboard" || cannot rename to "Clipboard"
+  if (!oldName || !newName || (oldName === newName)) {
     console.debug(`RENAME - Fail ("${oldName}" => "${newName}")`);
     return;
   }

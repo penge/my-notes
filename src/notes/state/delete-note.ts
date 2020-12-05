@@ -1,10 +1,8 @@
-import { isReserved } from "../reserved";
-
 import { MessageType } from "shared/storage/schema";
 import { sendMessage } from "messages/index";
 
 export default function deleteNote(noteNameToDelete: string): void {
-  if (!noteNameToDelete || isReserved(noteNameToDelete)) { // cannot delete "Clipboard"
+  if (!noteNameToDelete) {
     return;
   }
 
