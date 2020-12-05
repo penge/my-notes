@@ -11,7 +11,7 @@ import { newNoteModal } from "./notes/modals";
 import contextMenu from "./notes/context-menu";
 
 import notesHistory from "./notes/history";
-import { Message, MessageType, ContextMenuSelection } from "shared/storage/schema";
+import { Message, MessageType, ContextMenuSelection, NotesObject } from "shared/storage/schema";
 import { sendMessage } from "messages/index";
 
 let tabId: string; // important so can update the content in other tabs (except the tab that has made the changes)
@@ -100,10 +100,10 @@ chrome.storage.local.get([
   // Notes
   state.notes = notes;
   const activeFromUrl = window.location.search.startsWith("?") && decodeURIComponent(window.location.search.substring(1)); // Bookmark
-  const activeCandidate = activeFromUrl || lastActive || "Clipboard";
-  state.active = (activeCandidate in notes) ? activeCandidate : null;
-  if (state.active && !activeFromUrl) {
-    notesHistory.replace(activeCandidate);
+  const activeCandidates = [activeFromUrl, lastActive, Object.keys(notes).sort()[0]]; // ordered by importance
+  state.active = activeCandidates.find((candidate) => candidate && candidate in notes) || null;
+  if (state.active !== activeFromUrl) {
+    notesHistory.replace(state.active || "");
   }
 
   // Options
@@ -155,8 +155,8 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     }
 
     if (changes["notes"]) {
-      const oldNotes = changes["notes"].oldValue;
-      const newNotes = changes["notes"].newValue;
+      const oldNotes: NotesObject = changes["notes"].oldValue;
+      const newNotes: NotesObject = changes["notes"].newValue;
       state.notes = newNotes;
 
       // Auto-activate the created note
@@ -169,6 +169,10 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
       // This should not happen (fallback)
       if (!state.active) {
+        const newActive = Object.keys(newNotes).sort()[0];
+        if (newActive) {
+          state.active = newActive;
+        }
         return;
       }
 
@@ -190,12 +194,13 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
         return;
       }
 
-      // Activate "Clipboard" if some note was deleted
+      // Activate first available note if some note was deleted
       const oldSet = new Set(Object.keys(oldNotes));
       const newSet = new Set(Object.keys(newNotes));
       if (oldSet.size > newSet.size) {
-        state.active = "Clipboard";
-        notesHistory.replace("Clipboard");
+        const newActive = Object.keys(newNotes).sort()[0] || null;
+        state.active = newActive;
+        notesHistory.replace(newActive || "");
         return;
       }
 
