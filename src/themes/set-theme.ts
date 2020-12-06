@@ -35,8 +35,9 @@ export default function setTheme({ name, customTheme }: SetThemeOptions): void {
   }
 
   if (name === "custom") {
-    if (customTheme && customTheme.length > 0) {
-      insertCustomTheme(customTheme);
+    if (customTheme && customTheme.trim().length > 0) {
+      const protectedCustomTheme = "body{opacity:1;}" + customTheme;
+      insertCustomTheme(protectedCustomTheme);
     } else {
       insertTheme("light");
     }
