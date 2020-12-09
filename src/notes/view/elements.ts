@@ -14,6 +14,7 @@ const newNote = _get("new-note");
 const openOptions = _get("open-options");
 const syncNow = _get("sync-now");
 const contextMenu = _get("context-menu");
+const useAsClipboardAction = _get("use-as-clipboard");
 const renameAction = _get("rename");
 const deleteAction = _get("delete");
 
@@ -36,6 +37,7 @@ export {
   openOptions,
   syncNow,
   contextMenu,
+  useAsClipboardAction,
   renameAction,
   deleteAction,
 

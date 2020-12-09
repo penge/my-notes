@@ -38,9 +38,10 @@
 
   /* Context menu */
 
-  --context-menu-background-color: #626262;
+  --context-menu-background-color: #383838;
   --context-menu-text-color: white;
-  --context-menu-border-color: transparent;
+  --context-menu-hover-background-color: #494949;
+  --context-menu-hover-text-color: white;
 
 
   /* Sidebar */

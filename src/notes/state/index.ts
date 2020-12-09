@@ -8,6 +8,7 @@ import { SetThemeOptions } from "themes/set-theme";
 import createNote from "./create-note";
 import renameNote from "./rename-note";
 import deleteNote from "./delete-note";
+import useAsClipboard from "./use-as-clipboard";
 
 import view from "../view/index";
 
@@ -16,7 +17,9 @@ import notesHistory from "../history";
 interface Actions {
   createNote: (rawName: string) => void
   renameNote: (rawOldName: string, rawNewName: string) => void
-  deleteNote: (noteNameToDelete: string) => void; activateNote: (noteName: string) => void
+  deleteNote: (noteNameToDelete: string) => void
+  activateNote: (noteName: string) => void
+  useAsClipboard: (noteName: string) => void
 }
 
 export type State = {
@@ -41,6 +44,7 @@ export type State = {
   // Notes
   notes: NotesObject
   active: string | null
+  clipboard: string | null
 
   // Options
   focus: boolean
@@ -83,6 +87,7 @@ const state: State = {
   },
   notes: {},
   active: null,
+  clipboard: null,
   focus: defaults.focus,
   newtab: defaults.newtab,
   tab: defaults.tab,
@@ -91,6 +96,7 @@ const state: State = {
   renameNote,
   deleteNote,
   activateNote,
+  useAsClipboard,
 };
 
 const handler: ProxyHandler<State> = {
@@ -129,6 +135,9 @@ const handler: ProxyHandler<State> = {
         view.setActive(value as string, state.notes[value as string].content);
       }
       chrome.storage.local.set({ active: value });
+    }
+    if (prop === "clipboard") {
+      view.setClipboard(value as string);
     }
 
     // Sync

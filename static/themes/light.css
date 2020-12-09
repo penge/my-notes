@@ -40,7 +40,8 @@
 
   --context-menu-background-color: #222;
   --context-menu-text-color: white;
-  --context-menu-border-color: transparent;
+  --context-menu-hover-background-color: #4f4f4f;
+  --context-menu-hover-text-color: white;
 
 
   /* Sidebar */

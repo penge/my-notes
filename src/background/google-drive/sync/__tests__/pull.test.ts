@@ -1,6 +1,5 @@
 process.env.LOG_LEVEL = "SILENT";
 
-import { GoogleDriveFile } from "shared/storage/schema";
 import pull from "../pull";
 
 /*
@@ -8,9 +7,6 @@ UNCHANGED - Note should remain unchanged if not DELETED || NEW || UPDATED
 DELETED - Delete notes that were synced (having sync?.file.id) but deleted from the remote
 NEW - Add new notes created in the remote (file.id not present in any of notes)
 UPDATED - Update notes name/content if updated in the remote (file.modifiedTime > note.modifiedTime)
-
-Exception:
-"Clipboard" cannot be deleted or renamed, or other note renamed to "Clipboard"
 */
 const notes = {
   Article: { // UNCHANGED
@@ -89,7 +85,7 @@ const notes = {
     }
   },
 
-  Clipboard: { // UPDATED (should not be able to rename)
+  Clipboard: { // DELETED
     content: "Clipboard content",
     createdTime: "2020-04-20T09:07:00.000Z",
     modifiedTime: "2020-04-20T09:07:07.000Z",
@@ -152,13 +148,13 @@ const files = [
   { id: "6073", name: "Todo", createdTime: "2020-04-20T09:02:00.000Z", modifiedTime: "2020-04-20T09:02:07.000Z" },
   { id: "9d13", name: "Books", createdTime: "2020-04-20T09:04:00.000Z", modifiedTime: "2020-04-20T09:04:09.000Z" },
   { id: "df29", name: "Amazon", createdTime: "2020-04-20T09:06:00.000Z", modifiedTime: "2020-04-20T09:06:11.000Z" }, // before "Shopping"
-  { id: "2931", name: "Clipboard", createdTime: "2020-04-20T09:07:00.000Z", modifiedTime: "2020-04-20T09:07:12.000Z" },
   { id: "777f", name: "Math", createdTime: "2020-04-20T09:25:00.000Z", modifiedTime: "2020-04-20T09:25:25.000Z" }, // name conflict = add content to existing note
   { id: "9e0e", name: "Trip", createdTime: "2020-04-20T09:10:00.000Z", modifiedTime: "2020-04-20T09:10:15.000Z" }, // before "Vacation"
 
   // DELETED
   // { id: "ecb5", ... } // "Cooking"
   // { id: "f745", ... } // "News"
+  // { id: "2931", ... } // "Clipboard"
 
   // NEW
   { id: "2b18", name: "Phones", createdTime: "2020-04-20T09:11:00.000Z", modifiedTime: "2020-04-20T09:11:11.000Z" },
@@ -223,15 +219,8 @@ it("pulls new and updated notes, and deletes notes if deleted in Google Drive", 
   expect(Object.keys(updatedNotes.Amazon.sync?.file || {}).length === 4); // { id, name, createdTime, modifiedTime }
   expect("Shopping" in updatedNotes === false); // renamed to "Amazon"
 
-  // Clipboard
-  expect(updatedNotes.Clipboard.content === "CONTENT OF 2931");
-  expect(updatedNotes.Clipboard.createdTime === "2020-04-20T09:07:00.000Z");
-  expect(updatedNotes.Clipboard.modifiedTime === "2020-04-20T09:07:12.000Z");
-  expect(updatedNotes.Clipboard.sync?.file.id === "2931");
-  expect(updatedNotes.Clipboard.sync?.file.name === "Clipboard");
-  expect(updatedNotes.Clipboard.sync?.file.createdTime === "2020-04-20T09:07:00.000Z");
-  expect(updatedNotes.Clipboard.sync?.file.modifiedTime === "2020-04-20T09:07:12.000Z");
-  expect(Object.keys(updatedNotes.Clipboard.sync?.file || {}).length === 4); // { id, name, createdTime, modifiedTime }
+  // deleted Clipboard
+  expect("Clipboard" in updatedNotes === false);
 
   // deleted News
   expect("News" in updatedNotes === false);
@@ -286,100 +275,6 @@ it("pulls new and updated notes, and deletes notes if deleted in Google Drive", 
   expect(updatedNotes.Lamps.sync?.file.createdTime === "2020-04-20T09:13:00.000Z");
   expect(updatedNotes.Lamps.sync?.file.modifiedTime === "2020-04-20T09:13:13.000Z");
   expect(Object.keys(updatedNotes.Lamps.sync?.file || {}).length === 4); // { id, name, createdTime, modifiedTime }
-});
-
-it("unlinks Clipboard if deleted from Google Drive (Clipboard note is not deleted)", async () => {
-  const notes = {
-    Clipboard: {
-      content: "Clipboard content",
-      createdTime: "2020-04-20T09:07:00.000Z",
-      modifiedTime: "2020-04-20T09:07:07.000Z",
-      sync: {
-        file: {
-          id: "2931",
-          name: "Clipboard",
-          createdTime: "2020-04-20T09:07:00.000Z",
-          modifiedTime: "2020-04-20T09:07:07.000Z",
-        }
-      }
-    },
-  };
-
-  const files: GoogleDriveFile[] = [];
-
-  const updatedNotes = await pull(notes, files, { getFile });
-
-  expect(Object.keys(updatedNotes).length === 1); // { Clipboard }
-
-  // Clipboard
-  expect(updatedNotes.Clipboard.content === "Clipboard content");
-  expect(updatedNotes.Clipboard.createdTime === "2020-04-20T09:07:00.000Z");
-  expect(updatedNotes.Clipboard.modifiedTime === "2020-04-20T09:07:07.000Z");
-  expect("sync" in updatedNotes.Clipboard === false); // unlinked
-});
-
-it("unlinks Clipboard if renamed in Google Drive", async () => {
-  const notes = {
-    Clipboard: {
-      content: "Clipboard content",
-      createdTime: "2020-04-20T09:07:00.000Z",
-      modifiedTime: "2020-04-20T09:07:07.000Z",
-      sync: {
-        file: {
-          id: "2931",
-          name: "Clipboard",
-          createdTime: "2020-04-20T09:07:00.000Z",
-          modifiedTime: "2020-04-20T09:07:07.000Z",
-        }
-      }
-    },
-  };
-
-  const files = [
-    { id: "2931", name: "CopyPaste", createdTime: "2020-04-20T09:07:00.000Z", modifiedTime: "2020-04-20T09:07:12.000Z" }, // "Clipboard" cannot be renamed
-  ];
-
-  const updatedNotes = await pull(notes, files, { getFile });
-
-  expect(Object.keys(updatedNotes).length === 1); // { Clipboard }
-
-  // Clipboard
-  expect(updatedNotes.Clipboard.content === "Clipboard content");
-  expect(updatedNotes.Clipboard.createdTime === "2020-04-20T09:07:00.000Z");
-  expect(updatedNotes.Clipboard.modifiedTime === "2020-04-20T09:07:07.000Z");
-  expect("sync" in updatedNotes.Clipboard === false); // unlinked
-});
-
-it("unlinks any note if renamed to Clipboard in Google Drive", async () => {
-  const notes = {
-    Todo: {
-      content: "buy milk",
-      createdTime: "2020-04-20T09:02:00.000Z",
-      modifiedTime: "2020-04-20T09:02:02.000Z",
-      sync: {
-        file: {
-          id: "6073",
-          name: "Todo",
-          createdTime: "2020-04-20T09:02:00.000Z",
-          modifiedTime: "2020-04-20T09:02:02.000Z",
-        }
-      }
-    },
-  };
-
-  const files = [
-    { id: "6073", name: "Clipboard", createdTime: "2020-04-20T09:02:00.000Z", modifiedTime: "2020-04-20T09:02:07.000Z" },
-  ];
-
-  const updatedNotes = await pull(notes, files, { getFile });
-
-  expect(Object.keys(updatedNotes).length === 1); // { Todo }
-
-  // Todo
-  expect(updatedNotes.Todo.content === "buy milk");
-  expect(updatedNotes.Todo.createdTime === "2020-04-20T09:02:00.000Z");
-  expect(updatedNotes.Todo.modifiedTime === "2020-04-20T09:02:02.000Z");
-  expect("sync" in updatedNotes.Todo === false); // unlinked
 });
 
 // Relink the notes, and:
@@ -464,7 +359,7 @@ it("links notes to the last file in Google Drive if having the same name in Goog
   expect(updatedNotes.Todo.modifiedTime === "2020-04-20T09:02:02.000Z");
   expect("sync" in updatedNotes.Todo === false);
 
-  // Clipboard (last file used)
+  // Clipboard (last file with the same name used)
   expect(updatedNotes.Clipboard.content === "CONTENT OF 2931");
   expect(updatedNotes.Clipboard.createdTime === "2020-04-20T09:07:00.000Z");
   expect(updatedNotes.Clipboard.modifiedTime === "2020-04-20T09:07:12.000Z");

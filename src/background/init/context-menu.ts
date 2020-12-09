@@ -1,4 +1,9 @@
-import { ContextMenuSelection } from "shared/storage/schema";
+import { Message, MessageType } from "shared/storage/schema";
+
+import {
+  saveToClipboard,
+  saveToClipboardInOtherDevices,
+} from "./clipboard";
 
 const ID = "my-notes";
 
@@ -19,13 +24,13 @@ const create = (): void => {
     chrome.contextMenus.create({
       parentId: ID,
       id: "my-notes-save",
-      title: "Save selection",
+      title: "Save selected text to Clipboard",
       contexts: ["selection"],
     });
     chrome.contextMenus.create({
       parentId: ID,
-      id: "my-notes-send",
-      title: "Save selection to other devices",
+      id: "my-notes-save-other",
+      title: "Save selected text to Clipboard in other devices",
       contexts: ["selection"],
     });
   });
@@ -33,31 +38,22 @@ const create = (): void => {
 
 const attach = (): void => chrome.contextMenus.onClicked.addListener((info) => {
   const { pageUrl, selectionText } = info;
-  const textToSave = `${selectionText}<br><b>${pageUrl}</b><br><br>`;
+  const pageUrlLink = pageUrl.startsWith("http") ? `<a href="${pageUrl}" target="_blank">${pageUrl}</a>` : pageUrl;
+  const textToSave = `${selectionText}<br><b>(${pageUrlLink})</b><br><br>`;
 
   if (info.menuItemId === "my-notes-save") {
-    chrome.storage.local.get(["notes"], local => {
-      const notes = local.notes;
-      // Selection can be send only if "Clipboard" note exists
-      if ("Clipboard" in notes) {
-        notes["Clipboard"].content = textToSave + notes["Clipboard"].content;
-        chrome.storage.local.set({ notes: notes });
-      }
-    });
+    saveToClipboard(textToSave);
   }
 
-  if (info.menuItemId === "my-notes-send") {
-    chrome.storage.local.get(["id"], local => {
-      if (!local.id) {
-        return;
-      }
-      const selection: ContextMenuSelection = {
-        text: textToSave,
-        sender: local.id,
-      };
-      chrome.storage.sync.set({ selection: selection });
-    });
+  if (info.menuItemId === "my-notes-save-other") {
+    saveToClipboardInOtherDevices(textToSave);
   }
+
+  chrome.runtime.onMessage.addListener((message: Message) => {
+    if (message.type === MessageType.SAVE_TO_CLIPBOARD && message.payload) {
+      saveToClipboard(message.payload as string);
+    }
+  });
 });
 
 export default {

@@ -36,6 +36,7 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
     // Notes
     notes,
     active: null,
+    clipboard: null,
 
     // Options
     focus: false,

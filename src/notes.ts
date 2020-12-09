@@ -11,7 +11,8 @@ import { newNoteModal } from "./notes/modals";
 import contextMenu from "./notes/context-menu";
 
 import notesHistory from "./notes/history";
-import { NotesObject, Message, MessageType, ContextMenuSelection } from "shared/storage/schema";
+import { Message, MessageType, ContextMenuSelection, NotesObject } from "shared/storage/schema";
+import { sendMessage } from "messages/index";
 
 let tabId: string; // important so can update the content in other tabs (except the tab that has made the changes)
 chrome.tabs.getCurrent((tab) => {
@@ -71,6 +72,7 @@ chrome.storage.local.get([
   // Notes
   "notes",
   "active",
+  "clipboard",
 
   // Options
   "focus",
@@ -82,7 +84,7 @@ chrome.storage.local.get([
   const {
     notification,
     font, size, sidebar, sidebarWidth, toolbar, theme, customTheme,
-    notes, active : lastActive,
+    notes, active : lastActive, clipboard,
     focus, tab,
     sync } = local;
 
@@ -99,11 +101,12 @@ chrome.storage.local.get([
   // Notes
   state.notes = notes;
   const activeFromUrl = window.location.search.startsWith("?") && decodeURIComponent(window.location.search.substring(1)); // Bookmark
-  const activeCandidate = activeFromUrl || lastActive || "Clipboard";
-  state.active = (activeCandidate in notes) ? activeCandidate : null;
-  if (state.active && !activeFromUrl) {
-    notesHistory.replace(activeCandidate);
+  const activeCandidates = [activeFromUrl, lastActive, Object.keys(notes).sort()[0]]; // ordered by importance
+  state.active = activeCandidates.find((candidate) => candidate && candidate in notes) || null;
+  if (state.active !== activeFromUrl) {
+    notesHistory.replace(state.active || "");
   }
+  state.clipboard = clipboard;
 
   // Options
   state.focus = focus;
@@ -154,9 +157,11 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     }
 
     if (changes["notes"]) {
-      const oldNotes = changes["notes"].oldValue;
-      const newNotes = changes["notes"].newValue;
+      const oldNotes: NotesObject = changes["notes"].oldValue;
+      const newNotes: NotesObject = changes["notes"].newValue;
       state.notes = newNotes;
+
+      state.clipboard = changes["clipboard"] ? changes["clipboard"].newValue : state.clipboard;
 
       // Auto-activate the created note
       const newActive = changes["active"] && changes["active"].newValue;
@@ -168,15 +173,20 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
       // This should not happen (fallback)
       if (!state.active) {
+        const newActive = Object.keys(newNotes).sort()[0];
+        if (newActive) {
+          state.active = newActive;
+        }
         return;
       }
 
       // Reactivate edited note in other tabs only
+      // Reactive clipboard if edited from background using Context menu
       if (
         (state.active in oldNotes) &&
         (state.active in newNotes) &&
         (newNotes[state.active].content !== oldNotes[state.active].content) &&
-        (localStorage.getItem("notesChangedBy") !== tabId)
+        ((localStorage.getItem("notesChangedBy") !== tabId) || changes["clipboard"])
       ) {
         const newActive = state.active;
         state.active = newActive;
@@ -189,12 +199,13 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
         return;
       }
 
-      // Activate "Clipboard" if some note was deleted
+      // Activate first available note if some note was deleted
       const oldSet = new Set(Object.keys(oldNotes));
       const newSet = new Set(Object.keys(newNotes));
       if (oldSet.size > newSet.size) {
-        state.active = "Clipboard";
-        notesHistory.replace("Clipboard");
+        const newActive = Object.keys(newNotes).sort()[0] || null;
+        state.active = newActive;
+        notesHistory.replace(newActive || "");
         return;
       }
 
@@ -208,19 +219,19 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
         }
       }
     }
+
+    if (changes["clipboard"]) {
+      state.clipboard = changes["clipboard"].newValue;
+    }
   }
 
   if (areaName === "sync") {
     if (changes["selection"]) {
       const selection = changes["selection"].newValue as ContextMenuSelection;
-      if (!selection) { return; }
+      if (!selection || !selection.text) { return; }
       chrome.storage.local.get(["id"], local => {
         if (selection.sender === local.id) { return; }
-        const notes: NotesObject = { ...state.notes };
-        if ("Clipboard" in notes) {
-          notes["Clipboard"].content = selection.text + notes["Clipboard"].content;
-          chrome.storage.local.set({ notes: notes });
-        }
+        sendMessage(MessageType.SAVE_TO_CLIPBOARD, selection.text);
       });
     }
   }
@@ -233,11 +244,9 @@ const openLink = (event: MouseEvent) => {
 
   event.preventDefault();
   const target = event.target as HTMLLinkElement;
-  if (!target || !target.href) {
-    return;
+  if (target && target.href && target.href.startsWith("http")) {
+    window.open(target.href, "_blank");
   }
-
-  window.open(target.href, "_blank");
 };
 
 content.addEventListener("click", openLink); // Chrome OS, Windows

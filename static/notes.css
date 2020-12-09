@@ -138,6 +138,13 @@ body:not(.with-sidebar) { left: 0 !important; }
   margin-top: 3px;
   color: var(--sidebar-notes-text-color);
   border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#sidebar-notes .note > svg {
+  height: 1em;
+  flex-shrink: 0;
 }
 
 #sidebar-notes .note:hover,
@@ -240,24 +247,33 @@ body.with-control #content a {
 
 #context-menu {
   position: fixed;
-  border-radius: 2px;
   font-size: .8em;
   font-weight: bold;
   user-select: none;
-  background: var(--context-menu-background-color);
-  color: var(--context-menu-text-color);
-  border: 1px solid var(--context-menu-border-color);
 }
 
 body:not(.with-context-menu) #context-menu { display: none; }
 
 #context-menu .action {
+  background: var(--context-menu-background-color);
+  color: var(--context-menu-text-color);
   cursor: pointer;
-  margin: .8em;
+  padding: .8em;
 }
 
 #context-menu .action:hover {
-  text-decoration: underline;
+  background: var(--context-menu-hover-background-color);
+  color: var(--context-menu-hover-text-color);
+}
+
+#context-menu .action:first-child {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#context-menu .action:last-child {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 /* Toolbar */

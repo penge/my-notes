@@ -1,9 +1,7 @@
-import { isReserved } from "../reserved";
-
 export default function createNote(rawName: string): void {
   const name = rawName.trim();
-  if (!name || isReserved(name)) {
-    console.debug("CREATE - Fail (empty or reserved)");
+  if (!name) {
+    console.debug("CREATE - Fail (empty)");
     return;
   }
 

@@ -196,7 +196,7 @@ All your notes are stored locally in your browser.
 If you use Google Drive Sync, My Notes can backup the notes to your personal Google Drive.
 
 To provide Google Drive functionality, My Notes has an application in Google Cloud.
-The sole purpose of this application is to authenticate you securely towards the Google Drive and to allow the synchronization of notes.
+The sole purpose of this application is to authenticate you securely towards Google Drive and to allow the synchronization of notes.
 
 <br><br>
 
@@ -232,7 +232,7 @@ To read more about the warnings, see the [offical documentation](https://develop
 
 My Notes is published to [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop), a store for Google Chrome extensions.
 When publishing a new version, I first make a [new release](https://github.com/penge/my-notes/releases) here on GitHub.
-Then, I download the zip file of the new release and send it to Web Store for a review.
+Then I create a build of the new release and send it to Web Store for a review.
 The review usually takes between 24 hours and a few days.
 After a successful review, the new version is available on Web Store.
 
@@ -241,8 +241,8 @@ After a successful review, the new version is available on Web Store.
 **2. Can I install My Notes manually by downloading it from GitHub?**
 
 Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [Web Store]((https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop)).
-To install My Notes manually, download the zip file of the latest version which you can find at https://github.com/penge/my-notes/releases, then, unpack the downloaded file.
-Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive.
+To install My Notes manually, download the zip file of the latest version which you can find [here](https://github.com/penge/my-notes/releases). Then, unpack the downloaded file and install NPM packages followed by `npm run build`.
+Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive by selecting the `out` directory.
 
 <br>
 

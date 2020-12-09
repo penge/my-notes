@@ -1,15 +1,13 @@
-import { isReserved } from "../reserved";
-
 export default function renameNote(rawOldName: string, rawNewName: string): void {
   const oldName = rawOldName.trim();
   const newName = rawNewName.trim();
 
-  if (!oldName || !newName || (oldName === newName) || isReserved(oldName) || isReserved(newName)) { // cannot rename "Clipboard" || cannot rename to "Clipboard"
+  if (!oldName || !newName || (oldName === newName)) {
     console.debug(`RENAME - Fail ("${oldName}" => "${newName}")`);
     return;
   }
 
-  chrome.storage.local.get(["notes"], local => {
+  chrome.storage.local.get(["notes", "clipboard"], local => {
     const notes = { ...local.notes };
 
     // newName must be available
@@ -34,7 +32,10 @@ export default function renameNote(rawOldName: string, rawNewName: string): void
       modifiedTime: new Date().toISOString(),
     };
 
-    chrome.storage.local.set({ notes: notes }, () => {
+    // New clipboard
+    const clipboard = local.clipboard === oldName ? newName : local.clipboard;
+
+    chrome.storage.local.set({ notes, clipboard }, () => {
       console.debug(`RENAME - OK ("${oldName}" => "${newName}")`);
     });
   });

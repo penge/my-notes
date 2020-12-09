@@ -1,6 +1,5 @@
 import state from "./state/index";
 import { modalTemplate } from "./view/elements";
-import { isReserved } from "./reserved";
 import range from "./range";
 
 const removeModal = () => {
@@ -141,7 +140,7 @@ export const newNoteModal = (onConfirm: (newNoteName: string) => void): void => 
     captionValue: "New note",
     inputValue: "",
     confirmValue: "Create",
-    validate: (inputValue) => inputValue.length > 0 && !isReserved(inputValue) && !(inputValue in state.notes),
+    validate: (inputValue) => inputValue.length > 0 && !(inputValue in state.notes),
     onConfirm,
   });
 };
@@ -152,7 +151,7 @@ export const renameNoteModal = (currentName: string, onConfirm: (newName: string
     captionValue: "",
     inputValue: currentName,
     confirmValue: "Rename",
-    validate: (inputValue) => inputValue.length > 0 && inputValue !== currentName && !isReserved(inputValue) && !(inputValue in state.notes),
+    validate: (inputValue) => inputValue.length > 0 && inputValue !== currentName && !(inputValue in state.notes),
     onConfirm,
   });
 };
