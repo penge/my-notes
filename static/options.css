@@ -62,10 +62,6 @@ input, select {
 
 /* Font size */
 
-.slidecontainer {
-  width: 100%;
-}
-
 .slider {
   -webkit-appearance: none;
   width: 100%;
@@ -130,11 +126,6 @@ input, select {
 
 /* Hotkeys */
 
-#hotkeys,
-#hotkeys .hotkey {
-  display: none;
-}
-
 #hotkeys td {
   vertical-align: baseline;
 }
@@ -142,16 +133,6 @@ input, select {
 #hotkeys .description {
   font-weight: bold;
   padding-right: 2em;
-}
-
-body.os-mac #hotkeys,
-body.os-other #hotkeys {
-  display: block;
-}
-
-body.os-mac #hotkeys .hotkey.os-mac,
-body.os-other #hotkeys .hotkey.os-other {
-  display: inline-block;
 }
 
 /* Sync */
