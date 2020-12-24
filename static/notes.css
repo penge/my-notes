@@ -252,8 +252,6 @@ body.with-control #content a {
   user-select: none;
 }
 
-body:not(.with-context-menu) #context-menu { display: none; }
-
 #context-menu .action {
   background: var(--context-menu-background-color);
   color: var(--context-menu-text-color);
