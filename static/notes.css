@@ -140,6 +140,7 @@ body:not(.with-sidebar) { left: 0 !important; }
   border-radius: 3px;
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
 }
 
 #sidebar-notes .note > svg {
@@ -386,6 +387,7 @@ body.with-modal #toolbar {
   cursor: pointer;
   background: var(--modal-button-background-color);
   color: var(--modal-button-text-color);
+  margin-left: .5em;
 }
 
 #modal .modal-description {
