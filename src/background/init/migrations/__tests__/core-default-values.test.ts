@@ -62,10 +62,10 @@ const expectDefaultValues = (myItems?: Record<string, unknown>) => {
   });
 
   // active
-  expect(items.active).toBe(null);
+  expect(items.active).toBe("Clipboard");
 
   // clipboard
-  expect(items.clipboard).toBe(null);
+  expect(items.clipboard).toBe("Clipboard");
 
   // focus
   expect(items.focus).toBe(false);
@@ -100,4 +100,66 @@ it("fallbacks to default values", () => {
   });
 
   expectDefaultValues(Object.assign({}, items as unknown));
+});
+
+it("fallbacks active and clipboard if possible", () => {
+  const local = {
+    notes: {
+      Todo: {
+        content: "buy milk",
+        createdTime: "2020-04-20T09:02:00.000Z",
+        modifiedTime: "2020-04-20T09:02:02.000Z",
+        sync: {
+          file: {
+            id: "6073",
+            name: "Todo",
+            createdTime: "2020-04-20T09:02:00.000Z",
+            modifiedTime: "2020-04-20T09:02:02.000Z",
+          }
+        }
+      },
+      Clipboard: {
+        content: "Clipboard content",
+        createdTime: "2020-04-20T09:07:00.000Z",
+        modifiedTime: "2020-04-20T09:07:07.000Z",
+        sync: {
+          file: {
+            id: "2931",
+            name: "Clipboard",
+            createdTime: "2020-04-20T09:07:00.000Z",
+            modifiedTime: "2020-04-20T09:07:07.000Z",
+          }
+        }
+      },
+      Math: {
+        content: "some equations",
+        createdTime: "2020-04-20T09:09:00.000Z",
+        modifiedTime: "2020-04-20T09:09:09.000Z",
+      },
+    } as NotesObject
+  };
+
+  // Clipboard exists
+  const items = migrate({}, local);
+  expect(items.active).toBe("Clipboard");
+  expect(items.clipboard).toBe("Clipboard");
+
+  // Clipboard does NOT exist
+  const itemsNoClipboard = migrate({}, {
+    notes: {
+      Todo: local.notes.Todo,
+      Math: local.notes.Math,
+    }
+  });
+  expect(itemsNoClipboard.active).toBe("Math"); // first available in A-Z order
+  expect(itemsNoClipboard.clipboard).toBe(null);
+
+  // Empty notes
+  const noItems = migrate({}, {
+    notes: {
+      // empty
+    }
+  });
+  expect(noItems.active).toBe(null);
+  expect(noItems.clipboard).toBe(null);
 });

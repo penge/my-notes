@@ -35,8 +35,8 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
 
     // Notes
     notes,
-    active: null,
-    clipboard: null,
+    active: "Clipboard",
+    clipboard: "Clipboard",
 
     // Options
     focus: false,

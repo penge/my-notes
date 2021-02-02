@@ -26,14 +26,14 @@ it("sets custom values", () => {
           }
         }
       },
-      Clipboard: {
-        content: "Clipboard content",
+      Notebook: {
+        content: "Notebook content",
         createdTime: "2020-04-20T09:07:00.000Z",
         modifiedTime: "2020-04-20T09:07:07.000Z",
         sync: {
           file: {
             id: "2931",
-            name: "Clipboard",
+            name: "Notebook",
             createdTime: "2020-04-20T09:07:00.000Z",
             modifiedTime: "2020-04-20T09:07:07.000Z",
           }
@@ -46,7 +46,7 @@ it("sets custom values", () => {
       },
     },
     active: "Todo",
-    clipboard: "Clipboard",
+    clipboard: "Notebook",
     focus: true,
     newtab: true,
     tab: true,
@@ -57,6 +57,7 @@ it("sets custom values", () => {
 
   // Compare objects
   expect(items).toEqual(Object.assign({
+    // Automatically added properties to make a complete object (interface Storage)
     sidebar: true,
     toolbar: true,
   }, local));
