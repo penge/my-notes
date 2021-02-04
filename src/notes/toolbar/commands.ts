@@ -13,6 +13,9 @@ const h3 = (): void => { exec("formatBlock", "<H3>"); };
 const ul = (): void => { exec("insertUnorderedList"); };
 const ol = (): void => { exec("insertOrderedList"); };
 
+const outdent = (): void => { exec("outdent"); };
+const indent = (): void => { exec("indent"); };
+
 const left = (): void => { exec("justifyLeft"); };
 const center = (): void => { exec("justifyCenter"); };
 const right = (): void => { exec("justifyRight"); };
@@ -42,6 +45,9 @@ export default {
 
   ul,
   ol,
+
+  outdent,
+  indent,
 
   left,
   center,
