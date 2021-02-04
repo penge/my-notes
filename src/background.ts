@@ -4,6 +4,7 @@ import {
   contextMenu,
   notifications,
   open,
+  drop,
 
   googleDrive,
 } from "./background/init/index";
@@ -23,6 +24,9 @@ notifications.attach();
 
 // Click My Notes icon, "Open My Notes in every New Tab" (see Options)
 open.attach();
+
+// Drop text onto a note in Sidebar
+drop.attach();
 
 // Google Drive Sync
 googleDrive.attach();
