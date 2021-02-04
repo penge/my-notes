@@ -1,5 +1,5 @@
-import state from "./state/index";
-import { saveNotesDebounce } from "./saving";
+import { NotesObject } from "shared/storage/schema";
+import { saveNotesDebounce } from "./save";
 
 type NotesToSave = {
   [key: string]: {
@@ -10,14 +10,8 @@ type NotesToSave = {
 
 let notesChangedByTimeout: number;
 
-export default (content: HTMLElement, tabId: string): void => {
-  if (!state.active) {
-    return;
-  }
-
-  // Stop if the key didn't change the content
-  // Example: Ctrl, Alt, Shift, Arrow keys
-  if (state.notes[state.active].content === content.innerHTML) {
+export default (active: string, content: string, tabId: string, notes: NotesObject): void => {
+  if (!active || !tabId || !notes) {
     return;
   }
 
@@ -25,8 +19,8 @@ export default (content: HTMLElement, tabId: string): void => {
   // 1. Collect the changes to "notesToSave"
   // 2. Use "saveNotesDebouce()" to save all the changes at once
   const notesToSave: NotesToSave = JSON.parse(localStorage.getItem("notesToSave") || "{}") || {};
-  notesToSave[state.active] = {
-    content: content.innerHTML,
+  notesToSave[active] = {
+    content,
     modifiedTime: new Date().toISOString(),
   };
   localStorage.setItem("notesToSave", JSON.stringify(notesToSave));
@@ -34,5 +28,5 @@ export default (content: HTMLElement, tabId: string): void => {
   localStorage.setItem("notesChangedBy", tabId);
   notesChangedByTimeout = window.setTimeout(() => localStorage.removeItem("notesChangedBy"), 2000);
 
-  saveNotesDebounce(state.notes);
+  saveNotesDebounce(notes);
 };

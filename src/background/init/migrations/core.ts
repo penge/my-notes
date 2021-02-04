@@ -42,6 +42,12 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     };
   }
 
+  const tryNote = (noteName: string): string | null => (noteName in (notes as NotesObject))
+    ? noteName
+    : null;
+
+  const firstAvailableNote = Object.keys(notes as NotesObject).sort()[0] || null;
+
   const storage: Storage = {
     // Appearance
     font: validFont(local.font) ? local.font : defaultValues.font,
@@ -53,8 +59,8 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
 
     // Notes
     notes: notes as NotesObject, // already migrated to [3.x]
-    active: ((local.active as string) in (notes as NotesObject)) ? local.active as string : defaultValues.active,
-    clipboard: ((local.clipboard as string) in (notes as NotesObject)) ? local.clipboard as string : defaultValues.clipboard,
+    active: tryNote(local.active as string) || tryNote(defaultValues.active as string) || firstAvailableNote,
+    clipboard: tryNote(local.clipboard as string) || tryNote(defaultValues.clipboard as string),
 
     // Options
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,

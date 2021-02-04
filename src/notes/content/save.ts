@@ -1,8 +1,5 @@
-import { NotesObject, MessageType } from "shared/storage/schema";
-import { State } from "./state/index";
-
+import { NotesObject } from "shared/storage/schema";
 import debounce from "./debounce";
-import { sendMessage } from "messages/index";
 
 const mergeNotes = (currentNotes: NotesObject, notesToSave: NotesObject) => {
   const notes = Object.assign({}, currentNotes);
@@ -42,20 +39,7 @@ const saveNotes = (currentNotes: NotesObject): boolean => {
 // Saves notes after 1 second of inactivity
 const saveNotesDebounce = debounce(saveNotes, 1000);
 
-const syncNotes = (state: State): boolean => {
-  // Cannot Sync if already in progress
-  const canSync = document.body.classList.contains("syncing") === false && typeof state.sync === "object";
-  if (!canSync) {
-    return false;
-  }
-
-  document.body.classList.add("syncing");
-  sendMessage(MessageType.SYNC);
-  return true;
-};
-
 export {
   saveNotes,
   saveNotesDebounce,
-  syncNotes,
 };

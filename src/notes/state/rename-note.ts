@@ -1,7 +1,4 @@
-export default function renameNote(rawOldName: string, rawNewName: string): void {
-  const oldName = rawOldName.trim();
-  const newName = rawNewName.trim();
-
+export default function renameNote(oldName: string, newName: string): void {
   if (!oldName || !newName || (oldName === newName)) {
     console.debug(`RENAME - Fail ("${oldName}" => "${newName}")`);
     return;

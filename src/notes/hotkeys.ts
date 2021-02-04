@@ -1,213 +1,220 @@
-import { State } from "./state/index";
-
-import contextMenu from "./context-menu";
-
-const getAndClick = (id: string) => {
-  const elem = document.getElementById(id);
-  elem && elem.click();
-};
-
 const isMac = (os: string) => os === "mac";
 
-interface Options {
-  os: string
-  state: State
+export enum Hotkey {
+  // Options
+  OnOpenOptions,
+
+  // Toggles
+  OnToggleFocusMode,
+  OnToggleSidebar,
+  OnToggleToolbar,
+
+  // Controls
+  OnControl,
+  OnEscape,
+  OnEnter,
+  OnTab,
+
+  // Formatting
+  OnUnderline,
+  OnStrikethrough,
+  OnRemoveFormat,
+
+  // Lists
+  OnUnorderedList,
+  OnOrderedList,
+
+  // Sync notes
+  OnSync,
 }
 
-const registerOpenOptions = (event: KeyboardEvent, { os }: Options) => {
+type Callback = () => void;
+
+const callbacksByHotkey: {
+  [key: string]: Callback[]
+} = {};
+
+const publish = (hotkey: Hotkey, event: KeyboardEvent): void => {
+  const key: string = Hotkey[hotkey];
+  const callbacks = callbacksByHotkey[key];
+  if (!callbacks || !callbacks.length) {
+    return; // no callbacks for the hotkey
+  }
+
+  if (![Hotkey.OnControl, Hotkey.OnEscape].includes(hotkey)) {
+    event.preventDefault();
+  }
+
+  callbacks.forEach((callback) => callback());
+};
+
+const registerOpenOptions = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && (event.key === "O" || event.key === "o")) ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "O" || event.key === "o"))
   ) {
-    event.preventDefault();
-    chrome.tabs.create({ url: "/options.html" });
+    publish(Hotkey.OnOpenOptions, event);
   }
 };
 
-const registerToggleFocusMode = (event: KeyboardEvent, { os, state }: Options) => {
+const registerToggleFocusMode = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && (event.key === "F" || event.key === "f")) ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "F" || event.key === "f"))
   ) {
-    event.preventDefault();
-    // Toggle Focus mode only when a note is open (active)
-    if (state.active) {
-      chrome.storage.local.get(["focus"], local => {
-        chrome.storage.local.set({ focus: !local.focus });
-      });
-    }
+    publish(Hotkey.OnToggleFocusMode, event);
   }
 };
 
-const registerToggleSidebar = (event: KeyboardEvent, { os, state }: Options) => {
+const registerToggleSidebar = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && (event.key === "S" || event.key === "s") && !event.shiftKey) ||
     (!isMac(os) && event.ctrlKey && (event.key === "S" || event.key === "s") && !event.shiftKey)
   ) {
-    event.preventDefault();
-    // Toggle Sidebar only if not in focus mode
-    if (!state.focus) {
-      const hasSidebar = document.body.classList.toggle("with-sidebar");
-      chrome.storage.local.set({ sidebar: hasSidebar });
-    }
+    publish(Hotkey.OnToggleSidebar, event);
   }
 };
 
-const registerToggleToolbar = (event: KeyboardEvent, { os, state }: Options) => {
+const registerToggleToolbar = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && (event.key === "E" || event.key === "e")) ||
     (!isMac(os) && event.ctrlKey && (event.key === "E" || event.key === "e"))
   ) {
-    event.preventDefault();
-    // Toggle Toolbar only if not in focus mode
-    if (!state.focus) {
-      const hasToolbar = document.body.classList.toggle("with-toolbar");
-      chrome.storage.local.set({ toolbar: hasToolbar });
-    }
+    publish(Hotkey.OnToggleToolbar, event);
   }
 };
 
-const registerOpenNoteOnMouseHover = (event: KeyboardEvent, { os, state }: Options) => {
+const registerControl = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey) ||
     (!isMac(os) && event.ctrlKey)
   ) {
-    document.body.classList.add("with-control");
-    const hoveredNote = document.querySelector(".note.over");
-    hoveredNote && state.activateNote((hoveredNote as HTMLElement).innerText);
+    publish(Hotkey.OnControl, event);
   }
 };
 
-const registerCloseContextMenu = (event: KeyboardEvent) => {
-  if (event.key === "Escape" || event.keyCode === 27) {
-    contextMenu.hide();
+const registerEscape = (event: KeyboardEvent) => {
+  if (event.key === "Escape") {
+    publish(Hotkey.OnEscape, event);
   }
 };
 
-const registerCloseModal = (event: KeyboardEvent) => {
-  if (event.key === "Escape" || event.keyCode === 27) {
-    const cancel = document.getElementById("cancel");
-    cancel && cancel.click();
+const registerEnter = (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    publish(Hotkey.OnEnter, event);
   }
 };
 
-const registerConfirmModal = (event: KeyboardEvent) => {
-  if (event.key === "Enter" || event.keyCode === 13) {
-    // Look for #confirm in #modal
-    const confirm = document.getElementById("confirm");
-    if (confirm) {
-      // if modal is open and therefore can be confirmed and closed with Enter,
-      // prevent default behaviour of Enter
-      event.preventDefault();
-      confirm.click();
-    }
+const registerTab = (event: KeyboardEvent) => {
+  if (event.key === "Tab") {
+    publish(Hotkey.OnTab, event);
   }
 };
 
-const registerIndentOnTab = (event: KeyboardEvent, { state }: Options) => {
-  if (state.tab && event.key === "Tab") {
-    event.preventDefault();
-    document.execCommand("insertHTML", false, "&#009");
-  }
-};
-
-const registerUnderline = (event: KeyboardEvent, { os }: Options) => {
+const registerUnderline = (event: KeyboardEvent, os: string) => {
   if (isMac(os) && event.metaKey && (event.key === "U" || event.key === "u")) {
-    event.preventDefault();
-    getAndClick("U");
+    publish(Hotkey.OnUnderline, event);
   }
 };
 
-const registerStrikethrough = (event: KeyboardEvent, { os }: Options) => {
+const registerStrikethrough = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && (event.key === "X" || event.key === "x")) ||
     (!isMac(os) && event.altKey && event.shiftKey && (event.key === "5" || event.keyCode === 53 || event.code === "Digit5"))
   ) {
-    event.preventDefault();
-    getAndClick("S");
+    publish(Hotkey.OnStrikethrough, event);
   }
 };
 
-const registerRemoveFormat = (event: KeyboardEvent, { os }: Options) => {
+const registerRemoveFormat = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && event.key === "\\") ||
     (!isMac(os) && event.ctrlKey && event.key === "\\")
   ) {
-    event.preventDefault();
-    getAndClick("RF");
+    publish(Hotkey.OnRemoveFormat, event);
   }
 };
 
-const registerBulletedList = (event: KeyboardEvent, { os }: Options) => {
+const registerUnorderedList = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "7" || event.keyCode === 55 || event.code === "Digit7")) ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "7" || event.keyCode === 55 || event.code === "Digit7"))
+    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "7" || event.code === "Digit7")) ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "7" || event.code === "Digit7"))
   ) {
-    event.preventDefault();
-    getAndClick("UL");
+    publish(Hotkey.OnUnorderedList, event);
   }
 };
 
-const registerNumberedList = (event: KeyboardEvent, { os }: Options) => {
+const registerOrderedList = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "8" || event.keyCode === 56 || event.code === "Digit8")) ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "8" || event.keyCode === 56 || event.code === "Digit8"))
+    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "8" || event.code === "Digit8")) ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "8" || event.code === "Digit8"))
   ) {
-    event.preventDefault();
-    getAndClick("OL");
+    publish(Hotkey.OnOrderedList, event);
   }
 };
 
-const registerSyncNotes = (event: KeyboardEvent, { os }: Options) => {
+const registerSyncNotes = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && (event.key === "S" || event.key === "s")) ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "S" || event.key === "s"))
   ) {
-    event.preventDefault();
-    getAndClick("sync-now");
+    publish(Hotkey.OnSync, event);
   }
 };
 
-const keydown = (options: Options) => document.addEventListener("keydown", (event) => {
-  registerOpenOptions(event, options);
-  registerToggleFocusMode(event, options);
-  registerToggleSidebar(event, options);
-  registerToggleToolbar(event, options);
-  // navigateBackwardOneNote => see window.onpopstate in history.js
-  // navigateForwardOneNote => see window.onpopstate in history.js
-  registerOpenNoteOnMouseHover(event, options);
+const keydown = (os: string) => document.addEventListener("keydown", (event) => {
+  // Options
+  registerOpenOptions(event, os);
 
-  // Same for any OS
-  registerCloseContextMenu(event);
-  registerCloseModal(event);
-  registerConfirmModal(event);
-  registerIndentOnTab(event, options);
+  // Toggles
+  registerToggleFocusMode(event, os);
+  registerToggleSidebar(event, os);
+  registerToggleToolbar(event, os);
+
+  // Controls
+  registerControl(event, os);
+  registerEscape(event);
+  registerEnter(event);
+  registerTab(event);
 
   // Formatting
-  registerUnderline(event, options);
-  registerStrikethrough(event, options);
-  registerRemoveFormat(event, options);
+  registerUnderline(event, os);
+  registerStrikethrough(event, os);
+  registerRemoveFormat(event, os);
 
   // Lists
-  registerBulletedList(event, options);
-  registerNumberedList(event, options);
+  registerUnorderedList(event, os);
+  registerOrderedList(event, os);
 
   // Sync notes
-  registerSyncNotes(event, options);
+  registerSyncNotes(event, os);
 });
 
 const keyup = () => document.addEventListener("keyup", () => {
   document.body.classList.remove("with-control");
 });
 
-const register = (state: State): void => {
-  chrome.runtime.getPlatformInfo((platformInfo) => {
-    const os = platformInfo.os;
-    const options = { os, state } as Options;
-    keydown(options);
-  });
-
+const register = (os: "mac" | "other"): void => {
+  keydown(os);
   keyup();
 };
 
-export default { register };
+const subscribe = (hotkey: Hotkey, callback: Callback): void => {
+  const key: string = Hotkey[hotkey];
+  callbacksByHotkey[key] = [
+    ...(callbacksByHotkey[key] || []),
+    callback,
+  ];
+};
+
+const unsubscribe = (callbackToRemove: Callback): void => {
+  Object.keys(callbacksByHotkey).forEach((key) => {
+    callbacksByHotkey[key] = callbacksByHotkey[key].filter((callback) => callback !== callbackToRemove);
+  });
+};
+
+export default {
+  register,
+  subscribe,
+  unsubscribe,
+};

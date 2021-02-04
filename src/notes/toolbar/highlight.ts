@@ -1,11 +1,12 @@
 import { withRange } from "../range";
-import { getNodes } from "../content";
+import { getNodes } from "../iteration";
 import { createSpan } from "./span";
-import { ToolbarCallback } from "./index";
+
+type Callback = () => void
 
 const HIGHLIGHT_CLASS = "my-notes-highlight";
 
-const highlight = (cb: ToolbarCallback): void => withRange((range: Range) => {
+const highlight = (cb: Callback): void => withRange((range: Range) => {
   const nodes = getNodes(range);
   for (const node of nodes) {
     const value = node.nodeValue;

@@ -1,6 +1,5 @@
-export default function createNote(rawName: string): void {
-  const name = rawName.trim();
-  if (!name) {
+export default function createNote(newNoteName: string): void {
+  if (!newNoteName) {
     console.debug("CREATE - Fail (empty)");
     return;
   }
@@ -9,22 +8,22 @@ export default function createNote(rawName: string): void {
     const notes = { ...local.notes };
 
     // Name must be available
-    if (name in notes) {
-      console.debug(`CREATE - Fail ("${name}" not available)`);
+    if (newNoteName in notes) {
+      console.debug(`CREATE - Fail ("${newNoteName}" not available)`);
       return;
     }
 
     const time = new Date().toISOString();
 
     // Set a new note
-    notes[name] = {
+    notes[newNoteName] = {
       content: "",
       createdTime: time,
       modifiedTime: time,
     };
 
-    chrome.storage.local.set({ notes: notes, active: name }, () => {
-      console.debug(`CREATE - OK "${name}"`);
+    chrome.storage.local.set({ notes: notes, active: newNoteName }, () => {
+      console.debug(`CREATE - OK "${newNoteName}"`);
     });
   });
 }

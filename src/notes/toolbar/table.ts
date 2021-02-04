@@ -1,5 +1,6 @@
 import { withRange } from "../range";
-import { ToolbarCallback } from "./index";
+
+type Callback = () => void
 
 const withClosest = <T>(nodeName: string, fn: (el: T) => void) => withRange((range: Range) => {
   const el = range.startContainer.nodeName === nodeName
@@ -21,7 +22,7 @@ const insertRow = (table: HTMLTableElement, rowIndex: number, cellCount: number)
   }
 };
 
-const insertTable = (cb: ToolbarCallback): void => withRange((range: Range) => {
+const insertTable = (cb: Callback): void => withRange((range: Range) => {
   const table = document.createElement("table");
   for (let r = 0; r < 3; r += 1) {
     insertRow(table, -1, 3);
@@ -32,7 +33,7 @@ const insertTable = (cb: ToolbarCallback): void => withRange((range: Range) => {
   cb();
 });
 
-const insertRowRelative = (delta: number, cb: ToolbarCallback) => withtr((tr: HTMLTableRowElement) => {
+const insertRowRelative = (delta: number, cb: Callback) => withtr((tr: HTMLTableRowElement) => {
   const table = tr.closest("table") as HTMLTableElement;
   const index = tr.rowIndex + delta;
   const cellCount = table.rows[0].cells.length;
@@ -40,10 +41,10 @@ const insertRowRelative = (delta: number, cb: ToolbarCallback) => withtr((tr: HT
   cb();
 });
 
-const insertRowAbove = (cb: ToolbarCallback): void => insertRowRelative(0, cb);
-const insertRowBelow = (cb: ToolbarCallback): void => insertRowRelative(1, cb);
+const insertRowAbove = (cb: Callback): void => insertRowRelative(0, cb);
+const insertRowBelow = (cb: Callback): void => insertRowRelative(1, cb);
 
-const insertColumnRelative = (delta: number, cb: ToolbarCallback) => withtd((td: HTMLTableDataCellElement) => {
+const insertColumnRelative = (delta: number, cb: Callback) => withtd((td: HTMLTableDataCellElement) => {
   const table = td.closest("table") as HTMLTableElement;
   const index = td.cellIndex + delta;
   for (let row = 0; row < table.rows.length; row += 1) {
@@ -52,10 +53,10 @@ const insertColumnRelative = (delta: number, cb: ToolbarCallback) => withtd((td:
   cb();
 });
 
-const insertColumnLeft = (cb: ToolbarCallback): void => insertColumnRelative(0, cb);
-const insertColumnRight = (cb: ToolbarCallback): void => insertColumnRelative(1, cb);
+const insertColumnLeft = (cb: Callback): void => insertColumnRelative(0, cb);
+const insertColumnRight = (cb: Callback): void => insertColumnRelative(1, cb);
 
-const toggleHeadingRow = (cb: ToolbarCallback): void => withtd((td: HTMLTableDataCellElement) => {
+const toggleHeadingRow = (cb: Callback): void => withtd((td: HTMLTableDataCellElement) => {
   const containsHeading = td.classList.contains("heading");
 
   const tr = td.closest("tr") as HTMLTableRowElement;
@@ -67,7 +68,7 @@ const toggleHeadingRow = (cb: ToolbarCallback): void => withtd((td: HTMLTableDat
   cb();
 });
 
-const toggleHeadingColumn = (cb: ToolbarCallback): void => withtd((td: HTMLTableCellElement) => {
+const toggleHeadingColumn = (cb: Callback): void => withtd((td: HTMLTableCellElement) => {
   const containsHeading = td.classList.contains("heading");
 
   const table = td.closest("table") as HTMLTableElement;
@@ -79,7 +80,7 @@ const toggleHeadingColumn = (cb: ToolbarCallback): void => withtd((td: HTMLTable
   cb();
 });
 
-const deleteRow = (cb: ToolbarCallback): void => withtr((tr: HTMLTableRowElement) => {
+const deleteRow = (cb: Callback): void => withtr((tr: HTMLTableRowElement) => {
   const table = tr.closest("table") as HTMLTableElement;
   const rowIndex = tr.rowIndex;
   table.deleteRow(rowIndex);
@@ -92,7 +93,7 @@ const deleteRow = (cb: ToolbarCallback): void => withtr((tr: HTMLTableRowElement
   cb();
 });
 
-const deleteColumn = (cb: ToolbarCallback): void => withtd((td: HTMLTableDataCellElement) => {
+const deleteColumn = (cb: Callback): void => withtd((td: HTMLTableDataCellElement) => {
   const table = td.closest("table") as HTMLTableElement;
   const cellIndex = td.cellIndex;
   for (let row = 0; row < table.rows.length; row += 1) {
