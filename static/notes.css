@@ -154,6 +154,43 @@ body:not(.with-sidebar) { left: 0 !important; }
   color: var(--sidebar-active-note-text-color);
 }
 
+#sidebar-notes .note.drag-over {
+  background: var(--selection-background-color);
+  color: var(--selection-text-color);
+}
+
+@keyframes confirmation {
+  0% {
+    background: var(--selection-background-color);
+    color: var(--selection-text-color);
+  }
+  100% {
+    background: initial;
+    color: initial;
+  }
+}
+
+#sidebar-notes .note.drag-over > svg {
+  fill: var(--selection-text-color);
+}
+
+@keyframes confirmationsvg {
+  0% {
+    fill: var(--selection-text-color);
+  }
+  100% {
+    fill: initial;
+  }
+}
+
+#sidebar-notes .note.drag-confirmation > svg {
+  animation: confirmationsvg .3s cubic-bezier(1, 0, 0.5, 1) 2 alternate;
+}
+
+#sidebar-notes .note.drag-confirmation {
+  animation: confirmation .3s cubic-bezier(1, 0, 0.5, 1) 2 alternate;
+}
+
 #sidebar-buttons .button {
   cursor: pointer;
 }

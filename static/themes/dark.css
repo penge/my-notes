@@ -7,6 +7,11 @@
   --scrollbar-thumb-hover-background-color: #555;
 
 
+  /* Selection */
+  --selection-background-color: #008eff;
+  --selection-text-color: white;
+
+
   /* Generic */
 
   --background-color: #121212;

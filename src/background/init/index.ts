@@ -4,6 +4,7 @@ import migrations from "./migrations/index";
 import contextMenu from "./context-menu";
 import notifications from "./notifications";
 import open from "./open";
+import drop from "./drop";
 
 import googleDrive from "./google-drive";
 
@@ -29,6 +30,7 @@ export {
   contextMenu,
   notifications,
   open,
+  drop,
 
   googleDrive,
 };

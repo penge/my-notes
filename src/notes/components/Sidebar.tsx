@@ -1,11 +1,12 @@
 import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { useRef, useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
-import { NotesObject, Sync } from "shared/storage/schema";
+import { NotesObject, Sync, MessageType } from "shared/storage/schema";
 import Drag from "./Drag";
 import hotkeys, { Hotkey } from "notes/hotkeys";
 import formatDate from "shared/date/format-date";
 import { syncNotes } from "notes/content/sync";
+import { sendMessage } from "messages";
 
 const syncNowTitles = {
   mac: (lastSync: string) => `Click to sync the notes to and from Google Drive now (⌘ + Shift + S).\n\nLast sync: ${formatDate(lastSync)}`,
@@ -29,6 +30,9 @@ const Sidebar = ({
   os, notes, active, clipboard, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
 }: SidebarProps): h.JSX.Element => {
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const [dragOverNote, setDragOverNote] = useState<string | null>(null);
+  const [dragOverNoteConfirmation, setDragOverNoteConfirmation] = useState<string | null>(null);
 
   const [enteredNote, setEnteredNote] = useState<string | null>(null);
   const enteredNoteRef = useRef<string | null>(null);
@@ -56,6 +60,11 @@ const Sidebar = ({
     });
   }, []);
 
+  useEffect(() => {
+    setDragOverNote(null);
+    setDragOverNoteConfirmation(null);
+  }, [active]);
+
   return (
     <div id="sidebar" ref={sidebarRef} style={{
       width: width,
@@ -64,7 +73,12 @@ const Sidebar = ({
       <div id="sidebar-notes" class="notes">
         {Object.keys(notes).map((noteName) =>
           <div
-            class={clsx("note", noteName === active && "active")}
+            class={clsx(
+              "note",
+              noteName === active && "active",
+              noteName === dragOverNote && "drag-over",
+              noteName === dragOverNoteConfirmation && "drag-confirmation",
+            )}
             onClick={() => onActivateNote(noteName)}
             onMouseEnter={() => setEnteredNote(noteName)}
             onMouseLeave={() => setEnteredNote(null)}
@@ -72,6 +86,27 @@ const Sidebar = ({
               event.preventDefault();
               onActivateNote(noteName);
               onNoteContextMenu(noteName, event.pageX, event.pageY);
+            }}
+            onDragOver={(event) => {
+              event.preventDefault();
+              setDragOverNote(noteName);
+              setDragOverNoteConfirmation(null);
+            }}
+            onDragLeave={(event) => {
+              event.preventDefault();
+              setDragOverNote(null);
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              const data = event.dataTransfer?.getData("text");
+              if (data) {
+                sendMessage(MessageType.DROP, {
+                  targetNoteName: noteName,
+                  data,
+                });
+                setDragOverNoteConfirmation(noteName);
+              }
+              setDragOverNote(null);
             }}
           >
             {noteName}
