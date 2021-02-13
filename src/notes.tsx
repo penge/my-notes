@@ -489,6 +489,8 @@ const Notes = () => {
           <__Overlay type="to-create" />
         </Fragment>
       )}
+
+      <div id="tooltip-container"></div>
     </Fragment>
   );
 };

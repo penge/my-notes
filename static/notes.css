@@ -31,6 +31,10 @@ svg {
 
 /* Layers */
 
+#tooltip-container {
+  z-index: 100;
+}
+
 #modal {
   z-index: 20;
 }
@@ -348,6 +352,24 @@ body.with-toolbar #toolbar { transform: translateY(0); }
 
 #toolbar .button:not(.active) .menu {
   display: none;
+}
+
+/* Tooltip */
+
+#tooltip-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#tooltip {
+  position: fixed;
+  background-color: var(--tooltip-background-color);
+  color: var(--tooltip-text-color);
+  padding: 5px 8px;
+  border-radius: 2px;
+  font-size: 1.2rem;
+  user-select: none;
 }
 
 /* Overlay */

@@ -76,6 +76,11 @@
   --toolbar-submenu-background-color: #121212;
 
 
+  /* Tooltip */
+  --tooltip-background-color: #121212;
+  --tooltip-text-color: white;
+
+
   /* Editor */
 
   --pre-border-color: #454545;
