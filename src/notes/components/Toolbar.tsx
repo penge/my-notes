@@ -63,26 +63,26 @@ const Toolbar = ({ os }: ToolbarProps): h.JSX.Element => {
   return (
     <Fragment>
       <div id="toolbar" class="bar">
-        <div id="B" class="bold button" title={getTitle("B")} onClick={commands.bold}>
+        <div id="B" class="button" title={getTitle("B")} onClick={commands.bold}>
           <svg viewBox="0 0 181.395 181.395">
             <path d="m20.618,181.395v-181.395h62.293c22.506,0 40.074,4.174 52.699,12.521 12.623,8.346 18.936,20.785 18.936,37.313 0,8.639-2.033,16.318-6.104,23.049-4.07,6.729-10.34,11.795-18.813,15.199 10.631,2.408 18.479,7.246 23.547,14.514 5.064,7.268 7.6,15.637 7.6,25.104 0,17.691-5.939,31.064-17.814,40.115-11.879,9.055-28.904,13.58-51.082,13.58h-71.262zm42.235-105.772h20.93c9.551-0.166 16.695-2.014 21.43-5.545 4.734-3.529 7.102-8.699 7.102-15.51 0-7.725-2.41-13.35-7.225-16.881-4.82-3.529-12.211-5.295-22.178-5.295h-20.059v43.231zm0,27.908v45.473h29.027c8.971,0 15.699-1.766 20.184-5.297 4.484-3.529 6.729-8.947 6.729-16.256 0-7.891-1.932-13.85-5.795-17.879-3.861-4.027-10.111-6.041-18.748-6.041h-31.397z" />
           </svg>
         </div>
 
-        <div id="I" class="italic button" title={getTitle("I")} onClick={commands.italic}>
+        <div id="I" class="button" title={getTitle("I")} onClick={commands.italic}>
           <svg viewBox="0 0 181.5 181.5">
             <path d="M93.368,181.5H51.856L88.132,0h41.512L93.368,181.5z" />
           </svg>
         </div>
 
-        <div id="U" class="underline button" title={getTitle("U")} onClick={commands.underline}>
+        <div id="U" class="button" title={getTitle("U")} onClick={commands.underline}>
           <svg viewBox="0 0 230 230">
             <path d="M61.638,164.165C75.236,175.39,93.257,181,115.458,181c21.955,0,39.679-5.61,53.239-16.835 C182.254,152.942,189,137.13,189,116.731V0h-42v116.731c0,11.06-2.501,19.212-8.03,24.454c-5.529,5.244-13.284,7.864-23.524,7.864 c-10.322,0-18.312-2.642-23.965-7.926C85.829,135.841,83,127.711,83,116.731V0H41v116.731C41,137.13,48.039,152.942,61.638,164.165z" />
             <rect width="230" y="197" height="33" />
           </svg>
         </div>
 
-        <div id="S" class="line-through button wide" title={getTitle("S")} onClick={commands.strikeThrough}>
+        <div id="S" class="button wide" title={getTitle("S")} onClick={commands.strikeThrough}>
           <svg viewBox="0 0 230 230">
             <polygon points="230,99 136,99 136,57 183,57 183,25 47,25 47,57 94,57 94,99 0,99 0,132 94,132 94,205 136,205 136,132 230,132 " />
           </svg>
