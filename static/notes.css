@@ -43,20 +43,12 @@ svg {
   z-index: 10;
 }
 
-#drag {
-  z-index: 6;
-}
-
-#sidebar {
+#sidebar, #toolbar {
   z-index: 5;
 }
 
-#panel, .notification {
+.notification {
   z-index: 4;
-}
-
-#toolbar {
-  z-index: 3;
 }
 
 #content {
