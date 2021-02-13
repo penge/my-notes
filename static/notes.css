@@ -82,14 +82,14 @@ svg {
   user-select: none;
   box-sizing: border-box;
   border-top: 1px solid var(--bar-border-color);
+  padding: 0 .25em;
 }
 
 .bar > .button {
   font-weight: bold;
   padding: .5em;
-  margin: .5em;
-  margin-right: 0;
-  border-radius: 3px;
+  margin: .5em .25em;
+  border-radius: 2px;
 }
 
 .bar > .button.disabled {
