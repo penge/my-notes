@@ -1,4 +1,4 @@
-import { h, Fragment, render } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, render, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { useState, useEffect } from "preact/hooks";
 
 import __Font from "options/Font";
