@@ -114,6 +114,21 @@ const hotkeys: Hotkey[] = [
     mac: "⌘ + Shift + 8",
     other: "Ctrl + Shift + 8",
   },
+  {
+    description: "Current date",
+    mac: "⌘ + ;",
+    other: "Ctrl + ;"
+  },
+  {
+    description: "Current time",
+    mac: "⌘ + Shift + ;",
+    other: "Ctrl + Shift + ;"
+  },
+  {
+    description: "Current date and time",
+    mac: "⌘ + Shift + Option + ;",
+    other: "Ctrl + Shift + Alt + ;"
+  },
 ];
 
 export default hotkeys;

@@ -13,7 +13,7 @@
     "__check-types": "tsc --noEmit",
     "__develop-core": "npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --sourcemap=inline --outdir=out",
     "lint": "eslint src --ext .ts,.tsx",
-    "test": "jest",
+    "test": "TZ=UTC jest",
     "develop": "npm run __prepare-folder && npm run __develop-core",
     "develop-watch": "npm run develop && chokidar \"src/**/*.(ts|tsx)\" -c \"npm run __develop-core\"",
     "build": "npm run __prepare-folder && npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --minify --outdir=out"

@@ -24,6 +24,11 @@ export enum Hotkey {
   OnUnorderedList,
   OnOrderedList,
 
+  // Date
+  OnInsertDate,
+  OnInsertTime,
+  OnInsertDateAndTime,
+
   // Sync notes
   OnSync,
 }
@@ -153,6 +158,33 @@ const registerOrderedList = (event: KeyboardEvent, os: string) => {
   }
 };
 
+const registerInsertDate = (event: KeyboardEvent, os: string) => {
+  if (
+    (isMac(os) && event.metaKey && !event.shiftKey && !event.altKey && event.code === "Semicolon") ||
+    (!isMac(os) && event.ctrlKey && !event.shiftKey && !event.altKey && event.code === "Semicolon")
+  ) {
+    publish(Hotkey.OnInsertDate, event);
+  }
+};
+
+const registerInsertTime = (event: KeyboardEvent, os: string) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && !event.altKey && event.code === "Semicolon") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && !event.altKey && event.code === "Semicolon")
+  ) {
+    publish(Hotkey.OnInsertTime, event);
+  }
+};
+
+const registerInsertDateAndTime = (event: KeyboardEvent, os: string) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && event.altKey && event.code === "Semicolon") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.altKey && event.code === "Semicolon")
+  ) {
+    publish(Hotkey.OnInsertDateAndTime, event);
+  }
+};
+
 const registerSyncNotes = (event: KeyboardEvent, os: string) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyS") ||
@@ -185,6 +217,11 @@ const keydown = (os: string) => document.addEventListener("keydown", (event) => 
   // Lists
   registerUnorderedList(event, os);
   registerOrderedList(event, os);
+
+  // Date
+  registerInsertDate(event, os);
+  registerInsertTime(event, os);
+  registerInsertDateAndTime(event, os);
 
   // Sync notes
   registerSyncNotes(event, os);
