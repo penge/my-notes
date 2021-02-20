@@ -63,7 +63,7 @@ const Content = ({ active, initialContent, onEdit, indentOnTab }: ContentProps):
   useEffect(() => {
     contentRef.current.innerHTML = initialContent;
     autofocus(contentRef.current);
-  }, [initialContent]);
+  }, [active, initialContent]);
 
   // Toolbar controls (e.g. TABLE_INSERT) can change #content.innerHTML.
   // To save the changed content, "editnote" event is triggered from Toolbar.
