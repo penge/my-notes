@@ -36,6 +36,9 @@ import notesHistory from "notes/history";
 import hotkeys, { Hotkey } from "notes/hotkeys";
 import { sendMessage } from "messages";
 
+const activeFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
+const firstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
+
 const Notes = () => {
   const [os, setOs] = useState<"mac" | "other" | undefined>(undefined);
   const [tabId, setTabId] = useState<string>("");
@@ -114,9 +117,7 @@ const Notes = () => {
       setCustomTheme(local.customTheme);
 
       // Notes
-      const activeFromUrl: string = window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
-      const firstAvailableNote: string = Object.keys(local.notes as NotesObject).sort().shift() || "";
-      const activeCandidates: string[] = [activeFromUrl, local.active as string, firstAvailableNote]; // ordered by importance
+      const activeCandidates: string[] = [activeFromUrl(), local.active as string, firstAvailableNote(local.notes)]; // ordered by importance
       const active: string = activeCandidates.find((candidate) => candidate && candidate in local.notes) || "";
       setNotesProps({
         notes: local.notes,
@@ -163,7 +164,7 @@ const Notes = () => {
           if (newSet.size === oldSet.size) {
             const diff = new Set([...newSet].filter(x => !oldSet.has(x)));
             if (diff.size === 1) {
-              const renamedNoteName = diff.values().next().value;
+              const renamedNoteName = diff.values().next().value as string;
               setNotesProps((prev) => {
                 const newActive = prev.active in newNotes
                   ? prev.active // active is NOT renamed => keep unchanged
@@ -190,11 +191,10 @@ const Notes = () => {
 
           // DELETE
           if (oldSet.size > newSet.size) {
-            const firstAvailableNote = Object.keys(newNotes).sort()[0] || "";
             setNotesProps((prev) => {
               const newActive = prev.active in newNotes
                 ? prev.active // active is NOT deleted => keep unchanged
-                : firstAvailableNote; // active is deleted => use first available
+                : firstAvailableNote(newNotes); // active is deleted => use first available
 
               if (newActive !== prev.active) {
                 notesHistory.replace(newActive); // active is deleted => replace history
@@ -217,7 +217,7 @@ const Notes = () => {
           // NEW or UPDATE
           setNotesProps((prev) => {
             // Auto-active new note
-            const newActive = (changes["active"] && changes["active"].newValue) || prev.active;
+            const newActive = (changes["active"] && changes["active"].newValue as string) || prev.active || firstAvailableNote(newNotes);
 
             // Update clipboard (automatically created when needed)
             const newClipboard = clipboardCandidate === undefined
