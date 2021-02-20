@@ -106,6 +106,10 @@ svg {
 
 .bar > .button > svg {
   height: .8em;
+}
+
+.bar > .button > svg,
+.menu.bar > .button > * {
   pointer-events: none;
 }
 

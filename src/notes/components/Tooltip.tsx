@@ -50,19 +50,15 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
   const [rect, setRect] = useState<DOMRect | undefined>(undefined);
 
   useEffect(() => {
-    setRect(undefined);
-  }, [childrenRect]);
-
-  useEffect(() => {
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect();
       setRect(rect);
     }
-  });
+  }, [ref]);
 
   const position: h.JSX.CSSProperties | undefined = useMemo(() => {
     return rect && getTooltipPosition(childrenRect, rect);
-  }, [rect]);
+  }, [rect, childrenRect]);
 
   // Render hidden tooltip first, to get the width and height,
   // and then use effect to render visible tooltip, where
