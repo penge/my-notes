@@ -36,8 +36,8 @@ import notesHistory from "notes/history";
 import hotkeys, { Hotkey } from "notes/hotkeys";
 import { sendMessage } from "messages";
 
-const activeFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
-const firstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
+const getActiveFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
+const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
 
 const Notes = () => {
   const [os, setOs] = useState<"mac" | "other" | undefined>(undefined);
@@ -117,13 +117,17 @@ const Notes = () => {
       setCustomTheme(local.customTheme);
 
       // Notes
-      const activeCandidates: string[] = [activeFromUrl(), local.active as string, firstAvailableNote(local.notes)]; // ordered by importance
+      const activeFromUrl = getActiveFromUrl();
+      const activeCandidates: string[] = [activeFromUrl, local.active as string, getFirstAvailableNote(local.notes)]; // ordered by importance
       const active: string = activeCandidates.find((candidate) => candidate && candidate in local.notes) || "";
       setNotesProps({
         notes: local.notes,
         active,
         clipboard: local.clipboard,
       });
+      if (active !== activeFromUrl) {
+        notesHistory.replace(active);
+      }
 
       // Options
       setFocus(local.focus);
@@ -194,7 +198,7 @@ const Notes = () => {
             setNotesProps((prev) => {
               const newActive = prev.active in newNotes
                 ? prev.active // active is NOT deleted => keep unchanged
-                : firstAvailableNote(newNotes); // active is deleted => use first available
+                : getFirstAvailableNote(newNotes); // active is deleted => use first available
 
               if (newActive !== prev.active) {
                 notesHistory.replace(newActive); // active is deleted => replace history
@@ -217,7 +221,7 @@ const Notes = () => {
           // NEW or UPDATE
           setNotesProps((prev) => {
             // Auto-active new note
-            const newActive = (changes["active"] && changes["active"].newValue as string) || prev.active || firstAvailableNote(newNotes);
+            const newActive = (changes["active"] && changes["active"].newValue as string) || prev.active || getFirstAvailableNote(newNotes);
 
             // Update clipboard (automatically created when needed)
             const newClipboard = clipboardCandidate === undefined
@@ -232,6 +236,10 @@ const Notes = () => {
               (localStorage.getItem("notesChangedBy") !== tabIdRef.current)
             ) {
               setInitialContent(newNotes[newActive].content);
+            }
+
+            if (!(newActive in oldNotes)) {
+              notesHistory.push(newActive);
             }
 
             return {
@@ -416,6 +424,9 @@ const Notes = () => {
         {...notesProps}
         width={sidebarWidth}
         onActivateNote={(noteName) => {
+          if (notesProps.active === noteName) {
+            return;
+          }
           setNotesProps((prev) => ({ ...prev, active: noteName }));
           notesHistory.push(noteName);
           chrome.storage.local.set({ active: noteName });
