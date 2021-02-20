@@ -3,7 +3,7 @@ import Modal from "./Modal";
 
 export interface NewNoteModalProps {
   validate: (newNoteName: string) => boolean
-  onCancel: () => void
+  onCancel?: () => void
   onConfirm: (newNoteName: string) => void
 }
 

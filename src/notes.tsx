@@ -1,5 +1,5 @@
 import { h, render, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { useState, useEffect, useRef } from "preact/hooks";
+import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 
 import {
   Notification,
@@ -73,6 +73,8 @@ const Notes = () => {
   const syncRef = useRef<Sync | undefined>(undefined);
   syncRef.current = sync;
 
+  const [initialized, setInitialized] = useState<boolean>(false);
+
   const [contextMenuProps, setContextMenuProps] = useState<ContextMenuProps | null>(null);
   const [renameNoteModalProps, setRenameNoteModalProps] = useState<RenameNoteModalProps | null>(null);
   const [deleteNoteModalProps, setDeleteNoteModalProps] = useState<DeleteNoteModalProps | null>(null);
@@ -135,6 +137,8 @@ const Notes = () => {
 
       // Sync
       setSync(local.sync);
+
+      setInitialized(true);
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -407,6 +411,28 @@ const Notes = () => {
     });
   }, []);
 
+  const onNewNote = useCallback((empty?: boolean) => {
+    setNewNoteModalProps({
+      validate: (newNoteName: string) => newNoteName.length > 0 && !(newNoteName in notesProps.notes),
+      onCancel: empty ? undefined : () => setNewNoteModalProps(null),
+      onConfirm: (newNoteName) => {
+        setNewNoteModalProps(null);
+        createNote(newNoteName);
+      },
+    });
+  }, [notesProps]);
+
+  useEffect(() => {
+    if (!initialized || !tabId) {
+      return;
+    }
+
+    const empty = Object.keys(notesProps.notes).length === 0;
+    if (empty) {
+      onNewNote(empty);
+    }
+  }, [initialized, tabId, notesProps, onNewNote]);
+
   return (
     <Fragment>
       {notification && (
@@ -452,14 +478,7 @@ const Notes = () => {
             },
           }),
         })}
-        onNewNote={() => setNewNoteModalProps({
-          validate: (newNoteName: string) => newNoteName.length > 0 && !(newNoteName in notesProps.notes),
-          onCancel: () => setNewNoteModalProps(null),
-          onConfirm: (newNoteName) => {
-            setNewNoteModalProps(null);
-            createNote(newNoteName);
-          },
-        })}
+        onNewNote={() => onNewNote()}
         sync={sync}
       />
 
