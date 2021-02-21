@@ -73,7 +73,10 @@ interface ToolbarProps {
 }
 
 const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
-  const getTitle = useCallback((key: string) => (os && titles[key][os]) || "(undefined)", [os]);
+  const getTitle = useCallback((key: string) => {
+    const title = (os && titles[key] && titles[key][os]) || "";
+    return title;
+  }, [os]);
   const [submenu, setSubmenu] = useState<string | null>(null);
 
   const toggleSubmenu = (event: MouseEvent): void => {
