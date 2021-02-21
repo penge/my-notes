@@ -21,6 +21,11 @@ const Modal = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
+    document.body.classList.add("with-modal");
+    return () => document.body.classList.remove("with-modal");
+  }, []);
+
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.value = inputValue ?? "";
       inputRef.current.focus();

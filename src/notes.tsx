@@ -362,11 +362,6 @@ const Notes = () => {
     document.title = note ? notesProps.active : "My Notes";
   }, [notesProps.active]);
 
-  // Modal
-  useEffect(() => {
-    document.body.classList.toggle("with-modal", Boolean(renameNoteModalProps || deleteNoteModalProps || newNoteModalProps));
-  }, [renameNoteModalProps || deleteNoteModalProps || newNoteModalProps]);
-
   // Toolbar
   useEffect(() => {
     document.body.classList.toggle("with-toolbar", toolbar);
