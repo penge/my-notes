@@ -39,6 +39,12 @@ import { sendMessage } from "messages";
 const getActiveFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
 const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
 
+interface NotesProps {
+  notes: NotesObject
+  active: string
+  clipboard: string
+}
+
 const Notes = () => {
   const [os, setOs] = useState<"mac" | "other" | undefined>(undefined);
   const [tabId, setTabId] = useState<string>("");
@@ -54,11 +60,7 @@ const Notes = () => {
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
   const [customTheme, setCustomTheme] = useState<string>("");
 
-  const [notesProps, setNotesProps] = useState<{
-    notes: NotesObject,
-    active: string,
-    clipboard: string,
-  }>({
+  const [notesProps, setNotesProps] = useState<NotesProps>({
     notes: {},
     active: "",
     clipboard: "",
@@ -166,7 +168,13 @@ const Notes = () => {
           const oldSet = new Set(Object.keys(oldNotes));
           const newSet = new Set(Object.keys(newNotes));
 
-          const clipboardCandidate: string | null | undefined = changes["clipboard"] ? changes["clipboard"].newValue : undefined;
+          const getNewClipboard = (prev: NotesProps) => {
+            const clipboardCandidate: string | null | undefined = changes["clipboard"] ? changes["clipboard"].newValue : undefined;
+            const newClipboard = clipboardCandidate === undefined
+              ? prev.clipboard
+              : (clipboardCandidate || "");
+            return newClipboard;
+          };
 
           // RENAME
           if (newSet.size === oldSet.size) {
@@ -182,10 +190,7 @@ const Notes = () => {
                   notesHistory.replace(newActive); // active is renamed => replace history
                 }
 
-                const newClipboard = clipboardCandidate === undefined
-                  ? prev.clipboard // clipboard is NOT renamed => keep unchanged
-                  : (clipboardCandidate || ""); // clipboard is renamed => update it
-
+                const newClipboard = getNewClipboard(prev);
                 return {
                   notes: newNotes,
                   active: newActive,
@@ -208,10 +213,7 @@ const Notes = () => {
                 notesHistory.replace(newActive); // active is deleted => replace history
               }
 
-              const newClipboard = clipboardCandidate === undefined
-                ? prev.clipboard // clipboard is NOT deleted => keep unchanged
-                : (clipboardCandidate || ""); // clipboard is deleted => update it
-
+              const newClipboard = getNewClipboard(prev);
               return {
                 notes: newNotes,
                 active: newActive,
@@ -224,13 +226,15 @@ const Notes = () => {
 
           // NEW or UPDATE
           setNotesProps((prev) => {
-            // Auto-active new note
-            const newActive = (changes["active"] && changes["active"].newValue as string) || prev.active || getFirstAvailableNote(newNotes);
+            const diff = newSet.size > oldSet.size
+              ? new Set([...newSet].filter(x => !oldSet.has(x)))
+              : undefined;
 
-            // Update clipboard (automatically created when needed)
-            const newClipboard = clipboardCandidate === undefined
-              ? prev.clipboard // created note is NOT Clipboard
-              : (clipboardCandidate || ""); // created note is Clipboard
+            const newNoteName = (changes["active"] && changes["active"].newValue as string)
+              || ((diff && diff.size === 1) ? diff.values().next().value as string : "");
+
+            // Auto-active new note
+            const newActive = newNoteName || prev.active;
 
             // Re-activate note updated from background (Clipboard) or from other tab (any note)
             if (
@@ -246,6 +250,7 @@ const Notes = () => {
               notesHistory.push(newActive);
             }
 
+            const newClipboard = getNewClipboard(prev);
             return {
               notes: newNotes,
               active: newActive,
