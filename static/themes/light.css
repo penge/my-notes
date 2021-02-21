@@ -71,9 +71,14 @@
   /* Toolbar */
 
   --toolbar-button-color: black;
-  --toolbar-button-hover-background-color: #222;
+  --toolbar-button-hover-background-color: #111;
   --toolbar-button-hover-color: white;
   --toolbar-submenu-background-color: #f5f5f5;
+
+
+  /* Tooltip */
+  --tooltip-background-color: #111;
+  --tooltip-text-color: white;
 
 
   /* Editor */

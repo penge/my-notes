@@ -31,6 +31,10 @@ svg {
 
 /* Layers */
 
+#tooltip-container {
+  z-index: 100;
+}
+
 #modal {
   z-index: 20;
 }
@@ -43,20 +47,12 @@ svg {
   z-index: 10;
 }
 
-#drag {
-  z-index: 6;
-}
-
-#sidebar {
+#sidebar, #toolbar {
   z-index: 5;
 }
 
-#panel, .notification {
+.notification {
   z-index: 4;
-}
-
-#toolbar {
-  z-index: 3;
 }
 
 #content {
@@ -90,13 +86,13 @@ svg {
   user-select: none;
   box-sizing: border-box;
   border-top: 1px solid var(--bar-border-color);
+  padding: 0 .25em;
 }
 
 .bar > .button {
   font-weight: bold;
   padding: .5em;
-  margin: .5em;
-  margin-right: 0;
+  margin: .5em .25em;
   border-radius: 3px;
 }
 
@@ -104,8 +100,16 @@ svg {
   opacity: .4;
 }
 
+.bar > .button.last {
+  margin-left: auto;
+}
+
 .bar > .button > svg {
   height: .8em;
+}
+
+.bar > .button > svg,
+.menu.bar > .button > * {
   pointer-events: none;
 }
 
@@ -356,6 +360,37 @@ body.with-toolbar #toolbar { transform: translateY(0); }
 
 #toolbar .button:not(.active) .menu {
   display: none;
+}
+
+/* Tooltip */
+
+#tooltip-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#tooltip {
+  position: fixed;
+  background-color: var(--tooltip-background-color);
+  color: var(--tooltip-text-color);
+  padding: 5px 8px;
+  border-radius: 3px;
+  font-size: 1.2rem;
+  user-select: none;
+}
+
+.info-tooltip {
+  display: flex;
+}
+
+.info-tooltip > div {
+  text-align: right;
+}
+
+.info-tooltip > div:nth-child(1),
+.info-tooltip > div:nth-child(2) {
+  margin-right: 1em;
 }
 
 /* Overlay */

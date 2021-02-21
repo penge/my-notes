@@ -1,4 +1,4 @@
-import { Fragment, h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { Notification, NotificationType } from "shared/storage/schema";
 
 interface NotificationProps {

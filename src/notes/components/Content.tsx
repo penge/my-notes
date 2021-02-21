@@ -2,6 +2,7 @@ import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import hotkeys, { Hotkey } from "notes/hotkeys";
 import commands from "../toolbar/commands";
+import dateUtils from "shared/date/date-utils";
 
 interface ContentProps {
   active: string
@@ -25,6 +26,10 @@ const autofocus = (content: HTMLDivElement) => content && setTimeout(() => {
 });
 
 const indentOnTabCallback = () => document.execCommand("insertHTML", false, "&#009");
+
+const insertDate = () => document.execCommand("insertHTML", false, dateUtils.getCurrentDate());
+const insertTime = () => document.execCommand("insertHTML", false, dateUtils.getCurrentTime());
+const insertDateAndTime = () => document.execCommand("insertHTML", false, dateUtils.getCurrentDateAndTime());
 
 let latestCb: () => void;
 const reattachEditNote = (cb: () => void) => {
@@ -58,7 +63,7 @@ const Content = ({ active, initialContent, onEdit, indentOnTab }: ContentProps):
   useEffect(() => {
     contentRef.current.innerHTML = initialContent;
     autofocus(contentRef.current);
-  }, [initialContent]);
+  }, [active, initialContent]);
 
   // Toolbar controls (e.g. TABLE_INSERT) can change #content.innerHTML.
   // To save the changed content, "editnote" event is triggered from Toolbar.
@@ -78,6 +83,10 @@ const Content = ({ active, initialContent, onEdit, indentOnTab }: ContentProps):
 
     hotkeys.subscribe(Hotkey.OnUnorderedList, commands.ul);
     hotkeys.subscribe(Hotkey.OnOrderedList, commands.ol);
+
+    hotkeys.subscribe(Hotkey.OnInsertDate, insertDate);
+    hotkeys.subscribe(Hotkey.OnInsertTime, insertTime);
+    hotkeys.subscribe(Hotkey.OnInsertDateAndTime, insertDateAndTime);
   }, []);
 
   return (

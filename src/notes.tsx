@@ -1,5 +1,5 @@
-import { Fragment, h, render } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { useState, useEffect, useRef } from "preact/hooks";
+import { h, render, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 
 import {
   Notification,
@@ -36,6 +36,15 @@ import notesHistory from "notes/history";
 import hotkeys, { Hotkey } from "notes/hotkeys";
 import { sendMessage } from "messages";
 
+const getActiveFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
+const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
+
+interface NotesProps {
+  notes: NotesObject
+  active: string
+  clipboard: string
+}
+
 const Notes = () => {
   const [os, setOs] = useState<"mac" | "other" | undefined>(undefined);
   const [tabId, setTabId] = useState<string>("");
@@ -51,11 +60,7 @@ const Notes = () => {
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
   const [customTheme, setCustomTheme] = useState<string>("");
 
-  const [notesProps, setNotesProps] = useState<{
-    notes: NotesObject,
-    active: string,
-    clipboard: string,
-  }>({
+  const [notesProps, setNotesProps] = useState<NotesProps>({
     notes: {},
     active: "",
     clipboard: "",
@@ -69,6 +74,8 @@ const Notes = () => {
   const [sync, setSync] = useState<Sync | undefined>(undefined);
   const syncRef = useRef<Sync | undefined>(undefined);
   syncRef.current = sync;
+
+  const [initialized, setInitialized] = useState<boolean>(false);
 
   const [contextMenuProps, setContextMenuProps] = useState<ContextMenuProps | null>(null);
   const [renameNoteModalProps, setRenameNoteModalProps] = useState<RenameNoteModalProps | null>(null);
@@ -114,15 +121,17 @@ const Notes = () => {
       setCustomTheme(local.customTheme);
 
       // Notes
-      const activeFromUrl: string = window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
-      const firstAvailableNote: string = Object.keys(local.notes as NotesObject).sort().shift() || "";
-      const activeCandidates: string[] = [activeFromUrl, local.active as string, firstAvailableNote]; // ordered by importance
+      const activeFromUrl = getActiveFromUrl();
+      const activeCandidates: string[] = [activeFromUrl, local.active as string, getFirstAvailableNote(local.notes)]; // ordered by importance
       const active: string = activeCandidates.find((candidate) => candidate && candidate in local.notes) || "";
       setNotesProps({
         notes: local.notes,
         active,
         clipboard: local.clipboard,
       });
+      if (active !== activeFromUrl) {
+        notesHistory.replace(active);
+      }
 
       // Options
       setFocus(local.focus);
@@ -130,6 +139,8 @@ const Notes = () => {
 
       // Sync
       setSync(local.sync);
+
+      setInitialized(true);
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -157,13 +168,19 @@ const Notes = () => {
           const oldSet = new Set(Object.keys(oldNotes));
           const newSet = new Set(Object.keys(newNotes));
 
-          const clipboardCandidate: string | null | undefined = changes["clipboard"] ? changes["clipboard"].newValue : undefined;
+          const getNewClipboard = (prev: NotesProps) => {
+            const clipboardCandidate: string | null | undefined = changes["clipboard"] ? changes["clipboard"].newValue : undefined;
+            const newClipboard = clipboardCandidate === undefined
+              ? prev.clipboard
+              : (clipboardCandidate || "");
+            return newClipboard;
+          };
 
           // RENAME
           if (newSet.size === oldSet.size) {
             const diff = new Set([...newSet].filter(x => !oldSet.has(x)));
             if (diff.size === 1) {
-              const renamedNoteName = diff.values().next().value;
+              const renamedNoteName = diff.values().next().value as string;
               setNotesProps((prev) => {
                 const newActive = prev.active in newNotes
                   ? prev.active // active is NOT renamed => keep unchanged
@@ -173,10 +190,7 @@ const Notes = () => {
                   notesHistory.replace(newActive); // active is renamed => replace history
                 }
 
-                const newClipboard = clipboardCandidate === undefined
-                  ? prev.clipboard // clipboard is NOT renamed => keep unchanged
-                  : (clipboardCandidate || ""); // clipboard is renamed => update it
-
+                const newClipboard = getNewClipboard(prev);
                 return {
                   notes: newNotes,
                   active: newActive,
@@ -190,20 +204,16 @@ const Notes = () => {
 
           // DELETE
           if (oldSet.size > newSet.size) {
-            const firstAvailableNote = Object.keys(newNotes).sort()[0] || "";
             setNotesProps((prev) => {
               const newActive = prev.active in newNotes
                 ? prev.active // active is NOT deleted => keep unchanged
-                : firstAvailableNote; // active is deleted => use first available
+                : getFirstAvailableNote(newNotes); // active is deleted => use first available
 
               if (newActive !== prev.active) {
                 notesHistory.replace(newActive); // active is deleted => replace history
               }
 
-              const newClipboard = clipboardCandidate === undefined
-                ? prev.clipboard // clipboard is NOT deleted => keep unchanged
-                : (clipboardCandidate || ""); // clipboard is deleted => update it
-
+              const newClipboard = getNewClipboard(prev);
               return {
                 notes: newNotes,
                 active: newActive,
@@ -216,13 +226,15 @@ const Notes = () => {
 
           // NEW or UPDATE
           setNotesProps((prev) => {
-            // Auto-active new note
-            const newActive = (changes["active"] && changes["active"].newValue) || prev.active;
+            const diff = newSet.size > oldSet.size
+              ? new Set([...newSet].filter(x => !oldSet.has(x)))
+              : undefined;
 
-            // Update clipboard (automatically created when needed)
-            const newClipboard = clipboardCandidate === undefined
-              ? prev.clipboard // created note is NOT Clipboard
-              : (clipboardCandidate || ""); // created note is Clipboard
+            const newNoteName = (changes["active"] && changes["active"].newValue as string)
+              || ((diff && diff.size === 1) ? diff.values().next().value as string : "");
+
+            // Auto-active new note
+            const newActive = newNoteName || prev.active;
 
             // Re-activate note updated from background (Clipboard) or from other tab (any note)
             if (
@@ -234,6 +246,11 @@ const Notes = () => {
               setInitialContent(newNotes[newActive].content);
             }
 
+            if (!(newActive in oldNotes)) {
+              notesHistory.push(newActive);
+            }
+
+            const newClipboard = getNewClipboard(prev);
             return {
               notes: newNotes,
               active: newActive,
@@ -350,11 +367,6 @@ const Notes = () => {
     document.title = note ? notesProps.active : "My Notes";
   }, [notesProps.active]);
 
-  // Modal
-  useEffect(() => {
-    document.body.classList.toggle("with-modal", Boolean(renameNoteModalProps || deleteNoteModalProps || newNoteModalProps));
-  }, [renameNoteModalProps || deleteNoteModalProps || newNoteModalProps]);
-
   // Toolbar
   useEffect(() => {
     document.body.classList.toggle("with-toolbar", toolbar);
@@ -399,6 +411,28 @@ const Notes = () => {
     });
   }, []);
 
+  const onNewNote = useCallback((empty?: boolean) => {
+    setNewNoteModalProps({
+      validate: (newNoteName: string) => newNoteName.length > 0 && !(newNoteName in notesProps.notes),
+      onCancel: empty ? undefined : () => setNewNoteModalProps(null),
+      onConfirm: (newNoteName) => {
+        setNewNoteModalProps(null);
+        createNote(newNoteName);
+      },
+    });
+  }, [notesProps]);
+
+  useEffect(() => {
+    if (!initialized || !tabId) {
+      return;
+    }
+
+    const empty = Object.keys(notesProps.notes).length === 0;
+    if (empty) {
+      onNewNote(empty);
+    }
+  }, [initialized, tabId, notesProps, onNewNote]);
+
   return (
     <Fragment>
       {notification && (
@@ -416,6 +450,9 @@ const Notes = () => {
         {...notesProps}
         width={sidebarWidth}
         onActivateNote={(noteName) => {
+          if (notesProps.active === noteName) {
+            return;
+          }
           setNotesProps((prev) => ({ ...prev, active: noteName }));
           notesHistory.push(noteName);
           chrome.storage.local.set({ active: noteName });
@@ -441,14 +478,7 @@ const Notes = () => {
             },
           }),
         })}
-        onNewNote={() => setNewNoteModalProps({
-          validate: (newNoteName: string) => newNoteName.length > 0 && !(newNoteName in notesProps.notes),
-          onCancel: () => setNewNoteModalProps(null),
-          onConfirm: (newNoteName) => {
-            setNewNoteModalProps(null);
-            createNote(newNoteName);
-          },
-        })}
+        onNewNote={() => onNewNote()}
         sync={sync}
       />
 
@@ -463,6 +493,7 @@ const Notes = () => {
 
       <__Toolbar
         os={os}
+        note={notesProps.notes[notesProps.active]}
       />
 
       {contextMenuProps && (
@@ -489,6 +520,8 @@ const Notes = () => {
           <__Overlay type="to-create" />
         </Fragment>
       )}
+
+      <div id="tooltip-container"></div>
     </Fragment>
   );
 };

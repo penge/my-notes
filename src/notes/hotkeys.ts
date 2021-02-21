@@ -24,6 +24,11 @@ export enum Hotkey {
   OnUnorderedList,
   OnOrderedList,
 
+  // Date
+  OnInsertDate,
+  OnInsertTime,
+  OnInsertDateAndTime,
+
   // Sync notes
   OnSync,
 }
@@ -50,8 +55,8 @@ const publish = (hotkey: Hotkey, event: KeyboardEvent): void => {
 
 const registerOpenOptions = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "O" || event.key === "o")) ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "O" || event.key === "o"))
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyO") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyO")
   ) {
     publish(Hotkey.OnOpenOptions, event);
   }
@@ -59,8 +64,8 @@ const registerOpenOptions = (event: KeyboardEvent, os: string) => {
 
 const registerToggleFocusMode = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "F" || event.key === "f")) ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "F" || event.key === "f"))
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyF") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyF")
   ) {
     publish(Hotkey.OnToggleFocusMode, event);
   }
@@ -68,8 +73,8 @@ const registerToggleFocusMode = (event: KeyboardEvent, os: string) => {
 
 const registerToggleSidebar = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && (event.key === "S" || event.key === "s") && !event.shiftKey) ||
-    (!isMac(os) && event.ctrlKey && (event.key === "S" || event.key === "s") && !event.shiftKey)
+    (isMac(os) && event.metaKey && !event.shiftKey && event.code === "KeyS") ||
+    (!isMac(os) && event.ctrlKey && !event.shiftKey && event.code === "KeyS")
   ) {
     publish(Hotkey.OnToggleSidebar, event);
   }
@@ -77,8 +82,8 @@ const registerToggleSidebar = (event: KeyboardEvent, os: string) => {
 
 const registerToggleToolbar = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && (event.key === "E" || event.key === "e")) ||
-    (!isMac(os) && event.ctrlKey && (event.key === "E" || event.key === "e"))
+    (isMac(os) && event.metaKey && event.code === "KeyE") ||
+    (!isMac(os) && event.ctrlKey && event.code === "KeyE")
   ) {
     publish(Hotkey.OnToggleToolbar, event);
   }
@@ -112,15 +117,15 @@ const registerTab = (event: KeyboardEvent) => {
 };
 
 const registerUnderline = (event: KeyboardEvent, os: string) => {
-  if (isMac(os) && event.metaKey && (event.key === "U" || event.key === "u")) {
+  if (isMac(os) && event.metaKey && event.code === "KeyU") {
     publish(Hotkey.OnUnderline, event);
   }
 };
 
 const registerStrikethrough = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "X" || event.key === "x")) ||
-    (!isMac(os) && event.altKey && event.shiftKey && (event.key === "5" || event.keyCode === 53 || event.code === "Digit5"))
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyX") ||
+    (!isMac(os) && event.altKey && event.shiftKey && event.code === "Digit5")
   ) {
     publish(Hotkey.OnStrikethrough, event);
   }
@@ -128,8 +133,8 @@ const registerStrikethrough = (event: KeyboardEvent, os: string) => {
 
 const registerRemoveFormat = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.key === "\\") ||
-    (!isMac(os) && event.ctrlKey && event.key === "\\")
+    (isMac(os) && event.metaKey && event.code === "Backslash") ||
+    (!isMac(os) && event.ctrlKey && event.code === "Backslash")
   ) {
     publish(Hotkey.OnRemoveFormat, event);
   }
@@ -137,8 +142,8 @@ const registerRemoveFormat = (event: KeyboardEvent, os: string) => {
 
 const registerUnorderedList = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "7" || event.code === "Digit7")) ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "7" || event.code === "Digit7"))
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit7") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit7")
   ) {
     publish(Hotkey.OnUnorderedList, event);
   }
@@ -146,17 +151,44 @@ const registerUnorderedList = (event: KeyboardEvent, os: string) => {
 
 const registerOrderedList = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "8" || event.code === "Digit8")) ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "8" || event.code === "Digit8"))
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit8") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit8")
   ) {
     publish(Hotkey.OnOrderedList, event);
   }
 };
 
+const registerInsertDate = (event: KeyboardEvent, os: string) => {
+  if (
+    (isMac(os) && event.metaKey && !event.shiftKey && !event.altKey && event.code === "Semicolon") ||
+    (!isMac(os) && event.ctrlKey && !event.shiftKey && !event.altKey && event.code === "Semicolon")
+  ) {
+    publish(Hotkey.OnInsertDate, event);
+  }
+};
+
+const registerInsertTime = (event: KeyboardEvent, os: string) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && !event.altKey && event.code === "Semicolon") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && !event.altKey && event.code === "Semicolon")
+  ) {
+    publish(Hotkey.OnInsertTime, event);
+  }
+};
+
+const registerInsertDateAndTime = (event: KeyboardEvent, os: string) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && event.altKey && event.code === "Semicolon") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.altKey && event.code === "Semicolon")
+  ) {
+    publish(Hotkey.OnInsertDateAndTime, event);
+  }
+};
+
 const registerSyncNotes = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && (event.key === "S" || event.key === "s")) ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && (event.key === "S" || event.key === "s"))
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyS") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyS")
   ) {
     publish(Hotkey.OnSync, event);
   }
@@ -185,6 +217,11 @@ const keydown = (os: string) => document.addEventListener("keydown", (event) => 
   // Lists
   registerUnorderedList(event, os);
   registerOrderedList(event, os);
+
+  // Date
+  registerInsertDate(event, os);
+  registerInsertTime(event, os);
+  registerInsertDateAndTime(event, os);
 
   // Sync notes
   registerSyncNotes(event, os);

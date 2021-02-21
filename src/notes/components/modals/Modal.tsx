@@ -7,10 +7,10 @@ interface ModalProps {
   title?: string
   input?: boolean
   inputValue?: string
-  cancelValue: string
+  cancelValue?: string
   confirmValue: string
   validate?: (inputValue: string) => boolean
-  onCancel: () => void
+  onCancel?: () => void
   onConfirm: (inputValue: string) => void
   description?: h.JSX.Element
 }
@@ -19,6 +19,11 @@ const Modal = ({
   className, title, input, inputValue, cancelValue, confirmValue, validate, onCancel, onConfirm, description,
 }: ModalProps): h.JSX.Element => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    document.body.classList.add("with-modal");
+    return () => document.body.classList.remove("with-modal");
+  }, []);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -36,11 +41,15 @@ const Modal = ({
   }, []);
 
   useEffect(() => {
-    hotkeys.subscribe(Hotkey.OnEscape, onCancel);
+    if (cancelValue && onCancel) {
+      hotkeys.subscribe(Hotkey.OnEscape, onCancel);
+    }
     hotkeys.subscribe(Hotkey.OnEnter, onSubmit);
 
     return () => {
-      hotkeys.unsubscribe(onCancel);
+      if (cancelValue && onCancel) {
+        hotkeys.unsubscribe(onCancel);
+      }
       hotkeys.unsubscribe(onSubmit);
     };
   }, []);
@@ -61,11 +70,13 @@ const Modal = ({
       )}
 
       <div id="buttons">
-        <input
-          type="button"
-          value={cancelValue}
-          onClick={onCancel}
-        />
+        {cancelValue && onCancel && (
+          <input
+            type="button"
+            value={cancelValue}
+            onClick={onCancel}
+          />
+        )}
         <input
           type="submit"
           value={confirmValue}
