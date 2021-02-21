@@ -93,7 +93,7 @@ svg {
   font-weight: bold;
   padding: .5em;
   margin: .5em .25em;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .bar > .button.disabled {
@@ -375,7 +375,7 @@ body.with-toolbar #toolbar { transform: translateY(0); }
   background-color: var(--tooltip-background-color);
   color: var(--tooltip-text-color);
   padding: 5px 8px;
-  border-radius: 2px;
+  border-radius: 3px;
   font-size: 1.2rem;
   user-select: none;
 }
