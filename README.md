@@ -155,9 +155,9 @@ src/
 
   themes/           # Light, Dark, Custom
 
-  background.js     # Main script for background page
-  notes.js          # Main script for notes
-  options.js        # Main script for options
+  background.ts     # Main script for background page
+  notes.ts          # Main script for notes
+  options.ts        # Main script for options
 
 static/           # All static files (images, icons, HTML, CSS) copied to out/
 
