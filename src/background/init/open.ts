@@ -12,8 +12,8 @@ const iconClick = () => chrome.action.onClicked.addListener(() => {
 const NEW_TAB_PATH = "://newtab";
 
 // Open My Notes in every New Tab if enabled in Options / "Open My Notes in every New Tab"
-const newtab = () => chrome.tabs.onCreated.addListener(async (tab) => {
-  if (!tab.id) {
+const newtab = () => chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  if (!tabId) {
     return;
   }
 
@@ -28,9 +28,8 @@ const newtab = () => chrome.tabs.onCreated.addListener(async (tab) => {
     return;
   }
 
-  // pendingUrl is available since Chrome 79; url is a fallback
-  if (tab.pendingUrl?.includes(NEW_TAB_PATH) || tab.url?.includes(NEW_TAB_PATH)) {
-    chrome.tabs.update(tab.id, { url: "/notes.html" });
+  if (changeInfo.url?.includes(NEW_TAB_PATH)) {
+    chrome.tabs.update(tabId, { url: "/notes.html" });
   }
 });
 
