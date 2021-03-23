@@ -5,6 +5,7 @@ import {
   notifications,
   open,
   drop,
+  commands,
 
   googleDrive,
 } from "./background/init/index";
@@ -20,6 +21,9 @@ notifications.attach();
 
 // Drop text onto a note in Sidebar
 drop.attach();
+
+// Commands
+commands.attach();
 
 // Google Drive Sync
 googleDrive.attach();

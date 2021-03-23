@@ -5,6 +5,7 @@ import contextMenu from "./context-menu";
 import notifications from "./notifications";
 import open from "./open";
 import drop from "./drop";
+import commands from "./commands";
 
 import googleDrive from "./google-drive";
 
@@ -31,6 +32,7 @@ export {
   notifications,
   open,
   drop,
+  commands,
 
   googleDrive,
 };
