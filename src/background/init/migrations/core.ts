@@ -64,7 +64,6 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
 
     // Options
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,
-    newtab: validBoolean(local.newtab) ? local.newtab : defaultValues.newtab,
     tab: validBoolean(local.tab) ? local.tab : defaultValues.tab,
   };
 

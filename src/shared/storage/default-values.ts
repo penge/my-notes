@@ -40,7 +40,6 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
 
     // Options
     focus: false,
-    newtab: false,
     tab: false,
   };
 };

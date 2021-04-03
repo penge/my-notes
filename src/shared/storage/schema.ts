@@ -74,7 +74,6 @@ export interface Storage {
 
   // Options
   focus: boolean
-  newtab: boolean
   tab: boolean
 
   // Sync

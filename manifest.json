@@ -13,7 +13,6 @@
     "contextMenus"
   ],
   "optional_permissions": [
-    "tabs",
     "identity"
   ],
   "oauth2": {

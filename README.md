@@ -42,16 +42,15 @@
 
 <ol type="A">
   <li>Click on My Notes icon in Chrome toolbar</li>
-  <li>In every new tab (see Options)</li>
-  <li>Use Hotkey (see Options)</li>
+  <li>Use keyboard shortcut (see <code>chrome://extensions/shortcuts</code>)</li>
 </ol>
 
 **Options:**
 
 <ol type="A">
-  <li>Click on the gear icon in the bottom left corner</li>
+  <li>Click on gear icon in bottom left corner</li>
   <li>Right-click on My Notes icon in the Chrome toolbar and select Options</li>
-  <li>Use Hotkey (see Options)</li>
+  <li>Use keyboard shortcut (see Options)</li>
 </ol>
 
 <br><br>
@@ -213,16 +212,11 @@ Required permissions are shown to the user before installing the extension, and 
 
 **Optional:**
 
-- `"tabs"` — needed for "Open My Notes in every New Tab" (see Options)
 - `"identity"` — needed for "Enable Google Drive Sync" (see Options)
 
 Optional permissions are needed only to provide additional functionality that can be enabled via a checkbox in Options.
 
 User has the choice to either approve or deny the permissions.
-
-`"tabs"` is a more powerful permission and browsers usually display a generic, in this case unrelated warning as `It can: Read your Browsing history`.
-My Notes doesn't read your browsing history. The permission is only needed to enable "Open My Notes in every New Tab".
-To read more about the warnings, see the [offical documentation](https://developer.chrome.com/extensions/permission_warnings).
 
 <br><br>
 

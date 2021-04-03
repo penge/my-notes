@@ -22,7 +22,6 @@ const Options = () => {
   const [size, setSize] = useState<number>(0);
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
   const [customTheme, setCustomTheme] = useState<string>("");
-  const [newtab, setNewtab] = useState<boolean>(false);
   const [sync, setSync] = useState<Sync | undefined>(undefined);
   const [tab, setTab] = useState<boolean>(false);
 
@@ -32,7 +31,6 @@ const Options = () => {
       "size",
       "theme",
       "customTheme",
-      "newtab",
       "sync",
       "tab",
     ], local => {
@@ -40,7 +38,6 @@ const Options = () => {
       setSize(local.size);
       setTheme(local.theme);
       setCustomTheme(local.customTheme);
-      setNewtab(local.newtab);
       setSync(local.sync);
       setTab(local.tab);
     });
@@ -64,10 +61,6 @@ const Options = () => {
 
       if (changes["customTheme"]) {
         setCustomTheme(changes["customTheme"].newValue);
-      }
-
-      if (changes["newtab"]) {
-        setNewtab(changes["newtab"].newValue);
       }
 
       if (changes["sync"]) {
@@ -97,7 +90,6 @@ const Options = () => {
       <__Theme theme={theme} />
       <__Hotkeys />
       <__Options
-        newtab={newtab}
         sync={sync}
         tab={tab}
       />

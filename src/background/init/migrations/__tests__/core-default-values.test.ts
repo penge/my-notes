@@ -13,7 +13,6 @@ export const expectItems = (items: Record<string, unknown>): void => {
     "active",
     "clipboard",
     "focus",
-    "newtab",
     "tab",
   ];
 
@@ -70,9 +69,6 @@ const expectDefaultValues = (myItems?: Record<string, unknown>) => {
   // focus
   expect(items.focus).toBe(false);
 
-  // newtab
-  expect(items.newtab).toBe(false);
-
   // tab
   expect(items.tab).toBe(false);
 };
@@ -95,7 +91,6 @@ it("fallbacks to default values", () => {
     active: "Todo", // must be in "notes"
     clipboard: "a", // must be in "notes"
     focus: 1,       // must be boolean
-    newtab: 1,      // must be boolean
     tab: 1,         // must be boolean
   });
 
