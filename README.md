@@ -30,7 +30,7 @@
 
 → &nbsp; Themes (Light, Dark, Custom)
 
-→ &nbsp; Hotkeys
+→ &nbsp; Keyboard shortcuts
 
 → &nbsp; Works offline
 
@@ -127,7 +127,7 @@ src/
                       # - Migrates notes and options
                       # - Creates Context menu and attaches the events
                       # - Creates a Notification when My Notes is installed/updated
-                      # - Registers the ways to open My Notes (icon click, in every New Tab)
+                      # - Registers the ways to open My Notes (icon click, keyboard shortcut)
                       # - Registers events to trigger Google Drive Sync from My Notes
 
   dom/              # Helpers to get DOM elements

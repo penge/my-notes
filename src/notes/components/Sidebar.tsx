@@ -3,7 +3,7 @@ import { useRef, useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
 import { NotesObject, Sync, MessageType } from "shared/storage/schema";
 import Drag from "./Drag";
-import hotkeys, { Hotkey } from "notes/hotkeys";
+import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
 import { syncNotes } from "notes/content/sync";
 import { sendMessage } from "messages";
@@ -65,7 +65,7 @@ const Sidebar = ({
 
   useEffect(openEnteredNote, [enteredNote]);
   useEffect(() => {
-    hotkeys.subscribe(Hotkey.OnControl, () => {
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnControl, () => {
       document.body.classList.add("with-control");
       openEnteredNote();
     });

@@ -33,7 +33,7 @@ import edit from "notes/content/edit";
 import { saveNotes } from "notes/content/save";
 import { syncNotes } from "notes/content/sync";
 import notesHistory from "notes/history";
-import hotkeys, { Hotkey } from "notes/hotkeys";
+import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { sendMessage } from "messages";
 
 const getActiveFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
@@ -372,21 +372,22 @@ const Notes = () => {
     document.body.classList.toggle("with-toolbar", toolbar);
   }, [toolbar]);
 
-  // Hotkeys
+  // Keyboard shortcuts
   useEffect(() => {
     if (!os) {
       return;
     }
 
-    hotkeys.register(os);
-    hotkeys.subscribe(Hotkey.OnEscape, () => setContextMenuProps(null));
-    hotkeys.subscribe(Hotkey.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
-    hotkeys.subscribe(Hotkey.OnToggleFocusMode, () => {
+    keyboardShortcuts.register(os);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, () => setContextMenuProps(null));
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, () => {
       chrome.storage.local.get(["focus"], local => {
         chrome.storage.local.set({ focus: !local.focus });
       });
     });
-    hotkeys.subscribe(Hotkey.OnToggleSidebar, () => {
+
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleSidebar, () => {
       chrome.storage.local.get(["focus"], local => {
         if (!local.focus) { // toggle only if not in focus mode
           const hasSidebar = document.body.classList.toggle("with-sidebar");
@@ -394,7 +395,8 @@ const Notes = () => {
         }
       });
     });
-    hotkeys.subscribe(Hotkey.OnToggleToolbar, () => {
+
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleToolbar, () => {
       chrome.storage.local.get(["focus"], local => {
         if (!local.focus) { // toggle only if not in focus mode
           const hasToolbar = document.body.classList.toggle("with-toolbar");
@@ -402,7 +404,8 @@ const Notes = () => {
         }
       });
     });
-    hotkeys.subscribe(Hotkey.OnSync, () => syncNotes(syncRef.current));
+
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnSync, () => syncNotes(syncRef.current));
   }, [os]);
 
   useEffect(() => {

@@ -69,7 +69,7 @@ const Options = ({ sync, tab }: OptionsProps): h.JSX.Element => {
           }}
         />
         <div>
-          <label for="tab" class="bold">Indent text on <span class="hotkey">Tab</span></label>
+          <label for="tab" class="bold">Indent text on <span class="keyboard-shortcut">Tab</span></label>
           <div class="comment">
             By default, Tab key focuses the address bar. This can be changed to indent the text instead.
           </div>

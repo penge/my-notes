@@ -4,7 +4,7 @@ import { useState, useEffect } from "preact/hooks";
 import __Font from "options/Font";
 import __Size from "options/Size";
 import __Theme from "options/Theme";
-import __Hotkeys from "options/Hotkeys";
+import __KeyboardShortcuts from "options/KeyboardShortcuts";
 import __Options from "options/Options";
 import __Version from "options/Version";
 
@@ -88,7 +88,7 @@ const Options = () => {
       <__Font font={font} />
       <__Size size={size} />
       <__Theme theme={theme} />
-      <__Hotkeys />
+      <__KeyboardShortcuts />
       <__Options
         sync={sync}
         tab={tab}
