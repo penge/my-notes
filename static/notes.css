@@ -142,14 +142,6 @@ body:not(.with-sidebar) { left: 0 !important; }
   margin-top: 3px;
   color: var(--sidebar-notes-text-color);
   border-radius: 3px;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-#sidebar-notes .note > svg {
-  height: 1em;
-  flex-shrink: 0;
 }
 
 #sidebar-notes .note:hover,
@@ -172,23 +164,6 @@ body:not(.with-sidebar) { left: 0 !important; }
     background: initial;
     color: initial;
   }
-}
-
-#sidebar-notes .note.drag-over > svg {
-  fill: var(--selection-text-color);
-}
-
-@keyframes confirmationsvg {
-  0% {
-    fill: var(--selection-text-color);
-  }
-  100% {
-    fill: initial;
-  }
-}
-
-#sidebar-notes .note.drag-confirmation > svg {
-  animation: confirmationsvg .3s cubic-bezier(1, 0, 0.5, 1) 2 alternate;
 }
 
 #sidebar-notes .note.drag-confirmation {

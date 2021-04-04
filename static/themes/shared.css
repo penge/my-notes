@@ -36,15 +36,15 @@ a:hover {
   display: none !important;
 }
 
-.hotkey, .hotlink {
+.keyboard-shortcut, .url {
   border-radius: 3px;
   padding: 3px 8px;
   display: inline-block;
   font-family: "Courier New", Courier, monospace;
-  background: var(--hotkey-background-color);
-  color: var(--hotkey-text-color);
+  background: var(--keyboard-shortcut-background-color);
+  color: var(--keyboard-shortcut-text-color);
 }
 
-.hotkey {
+.keyboard-shortcut {
   font-weight: bold;
 }

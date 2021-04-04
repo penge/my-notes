@@ -7,30 +7,24 @@
   <br><br>
   <img src="static/images/my-notes.png" width="800" /><br>
   My Notes is a Chrome extension for simple and fast note-taking.<br><br>
-  Write down your ideas, notes, todos, clipboard, articles, and other, all effortlessly in a Chrome's New Tab.
+  Write down your ideas, notes, todos, and other – all effortlessly while staying in Chrome.
 </p>
 
 <br><br>
 
 ## Features
 
-→ &nbsp; All notes available inside your Chrome ([_How to open_](#how-to-open))
+→ &nbsp; All notes quickly accessible in Chrome ([_How to open_](#how-to-open))
 
-→ &nbsp; All notes saved automatically
+→ &nbsp; All notes automatically saved and synchronized in every open tab
 
-→ &nbsp; All notes synchronized in every open window as you edit them
+→ &nbsp; Context menu to save selected text from websites, or transfer selected text to other computer ([_Context menu_](#context-menu))
 
-→ &nbsp; Can use HTML
-
-→ &nbsp; Great as a Clipboard
-
-→ &nbsp; Can send text between computers ([_Context menu_](#context-menu))
-
-→ &nbsp; Can store notes to Google Drive and edit them from other devices ([_Google Drive Sync_](#google-drive-sync))
+→ &nbsp; Backup notes to Google Drive or edit them from other devices ([_Google Drive Sync_](#google-drive-sync))
 
 → &nbsp; Themes (Light, Dark, Custom)
 
-→ &nbsp; Hotkeys
+→ &nbsp; Keyboard shortcuts
 
 → &nbsp; Works offline
 
@@ -41,36 +35,30 @@
 **My Notes:**
 
 <ol type="A">
-  <li>Click on My Notes icon in Chrome toolbar</li>
-  <li>In every new tab (see Options)</li>
-  <li>Use Hotkey (see Options)</li>
+  <li>Click on My Notes icon in Chrome toolbar (pin the icon for quick access)</li>
+  <li>Use keyboard shortcut (see <code>chrome://extensions/shortcuts</code>)</li>
 </ol>
 
 **Options:**
 
 <ol type="A">
-  <li>Click on the gear icon in the bottom left corner</li>
-  <li>Right-click on My Notes icon in the Chrome toolbar and select Options</li>
-  <li>Use Hotkey (see Options)</li>
+  <li>Click on gear icon in bottom left corner</li>
+  <li>Click on three-dots icon next to My Notes in Chrome toolbar and select Options</li>
+  <li>Use keyboard shortcut (see Options)</li>
 </ol>
 
 <br><br>
 
 ## Context menu
 
-Context menu allows you to quickly save the selected text to My Notes Clipboard (a special note in My Notes).
+Context menu allows you to quickly save selected text from any website to My Notes, or to transfer selected text to My Notes in other computer.
 
-<img src="static/images/context-menu.png" width="800" />
+To use Context menu, select the text on website, right-click and see "My Notes" Context menu.
 
-### Save selection
+Context menu has these options:
 
-Saves the selected text to My Notes Clipboard in your current computer.
-My Notes doesn't have to be open.
-
-### Save selection to other devices
-
-Saves the selected text to My Notes Clipboard in your other computer(s).
-My Notes needs to be open in the second computer and same Google Account needs to be used.
+- `Save to [note name]` – Option for every note. As you create new notes, they are automatically added to the list. My Notes doesn't have to be open. Google Drive Sync is not required.
+- `Save to remotely open My Notes` – My Notes in other computer needs to be open. Same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@Received"** (created automatically if doesn't exist, otherwise updated).
 
 <br><br>
 
@@ -128,7 +116,7 @@ src/
                       # - Migrates notes and options
                       # - Creates Context menu and attaches the events
                       # - Creates a Notification when My Notes is installed/updated
-                      # - Registers the ways to open My Notes (icon click, in every New Tab)
+                      # - Registers the ways to open My Notes (icon click, keyboard shortcut)
                       # - Registers events to trigger Google Drive Sync from My Notes
 
   dom/              # Helpers to get DOM elements
@@ -213,16 +201,11 @@ Required permissions are shown to the user before installing the extension, and 
 
 **Optional:**
 
-- `"tabs"` — needed for "Open My Notes in every New Tab" (see Options)
 - `"identity"` — needed for "Enable Google Drive Sync" (see Options)
 
 Optional permissions are needed only to provide additional functionality that can be enabled via a checkbox in Options.
 
 User has the choice to either approve or deny the permissions.
-
-`"tabs"` is a more powerful permission and browsers usually display a generic, in this case unrelated warning as `It can: Read your Browsing history`.
-My Notes doesn't read your browsing history. The permission is only needed to enable "Open My Notes in every New Tab".
-To read more about the warnings, see the [offical documentation](https://developer.chrome.com/extensions/permission_warnings).
 
 <br><br>
 

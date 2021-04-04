@@ -2,47 +2,17 @@ import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/
 import { Sync, MessageType } from "shared/storage/schema";
 import formatDate from "shared/date/format-date";
 import { requestPermission, removePermission } from "shared/permissions";
-import { setItem } from "shared/storage";
 import { sendMessage } from "messages";
 
 interface OptionsProps {
-  newtab?: boolean
   sync?: Sync
   tab?: boolean
 }
 
-const Options = ({ newtab, sync, tab }: OptionsProps): h.JSX.Element => {
+const Options = ({ sync, tab }: OptionsProps): h.JSX.Element => {
   return (
     <Fragment>
       <h2>Options</h2>
-
-      {/* "newtab" */}
-      <div class="selection with-comment">
-        <input
-          type="checkbox"
-          checked={newtab}
-          onClick={async (event) => {
-            const target = (event.target as HTMLInputElement);
-            const { checked } = target;
-            if (checked) { // request permission on check
-              const granted = await requestPermission("tabs");
-              target.checked = granted;
-              await setItem("newtab", granted);
-              return;
-            }
-
-            await removePermission("tabs");
-            await setItem("newtab", false);
-            target.checked = false;
-          }}
-        />
-        <div>
-          <label for="newtab" class="bold">Open My Notes in every New Tab</label>
-          <div class="comment">
-            My Notes will request permission to enable this feature.
-          </div>
-        </div>
-      </div>
 
       {/* "sync" */}
       <div class="selection with-comment">
@@ -99,7 +69,7 @@ const Options = ({ newtab, sync, tab }: OptionsProps): h.JSX.Element => {
           }}
         />
         <div>
-          <label for="tab" class="bold">Indent text on <span class="hotkey">Tab</span></label>
+          <label for="tab" class="bold">Indent text on <span class="keyboard-shortcut">Tab</span></label>
           <div class="comment">
             By default, Tab key focuses the address bar. This can be changed to indent the text instead.
           </div>

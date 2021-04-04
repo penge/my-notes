@@ -3,7 +3,7 @@ import { Message, MessageType } from "shared/storage/schema";
 
 let syncLock = false;
 
-const attach = (): void => chrome.runtime.onMessage.addListener(async (message: Message) => {
+export const registerGoogleDriveMessages = (): void => chrome.runtime.onMessage.addListener(async (message: Message) => {
   if (message.type === MessageType.SYNC_INITIATE) {
     const initiated = await initiate();
     if (initiated) {
@@ -29,6 +29,3 @@ const attach = (): void => chrome.runtime.onMessage.addListener(async (message: 
   }
 });
 
-export default {
-  attach,
-};

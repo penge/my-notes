@@ -3,7 +3,7 @@ import { useRef, useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
 import { NotesObject, Sync, MessageType } from "shared/storage/schema";
 import Drag from "./Drag";
-import hotkeys, { Hotkey } from "notes/hotkeys";
+import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
 import { syncNotes } from "notes/content/sync";
 import { sendMessage } from "messages";
@@ -29,7 +29,6 @@ interface SidebarProps {
   os?: "mac" | "other"
   notes: NotesObject
   active: string
-  clipboard: string
   width?: string
   onActivateNote: (noteName: string) => void
   onNoteContextMenu: (noteName: string, x: number, y: number) => void
@@ -38,7 +37,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({
-  os, notes, active, clipboard, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
+  os, notes, active, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
 }: SidebarProps): h.JSX.Element => {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +64,7 @@ const Sidebar = ({
 
   useEffect(openEnteredNote, [enteredNote]);
   useEffect(() => {
-    hotkeys.subscribe(Hotkey.OnControl, () => {
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnControl, () => {
       document.body.classList.add("with-control");
       openEnteredNote();
     });
@@ -121,16 +120,6 @@ const Sidebar = ({
             }}
           >
             {noteName}
-            {noteName === clipboard && (
-              <svg viewBox="0 0 415.999 415.999">
-                <path d="M335.999,64h-44.423c-5.926-6.583-13.538-11.62-22.284-14.136c-7.368-2.118-13.038-7.788-15.156-15.156
-                  C248.371,14.664,229.898,0,208,0c-21.898,0-40.37,14.664-46.136,34.707c-2.121,7.376-7.805,13.039-15.181,15.164
-                  c-8.738,2.518-16.342,7.55-22.262,14.129H80C62.327,64,48,78.327,48,96v287.999c0,17.673,14.326,32,31.999,32h255.999
-                  c17.674,0,32-14.327,32-32V96C367.999,78.327,353.672,64,335.999,64z M208.205,32c8.837,0,16,7.163,16,16c0,8.836-7.163,16-16,16
-                  s-16-7.164-16-16C192.205,39.163,199.368,32,208.205,32z M335.999,383.999H80V96h32v32h192V96h31.999V383.999z"/>
-                <polygon points="268.853,188.627 179.882,277.601 142.752,241.257 120.124,263.9 179.882,322.854 291.481,211.256"/>
-              </svg>
-            )}
           </div>
         )}
       </div>

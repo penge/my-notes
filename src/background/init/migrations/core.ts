@@ -38,7 +38,6 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
       One: { content: notes[0], createdTime, modifiedTime },   // before 1/3
       Two: { content: notes[1], createdTime, modifiedTime },   // before 2/3
       Three: { content: notes[2], createdTime, modifiedTime }, // before 3/3
-      Clipboard: { content: "", createdTime, modifiedTime },
     };
   }
 
@@ -60,11 +59,9 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     // Notes
     notes: notes as NotesObject, // already migrated to [3.x]
     active: tryNote(local.active as string) || tryNote(defaultValues.active as string) || firstAvailableNote,
-    clipboard: tryNote(local.clipboard as string) || tryNote(defaultValues.clipboard as string),
 
     // Options
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,
-    newtab: validBoolean(local.newtab) ? local.newtab : defaultValues.newtab,
     tab: validBoolean(local.tab) ? local.tab : defaultValues.tab,
   };
 

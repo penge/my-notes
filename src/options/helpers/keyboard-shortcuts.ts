@@ -1,4 +1,4 @@
-interface Hotkey {
+interface KeyboardShortcut {
   description: string
   mac: string
   other: string
@@ -6,7 +6,7 @@ interface Hotkey {
   hold?: boolean
 }
 
-const hotkeys: Hotkey[] = [
+const keyboardShortcuts: KeyboardShortcut[] = [
   {
     description: "Open My Notes",
     mac: "⌘ + Shift + M",
@@ -131,4 +131,4 @@ const hotkeys: Hotkey[] = [
   },
 ];
 
-export default hotkeys;
+export default keyboardShortcuts;

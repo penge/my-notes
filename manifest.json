@@ -13,7 +13,6 @@
     "contextMenus"
   ],
   "optional_permissions": [
-    "tabs",
     "identity"
   ],
   "oauth2": {
@@ -27,6 +26,16 @@
   },
   "action": {
     "default_icon": "images/icon128.png"
+  },
+  "commands": {
+    "open-my-notes": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+M",
+        "windows": "Ctrl+Shift+M",
+        "mac": "Ctrl+Shift+M"
+      },
+      "description": "Open My Notes"
+    }
   },
   "minimum_chrome_version": "88",
   "offline_enabled": true

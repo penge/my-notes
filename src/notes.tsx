@@ -10,7 +10,6 @@ import {
   Sync,
   Message,
   MessageType,
-  ContextMenuSelection,
 } from "shared/storage/schema";
 import setThemeCore from "themes/set-theme";
 
@@ -33,8 +32,7 @@ import edit from "notes/content/edit";
 import { saveNotes } from "notes/content/save";
 import { syncNotes } from "notes/content/sync";
 import notesHistory from "notes/history";
-import hotkeys, { Hotkey } from "notes/hotkeys";
-import { sendMessage } from "messages";
+import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 
 const getActiveFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
 const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
@@ -42,7 +40,6 @@ const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes)
 interface NotesProps {
   notes: NotesObject
   active: string
-  clipboard: string
 }
 
 const Notes = () => {
@@ -63,7 +60,6 @@ const Notes = () => {
   const [notesProps, setNotesProps] = useState<NotesProps>({
     notes: {},
     active: "",
-    clipboard: "",
   });
   const notesRef = useRef<NotesObject>();
   notesRef.current = notesProps.notes;
@@ -99,7 +95,6 @@ const Notes = () => {
       // Notes
       "notes",
       "active",
-      "clipboard",
 
       // Options
       "focus",
@@ -127,7 +122,6 @@ const Notes = () => {
       setNotesProps({
         notes: local.notes,
         active,
-        clipboard: local.clipboard,
       });
       if (active !== activeFromUrl) {
         notesHistory.replace(active);
@@ -144,151 +138,121 @@ const Notes = () => {
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
-      if (areaName === "local") {
-        if (changes["font"]) {
-          setFont(changes["font"].newValue);
-        }
+      if (areaName !== "local") {
+        return;
+      }
 
-        if (changes["size"]) {
-          setSize(changes["size"].newValue);
-        }
+      if (changes["font"]) {
+        setFont(changes["font"].newValue);
+      }
 
-        if (changes["theme"]) {
-          setTheme(changes["theme"].newValue);
-        }
+      if (changes["size"]) {
+        setSize(changes["size"].newValue);
+      }
 
-        if (changes["customTheme"]) {
-          setCustomTheme(changes["customTheme"].newValue);
-        }
+      if (changes["theme"]) {
+        setTheme(changes["theme"].newValue);
+      }
 
-        if (changes["notes"]) {
-          const oldNotes: NotesObject = changes["notes"].oldValue;
-          const newNotes: NotesObject = changes["notes"].newValue;
+      if (changes["customTheme"]) {
+        setCustomTheme(changes["customTheme"].newValue);
+      }
 
-          const oldSet = new Set(Object.keys(oldNotes));
-          const newSet = new Set(Object.keys(newNotes));
+      if (changes["notes"]) {
+        const oldNotes: NotesObject = changes["notes"].oldValue;
+        const newNotes: NotesObject = changes["notes"].newValue;
 
-          const getNewClipboard = (prev: NotesProps) => {
-            const clipboardCandidate: string | null | undefined = changes["clipboard"] ? changes["clipboard"].newValue : undefined;
-            const newClipboard = clipboardCandidate === undefined
-              ? prev.clipboard
-              : (clipboardCandidate || "");
-            return newClipboard;
-          };
+        const oldSet = new Set(Object.keys(oldNotes));
+        const newSet = new Set(Object.keys(newNotes));
 
-          // RENAME
-          if (newSet.size === oldSet.size) {
-            const diff = new Set([...newSet].filter(x => !oldSet.has(x)));
-            if (diff.size === 1) {
-              const renamedNoteName = diff.values().next().value as string;
-              setNotesProps((prev) => {
-                const newActive = prev.active in newNotes
-                  ? prev.active // active is NOT renamed => keep unchanged
-                  : renamedNoteName; // active is renamed => update it
-
-                if (newActive !== prev.active) {
-                  notesHistory.replace(newActive); // active is renamed => replace history
-                }
-
-                const newClipboard = getNewClipboard(prev);
-                return {
-                  notes: newNotes,
-                  active: newActive,
-                  clipboard: newClipboard,
-                };
-              });
-
-              return; // RENAME condition was met
-            }
-          }
-
-          // DELETE
-          if (oldSet.size > newSet.size) {
+        // RENAME
+        if (newSet.size === oldSet.size) {
+          const diff = new Set([...newSet].filter(x => !oldSet.has(x)));
+          if (diff.size === 1) {
+            const renamedNoteName = diff.values().next().value as string;
             setNotesProps((prev) => {
               const newActive = prev.active in newNotes
-                ? prev.active // active is NOT deleted => keep unchanged
-                : getFirstAvailableNote(newNotes); // active is deleted => use first available
+                ? prev.active // active is NOT renamed => keep unchanged
+                : renamedNoteName; // active is renamed => update it
 
               if (newActive !== prev.active) {
-                notesHistory.replace(newActive); // active is deleted => replace history
+                notesHistory.replace(newActive); // active is renamed => replace history
               }
 
-              const newClipboard = getNewClipboard(prev);
               return {
                 notes: newNotes,
                 active: newActive,
-                clipboard: newClipboard,
               };
             });
 
-            return; // DELETE condition was met
+            return; // RENAME condition was met
           }
+        }
 
-          // NEW or UPDATE
+        // DELETE
+        if (oldSet.size > newSet.size) {
           setNotesProps((prev) => {
-            const diff = newSet.size > oldSet.size
-              ? new Set([...newSet].filter(x => !oldSet.has(x)))
-              : undefined;
+            const newActive = prev.active in newNotes
+              ? prev.active // active is NOT deleted => keep unchanged
+              : getFirstAvailableNote(newNotes); // active is deleted => use first available
 
-            const newNoteName = (changes["active"] && changes["active"].newValue as string)
-              || ((diff && diff.size === 1) ? diff.values().next().value as string : "");
-
-            // Auto-active new note
-            const newActive = newNoteName || prev.active;
-
-            // Re-activate note updated from background (Clipboard) or from other tab (any note)
-            if (
-              (newActive in oldNotes) &&
-              (newActive in newNotes) &&
-              (newNotes[newActive].content !== oldNotes[newActive].content) &&
-              (localStorage.getItem("notesChangedBy") !== tabIdRef.current)
-            ) {
-              setInitialContent(newNotes[newActive].content);
+            if (newActive !== prev.active) {
+              notesHistory.replace(newActive); // active is deleted => replace history
             }
 
-            if (!(newActive in oldNotes)) {
-              notesHistory.push(newActive);
-            }
-
-            const newClipboard = getNewClipboard(prev);
             return {
               notes: newNotes,
               active: newActive,
-              clipboard: newClipboard,
             };
           });
+
+          return; // DELETE condition was met
         }
 
-        if (changes["clipboard"]) {
-          setNotesProps((prev) => ({
-            ...prev,
-            clipboard: changes["clipboard"].newValue,
-          }));
-        }
+        // NEW or UPDATE
+        setNotesProps((prev) => {
+          const diff = newSet.size > oldSet.size
+            ? new Set([...newSet].filter(x => !oldSet.has(x)))
+            : undefined;
 
-        if (changes["focus"]) {
-          setFocus(changes["focus"].newValue);
-        }
+          const newNoteName = (changes["active"] && changes["active"].newValue as string)
+            || ((diff && diff.size === 1) ? diff.values().next().value as string : "");
 
-        if (changes["tab"]) {
-          setTab(changes["tab"].newValue);
-        }
+          // Auto-active new note
+          const newActive = newNoteName || prev.active;
 
-        if (changes["sync"]) {
-          setSync(changes["sync"].newValue);
-          document.body.classList.remove("syncing");
-        }
+          // Re-activate note updated from background or from other tab
+          if (
+            (newActive in oldNotes) &&
+            (newActive in newNotes) &&
+            (newNotes[newActive].content !== oldNotes[newActive].content) &&
+            (localStorage.getItem("notesChangedBy") !== tabIdRef.current)
+          ) {
+            setInitialContent(newNotes[newActive].content);
+          }
+
+          if (!(newActive in oldNotes)) {
+            notesHistory.push(newActive);
+          }
+
+          return {
+            notes: newNotes,
+            active: newActive,
+          };
+        });
       }
 
-      if (areaName === "sync") {
-        if (changes["selection"]) {
-          const selection = changes["selection"].newValue as ContextMenuSelection;
-          if (!selection || !selection.text) { return; }
-          chrome.storage.local.get(["id"], local => {
-            if (selection.sender === local.id) { return; }
-            sendMessage(MessageType.SAVE_TO_CLIPBOARD, selection.text);
-          });
-        }
+      if (changes["focus"]) {
+        setFocus(changes["focus"].newValue);
+      }
+
+      if (changes["tab"]) {
+        setTab(changes["tab"].newValue);
+      }
+
+      if (changes["sync"]) {
+        setSync(changes["sync"].newValue);
+        document.body.classList.remove("syncing");
       }
     });
 
@@ -372,21 +336,22 @@ const Notes = () => {
     document.body.classList.toggle("with-toolbar", toolbar);
   }, [toolbar]);
 
-  // Hotkeys
+  // Keyboard shortcuts
   useEffect(() => {
     if (!os) {
       return;
     }
 
-    hotkeys.register(os);
-    hotkeys.subscribe(Hotkey.OnEscape, () => setContextMenuProps(null));
-    hotkeys.subscribe(Hotkey.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
-    hotkeys.subscribe(Hotkey.OnToggleFocusMode, () => {
+    keyboardShortcuts.register(os);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, () => setContextMenuProps(null));
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, () => {
       chrome.storage.local.get(["focus"], local => {
         chrome.storage.local.set({ focus: !local.focus });
       });
     });
-    hotkeys.subscribe(Hotkey.OnToggleSidebar, () => {
+
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleSidebar, () => {
       chrome.storage.local.get(["focus"], local => {
         if (!local.focus) { // toggle only if not in focus mode
           const hasSidebar = document.body.classList.toggle("with-sidebar");
@@ -394,7 +359,8 @@ const Notes = () => {
         }
       });
     });
-    hotkeys.subscribe(Hotkey.OnToggleToolbar, () => {
+
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleToolbar, () => {
       chrome.storage.local.get(["focus"], local => {
         if (!local.focus) { // toggle only if not in focus mode
           const hasToolbar = document.body.classList.toggle("with-toolbar");
@@ -402,7 +368,8 @@ const Notes = () => {
         }
       });
     });
-    hotkeys.subscribe(Hotkey.OnSync, () => syncNotes(syncRef.current));
+
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnSync, () => syncNotes(syncRef.current));
   }, [os]);
 
   useEffect(() => {
@@ -459,7 +426,6 @@ const Notes = () => {
         }}
         onNoteContextMenu={(noteName, x, y) => setContextMenuProps({
           noteName, x, y,
-          onUseAsClipboard: (noteName) => chrome.storage.local.set({ clipboard: noteName }),
           onRename: (noteName) => setRenameNoteModalProps({
             noteName,
             validate: (newNoteName: string) => newNoteName.length > 0 && newNoteName !== noteName && !(newNoteName in notesProps.notes),

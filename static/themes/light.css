@@ -93,8 +93,8 @@
 
   /* Only in Options */
 
-  --hotkey-background-color: #e1e1e1;
-  --hotkey-text-color: #121212;
+  --keyboard-shortcut-background-color: #e1e1e1;
+  --keyboard-shortcut-text-color: #121212;
 
   --comment-background-color: #e1e1e1;
   --comment-text-color: #121212;

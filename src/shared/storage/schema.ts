@@ -70,11 +70,9 @@ export interface Storage {
   // Notes
   notes: NotesObject
   active: string | null
-  clipboard: string | null
 
   // Options
   focus: boolean
-  newtab: boolean
   tab: boolean
 
   // Sync
@@ -94,7 +92,6 @@ export enum MessageType {
   SYNC_DONE,
   SYNC_STOP,
   SYNC_DELETE_FILE,
-  SAVE_TO_CLIPBOARD,
   DROP,
 }
 

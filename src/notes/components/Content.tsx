@@ -1,6 +1,6 @@
 import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { useCallback, useEffect, useRef } from "preact/hooks";
-import hotkeys, { Hotkey } from "notes/hotkeys";
+import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import commands from "../toolbar/commands";
 import dateUtils from "shared/date/date-utils";
 
@@ -54,9 +54,10 @@ const Content = ({ active, initialContent, onEdit, indentOnTab }: ContentProps):
     }
 
     event.preventDefault();
-    const target = event.target as HTMLLinkElement;
-    if (target && target.href && target.href.startsWith("http")) {
-      window.open(target.href, "_blank");
+    const target = event.target;
+    const href = target && (target as HTMLLinkElement).href;
+    if (href && ["http", "chrome-extension"].some((protocol) => href.startsWith(protocol))) {
+      window.open(href, "_blank");
     }
   }, []);
 
@@ -70,23 +71,23 @@ const Content = ({ active, initialContent, onEdit, indentOnTab }: ContentProps):
   useEffect(() => reattachEditNote(onInput), [onInput]);
 
   useEffect(() => {
-    hotkeys.unsubscribe(indentOnTabCallback);
+    keyboardShortcuts.unsubscribe(indentOnTabCallback);
     if (indentOnTab) {
-      hotkeys.subscribe(Hotkey.OnTab, indentOnTabCallback);
+      keyboardShortcuts.subscribe(KeyboardShortcut.OnTab, indentOnTabCallback);
     }
   }, [indentOnTab]);
 
   useEffect(() => {
-    hotkeys.subscribe(Hotkey.OnUnderline, commands.underline);
-    hotkeys.subscribe(Hotkey.OnStrikethrough, commands.strikeThrough);
-    hotkeys.subscribe(Hotkey.OnRemoveFormat, commands.removeFormat);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.underline);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnStrikethrough, commands.strikeThrough);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnRemoveFormat, commands.removeFormat);
 
-    hotkeys.subscribe(Hotkey.OnUnorderedList, commands.ul);
-    hotkeys.subscribe(Hotkey.OnOrderedList, commands.ol);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnorderedList, commands.ul);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnOrderedList, commands.ol);
 
-    hotkeys.subscribe(Hotkey.OnInsertDate, insertDate);
-    hotkeys.subscribe(Hotkey.OnInsertTime, insertTime);
-    hotkeys.subscribe(Hotkey.OnInsertDateAndTime, insertDateAndTime);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, insertDate);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, insertTime);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, insertDateAndTime);
   }, []);
 
   return (

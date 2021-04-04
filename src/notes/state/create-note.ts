@@ -22,7 +22,7 @@ export default function createNote(newNoteName: string): void {
       modifiedTime: time,
     };
 
-    chrome.storage.local.set({ notes: notes, active: newNoteName }, () => {
+    chrome.storage.local.set({ notes, active: newNoteName }, () => {
       console.debug(`CREATE - OK "${newNoteName}"`);
     });
   });

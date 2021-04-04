@@ -18,9 +18,9 @@ const InsertLinkModal = ({ onCancel, onConfirm }: InsertLinkModalProps): h.JSX.E
     onConfirm={onConfirm}
     description={(
       <div className="modal-description">
-        Link can start with <span class="hotlink">http</span>, <span class="hotlink">https</span>, or <span class="hotlink">chrome-extension</span> if referencing other note.
+        Link can start with <span class="url">http</span>, <span class="url">https</span>, or <span class="url">chrome-extension</span> if referencing other note.
         <br /><br />
-        See <strong>Hotkeys</strong> for how to open the inserted link.
+        See <strong>Shortcuts</strong> for how to open the inserted link.
       </div>
     )}
   />

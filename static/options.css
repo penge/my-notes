@@ -124,13 +124,13 @@ input, select {
   font-style: italic;
 }
 
-/* Hotkeys */
+/* Keyboard shortcuts */
 
-#hotkeys td {
+#keyboard-shortcuts td {
   vertical-align: baseline;
 }
 
-#hotkeys .description {
+#keyboard-shortcuts .description {
   font-weight: bold;
   padding-right: 2em;
 }

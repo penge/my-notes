@@ -1,32 +1,61 @@
+import { setId } from "background/init/id";
+import { runMigrations } from "background/init/migrations";
+import { showNewVersionNotification } from "background/init/notifications";
+import { openMyNotesOnIconClick, openMyNotesOnKeyboardShortcut } from "background/init/open";
+import { registerGoogleDriveMessages } from "background/init/google-drive";
+import { recreateContextMenu } from "background/init/context-menu";
+import { saveTextOnDrop, saveTextToLocalMyNotes } from "background/init/saving";
+
 import {
-  setId,
-  migrations,
-  contextMenu,
-  notifications,
-  open,
-  drop,
-
-  googleDrive,
-} from "./background/init/index";
-
-// Click My Notes icon, "Open My Notes in every New Tab" (see Options)
-open.attach();
-
-// Context menu ("Save selected text to Clipboard", "Save selected text to Clipboard in other devices")
-contextMenu.attach();
-
-// Notifications (NEW VERSION installed)
-notifications.attach();
-
-// Drop text onto a note in Sidebar
-drop.attach();
-
-// Google Drive Sync
-googleDrive.attach();
+  NotesObject,
+  ContextMenuSelection,
+} from "shared/storage/schema";
 
 // Run when Installed or Updated
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
   setId(); // Set unique My Notes ID, if not set before
-  migrations.run(); // Migrate notes and options (font type, font size, etc.)
-  contextMenu.create(); // Create Context menu
+  runMigrations(); // Migrate notes and options (font type, font size, etc.)
+  showNewVersionNotification(details); // Notifications (NEW VERSION installed)
+});
+
+// Click on My Notes icon, or use a keyboard shortcut (see chrome://extensions/shortcuts)
+openMyNotesOnIconClick();
+openMyNotesOnKeyboardShortcut();
+
+// Drop text onto a note in Sidebar
+saveTextOnDrop();
+
+// Google Drive Sync
+registerGoogleDriveMessages();
+
+// Context menu
+const recreateContextMenuFromNotes = (notes: NotesObject) => {
+  const noteNames = Object.keys(notes).sort();
+  recreateContextMenu(noteNames);
+};
+
+chrome.storage.local.get("notes", (local) => {
+  recreateContextMenuFromNotes(local.notes as NotesObject);
+});
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === "local" && changes["notes"]) {
+    recreateContextMenuFromNotes(changes.notes.newValue as NotesObject);
+  }
+
+  // Used by "Save to remotely open My Notes"
+  if (areaName === "sync" && changes["selection"]) {
+    const selection = changes["selection"].newValue as ContextMenuSelection;
+    if (!selection || !selection.text) {
+      return;
+    }
+
+    chrome.storage.local.get(["id"], local => {
+      if (selection.sender === local.id) {
+        return;
+      }
+
+      saveTextToLocalMyNotes(selection.text, "@Received");
+    });
+  }
 });

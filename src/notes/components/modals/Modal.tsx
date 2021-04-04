@@ -1,6 +1,6 @@
 import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { useRef, useEffect, useCallback } from "preact/hooks";
-import hotkeys, { Hotkey } from "notes/hotkeys";
+import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 
 interface ModalProps {
   className?: string
@@ -42,15 +42,15 @@ const Modal = ({
 
   useEffect(() => {
     if (cancelValue && onCancel) {
-      hotkeys.subscribe(Hotkey.OnEscape, onCancel);
+      keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, onCancel);
     }
-    hotkeys.subscribe(Hotkey.OnEnter, onSubmit);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnEnter, onSubmit);
 
     return () => {
       if (cancelValue && onCancel) {
-        hotkeys.unsubscribe(onCancel);
+        keyboardShortcuts.unsubscribe(onCancel);
       }
-      hotkeys.unsubscribe(onSubmit);
+      keyboardShortcuts.unsubscribe(onSubmit);
     };
   }, []);
 

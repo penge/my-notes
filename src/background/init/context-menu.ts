@@ -1,11 +1,20 @@
-import { Message, MessageType } from "shared/storage/schema";
-
 import {
-  saveToClipboard,
-  saveToClipboardInOtherDevices,
-} from "./clipboard";
+  saveTextToLocalMyNotes,
+  saveTextToRemotelyOpenMyNotes,
+} from "./saving";
 
 const ID = "my-notes";
+const contexts = ["selection"];
+
+const MY_NOTES_SAVE_TO_NOTE_PREFIX = "my-notes-save-to-note-";
+const MY_NOTES_SAVE_TO_REMOTE = "my-notes-save-to-remote";
+
+const getTextToSave = (info: chrome.contextMenus.OnClickData) => {
+  const { pageUrl, selectionText } = info;
+  const pageUrlLink = pageUrl.startsWith("http") ? `<a href="${pageUrl}" target="_blank">${pageUrl}</a>` : pageUrl;
+  const textToSave = `${selectionText}<br><b>(${pageUrlLink})</b><br><br>`;
+  return textToSave;
+};
 
 /**
  * Creates My Notes Context menu
@@ -15,48 +24,73 @@ const ID = "my-notes";
  *
  * Required permission: "contextMenus" (see manifest.json)
  */
-const create = (): void => {
+const createContextMenu = (noteNames: string[]): void => {
   chrome.contextMenus.create({
     id: ID,
     title: "My Notes",
-    contexts: ["selection"],
+    contexts,
   }, () => {
-    chrome.contextMenus.create({
-      parentId: ID,
-      id: "my-notes-save",
-      title: "Save selected text to Clipboard",
-      contexts: ["selection"],
+    noteNames.forEach((noteName) => {
+      chrome.contextMenus.create({
+        parentId: ID,
+        id: `${MY_NOTES_SAVE_TO_NOTE_PREFIX}${noteName}`,
+        title: `Save to ${noteName}`,
+        contexts,
+      });
     });
     chrome.contextMenus.create({
       parentId: ID,
-      id: "my-notes-save-other",
-      title: "Save selected text to Clipboard in other devices",
-      contexts: ["selection"],
+      id: "my-notes-separator",
+      type: "separator",
+      contexts,
+    });
+    chrome.contextMenus.create({
+      parentId: ID,
+      id: MY_NOTES_SAVE_TO_REMOTE,
+      title: "Save to remotely open My Notes",
+      contexts,
     });
   });
 };
 
-const attach = (): void => chrome.contextMenus.onClicked.addListener((info) => {
-  const { pageUrl, selectionText } = info;
-  const pageUrlLink = pageUrl.startsWith("http") ? `<a href="${pageUrl}" target="_blank">${pageUrl}</a>` : pageUrl;
-  const textToSave = `${selectionText}<br><b>(${pageUrlLink})</b><br><br>`;
+let lastNoteNames: string[] = [];
+let onClickedAttached = false;
 
-  if (info.menuItemId === "my-notes-save") {
-    saveToClipboard(textToSave);
+const attachOnClicked = () => {
+  if (onClickedAttached) {
+    return;
   }
 
-  if (info.menuItemId === "my-notes-save-other") {
-    saveToClipboardInOtherDevices(textToSave);
-  }
+  chrome.contextMenus.onClicked.addListener((info) => {
+    const menuId: string = info.menuItemId;
+    const textToSave = getTextToSave(info);
 
-  chrome.runtime.onMessage.addListener((message: Message) => {
-    if (message.type === MessageType.SAVE_TO_CLIPBOARD && message.payload) {
-      saveToClipboard(message.payload as string);
+    if (menuId.startsWith(MY_NOTES_SAVE_TO_NOTE_PREFIX)) {
+      const destinationNoteName = menuId.replace(MY_NOTES_SAVE_TO_NOTE_PREFIX, "");
+      saveTextToLocalMyNotes(textToSave, destinationNoteName);
+      return;
+    }
+
+    if (info.menuItemId === MY_NOTES_SAVE_TO_REMOTE) {
+      saveTextToRemotelyOpenMyNotes(textToSave);
+      return;
     }
   });
-});
 
-export default {
-  create,
-  attach,
+  onClickedAttached = true;
+};
+
+export const recreateContextMenu = (noteNames: string[]): void => {
+  attachOnClicked(); // attach onClicked only once
+
+  // re-create context menu only if noteNames changed
+  if (JSON.stringify(lastNoteNames) === JSON.stringify(noteNames)) {
+    return;
+  }
+
+  lastNoteNames = [...noteNames];
+
+  chrome.contextMenus.removeAll(() => {
+    createContextMenu(noteNames);
+  });
 };
