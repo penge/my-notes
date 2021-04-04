@@ -1,7 +1,7 @@
 import { Storage } from "shared/storage/schema";
 import migrate from "./core";
 
-const run = (): void => {
+export const runMigrations = (): void => {
   chrome.storage.sync.get(["newtab", "value", "notes"], sync => {
     chrome.storage.local.get([
       "font",
@@ -10,7 +10,6 @@ const run = (): void => {
       "customTheme",
       "notes",
       "active",
-      "clipboard",
       "focus",
       "tab",
       "sidebar",
@@ -22,8 +21,4 @@ const run = (): void => {
       chrome.storage.sync.remove(["newtab", "value", "notes"]); // no longer needed
     });
   });
-};
-
-export default {
-  run,
 };

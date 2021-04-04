@@ -11,7 +11,6 @@ export const expectItems = (items: Record<string, unknown>): void => {
     "customTheme",
     "notes",
     "active",
-    "clipboard",
     "focus",
     "tab",
   ];
@@ -48,8 +47,8 @@ const expectDefaultValues = (myItems?: Record<string, unknown>) => {
 
   // notes
   const notes = items.notes as NotesObject;
-  expect(Object.keys(notes).length).toBe(4); // "One", "Two", "Three", "Clipboard"
-  ["One", "Two", "Three", "Clipboard"].every((noteName: string) => {
+  expect(Object.keys(notes).length).toBe(3); // "One", "Two", "Three"
+  ["One", "Two", "Three"].every((noteName: string) => {
     const note = (notes)[noteName] as Note;
 
     expect(Object.keys(note).length).toBe(3); // "content", "createdTime", "modifiedTime"
@@ -61,10 +60,7 @@ const expectDefaultValues = (myItems?: Record<string, unknown>) => {
   });
 
   // active
-  expect(items.active).toBe("Clipboard");
-
-  // clipboard
-  expect(items.clipboard).toBe("Clipboard");
+  expect(items.active).toBe("One");
 
   // focus
   expect(items.focus).toBe(false);
@@ -89,7 +85,6 @@ it("fallbacks to default values", () => {
     customTheme: { background: "#ffffff" }, // must be string
     notes: null,    // must be object
     active: "Todo", // must be in "notes"
-    clipboard: "a", // must be in "notes"
     focus: 1,       // must be boolean
     tab: 1,         // must be boolean
   });
@@ -136,8 +131,7 @@ it("fallbacks active and clipboard if possible", () => {
 
   // Clipboard exists
   const items = migrate({}, local);
-  expect(items.active).toBe("Clipboard");
-  expect(items.clipboard).toBe("Clipboard");
+  expect(items.active).toBe("Clipboard"); // first available in A-Z order
 
   // Clipboard does NOT exist
   const itemsNoClipboard = migrate({}, {
@@ -147,7 +141,6 @@ it("fallbacks active and clipboard if possible", () => {
     }
   });
   expect(itemsNoClipboard.active).toBe("Math"); // first available in A-Z order
-  expect(itemsNoClipboard.clipboard).toBe(null);
 
   // Empty notes
   const noItems = migrate({}, {
@@ -156,5 +149,4 @@ it("fallbacks active and clipboard if possible", () => {
     }
   });
   expect(noItems.active).toBe(null);
-  expect(noItems.clipboard).toBe(null);
 });

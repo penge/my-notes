@@ -12,7 +12,6 @@ const getDefaultNotes = (): NotesObject => {
     One: { content: "", createdTime, modifiedTime },
     Two: { content: "", createdTime, modifiedTime },
     Three: { content: "", createdTime, modifiedTime },
-    Clipboard: { content: "", createdTime, modifiedTime },
   };
 };
 
@@ -35,8 +34,7 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
 
     // Notes
     notes,
-    active: "Clipboard",
-    clipboard: "Clipboard",
+    active: "One",
 
     // Options
     focus: false,

@@ -46,7 +46,6 @@ it("sets custom values", () => {
       },
     },
     active: "Todo",
-    clipboard: "Notebook",
     focus: true,
     tab: true,
   };

@@ -32,7 +32,7 @@ const saveNotes = (currentNotes: NotesObject): boolean => {
   localStorage.removeItem("notesToSave");
 
   const notes = mergeNotes(currentNotes, notesToSave);
-  chrome.storage.local.set({ notes: notes });
+  chrome.storage.local.set({ notes });
   return true;
 };
 

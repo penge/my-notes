@@ -5,27 +5,24 @@ it("migrates data", () => {
 
   // Migrate notes from [1.1.1], [1.1], [1.0] => [3.x]
   items = migrate({ newtab: "buy milk" }, {});
-  expect(Object.keys(items.notes).length).toBe(4);
+  expect(Object.keys(items.notes).length).toBe(3);
   expect(items.notes.One.content).toBe("buy milk");
   expect(items.notes.Two.content).toBe("");
   expect(items.notes.Three.content).toBe("");
-  expect(items.notes.Clipboard.content).toBe("");
 
   // Migrate notes from [1.4], [1.3], [1.2] => [3.x]
   items = migrate({ value: "buy coffee" }, {});
-  expect(Object.keys(items.notes).length).toBe(4);
+  expect(Object.keys(items.notes).length).toBe(3);
   expect(items.notes.One.content).toBe("buy coffee");
   expect(items.notes.Two.content).toBe("");
   expect(items.notes.Three.content).toBe("");
-  expect(items.notes.Clipboard.content).toBe("");
 
   // Migrate notes from newest [1.x] => [3.x]
   items = migrate({ newtab: "buy milk", value: "buy milk, buy coffee" }, {});
-  expect(Object.keys(items.notes).length).toBe(4);
+  expect(Object.keys(items.notes).length).toBe(3);
   expect(items.notes.One.content).toBe("buy milk, buy coffee");
   expect(items.notes.Two.content).toBe("");
   expect(items.notes.Three.content).toBe("");
-  expect(items.notes.Clipboard.content).toBe("");
 
   // Migrate notes from [2.0], [2.0.1], [2.0.2], [2.1] => [3.x]
   items = migrate({ notes: ["from page 1", "from page 2", "from page 3"] }, {});
@@ -33,15 +30,13 @@ it("migrates data", () => {
   expect(items.notes.One.content === "from page 1");
   expect(items.notes.Two.content === "from page 2");
   expect(items.notes.Three.content === "from page 3");
-  expect(items.notes.Clipboard.content === "");
 
   // Migrate notes from [2.2] => [3.x]
   items = migrate({}, { notes: ["1", "2", "3"] });
-  expect(Object.keys(items.notes).length).toBe(4);
+  expect(Object.keys(items.notes).length).toBe(3);
   expect(items.notes.One.content).toBe("1");
   expect(items.notes.Two.content).toBe("2");
   expect(items.notes.Three.content).toBe("3");
-  expect(items.notes.Clipboard.content).toBe("");
 
   // Migrate notes from [3.0] => [3.x]
   const local = {

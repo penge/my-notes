@@ -5,13 +5,12 @@ export interface ContextMenuProps {
   noteName: string
   x: number
   y: number
-  onUseAsClipboard: (noteName: string) => void
   onRename: (noteName: string) => void
   onDelete: (noteName: string) => void
 }
 
 const ContextMenu = ({
-  noteName, x, y, onUseAsClipboard, onRename, onDelete,
+  noteName, x, y, onRename, onDelete,
 }: ContextMenuProps): h.JSX.Element => {
   const [offsetHeight, setOffsetHeight] = useState<number>(0);
   const ref = useRef<HTMLDivElement>();
@@ -31,7 +30,6 @@ const ContextMenu = ({
     }: {
       opacity: 0, // offsetHeight NOT set, yet
     }}>
-      <div class="action" onClick={() => onUseAsClipboard(noteName)}>Use as Clipboard</div>
       <div class="action" onClick={() => onRename(noteName)}>Rename</div>
       <div class="action" onClick={() => onDelete(noteName)}>Delete</div>
     </div>
