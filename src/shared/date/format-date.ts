@@ -1,13 +1,23 @@
-export default (ISOString: string): string => {
-  if (!ISOString) {
+import parseDate from "./parse-date";
+
+export enum FormatDateOption {
+  ONLY_TIME,
+  ONLY_DATE
+}
+
+export default (ISOString: string, option?: FormatDateOption): string => {
+  const parsed = parseDate(ISOString);
+  if (!parsed) {
     return "";
   }
 
-  return new Date(ISOString).toLocaleString("en-US", {
-    month: "long", // "May"
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric"
-  });
+  if (option === FormatDateOption.ONLY_DATE) {
+    return parsed.date;
+  }
+
+  if (option === FormatDateOption.ONLY_TIME) {
+    return parsed.time;
+  }
+
+  return parsed.dateTime;
 };

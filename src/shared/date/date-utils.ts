@@ -1,9 +1,9 @@
-import formatDate from "./format-date";
+import formatDate, { FormatDateOption } from "./format-date";
 
 const now = (): string => new Date().toISOString();
 
-const getCurrentDate = (): string => formatDate(now()).split(",")[0].trim();
-const getCurrentTime = (): string => formatDate(now()).split(",")[1].trim();
+const getCurrentDate = (): string => formatDate(now(), FormatDateOption.ONLY_DATE);
+const getCurrentTime = (): string => formatDate(now(), FormatDateOption.ONLY_TIME);
 const getCurrentDateAndTime = (): string => formatDate(now());
 
 export default {
