@@ -1,9 +1,7 @@
 import { Note, NotesObject, GoogleDriveFile } from "shared/storage/schema";
+import { Log } from "shared/logger";
 import { GoogleDriveFileUpdate } from "../api";
 import { CreateFileBodyOptions, UpdateFileBodyOptions } from "../bodies";
-
-const LOG_LEVEL = process.env.LOG_LEVEL;
-export const canLog = LOG_LEVEL !== "SILENT";
 
 const merge = (note: Note, file: GoogleDriveFile | GoogleDriveFileUpdate): GoogleDriveFile => ({
   id: file.id,
@@ -26,7 +24,7 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
     // 1. Create a file for every new note
     //    COND: note.sync is undefined
     if (!("sync" in note)) {
-      canLog && console.log(`SYNC - OUT - CREATING FILE - ${noteName}`);
+      Log(`SYNC - OUT - CREATING FILE - ${noteName}`);
       const file = await createFile(folderId, { ...note, name: noteName }); // Returns { id, name, content, createdTime, modifiedTime }
       note.sync = { file: merge(note, file) };
       continue;
@@ -38,7 +36,7 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
       continue;
     }
     if (new Date(note.modifiedTime).getTime() > new Date(note.sync.file.modifiedTime).getTime()) {
-      canLog && console.log(`SYNC - OUT - UPDATING FILE - ${noteName} (name before: ${note.sync.file.name})`);
+      Log(`SYNC - OUT - UPDATING FILE - ${noteName} (name before: ${note.sync.file.name})`);
       const file = await updateFile(note.sync.file.id, { ...note, name: noteName }); // Returns { id, name, content, modifiedTime }
       note.sync = { file: merge(note, file) };
     }
