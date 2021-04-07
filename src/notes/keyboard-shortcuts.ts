@@ -186,8 +186,8 @@ const registerInsertDateAndTime = (event: KeyboardEvent, os: string) => {
 
 const registerSyncNotes = (event: KeyboardEvent, os: string) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyS") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyS")
+    (isMac(os) && event.metaKey && event.code === "KeyR") ||
+    (!isMac(os) && event.ctrlKey && event.code === "KeyR")
   ) {
     publish(KeyboardShortcut.OnSync, event);
   }
