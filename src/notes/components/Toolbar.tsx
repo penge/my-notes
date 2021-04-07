@@ -7,7 +7,7 @@ import InsertLinkModal, { InsertLinkModalProps } from "./modals/InsertLinkModal"
 import range from "../range";
 import Tooltip from "./Tooltip";
 import { Note } from "shared/storage/schema";
-import formatDate from "shared/date/format-date";
+import NoteInfo from "./NoteInfo";
 
 const callback = () => {
   const event = new Event("editnote");
@@ -44,28 +44,6 @@ const titles = {
     other: "Numbered List (Ctrl + Shift + 8)"
   }
 } as { [key: string]: { mac: string, other: string } };
-
-const getInfoTooltip = (note: Note) => {
-  const created = formatDate(note.createdTime).split(",");
-  const modified = formatDate(note.modifiedTime).split(",");
-
-  return (
-    <Fragment>
-      <div>
-        <div>Created:</div>
-        <div>Modified:</div>
-      </div>
-      <div>
-        <div>{created[0]}</div>
-        <div>{modified[0]}</div>
-      </div>
-      <div>
-        <div>{created[1]}</div>
-        <div>{modified[1]}</div>
-      </div>
-    </Fragment>
-  );
-};
 
 interface ToolbarProps {
   os?: "mac" | "other"
@@ -417,7 +395,7 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
           </div>
         </Tooltip>
 
-        <Tooltip className="info-tooltip" tooltip={note ? getInfoTooltip(note) : ""}>
+        <Tooltip className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
           <div id="INFO" class="button last">
             <svg viewBox="0 0 111.577 111.577">
               <path d="M78.962,99.536l-1.559,6.373c-4.677,1.846-8.413,3.251-11.195,4.217c-2.785,0.969-6.021,1.451-9.708,1.451

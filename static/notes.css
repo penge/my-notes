@@ -355,17 +355,20 @@ body.with-toolbar #toolbar { transform: translateY(0); }
   user-select: none;
 }
 
-.info-tooltip {
+.info-tooltip .row {
   display: flex;
+  flex-direction: row;
 }
 
-.info-tooltip > div {
+.info-tooltip .column {
+  display: flex;
+  flex-direction: column;
   text-align: right;
+  margin-right: 2em;
 }
 
-.info-tooltip > div:nth-child(1),
-.info-tooltip > div:nth-child(2) {
-  margin-right: 1em;
+.info-tooltip .column:last-child {
+  margin-right: 0;
 }
 
 /* Overlay */
