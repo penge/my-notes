@@ -62,7 +62,9 @@ export const listFiles = async (folderId: string): Promise<GoogleDriveFile[]> =>
   return json && json.files;
 };
 
-export const getFile = async (fileId: string): Promise<string | undefined> => {
+export type GetFileFunction = (fileId: string) => Promise<string | undefined>;
+
+export const getFile: GetFileFunction = async (fileId: string): Promise<string | undefined> => {
   const file = await files.get(fileId);
   return file;
 };

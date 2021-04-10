@@ -20,8 +20,8 @@ const keyboardShortcuts: KeyboardShortcut[] = [
   },
   {
     description: "Sync notes to and from Google Drive",
-    mac: "⌘ + Shift + S",
-    other: "Ctrl + Shift + S",
+    mac: "⌘ + R",
+    other: "Ctrl + R",
   },
   {
     description: "Toggle Focus mode",

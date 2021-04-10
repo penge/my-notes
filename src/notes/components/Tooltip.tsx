@@ -91,9 +91,20 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
   );
 };
 
+let renderProps: TooltipRenderProps | undefined;
+
 const Tooltip = ({ tooltip, children, className }: TooltipProps): h.JSX.Element => {
   const show = (props: TooltipRenderProps) => render(<TooltipRender {...props} />, getContainer());
   const hide = () => render("", getContainer());
+
+  useEffect(() => {
+    if (renderProps) {
+      show({
+        ...renderProps,
+        tooltip,
+      });
+    }
+  }, [tooltip]);
 
   const clone = cloneElement(children, {
     onMouseOver: (event) => {
@@ -101,9 +112,13 @@ const Tooltip = ({ tooltip, children, className }: TooltipProps): h.JSX.Element 
         return;
       }
       const childrenRect = event.currentTarget.getBoundingClientRect();
-      show({ tooltip, childrenRect, className });
+      renderProps = { tooltip, childrenRect, className };
+      show(renderProps);
     },
-    onMouseLeave: () => hide(),
+    onMouseLeave: () => {
+      renderProps = undefined;
+      hide();
+    },
   } as h.JSX.HTMLAttributes<HTMLDivElement>);
 
   return clone;

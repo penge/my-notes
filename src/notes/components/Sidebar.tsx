@@ -12,13 +12,13 @@ import Tooltip from "./Tooltip";
 const syncNowTitles = {
   mac: (lastSync: string) => (
     <Fragment>
-      <div>Click to sync the notes to and from Google Drive now (⌘ + Shift + S)</div>
+      <div>Click to sync the notes to and from Google Drive now (⌘ + R)</div>
       <div>Last sync: {formatDate(lastSync)}</div>
     </Fragment>
   ),
   other: (lastSync: string) => (
     <Fragment>
-      <div>Click to sync the notes to and from Google Drive now (Ctrl + Shift + S)</div>
+      <div>Click to sync the notes to and from Google Drive now (Ctrl + R)</div>
       <div>Last sync: {formatDate(lastSync)}</div>
     </Fragment>
   ),
