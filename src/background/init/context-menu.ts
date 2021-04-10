@@ -1,3 +1,4 @@
+import { Log } from "shared/logger";
 import {
   saveTextToLocalMyNotes,
   saveTextToRemotelyOpenMyNotes,
@@ -61,23 +62,26 @@ const attachOnClicked = () => {
     return;
   }
 
+  Log("Context menu is attaching on clicked");
+  onClickedAttached = true;
+
   chrome.contextMenus.onClicked.addListener((info) => {
     const menuId: string = info.menuItemId;
     const textToSave = getTextToSave(info);
 
     if (menuId.startsWith(MY_NOTES_SAVE_TO_NOTE_PREFIX)) {
       const destinationNoteName = menuId.replace(MY_NOTES_SAVE_TO_NOTE_PREFIX, "");
+      Log(`Context menu is saving text to ${destinationNoteName}`);
       saveTextToLocalMyNotes(textToSave, destinationNoteName);
       return;
     }
 
     if (info.menuItemId === MY_NOTES_SAVE_TO_REMOTE) {
+      Log("Context menu is saving text to be picked up by the remotely open My Notes");
       saveTextToRemotelyOpenMyNotes(textToSave);
       return;
     }
   });
-
-  onClickedAttached = true;
 };
 
 export const recreateContextMenu = (noteNames: string[]): void => {

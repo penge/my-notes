@@ -28,8 +28,7 @@ import renameNote from "notes/state/rename-note";
 import deleteNote from "notes/state/delete-note";
 import createNote from "notes/state/create-note";
 
-import edit from "notes/content/edit";
-import { saveNotes } from "notes/content/save";
+import { saveNote } from "notes/content/save";
 import { syncNotes } from "notes/content/sync";
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
@@ -45,8 +44,6 @@ interface NotesProps {
 const Notes = () => {
   const [os, setOs] = useState<"mac" | "other" | undefined>(undefined);
   const [tabId, setTabId] = useState<string>("");
-  const tabIdRef = useRef<string>();
-  tabIdRef.current = tabId;
 
   const [notification, setNotification] = useState<Notification | undefined>(undefined);
   const [font, setFont] = useState<RegularFont | GoogleFont | undefined>(undefined);
@@ -79,6 +76,15 @@ const Notes = () => {
   const [newNoteModalProps, setNewNoteModalProps] = useState<NewNoteModalProps | null>(null);
 
   useEffect(() => {
+    chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
+    chrome.tabs.getCurrent((tab) => tab && setTabId(String(tab.id)));
+  }, []);
+
+  useEffect(() => {
+    if (!tabId) {
+      return;
+    }
+
     chrome.storage.local.get([
       // Notifications
       "notification",
@@ -226,7 +232,7 @@ const Notes = () => {
             (newActive in oldNotes) &&
             (newActive in newNotes) &&
             (newNotes[newActive].content !== oldNotes[newActive].content) &&
-            (localStorage.getItem("notesChangedBy") !== tabIdRef.current)
+            (localStorage.getItem("notesChangedBy") !== tabId)
           ) {
             setInitialContent(newNotes[newActive].content);
           }
@@ -262,19 +268,12 @@ const Notes = () => {
       }
     });
 
-    chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
-    chrome.tabs.getCurrent((tab) => tab && setTabId(String(tab.id)));
-
     notesHistory.attach((noteName) => {
       setNotesProps((prev) => noteName in prev.notes
         ? { ...prev, active: noteName }
         : prev);
     });
-
-    window.addEventListener("beforeunload", () => {
-      saveNotes(notesRef.current);
-    });
-  }, []);
+  }, [tabId]);
 
   // Font
   useEffect(() => {
@@ -452,7 +451,7 @@ const Notes = () => {
         active={notesProps.active}
         initialContent={initialContent}
         onEdit={(active, content) => {
-          edit(active, content, tabId, notesProps.notes);
+          saveNote(active, content, tabId, notesRef.current);
         }}
         indentOnTab={tab}
       />
