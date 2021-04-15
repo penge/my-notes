@@ -1,3 +1,8 @@
+const environment = process.env.NODE_ENV;
+if (environment === "production") {
+  return;
+}
+
 const fs = require("fs"); // eslint-disable-line
 
 const MY_NOTES_CLIENT_ID_DEFAULT = "813847979218-unbbh8m0el8vjdi74rnqdarm1mhv3985.apps.googleusercontent.com";
