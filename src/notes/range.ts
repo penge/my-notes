@@ -19,6 +19,10 @@ const restore = (): void => {
   }
 };
 
+const empty = (): void => {
+  document.getSelection()?.empty();
+};
+
 export const withRange = (fn: (range: Range) => void): void => {
   const range = save();
   if (!range) {
@@ -31,4 +35,5 @@ export const withRange = (fn: (range: Range) => void): void => {
 export default {
   save,
   restore,
+  empty,
 };

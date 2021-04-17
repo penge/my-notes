@@ -1,4 +1,4 @@
-import { withRange } from "../range";
+import __range, { withRange } from "../range";
 
 type Callback = () => void
 
@@ -29,7 +29,7 @@ const insertTable = (cb: Callback): void => withRange((range: Range) => {
   }
 
   range.insertNode(table);
-  document.getSelection()?.empty();
+  __range.empty();
   cb();
 });
 
@@ -38,6 +38,7 @@ const insertRowRelative = (delta: number, cb: Callback) => withtr((tr: HTMLTable
   const index = tr.rowIndex + delta;
   const cellCount = table.rows[0].cells.length;
   insertRow(table, index, cellCount);
+  __range.restore();
   cb();
 });
 
@@ -50,6 +51,7 @@ const insertColumnRelative = (delta: number, cb: Callback) => withtd((td: HTMLTa
   for (let row = 0; row < table.rows.length; row += 1) {
     table.rows[row].insertCell(index);
   }
+  __range.restore();
   cb();
 });
 
@@ -65,6 +67,7 @@ const toggleHeadingRow = (cb: Callback): void => withtd((td: HTMLTableDataCellEl
     tr.cells[c].classList.toggle("heading", !containsHeading);
   }
 
+  __range.restore();
   cb();
 });
 
@@ -77,6 +80,7 @@ const toggleHeadingColumn = (cb: Callback): void => withtd((td: HTMLTableCellEle
     table.rows[row].cells[cellIndex].classList.toggle("heading", !containsHeading);
   }
 
+  __range.restore();
   cb();
 });
 
@@ -90,6 +94,7 @@ const deleteRow = (cb: Callback): void => withtr((tr: HTMLTableRowElement) => {
     table.remove();
   }
 
+  __range.empty();
   cb();
 });
 
@@ -105,6 +110,7 @@ const deleteColumn = (cb: Callback): void => withtd((td: HTMLTableDataCellElemen
     table.remove();
   }
 
+  __range.empty();
   cb();
 });
 
