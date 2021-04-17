@@ -395,7 +395,7 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
           </div>
         </Tooltip>
 
-        <Tooltip className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
+        <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
           <div id="INFO" class="button last">
             <svg viewBox="0 0 111.577 111.577">
               <path d="M78.962,99.536l-1.559,6.373c-4.677,1.846-8.413,3.251-11.195,4.217c-2.785,0.969-6.021,1.451-9.708,1.451

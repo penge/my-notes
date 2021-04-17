@@ -1,13 +1,15 @@
 import { h, render, cloneElement, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { useRef, useState, useEffect, useMemo } from "preact/hooks";
+import { useRef, useState, useEffect, useMemo, useCallback } from "preact/hooks";
 
 interface TooltipProps {
+  id?: string
   tooltip: string | h.JSX.Element
   children: h.JSX.Element
   className?: string
 }
 
 interface TooltipRenderProps {
+  id?: string
   tooltip: string | h.JSX.Element
   childrenRect: DOMRect
   className?: string
@@ -93,17 +95,19 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
 
 let renderProps: TooltipRenderProps | undefined;
 
-const Tooltip = ({ tooltip, children, className }: TooltipProps): h.JSX.Element => {
-  const show = (props: TooltipRenderProps) => render(<TooltipRender {...props} />, getContainer());
-  const hide = () => render("", getContainer());
+const Tooltip = ({ id, tooltip, children, className }: TooltipProps): h.JSX.Element => {
+  const show = useCallback((props: TooltipRenderProps) => render(<TooltipRender {...props} />, getContainer()), []);
+  const hide = useCallback(() => render("", getContainer()), []);
 
   useEffect(() => {
-    if (renderProps) {
-      show({
-        ...renderProps,
-        tooltip,
-      });
+    if (!renderProps || (id && renderProps.id !== id)) {
+      return;
     }
+
+    show({
+      ...renderProps,
+      tooltip,
+    });
   }, [tooltip]);
 
   const clone = cloneElement(children, {
@@ -112,7 +116,7 @@ const Tooltip = ({ tooltip, children, className }: TooltipProps): h.JSX.Element 
         return;
       }
       const childrenRect = event.currentTarget.getBoundingClientRect();
-      renderProps = { tooltip, childrenRect, className };
+      renderProps = { id, tooltip, childrenRect, className };
       show(renderProps);
     },
     onMouseLeave: () => {
