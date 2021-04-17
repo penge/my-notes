@@ -9,7 +9,7 @@
     "url": "git+https://github.com/penge/my-notes.git"
   },
   "scripts": {
-    "__prepare-folder": "rm -rf out && cp -R static out/ && cp LICENSE out/ && cp manifest.json out/ && node ./env/set-client-id.js out/manifest.json",
+    "__prepare-folder": "rm -rf out && cp -R static out/ && cp LICENSE out/ && cp manifest.json out/ && rm out/images/icon.svg && rm out/images/my-notes.png && node ./env/set-client-id.js out/manifest.json",
     "__check-types": "tsc --noEmit",
     "__develop-core": "npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --sourcemap=inline --outdir=out",
     "lint": "eslint src --ext .ts,.tsx",
