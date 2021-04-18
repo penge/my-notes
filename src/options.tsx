@@ -24,6 +24,7 @@ const Options = () => {
   const [customTheme, setCustomTheme] = useState<string>("");
   const [sync, setSync] = useState<Sync | undefined>(undefined);
   const [tab, setTab] = useState<boolean>(false);
+  const [tabSize, setTabSize] = useState<number>(-1);
 
   useEffect(() => {
     chrome.storage.local.get([
@@ -33,6 +34,7 @@ const Options = () => {
       "customTheme",
       "sync",
       "tab",
+      "tabSize",
     ], local => {
       setFont(local.font);
       setSize(local.size);
@@ -40,6 +42,7 @@ const Options = () => {
       setCustomTheme(local.customTheme);
       setSync(local.sync);
       setTab(local.tab);
+      setTabSize(local.tabSize);
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -70,6 +73,10 @@ const Options = () => {
       if (changes["tab"]) {
         setTab(changes["tab"].newValue);
       }
+
+      if (changes["tabSize"]) {
+        setTabSize(changes["tabSize"].newValue);
+      }
     });
   }, []);
 
@@ -92,6 +99,7 @@ const Options = () => {
       <__Options
         sync={sync}
         tab={tab}
+        tabSize={tabSize}
       />
       <__Version version={version} />
     </Fragment>

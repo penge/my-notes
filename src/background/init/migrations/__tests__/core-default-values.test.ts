@@ -1,20 +1,7 @@
 import { NotesObject, Note } from "shared/storage/schema";
-import migrate from "../core";
+import migrate, { expectedKeys } from "../core";
 
 export const expectItems = (items: Record<string, unknown>): void => {
-  const expectedKeys = [ // interface Storage
-    "font",
-    "size",
-    "sidebar",
-    "toolbar",
-    "theme",
-    "customTheme",
-    "notes",
-    "active",
-    "focus",
-    "tab",
-  ];
-
   expect(Object.keys(items).sort()).toEqual(expectedKeys.sort());
 };
 
@@ -67,6 +54,9 @@ const expectDefaultValues = (myItems?: Record<string, unknown>) => {
 
   // tab
   expect(items.tab).toBe(false);
+
+  // tab size
+  expect(items.tabSize).toBe(-1);
 };
 
 it("returns default values", () => {
@@ -87,6 +77,7 @@ it("fallbacks to default values", () => {
     active: "Todo", // must be in "notes"
     focus: 1,       // must be boolean
     tab: 1,         // must be boolean
+    tabSize: "Tab"  // must be number
   });
 
   expectDefaultValues(Object.assign({}, items as unknown));

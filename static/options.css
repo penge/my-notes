@@ -17,6 +17,7 @@ input, select {
 
 .separator { padding: 0 12px; }
 .bold { font-weight: bold; }
+.space-top { margin-top: 1em; }
 .space-left { margin-left: 1em; }
 
 /* Radio or Checkbox selection */
@@ -52,7 +53,7 @@ input, select {
 #google-fonts-area ol { margin-top: 0; }
 #google-fonts-area ol li { line-height: 2em; }
 
-#google-fonts-area input {
+#google-fonts-area input, select {
   max-width: 500px;
   box-sizing: content-box;
   outline: none;
@@ -94,6 +95,10 @@ input, select {
   line-height: 1.5em;
   background: var(--comment-background-color);
   color: var(--comment-text-color);
+}
+
+.selection.with-comment .comment label {
+  padding-left: 0;
 }
 
 /* Theme labels */

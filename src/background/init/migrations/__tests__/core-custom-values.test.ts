@@ -1,3 +1,4 @@
+import { Storage } from "shared/storage/schema";
 import migrate from "../core";
 import { expectItems } from "./core-default-values.test";
 
@@ -48,9 +49,10 @@ it("sets custom values", () => {
     active: "Todo",
     focus: true,
     tab: true,
+    tabSize: 2,
   };
 
-  const items = migrate({}, local);
+  const items: Storage = migrate({}, local);
   expectItems(Object.assign({}, items as unknown));
 
   // Compare objects

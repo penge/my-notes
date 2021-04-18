@@ -6,10 +6,11 @@ import { sendMessage } from "messages";
 
 interface OptionsProps {
   sync?: Sync
-  tab?: boolean
+  tab: boolean
+  tabSize: number
 }
 
-const Options = ({ sync, tab }: OptionsProps): h.JSX.Element => {
+const Options = ({ sync, tab, tabSize }: OptionsProps): h.JSX.Element => {
   return (
     <Fragment>
       <h2>Options</h2>
@@ -71,7 +72,20 @@ const Options = ({ sync, tab }: OptionsProps): h.JSX.Element => {
         <div>
           <label for="tab" class="bold">Indent text on <span class="keyboard-shortcut">Tab</span></label>
           <div class="comment">
-            By default, Tab key focuses the address bar. This can be changed to indent the text instead.
+            <div>
+              By default, Tab key changes focus between address bar and the note. This can be changed to indent the text instead.
+            </div>
+            <div class="space-top">
+              <label for="tab-size">Tab size:</label>
+              <select name="tab-size" value={tabSize} onChange={(event) => {
+                const newTabSize: number = parseInt((event.target as HTMLSelectElement).value);
+                chrome.storage.local.set({ tabSize: newTabSize });
+              }}>
+                <option value="-1">Tab</option>
+                <option value="2">2 spaces</option>
+                <option value="4">4 spaces</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
