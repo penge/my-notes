@@ -1,8 +1,3 @@
-const environment = process.env.NODE_ENV;
-if (environment === "production") {
-  return;
-}
-
 const manifestPath = process.argv.slice(2)[0];
 if (!manifestPath) {
   return;
