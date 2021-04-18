@@ -1,3 +1,7 @@
+import dateUtils from "shared/date/date-utils";
+import table from "./table";
+import highlight from "./highlight";
+
 export const exec = (command: string, value?: string): boolean =>
   document.execCommand(command, false, value);
 
@@ -31,9 +35,11 @@ const insertTab = (tabSize: number): void => {
 const insertImage = (src: string): void => { exec("insertImage", src); };
 const insertLink = (href: string): void => { exec("createLink", href); };
 
+const insertDate = (): void => { exec("insertHTML", dateUtils.getCurrentDate()); };
+const insertTime = (): void => { exec("insertHTML", dateUtils.getCurrentTime()); };
+const insertDateAndTime = (): void => { exec("insertHTML", dateUtils.getCurrentDateAndTime()); };
+
 const pre = (): void => { exec("formatBlock", "<PRE>"); };
-import table from "./table";
-import highlight from "./highlight";
 
 const removeFormat = (): void => {
   exec("removeFormat");
@@ -63,6 +69,10 @@ export default {
   insertTab,
   insertImage,
   insertLink,
+
+  insertDate,
+  insertTime,
+  insertDateAndTime,
 
   pre,
   table,
