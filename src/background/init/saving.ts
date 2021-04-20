@@ -21,7 +21,10 @@ export const saveTextToLocalMyNotes = (textToSave: string, noteName: string): vo
       modifiedTime: time,
     };
 
-    chrome.storage.local.set({ notes });
+    chrome.storage.local.set({
+      notes,
+      setFromBackground: true,
+    });
   });
 };
 
@@ -58,7 +61,7 @@ export const saveTextOnDrop = (): void => chrome.runtime.onMessage.addListener((
     }
 
     const oldContent = notes[targetNoteName].content;
-    const newContent = `${oldContent}<br><br>${data}`;
+    const newContent = `${data}<br><br>${oldContent}`;
     const modifiedTime = new Date().toISOString();
 
     notes[targetNoteName] = {
@@ -67,6 +70,9 @@ export const saveTextOnDrop = (): void => chrome.runtime.onMessage.addListener((
       modifiedTime,
     };
 
-    chrome.storage.local.set({ notes });
+    chrome.storage.local.set({
+      notes,
+      setFromBackground: true,
+    });
   });
 });

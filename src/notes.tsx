@@ -228,13 +228,17 @@ const Notes = () => {
           const newActive = newNoteName || prev.active;
 
           // Re-activate note updated from background or from other tab
+          const setFromBackground = changes["setFromBackground"] && changes["setFromBackground"].newValue;
           if (
+            setFromBackground &&
             (newActive in oldNotes) &&
             (newActive in newNotes) &&
-            (newNotes[newActive].content !== oldNotes[newActive].content) &&
-            (localStorage.getItem("notesChangedBy") !== tabId)
+            (newNotes[newActive].content !== oldNotes[newActive].content)
           ) {
             setInitialContent(newNotes[newActive].content);
+            setTimeout(() => {
+              chrome.storage.local.set({ setFromBackground: false });
+            }, 1000); // wait so other tabs can update its content too
           }
 
           if (!(newActive in oldNotes)) {
