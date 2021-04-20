@@ -33,7 +33,8 @@ import { syncNotes } from "notes/content/sync";
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 
-const getActiveFromUrl = (): string => window.location.search.startsWith("?") ? decodeURIComponent(window.location.search.substring(1)) : ""; // Bookmark
+const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
+const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
 const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
 
 interface NotesProps {
@@ -134,7 +135,7 @@ const Notes = () => {
       }
 
       // Options
-      setFocus(local.focus);
+      setFocus(getFocusOverride() || local.focus);
       setTab(local.tab);
 
       // Sync
@@ -253,7 +254,7 @@ const Notes = () => {
       }
 
       if (changes["focus"]) {
-        setFocus(changes["focus"].newValue);
+        setFocus(getFocusOverride() || changes["focus"].newValue);
       }
 
       if (changes["tab"]) {
@@ -349,12 +350,18 @@ const Notes = () => {
     keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, () => setContextMenuProps(null));
     keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, () => {
+      if (getFocusOverride()) {
+        return;
+      }
       chrome.storage.local.get(["focus"], local => {
         chrome.storage.local.set({ focus: !local.focus });
       });
     });
 
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleSidebar, () => {
+      if (getFocusOverride()) {
+        return;
+      }
       chrome.storage.local.get(["focus"], local => {
         if (!local.focus) { // toggle only if not in focus mode
           const hasSidebar = document.body.classList.toggle("with-sidebar");
@@ -364,6 +371,9 @@ const Notes = () => {
     });
 
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleToolbar, () => {
+      if (getFocusOverride()) {
+        return;
+      }
       chrome.storage.local.get(["focus"], local => {
         if (!local.focus) { // toggle only if not in focus mode
           const hasToolbar = document.body.classList.toggle("with-toolbar");
