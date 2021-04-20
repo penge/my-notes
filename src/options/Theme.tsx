@@ -1,8 +1,8 @@
 import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { Theme } from "shared/storage/schema";
+import { capitalize } from "shared/string/capitalize-string";
 
 const THEMES = ["light", "dark", "custom"] as Theme[];
-const capitalize = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 interface ThemeProps {
   theme?: Theme
