@@ -2,7 +2,6 @@ import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import commands from "../toolbar/commands";
-import dateUtils from "shared/date/date-utils";
 
 interface ContentProps {
   active: string
@@ -27,10 +26,6 @@ const autofocus = (content: HTMLDivElement) => content && setTimeout(() => {
 });
 
 const indentOnTabCallbackFactory = (tabSize: number) => () => commands.insertTab(tabSize);
-
-const insertDate = () => document.execCommand("insertHTML", false, dateUtils.getCurrentDate());
-const insertTime = () => document.execCommand("insertHTML", false, dateUtils.getCurrentTime());
-const insertDateAndTime = () => document.execCommand("insertHTML", false, dateUtils.getCurrentDateAndTime());
 
 let latestCb: () => void;
 const reattachEditNote = (cb: () => void) => {
@@ -90,9 +85,9 @@ const Content = ({ active, initialContent, onEdit, indentOnTab, tabSize }: Conte
     keyboardShortcuts.subscribe(KeyboardShortcut.OnUnorderedList, commands.ul);
     keyboardShortcuts.subscribe(KeyboardShortcut.OnOrderedList, commands.ol);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, insertDate);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, insertTime);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, insertDateAndTime);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, commands.insertDate);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, commands.insertTime);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, commands.insertDateAndTime);
   }, []);
 
   return (
