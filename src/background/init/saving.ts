@@ -5,6 +5,8 @@ import {
   Message,
 } from "shared/storage/schema";
 
+const getSetBy = (): string => `worker-${new Date().getTime()}`;
+
 export const saveTextToLocalMyNotes = (textToSave: string, noteName: string): void => {
   chrome.storage.local.get(["notes"], local => {
     const notes = local.notes as NotesObject;
@@ -23,7 +25,7 @@ export const saveTextToLocalMyNotes = (textToSave: string, noteName: string): vo
 
     chrome.storage.local.set({
       notes,
-      setFromBackground: true,
+      setBy: getSetBy(),
     });
   });
 };
@@ -72,7 +74,7 @@ export const saveTextOnDrop = (): void => chrome.runtime.onMessage.addListener((
 
     chrome.storage.local.set({
       notes,
-      setFromBackground: true,
+      setBy: getSetBy(),
     });
   });
 });

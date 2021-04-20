@@ -14,5 +14,8 @@ export const saveNote = (active: string, content: string, tabId: string, notes: 
     },
   };
 
-  chrome.storage.local.set({ notes: notesCopy });
+  chrome.storage.local.set({
+    notes: notesCopy,
+    setBy: `${tabId}-${new Date().getTime()}`,
+  });
 };
