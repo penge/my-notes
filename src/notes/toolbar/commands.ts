@@ -20,7 +20,14 @@ const left = (): void => { exec("justifyLeft"); };
 const center = (): void => { exec("justifyCenter"); };
 const right = (): void => { exec("justifyRight"); };
 
-const insertTab = (): void => { exec("insertHTML", "&#009"); };
+const insertTab = (tabSize: number): void => {
+  const tabHtml: string = {
+    "-1": "&#009",
+    "2": "&nbsp;&nbsp;",
+    "4": "&nbsp;&nbsp;&nbsp;&nbsp;"
+  }[tabSize] || "&#009";
+  exec("insertHTML", tabHtml);
+};
 const insertImage = (src: string): void => { exec("insertImage", src); };
 const insertLink = (href: string): void => { exec("createLink", href); };
 

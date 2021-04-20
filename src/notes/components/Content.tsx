@@ -9,6 +9,7 @@ interface ContentProps {
   initialContent: string
   onEdit: (active: string, content: string) => void
   indentOnTab: boolean
+  tabSize: number
 }
 
 const autofocus = (content: HTMLDivElement) => content && setTimeout(() => {
@@ -25,7 +26,7 @@ const autofocus = (content: HTMLDivElement) => content && setTimeout(() => {
   selection.addRange(range);
 });
 
-const indentOnTabCallback = () => document.execCommand("insertHTML", false, "&#009");
+const indentOnTabCallbackFactory = (tabSize: number) => () => commands.insertTab(tabSize);
 
 const insertDate = () => document.execCommand("insertHTML", false, dateUtils.getCurrentDate());
 const insertTime = () => document.execCommand("insertHTML", false, dateUtils.getCurrentTime());
@@ -38,7 +39,16 @@ const reattachEditNote = (cb: () => void) => {
   document.addEventListener("editnote", latestCb);
 };
 
-const Content = ({ active, initialContent, onEdit, indentOnTab }: ContentProps): h.JSX.Element => {
+let latestIndentOnTabCallback: () => void;
+const reattachIndentOnTab = (indentOnTab: boolean, tabSize: number) => {
+  keyboardShortcuts.unsubscribe(latestIndentOnTabCallback);
+  if (indentOnTab) {
+    latestIndentOnTabCallback = indentOnTabCallbackFactory(tabSize);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnTab, latestIndentOnTabCallback);
+  }
+};
+
+const Content = ({ active, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
   const contentRef = useRef<HTMLDivElement>();
 
   const onInput = useCallback(() => {
@@ -70,12 +80,7 @@ const Content = ({ active, initialContent, onEdit, indentOnTab }: ContentProps):
   // To save the changed content, "editnote" event is triggered from Toolbar.
   useEffect(() => reattachEditNote(onInput), [onInput]);
 
-  useEffect(() => {
-    keyboardShortcuts.unsubscribe(indentOnTabCallback);
-    if (indentOnTab) {
-      keyboardShortcuts.subscribe(KeyboardShortcut.OnTab, indentOnTabCallback);
-    }
-  }, [indentOnTab]);
+  useEffect(() => reattachIndentOnTab(indentOnTab, tabSize), [indentOnTab, tabSize]);
 
   useEffect(() => {
     keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.underline);

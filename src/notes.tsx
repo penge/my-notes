@@ -65,6 +65,7 @@ const Notes = () => {
   const [initialContent, setInitialContent] = useState<string>("");
   const [focus, setFocus] = useState<boolean>(false);
   const [tab, setTab] = useState<boolean>(false);
+  const [tabSize, setTabSize] = useState<number>(-1);
   const [sync, setSync] = useState<Sync | undefined>(undefined);
   const syncRef = useRef<Sync | undefined>(undefined);
   syncRef.current = sync;
@@ -106,6 +107,7 @@ const Notes = () => {
       // Options
       "focus",
       "tab",
+      "tabSize",
 
       // Sync
       "sync"
@@ -137,6 +139,7 @@ const Notes = () => {
       // Options
       setFocus(getFocusOverride() || local.focus);
       setTab(local.tab);
+      setTabSize(local.tabSize);
 
       // Sync
       setSync(local.sync);
@@ -259,6 +262,10 @@ const Notes = () => {
 
       if (changes["tab"]) {
         setTab(changes["tab"].newValue);
+      }
+
+      if (changes["tabSize"]) {
+        setTabSize(changes["tabSize"].newValue);
       }
 
       if (changes["sync"]) {
@@ -468,6 +475,7 @@ const Notes = () => {
           saveNote(active, content, tabId, notesRef.current);
         }}
         indentOnTab={tab}
+        tabSize={tabSize}
       />
 
       <__Toolbar

@@ -35,3 +35,7 @@ export const validCustomTheme = (customTheme: unknown): customTheme is string =>
 export const validBoolean = (value: unknown): value is boolean => {
   return typeof value === "boolean";
 };
+
+export const validTabSize = (value: unknown): value is number => {
+  return typeof value === "number" && [-1, 2, 4].includes(value);
+};

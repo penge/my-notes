@@ -6,8 +6,28 @@ import {
   validCustomTheme,
   validFont,
   validSize,
+  validTabSize,
   validTheme
 } from "shared/storage/validations";
+
+export const expectedKeys = [
+  // Appearance
+  "font",
+  "size",
+  "theme",
+  "customTheme",
+  "sidebar",
+  "toolbar",
+
+  // Notes
+  "notes",
+  "active",
+
+  // Options
+  "focus",
+  "tab",
+  "tabSize",
+];
 
 export default (sync: { [key: string]: unknown }, local: { [key: string]: unknown }): Storage => {
   const defaultValues = defaultValuesFactory(true);
@@ -63,6 +83,7 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     // Options
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,
     tab: validBoolean(local.tab) ? local.tab : defaultValues.tab,
+    tabSize: validTabSize(local.tabSize) ? local.tabSize : defaultValues.tabSize,
   };
 
   return storage;
