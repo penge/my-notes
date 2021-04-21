@@ -112,7 +112,7 @@ It cannot see, access or modify any other files in your Google Drive.
 ## How to contribute
 
 1. Share your feedback (what to improve, what to change) under [Issues](https://github.com/penge/my-notes/issues) or join the discussion in [Discussions](https://github.com/penge/my-notes/discussions).
-2. [Buy Me a Coffee](https://www.buymeacoffee.com/privacy-policy).
+2. [Buy Me a Coffee](https://www.buymeacoffee.com/penge).
 3. Develop a feature.
 4. Help to test the upcoming version (to get feedback, to improve or tweak).
 5. Help to improve the documentation.
