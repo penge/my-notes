@@ -24,6 +24,7 @@ const getContainer = () => {
 };
 
 const MINIMAL_OFFSET = 5;
+const EDGE_OFFSET = ".75em";
 
 const getTooltipPosition = (childrenRect: DOMRect, rect: DOMRect): h.JSX.CSSProperties => {
   const styles: h.JSX.CSSProperties = {
@@ -33,10 +34,10 @@ const getTooltipPosition = (childrenRect: DOMRect, rect: DOMRect): h.JSX.CSSProp
   const leftOffset = (childrenRect.left + (childrenRect.width / 2) - (rect.width / 2));
 
   if (leftOffset < MINIMAL_OFFSET) { // handle LEFT edge (5px gap at least)
-    styles.left = "1em";
+    styles.left = EDGE_OFFSET;
 
   } else if ((leftOffset + rect.width + MINIMAL_OFFSET) > window.innerWidth) { // handle RIGHT edge (5px gap at least)
-    styles.right = "1em";
+    styles.right = EDGE_OFFSET;
 
   } else {
     styles.left = leftOffset;

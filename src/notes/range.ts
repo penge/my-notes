@@ -12,11 +12,16 @@ const save = (): Range | null => {
   return range;
 };
 
-const restore = (): void => {
-  if (selection && range) {
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }
+const restore = (cb?: () => void): void => {
+  setTimeout(() => {
+    if (selection && range) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+      if (cb) {
+        cb();
+      }
+    }
+  });
 };
 
 const empty = (): void => {

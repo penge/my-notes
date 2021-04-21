@@ -1,13 +1,15 @@
 import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { useCallback, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
 import commands from "../toolbar/commands";
 import InsertImageModal, { InsertImageModalProps } from "./modals/InsertImageModal";
 import InsertLinkModal, { InsertLinkModalProps } from "./modals/InsertLinkModal";
 import range from "../range";
 import Tooltip from "./Tooltip";
-import { Note } from "shared/storage/schema";
+import { Note, Theme } from "shared/storage/schema";
 import NoteInfo from "./NoteInfo";
+import { capitalize } from "shared/string/capitalize-string";
+import { HIGHLIGHT_COLORS } from "notes/toolbar/highlight";
 
 const callback = () => {
   const event = new Event("editnote");
@@ -48,24 +50,41 @@ const titles = {
 interface ToolbarProps {
   os?: "mac" | "other"
   note?: Note
+  theme?: Theme
 }
 
-const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
+const Toolbar = ({ os, note, theme }: ToolbarProps): h.JSX.Element => {
   const getTitle = useCallback((key: string) => {
     const title = (os && titles[key] && titles[key][os]) || "";
     return title;
   }, [os]);
+
   const [submenu, setSubmenu] = useState<string | null>(null);
 
-  const toggleSubmenu = (event: MouseEvent): void => {
+  const toggleSubmenu = useCallback((event: MouseEvent): void => {
     if (event.target === event.currentTarget) {
+      range.save();
       const submenuToToggle = (event.target as HTMLDivElement).id;
       setSubmenu((prev) => prev === submenuToToggle ? null : submenuToToggle);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    range.restore();
+  }, [submenu]);
 
   const [insertImageModalProps, setInsertImageModalProps] = useState<InsertImageModalProps | null>(null);
   const [insertLinkModalProps, setInsertLinkModalProps] = useState<InsertLinkModalProps | null>(null);
+
+  const ThemeColorFilter = useCallback((color: string): boolean => {
+    if (
+      (theme === "dark" && ["black", "white", "silver", "purple"].includes(color)) ||
+      (theme === "light" && ["white", "purple"].includes(color))
+    ) {
+      return false;
+    }
+    return true;
+  }, [theme]);
 
   return (
     <Fragment>
@@ -109,15 +128,15 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
               <path d="M136.922,51.991H89.297v148.332H47.253V51.991H0V19.745h136.922V51.991z" />
               <path d="M220.068,98.245h-38.463v102.078h-38.236V98.245h-37.899V68.919h114.598V98.245z" />
             </svg>
-            <div class="menu bar">
+            <div class="menu bar" style={{ paddingLeft: ".33em" }}>
               <Tooltip tooltip="Heading 1">
-                <div id="H1" class="button" onClick={commands.h1}>H<span>1</span></div>
+                <div id="H1" class="button auto" onClick={commands.h1}>H<span>1</span></div>
               </Tooltip>
               <Tooltip tooltip="Heading 2">
-                <div id="H2" class="button" onClick={commands.h2}>H<span>2</span></div>
+                <div id="H2" class="button auto" onClick={commands.h2}>H<span>2</span></div>
               </Tooltip>
               <Tooltip tooltip="Heading 3">
-                <div id="H3" class="button" onClick={commands.h3}>H<span>3</span></div>
+                <div id="H3" class="button auto" onClick={commands.h3}>H<span>3</span></div>
               </Tooltip>
             </div>
           </div>
@@ -217,13 +236,15 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
           <div id="IMG" class="button" onClick={() => {
             range.save();
             setInsertImageModalProps({
-              onCancel: () => setInsertImageModalProps(null),
+              onCancel: () => {
+                setInsertImageModalProps(null);
+                range.restore();
+              },
               onConfirm: (src) => {
                 setInsertImageModalProps(null);
-                setTimeout(() => {
-                  range.restore();
+                range.restore(() => {
                   commands.insertImage(src);
-                }, 0);
+                });
               }
             });
           }}>
@@ -239,13 +260,15 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
           <div id="LINK" class="button" onClick={() => {
             range.save();
             setInsertLinkModalProps({
-              onCancel: () => setInsertLinkModalProps(null),
+              onCancel: () => {
+                setInsertLinkModalProps(null);
+                range.restore();
+              },
               onConfirm: (href) => {
                 setInsertLinkModalProps(null);
-                setTimeout(() => {
-                  range.restore();
+                range.restore(() => {
                   commands.insertLink(href);
-                }, 0);
+                });
               }
             });
           }}>
@@ -281,7 +304,7 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
           </div>
         </Tooltip>
 
-        <Tooltip tooltip="Date and time">
+        <Tooltip tooltip="Date and Time">
           <div id="DT" class={clsx("button", submenu === "DT" && "active")} onClick={toggleSubmenu}>
             <svg viewBox="0 0 559.98 559.98">
               <path d="M279.99,0C125.601,0,0,125.601,0,279.99c0,154.39,125.601,279.99,279.99,279.99c154.39,0,279.99-125.601,279.99-279.99
@@ -291,15 +314,15 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
                 c0,0.373,0.092,0.723,0.11,1.096c-0.312,6.45,1.91,12.999,6.836,17.926l88.343,88.336c9.266,9.266,24.284,9.266,33.543,0
                 c9.26-9.266,9.266-24.284,0-33.544L304.226,280.326z"/>
             </svg>
-            <div class="menu bar">
-              <Tooltip tooltip="Insert current date">
-                <div class="button" onClick={commands.insertDate}>Date</div>
+            <div class="menu bar" style={{ paddingLeft: ".4em" }}>
+              <Tooltip tooltip="Insert current Date">
+                <div class="button auto" onClick={commands.insertDate}>D</div>
               </Tooltip>
-              <Tooltip tooltip="Insert current time">
-                <div class="button" onClick={commands.insertTime}>Time</div>
+              <Tooltip tooltip="Insert current Time">
+                <div class="button auto" onClick={commands.insertTime}>T</div>
               </Tooltip>
-              <Tooltip tooltip="Insert current date and time">
-                <div class="button" onClick={commands.insertDateAndTime}>Date and time</div>
+              <Tooltip tooltip="Insert current Date and Time">
+                <div class="button auto" onClick={commands.insertDateAndTime}>D+T</div>
               </Tooltip>
             </div>
           </div>
@@ -311,7 +334,7 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
               <path d="M0,0v384h384V0H0z M170.667,341.333h-128v-128h128V341.333z M170.667,170.667h-128v-128h128V170.667z M341.333,341.333
                 h-128v-128h128V341.333z M341.333,170.667h-128v-128h128V170.667z"/>
             </svg>
-            <div class="menu bar">
+            <div class="menu bar" style={{ paddingLeft: ".33em" }}>
               <Tooltip tooltip="Insert table (3x3)">
                 <div id="TABLE_INSERT" class="button wide" onClick={() => commands.table.insertTable(callback)}>
                   <svg viewBox="0 0 384 384">
@@ -398,15 +421,37 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
           </div>
         </Tooltip>
 
-        <Tooltip tooltip="Highlight">
-          <div id="HIGH" class="button" onClick={() => commands.highlight(callback)}>
-            <svg viewBox="0 0 512 512">
-              <polygon points="338.231,77.679 153.163,232.022 299.779,378.637 454.122,193.57" />
-              <polygon points="407.634,19.801 361.366,58.387 473.414,170.435 512,124.168" />
-              <path d="M134.863,256.148c-11.814,34.634-30.789,65.513-56.885,91.608l-10.606,10.607l106.066,106.066l10.607-10.607
-                c25.95-25.95,56.838-44.91,91.619-56.873L134.863,256.148z"/>
-              <polygon points="67.372,400.789 0,460.379 96.46,492.199 131.012,464.429" />
+        <Tooltip tooltip="Text Color">
+          <div id="TC" class={clsx("button", submenu === "TC" && "active")} onClick={toggleSubmenu}>
+            <svg viewBox="0 0 94.737 94.737">
+              <path d="M72.782,0H50.043L38.632,34.561h7.46c2.792,0,5.269,1.353,6.828,3.431l0.385-1.452l7.189-21.336l2.339-0.013l7.534,22.813
+                H52.932c1.064,1.426,1.704,3.188,1.704,5.099v9.924h18.918l3.341,12.704h17.515L72.782,0z"/>
+              <path d="M51.547,85.23c-0.888-2.971-1.488-12.396-1.488-19.766c0-0.902-0.235-1.75-0.645-2.486
+                c0.41-0.914,0.643-1.922,0.643-2.985V46.498c0-4.04-3.286-7.326-7.326-7.326h-6.926c-0.063-0.833-0.107-1.664-0.133-2.474
+                c-0.029-0.729-0.039-1.406-0.042-2.073c-0.01-0.703,0.002-1.277,0.032-1.776c0.06-1.079,0.188-2.124,0.378-3.057
+                c0.205-1,0.432-1.649,0.519-1.883c0.015-0.041,0.03-0.08,0.044-0.121c0.056-0.161,0.104-0.281,0.136-0.351
+                c2.836-5.413,0.769-12.133-4.634-15.013c-1.597-0.85-3.394-1.3-5.195-1.307c-1.803,0.007-3.599,0.457-5.194,1.307
+                c-5.402,2.88-7.471,9.6-4.635,15.013c0.031,0.069,0.081,0.189,0.137,0.351c0.014,0.041,0.028,0.08,0.044,0.121
+                c0.087,0.233,0.312,0.883,0.518,1.883c0.19,0.933,0.32,1.978,0.378,3.057c0.031,0.499,0.042,1.073,0.033,1.776
+                c-0.004,0.667-0.013,1.344-0.042,2.073c-0.026,0.81-0.07,1.641-0.133,2.474h-6.926c-4.04,0-7.326,3.286-7.326,7.326v13.495
+                c0,1.063,0.231,2.071,0.642,2.985c-0.409,0.736-0.644,1.584-0.644,2.486c0,7.368-0.602,16.795-1.488,19.766
+                c-1.821,1.5-2.168,3.619-1.828,5.191c0.937,4.315,5.459,4.315,6.945,4.315c3.454,0,9.681-0.606,9.943-0.632
+                c0.402-0.041,0.791-0.127,1.159-0.252c0.395,0.099,0.805,0.151,1.222,0.152l7.195,0.035l7.196-0.035
+                c0.417-0.001,0.827-0.055,1.221-0.152c0.368,0.125,0.757,0.211,1.159,0.252c0.263,0.024,6.491,0.632,9.944,0.632
+                c1.485,0,6.01,0,6.944-4.315C53.715,88.85,53.368,86.73,51.547,85.23z M37.074,89.198L34.326,77.21l-1.375,11.871l-13.3-0.006
+                l-2.906-6.99v7.113c0,0-13.952,1.368-10.942,0c3.009-1.367,3.009-23.527,3.009-23.527h18.098h18.099c0,0,0,22.16,3.009,23.527
+                C51.026,90.566,37.074,89.198,37.074,89.198z"/>
             </svg>
+            <div class="menu bar" style={{ paddingLeft: ".3em" }}>
+              {HIGHLIGHT_COLORS.filter(ThemeColorFilter).map((color) => (
+                <Tooltip tooltip={`Change selected text color to ${capitalize(color)}`}>
+                  <div class={`plain button letter my-notes-text-color-${color}`} onClick={() => commands.highlight(`my-notes-text-color-${color}`, callback)}>A</div>
+                </Tooltip>
+              ))}
+              <Tooltip tooltip="Highlight selected text">
+                <div class="last plain button auto letter my-notes-highlight" onClick={() => commands.highlight("my-notes-highlight", callback)}>Hi</div>
+              </Tooltip>
+            </div>
           </div>
         </Tooltip>
 

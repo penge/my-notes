@@ -35,7 +35,7 @@
 **My Notes:**
 
 <ol type="A">
-  <li>Click on My Notes icon in Chrome toolbar (pin the icon for quick access)</li>
+  <li>Click on My Notes icon in Chrome Toolbar (pin the icon for quick access)</li>
   <li>Use keyboard shortcut (see <code>chrome://extensions/shortcuts</code>)</li>
 </ol>
 
@@ -43,7 +43,8 @@
 
 <ol type="A">
   <li>Click on gear icon in bottom left corner</li>
-  <li>Click on three-dots icon next to My Notes in Chrome toolbar and select Options</li>
+  <li>Right-click on the pinned icon in Chrome Toolbar and select Options</li>
+  <li>Click on three-dots icon next to My Notes in Chrome Toolbar and select Options</li>
   <li>Use keyboard shortcut (see Options)</li>
 </ol>
 
@@ -91,7 +92,30 @@ Sync button tooltip shows the time of the most recent synchronization.
 My Notes has only access to the folder "My Notes" and only to the files it created in this folder.
 It cannot see, access or modify any other files in your Google Drive.
 
-Google Drive Sync works only if the extension is installed from Web Store.
+<br><br>
+
+## Tips and tricks
+
+1. Set a keyboard shortcut to quickly open My Notes (for example `Cmd + Shift + M`), which you can set on this page `chrome://extensions/shortcuts`. If you make the keyboard shortcut Global, it will open My Notes even if Google Chrome is closed.
+2. Check keyboard shortcuts (open Options) on how to quickly do some actions.
+3. Hold down the Shift key (`Cmd + Shift + V`) to paste text in a plain format (without styles).
+4. Hide Toolbar and Sidebar if you prefer a simple interface.
+5. See [Google Fonts](https://fonts.google.com) for a font you like, write its name into My Notes Options to use it.
+6. Note name is present in the URL, therefore you can save it to bookmarks for quick access (if you append saved URL with `&focus`, it will always open that note in Focus mode).
+7. Use Context menu to transfer selected text to My Notes in other computer(s).
+8. Use Custom theme to customize the look of My Notes in any way needed.
+9. Drag and Drop text onto a note's name in the Sidebar to insert the text into the note.
+10. Drag the Sidebar line to resize the Sidebar, double-click on the Sidebar line to restore the original Sidebar width.
+
+<br><br>
+
+## How to contribute
+
+1. Share your feedback (what to improve, what to change) under [Issues](https://github.com/penge/my-notes/issues) or join the discussion in [Discussions](https://github.com/penge/my-notes/discussions).
+2. [Buy Me a Coffee](https://www.buymeacoffee.com/privacy-policy).
+3. Develop a feature.
+4. Help to test the upcoming version (to get feedback, to improve or tweak).
+5. Help to improve the documentation.
 
 <br><br>
 
@@ -213,7 +237,7 @@ User has the choice to either approve or deny the permissions.
 
 **1. Where is My Notes published? What is the process behind publishing My Notes?**
 
-My Notes is published to [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop), a store for Google Chrome extensions.
+My Notes is published on [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop), a store for Google Chrome extensions.
 When publishing a new version, I first make a [new release](https://github.com/penge/my-notes/releases) here on GitHub.
 Then I create a build of the new release and send it to Web Store for a review.
 The review usually takes between 24 hours and a few days.
