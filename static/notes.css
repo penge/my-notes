@@ -276,6 +276,47 @@ body.with-control #content a {
 .my-notes-text-color-white    { color: white; }
 .my-notes-text-color-silver   { color: silver; }
 
+#my-notes-image-skeleton {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  background: #f5f5f5;
+}
+
+#my-notes-image-to-upload-overlay-caption {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: .5em;
+  background: #1565c0;
+  color: white;
+}
+
+#my-notes-image-to-upload-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  opacity: .6;
+  background: white;
+}
+
+body.locked #sidebar,
+body.locked #toolbar {
+  user-select: none;
+  pointer-events: none;
+}
+
+body.locked #content {
+  user-select: none;
+  -webkit-user-modify: read-only;
+}
+
+.my-notes-image {
+  background: #f9f9f9;
+}
+
 /* Context menu */
 
 #context-menu {

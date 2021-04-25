@@ -18,9 +18,13 @@ export default async (): Promise<Sync | undefined> => {
   }
   const folderLocation = `https://drive.google.com/drive/u/0/folders/${folderId}`;
 
+  // Get assets folder ID
+  const assetsFolderId = await api.getAssetsFolderId(folderId) || await api.createAssetsFolder(folderId);
+
   const sync: Sync = {
     folderId,
     folderLocation,
+    assetsFolderId,
   };
 
   await setItem<Sync>("sync", sync);

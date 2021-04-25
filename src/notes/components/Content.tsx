@@ -2,6 +2,11 @@ import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import commands from "../toolbar/commands";
+import __range from "notes/range";
+
+import { isImageFile } from "./image/read-image";
+import { dropImage } from "./image/drop-image";
+import { runUploadPreconditions } from "background/google-drive/preconditions/upload-preconditions";
 
 interface ContentProps {
   active: string
@@ -99,6 +104,33 @@ const Content = ({ active, initialContent, onEdit, indentOnTab, tabSize }: Conte
       autofocus
       onInput={onInput}
       onClick={openLink}
+      onDragEnter={() => {
+        __range.empty();
+      }}
+      onDrop={async (event) => {
+        const file = event.dataTransfer?.files[0];
+        if (!file || !isImageFile(file)) {
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.add("locked");
+
+        const result = await runUploadPreconditions();
+        if (!result) {
+          document.body.classList.remove("locked");
+          return;
+        }
+
+        const { sync, token } = result;
+        await dropImage({
+          event,
+          sync,
+          token,
+          file,
+          onComplete: onInput,
+        });
+      }}
     />
   );
 };
