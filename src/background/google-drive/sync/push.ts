@@ -23,7 +23,7 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
 
     // 1. Create a file for every new note
     //    COND: note.sync is undefined
-    if (!("sync" in note)) {
+    if (!note.sync) {
       Log(`SYNC - OUT - CREATING FILE - ${noteName}`);
       const file = await createFile(folderId, { ...note, name: noteName }); // Returns { id, name, content, createdTime, modifiedTime }
       note.sync = { file: merge(note, file) };
@@ -32,9 +32,6 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
 
     // 2. Update file for every updated note
     //    COND: note.modifiedTime > note.sync.file.modifiedTime
-    if (!note.sync) {
-      continue;
-    }
     if (new Date(note.modifiedTime).getTime() > new Date(note.sync.file.modifiedTime).getTime()) {
       Log(`SYNC - OUT - UPDATING FILE - ${noteName} (name before: ${note.sync.file.name})`);
       const file = await updateFile(note.sync.file.id, { ...note, name: noteName }); // Returns { id, name, content, modifiedTime }
