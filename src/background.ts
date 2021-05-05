@@ -3,7 +3,7 @@ import { runMigrations } from "background/init/migrations";
 import { showNewVersionNotification } from "background/init/notifications";
 import { openMyNotesOnIconClick, openMyNotesOnKeyboardShortcut } from "background/init/open";
 import { registerGoogleDriveMessages } from "background/init/google-drive";
-import { recreateContextMenu } from "background/init/context-menu";
+import { attachContextMenuOnClicked, recreateContextMenuFromNotes } from "background/init/context-menu";
 import { saveTextOnDrop, saveTextToLocalMyNotes } from "background/init/saving";
 
 import {
@@ -28,16 +28,13 @@ saveTextOnDrop();
 // Google Drive Sync
 registerGoogleDriveMessages();
 
-// Context menu
-const recreateContextMenuFromNotes = (notes: NotesObject) => {
-  const noteNames = Object.keys(notes).sort();
-  recreateContextMenu(noteNames);
-};
-
+// Context menu (recreate on initial load)
+attachContextMenuOnClicked();
 chrome.storage.local.get("notes", (local) => {
   recreateContextMenuFromNotes(local.notes as NotesObject);
 });
 
+// Context menu (recreate when notes are renamed/created/deleted)
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local" && changes["notes"]) {
     recreateContextMenuFromNotes(changes.notes.newValue as NotesObject);

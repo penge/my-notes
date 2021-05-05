@@ -151,7 +151,7 @@ const Sidebar = ({
           </div>
         </Tooltip>
 
-        <Tooltip tooltip={(sync && sync.lastSync) ? (os ? syncNowTitles[os](sync.lastSync) : "") : syncNowTitles.disabled}>
+        <Tooltip id="sync-now-tooltip" tooltip={(sync && sync.lastSync) ? (os ? syncNowTitles[os](sync.lastSync) : "") : syncNowTitles.disabled}>
           <div id="sync-now"
             class={clsx("button", (!sync || !sync.lastSync) && "disabled")}
             onClick={() => syncNotes(sync)}
