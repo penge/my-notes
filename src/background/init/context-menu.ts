@@ -1,4 +1,5 @@
 import { Log } from "shared/logger";
+import { NotesObject } from "shared/storage/schema";
 import {
   saveTextToLocalMyNotes,
   saveTextToRemotelyOpenMyNotes,
@@ -55,38 +56,26 @@ const createContextMenu = (noteNames: string[]): void => {
 };
 
 let lastNoteNames: string[] = [];
-let onClickedAttached = false;
 
-const attachOnClicked = () => {
-  if (onClickedAttached) {
+export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClicked.addListener((info) => {
+  const menuId: string = info.menuItemId;
+  const textToSave = getTextToSave(info);
+
+  if (menuId.startsWith(MY_NOTES_SAVE_TO_NOTE_PREFIX)) {
+    const destinationNoteName = menuId.replace(MY_NOTES_SAVE_TO_NOTE_PREFIX, "");
+    Log(`Context menu is saving text to ${destinationNoteName}`);
+    saveTextToLocalMyNotes(textToSave, destinationNoteName);
     return;
   }
 
-  Log("Context menu is attaching on clicked");
-  onClickedAttached = true;
+  if (info.menuItemId === MY_NOTES_SAVE_TO_REMOTE) {
+    Log("Context menu is saving text to be picked up by the remotely open My Notes");
+    saveTextToRemotelyOpenMyNotes(textToSave);
+    return;
+  }
+});
 
-  chrome.contextMenus.onClicked.addListener((info) => {
-    const menuId: string = info.menuItemId;
-    const textToSave = getTextToSave(info);
-
-    if (menuId.startsWith(MY_NOTES_SAVE_TO_NOTE_PREFIX)) {
-      const destinationNoteName = menuId.replace(MY_NOTES_SAVE_TO_NOTE_PREFIX, "");
-      Log(`Context menu is saving text to ${destinationNoteName}`);
-      saveTextToLocalMyNotes(textToSave, destinationNoteName);
-      return;
-    }
-
-    if (info.menuItemId === MY_NOTES_SAVE_TO_REMOTE) {
-      Log("Context menu is saving text to be picked up by the remotely open My Notes");
-      saveTextToRemotelyOpenMyNotes(textToSave);
-      return;
-    }
-  });
-};
-
-export const recreateContextMenu = (noteNames: string[]): void => {
-  attachOnClicked(); // attach onClicked only once
-
+const recreateContextMenu = (noteNames: string[]): void => {
   // re-create context menu only if noteNames changed
   if (JSON.stringify(lastNoteNames) === JSON.stringify(noteNames)) {
     return;
@@ -97,4 +86,9 @@ export const recreateContextMenu = (noteNames: string[]): void => {
   chrome.contextMenus.removeAll(() => {
     createContextMenu(noteNames);
   });
+};
+
+export const recreateContextMenuFromNotes = (notes: NotesObject): void => {
+  const noteNames = Object.keys(notes).sort();
+  recreateContextMenu(noteNames);
 };
