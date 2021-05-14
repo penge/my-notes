@@ -17,6 +17,7 @@
     "test": "LOG_LEVEL=SILENT TZ=UTC jest",
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",
     "develop-watch": "npm run develop && chokidar \"src/**/*.(ts|tsx)\" -c \"npm run __develop-core\"",
+    "develop-watch-static": "chokidar \"static/*.(html|css)\" -c \"cp {path} out\"",
     "build": "npm run __prepare-folder && npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --minify --outdir=out"
   },
   "devDependencies": {
