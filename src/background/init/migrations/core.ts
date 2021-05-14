@@ -27,6 +27,7 @@ export const expectedKeys = [
   "focus",
   "tab",
   "tabSize",
+  "autoSync",
 ];
 
 export default (sync: { [key: string]: unknown }, local: { [key: string]: unknown }): Storage => {
@@ -84,6 +85,7 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,
     tab: validBoolean(local.tab) ? local.tab : defaultValues.tab,
     tabSize: validTabSize(local.tabSize) ? local.tabSize : defaultValues.tabSize,
+    autoSync: validBoolean(local.autoSync) ? local.autoSync : defaultValues.autoSync,
   };
 
   return storage;

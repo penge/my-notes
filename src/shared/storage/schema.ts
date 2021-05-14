@@ -76,6 +76,7 @@ export interface Storage {
   focus: boolean
   tab: boolean
   tabSize: number
+  autoSync: boolean
 
   // Sync
   sync?: Sync // Google Drive Sync
