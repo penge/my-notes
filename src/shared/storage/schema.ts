@@ -35,6 +35,7 @@ export interface Notification {
 export interface Sync {
   folderId: string
   folderLocation: string
+  assetsFolderId: string
   lastSync?: string
 }
 

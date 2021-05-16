@@ -11,20 +11,26 @@ import {
 import { listFoldersQuery, listFilesQuery } from "./queries";
 import files from "./files/index";
 
-export const createMyNotesFolder = async (): Promise<string> => {
-  const body = createFolderBody("My Notes");
+const createFolder = async (folderName: string, parent?: string): Promise<string> => {
+  const body = createFolderBody(folderName, parent);
   const json = await files.create(body) as { id: string };
   const folderId = json && json.id;
   return folderId;
 };
 
-export const getMyNotesFolderId = async (): Promise<string> => {
-  const query = listFoldersQuery("My Notes");
+const getFolder = async (folderName: string, parent?: string): Promise<string> => {
+  const query = listFoldersQuery(folderName, parent);
   const fields = "files(id)";
   const json = await files.list(query, fields) as { files: {id: string}[] };
   const folderId = json && json.files && json.files[0] && json.files[0].id;
   return folderId;
 };
+
+export const createMyNotesFolder = (): Promise<string> => createFolder("My Notes");
+export const getMyNotesFolderId = (): Promise<string> => getFolder("My Notes");
+
+export const createAssetsFolder = (parent: string): Promise<string> => createFolder("assets", parent);
+export const getAssetsFolderId = (parent: string): Promise<string> => getFolder("assets", parent);
 
 export const createFile = async (folderId: string, { name, content, createdTime, modifiedTime }: CreateFileBodyOptions): Promise<GoogleDriveFile> => {
   const body = createFileBody(folderId, { name, content, createdTime, modifiedTime });
