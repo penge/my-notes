@@ -53,7 +53,7 @@ interface ToolbarProps {
   theme?: Theme
 }
 
-const Toolbar = ({ os, note, theme }: ToolbarProps): h.JSX.Element => {
+const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
   const getTitle = useCallback((key: string) => {
     const title = (os && titles[key] && titles[key][os]) || "";
     return title;
@@ -75,16 +75,6 @@ const Toolbar = ({ os, note, theme }: ToolbarProps): h.JSX.Element => {
 
   const [insertImageModalProps, setInsertImageModalProps] = useState<InsertImageModalProps | null>(null);
   const [insertLinkModalProps, setInsertLinkModalProps] = useState<InsertLinkModalProps | null>(null);
-
-  const ThemeColorFilter = useCallback((color: string): boolean => {
-    if (
-      (theme === "dark" && ["black", "white", "silver", "purple"].includes(color)) ||
-      (theme === "light" && ["white", "purple"].includes(color))
-    ) {
-      return false;
-    }
-    return true;
-  }, [theme]);
 
   return (
     <Fragment>
@@ -443,11 +433,14 @@ const Toolbar = ({ os, note, theme }: ToolbarProps): h.JSX.Element => {
                 C51.026,90.566,37.074,89.198,37.074,89.198z"/>
             </svg>
             <div class="menu bar" style={{ paddingLeft: ".3em" }}>
-              {HIGHLIGHT_COLORS.filter(ThemeColorFilter).map((color) => (
+              {HIGHLIGHT_COLORS.map((color) => (
                 <Tooltip tooltip={`Change selected text color to ${capitalize(color)}`}>
                   <div class={`plain button letter my-notes-text-color-${color}`} onClick={() => commands.highlight(`my-notes-text-color-${color}`, callback)}>A</div>
                 </Tooltip>
               ))}
+              <Tooltip tooltip="Change selected text color to default text color">
+                <div class="plain button letter my-notes-text-color-auto" onClick={() => commands.highlight("my-notes-text-color-auto", callback)}>Auto</div>
+              </Tooltip>
               <Tooltip tooltip="Highlight selected text">
                 <div class="last plain button auto letter my-notes-highlight" onClick={() => commands.highlight("my-notes-highlight", callback)}>Hi</div>
               </Tooltip>
