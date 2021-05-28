@@ -275,6 +275,7 @@ body.with-control #content a {
 .my-notes-text-color-black    { color: black; }
 .my-notes-text-color-white    { color: white; }
 .my-notes-text-color-silver   { color: silver; }
+.my-notes-text-color-auto     { color: var(--text-color); }
 
 #my-notes-image-skeleton {
   position: relative;

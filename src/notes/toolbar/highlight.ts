@@ -11,50 +11,75 @@ export const HIGHLIGHT_COLORS: string[] = [
   "cyan",
   "magenta",
   "purple",
-  "black",
-  "white",
   "silver",
 ];
 
 const validCssClasses: string[] = [
   "my-notes-highlight",
   ...HIGHLIGHT_COLORS.map((color) => `my-notes-text-color-${color}`),
+  "my-notes-text-color-auto", // used to change text color to theme's default
 ];
+
+const createSpan = (cssClass: string, innerText?: string) => {
+  const span = document.createElement("span");
+  span.classList.add(cssClass);
+  if (innerText) {
+    span.innerText = innerText;
+  }
+  return span;
+};
 
 const highlight = (cssClass: string, cb: Callback): void => withRange((range: Range) => {
   if (
-    !validCssClasses.includes(cssClass) ||
-    range.startContainer !== range.endContainer ||
-    range.startContainer.nodeType !== Node.TEXT_NODE
+    !validCssClasses.includes(cssClass) ||           // only valid CSS class can be added
+    range.startContainer !== range.endContainer ||   // selection must be within the same element (in other words, selection across different elements is not allowed)
+    range.startContainer.nodeType !== Node.TEXT_NODE // CSS can be applied only if text is selected
   ) {
     return;
   }
 
-  const parent = range.startContainer.parentElement;
-  const isParentHighlighted = parent && parent.tagName === "SPAN" &&
+  const parent = range.startContainer.parentElement?.id !== "content"
+    ? range.startContainer.parentElement
+    : null;
+
+  const isParentHighlighted = parent && ["SPAN", "A"].includes(parent.tagName) &&
     validCssClasses.some((clazz) => parent.classList.contains(clazz));
 
-  const newElement = document.createElement("span");
-  newElement.classList.add(cssClass);
-
-  if (!parent || !isParentHighlighted) {
+  if (!parent) {
     // Surround text with a new highlight <span>
-    range.surroundContents(newElement);
-  } else {
-    const shouldResetClass =
-      cssClass === "my-notes-text-color-black" ||
-      parent.classList.contains(cssClass);
+    range.surroundContents(createSpan(cssClass));
 
-    if (shouldResetClass) {
-      // Replace parent highlight <span> with text (removes highlight style)
-      const superParent = parent.parentNode;
-      parent.replaceWith(parent.innerText);
-      superParent?.normalize(); // join consecutive TEXT_NODEs into one TEXT_NODE (this is a needed cleanup as highlight requires startContainer and endContainer to be the same TEXT_NODE)
+  } else if (!isParentHighlighted && parent.tagName === "SPAN") { // having "SPAN" parent which is not highlighted
+    // Surround text with a new highlight <span>
+    range.surroundContents(createSpan(cssClass));
 
-    } else {
-      // Replace parent highlight <span> with new highlight <span> (changes highlight style)
-      newElement.innerText = parent.innerText;
-      parent.replaceWith(newElement);
+  } else if (!isParentHighlighted && parent.tagName === "A") { // having "A" parent which is not highlighted
+    parent.classList.add(cssClass);
+
+  } else { // having a highlighted parent
+    const shouldResetClass = parent.classList.contains(cssClass) // applying already applied CSS class should remove it
+      || cssClass === "my-notes-text-color-auto"; // auto should remove any applied CSS class
+
+    if (shouldResetClass) { // removing CSS class
+      if (parent.tagName === "A") {
+        parent.classList.remove(...validCssClasses);
+
+      } else { // parent is other than "A"
+        // Replace parent highlight <span> with text (removes highlight style)
+        const superParent = parent.parentNode;
+        parent.replaceWith(parent.innerText);
+        superParent?.normalize(); // join consecutive TEXT_NODEs into one TEXT_NODE (this is a needed cleanup as highlight requires startContainer and endContainer to be the same TEXT_NODE)
+      }
+
+    } else { // changing CSS class
+      if (parent.tagName === "A") {
+        parent.classList.remove(...validCssClasses);
+        parent.classList.add(cssClass);
+
+      } else {
+        // Replace parent highlight <span> with new highlight <span> (changes highlight style)
+        parent.replaceWith(createSpan(cssClass, parent.innerText));
+      }
     }
   }
 

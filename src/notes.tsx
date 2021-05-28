@@ -478,7 +478,6 @@ const Notes = () => {
       <__Toolbar
         os={os}
         note={notesProps.notes[notesProps.active]}
-        theme={theme}
       />
 
       {contextMenuProps && (
