@@ -21,7 +21,7 @@
     "build": "npm run __prepare-folder && npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --minify --outdir=out"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.134",
+    "@types/chrome": "0.0.143",
     "@types/jest": "^26.0.23",
     "@types/jsdom": "^16.2.10",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
