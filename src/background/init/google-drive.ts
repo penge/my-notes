@@ -1,22 +1,22 @@
 import { initiate, sync, syncDeleteFile, stop } from "../google-drive/sync/index";
 import { Message, MessageType } from "shared/storage/schema";
 
-let syncLock = false;
+let syncInProgress = false;
 
 export const registerGoogleDriveMessages = (): void => chrome.runtime.onMessage.addListener(async (message: Message) => {
   if (message.type === MessageType.SYNC_INITIATE) {
     const initiated = await initiate();
     if (initiated) {
-      syncLock = true;
+      syncInProgress = true;
       await sync();
-      syncLock = false;
+      syncInProgress = false;
     }
   }
 
-  if (message.type === MessageType.SYNC && syncLock === false) {
-    syncLock = true;
+  if (message.type === MessageType.SYNC && syncInProgress === false) {
+    syncInProgress = true;
     await sync();
-    syncLock = false;
+    syncInProgress = false;
   }
 
   if (message.type === MessageType.SYNC_DELETE_FILE && message.payload) {

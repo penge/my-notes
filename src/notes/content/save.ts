@@ -5,17 +5,20 @@ export const saveNote = (active: string, content: string, tabId: string, notes: 
     return;
   }
 
+  const modifiedTime = new Date().toISOString();
+
   const notesCopy: NotesObject = {
     ...notes,
     [active]: {
       ...notes[active],
       content,
-      modifiedTime: new Date().toISOString(),
+      modifiedTime,
     },
   };
 
   chrome.storage.local.set({
     notes: notesCopy,
-    setBy: `${tabId}-${new Date().getTime()}`,
+    setBy: `${tabId}-${modifiedTime}`,
+    lastEdit: modifiedTime,
   });
 };

@@ -35,6 +35,8 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
     // Notes
     notes,
     active: "One",
+    setBy: "",
+    lastEdit: "",
 
     // Options
     focus: false,

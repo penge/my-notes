@@ -22,6 +22,8 @@ export const expectedKeys = [
   // Notes
   "notes",
   "active",
+  "setBy",
+  "lastEdit",
 
   // Options
   "focus",
@@ -80,6 +82,8 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     // Notes
     notes: notes as NotesObject, // already migrated to [3.x]
     active: tryNote(local.active as string) || tryNote(defaultValues.active as string) || firstAvailableNote,
+    setBy: local.setBy as string || "",
+    lastEdit: local.lastEdit as string || "",
 
     // Options
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,

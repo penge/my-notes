@@ -63,7 +63,7 @@ export interface Storage {
   font: RegularFont | GoogleFont
   size: number
   sidebar: boolean
-  sidebarWidth?: number
+  sidebarWidth?: string
   toolbar: boolean
   theme: Theme
   customTheme: string
@@ -71,6 +71,8 @@ export interface Storage {
   // Notes
   notes: NotesObject
   active: string | null
+  setBy: string     // e.g. "worker-[ISOString]", "[tabId]-[ISOString]"
+  lastEdit: string  // e.g. "[ISOString]"
 
   // Options
   focus: boolean

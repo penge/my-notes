@@ -61,5 +61,7 @@ it("sets custom values", () => {
     sidebar: true,
     toolbar: true,
     autoSync: false,
+    setBy: "",
+    lastEdit: "",
   }, local));
 });
