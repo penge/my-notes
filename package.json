@@ -14,7 +14,7 @@
     "__check-types": "tsc --noEmit",
     "__develop-core": "npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --sourcemap=inline --outdir=out",
     "lint": "eslint src --ext .ts,.tsx",
-    "test": "LOG_LEVEL=SILENT TZ=UTC jest",
+    "test": "LOG_LEVEL=SILENT TZ=UTC jest --maxWorkers=4",
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",
     "develop-watch": "npm run develop && chokidar \"src/**/*.(ts|tsx)\" -c \"npm run __develop-core\"",
     "develop-watch-static": "chokidar \"static/*.(html|css)\" -c \"cp {path} out\"",
