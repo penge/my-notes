@@ -78,3 +78,23 @@ export const saveTextOnDrop = (): void => chrome.runtime.onMessage.addListener((
     });
   });
 });
+
+export const saveTextOnRemoteTransfer = (): void => {
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    // Used by "Save to remotely open My Notes"
+    if (areaName === "sync" && changes["selection"]) {
+      const selection = changes["selection"].newValue as ContextMenuSelection;
+      if (!selection || !selection.text) {
+        return;
+      }
+
+      chrome.storage.local.get(["id"], local => {
+        if (selection.sender === local.id) {
+          return;
+        }
+
+        saveTextToLocalMyNotes(selection.text, "@Received");
+      });
+    }
+  });
+};

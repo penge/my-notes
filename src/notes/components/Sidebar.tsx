@@ -5,20 +5,19 @@ import { NotesObject, Sync, MessageType } from "shared/storage/schema";
 import Drag from "./Drag";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
-import { syncNotes } from "notes/content/sync";
 import { sendMessage } from "messages";
 import Tooltip from "./Tooltip";
 
 const syncNowTitles = {
   mac: (lastSync: string) => (
     <Fragment>
-      <div>Click to sync the notes to and from Google Drive now (⌘ + R)</div>
+      <div>Click to sync notes to and from Google Drive (⌘ + R)</div>
       <div>Last sync: {formatDate(lastSync)}</div>
     </Fragment>
   ),
   other: (lastSync: string) => (
     <Fragment>
-      <div>Click to sync the notes to and from Google Drive now (Ctrl + R)</div>
+      <div>Click to sync notes to and from Google Drive (Ctrl + R)</div>
       <div>Last sync: {formatDate(lastSync)}</div>
     </Fragment>
   ),
@@ -154,7 +153,7 @@ const Sidebar = ({
         <Tooltip id="sync-now-tooltip" tooltip={(sync && sync.lastSync) ? (os ? syncNowTitles[os](sync.lastSync) : "") : syncNowTitles.disabled}>
           <div id="sync-now"
             class={clsx("button", (!sync || !sync.lastSync) && "disabled")}
-            onClick={() => syncNotes(sync)}
+            onClick={() => sendMessage(MessageType.SYNC)}
           >
             <svg viewBox="0 0 341.333 341.333">
               <path d="M341.227,149.333V0l-50.133,50.133C260.267,19.2,217.707,0,170.56,0C76.267,0,0.107,76.373,0.107,170.667

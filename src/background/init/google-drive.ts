@@ -1,31 +1,102 @@
 import { initiate, sync, syncDeleteFile, stop } from "../google-drive/sync/index";
-import { Message, MessageType } from "shared/storage/schema";
+import { Storage, Message, MessageType } from "shared/storage/schema";
+import { withGrantedPermission } from "shared/permissions";
+import { Log } from "shared/logger";
 
-let syncInProgress = false;
+const PREFIX = "Google Drive Sync";
 
-export const registerGoogleDriveMessages = (): void => chrome.runtime.onMessage.addListener(async (message: Message) => {
+export const handleGoogleDriveMessage = (message: Message): void => {
   if (message.type === MessageType.SYNC_INITIATE) {
-    const initiated = await initiate();
-    if (initiated) {
-      syncInProgress = true;
-      await sync();
-      syncInProgress = false;
-    }
+    initiate().then((initiated) => initiated && sync());
   }
 
-  if (message.type === MessageType.SYNC && syncInProgress === false) {
-    syncInProgress = true;
-    await sync();
-    syncInProgress = false;
+  if (message.type === MessageType.SYNC) {
+    sync();
   }
 
   if (message.type === MessageType.SYNC_DELETE_FILE && message.payload) {
     const fileId = message.payload as string;
-    await syncDeleteFile(fileId);
+    syncDeleteFile(fileId);
   }
 
   if (message.type === MessageType.SYNC_STOP) {
-    await stop();
+    stop();
   }
+};
+
+export const registerGoogleDriveMessages = (): void => {
+  chrome.runtime.onMessage.addListener(handleGoogleDriveMessage);
+};
+
+const AUTO_SYNC_ALARM_NAME = "Auto Sync";
+const autoSyncOnAlarmListener = (alarm: chrome.alarms.Alarm) => {
+  if (alarm.name !== AUTO_SYNC_ALARM_NAME) {
+    return;
+  }
+
+  chrome.storage.local.get(["sync", "autoSync", "lastEdit"], local => {
+    const { sync: syncObj, autoSync, lastEdit } = local as Storage;
+    if (!syncObj || !autoSync) { // check if sync or autoSync wasn't meanwhile disabled by the user
+      detachGoogleDriveAutoSyncAlarm();
+      return;
+    }
+
+    if (lastEdit <= (syncObj.lastSync ?? "")) { // lastEdit should be GTE than sync.lastSync
+      return; // no need to auto sync
+    }
+
+    Log(`${PREFIX} - ${AUTO_SYNC_ALARM_NAME} is going to auto sync notes`);
+    sync();
+  });
+};
+
+const attachGoogleDriveAutoSyncAlarm = (): void => withGrantedPermission("alarms", () => {
+  chrome.alarms.onAlarm.removeListener(autoSyncOnAlarmListener);
+  chrome.alarms.clear(AUTO_SYNC_ALARM_NAME, () => {
+    chrome.alarms.onAlarm.addListener(autoSyncOnAlarmListener);
+    chrome.alarms.create(AUTO_SYNC_ALARM_NAME, {
+      periodInMinutes: 0.1, // Every 6 seconds
+    });
+
+    Log(`${PREFIX} - ${AUTO_SYNC_ALARM_NAME} was registered`);
+  });
 });
 
+const detachGoogleDriveAutoSyncAlarm = (): void => withGrantedPermission("alarms", () => {
+  chrome.alarms.onAlarm.removeListener(autoSyncOnAlarmListener);
+  chrome.alarms.clear(AUTO_SYNC_ALARM_NAME, (wasCleared) => {
+    if (wasCleared) {
+      Log(`${PREFIX} - ${AUTO_SYNC_ALARM_NAME} was unregistered`);
+    }
+  });
+});
+
+export const registerGoogleDriveAutoSync = (): void => {
+  // Attach alarm once service worker started
+  chrome.storage.local.get(["sync", "autoSync"], (local) => {
+    if (local.sync && local.autoSync) {
+      attachGoogleDriveAutoSyncAlarm();
+    }
+  });
+
+  // Attach/Detach alarm depending on storage changes
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== "local" || !changes["autoSync"]) { // only local, only "autoSync"
+      return;
+    }
+
+    const autoSync = changes["autoSync"].newValue;
+    if (!autoSync) {
+      detachGoogleDriveAutoSyncAlarm(); // we can detach alarm now, no need to check "sync"
+      return;
+    }
+
+    chrome.storage.local.get("sync", (local) => {
+      if (!local.sync) {
+        detachGoogleDriveAutoSyncAlarm();
+      }
+
+      attachGoogleDriveAutoSyncAlarm(); // both "sync" and "autoSync" are true here (required to attach the alarm)
+    });
+  });
+};

@@ -9,6 +9,7 @@ import __Options from "options/Options";
 import __Version from "options/Version";
 
 import {
+  Storage,
   RegularFont,
   GoogleFont,
   Theme,
@@ -23,6 +24,7 @@ const Options = () => {
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
   const [customTheme, setCustomTheme] = useState<string>("");
   const [sync, setSync] = useState<Sync | undefined>(undefined);
+  const [autoSync, setAutoSync] = useState<boolean>(false);
   const [tab, setTab] = useState<boolean>(false);
   const [tabSize, setTabSize] = useState<number>(-1);
 
@@ -33,14 +35,18 @@ const Options = () => {
       "theme",
       "customTheme",
       "sync",
+      "autoSync",
       "tab",
       "tabSize",
-    ], local => {
+    ], items => {
+      const local = items as Storage;
+
       setFont(local.font);
       setSize(local.size);
       setTheme(local.theme);
       setCustomTheme(local.customTheme);
       setSync(local.sync);
+      setAutoSync(local.autoSync);
       setTab(local.tab);
       setTabSize(local.tabSize);
     });
@@ -68,6 +74,10 @@ const Options = () => {
 
       if (changes["sync"]) {
         setSync(changes["sync"].newValue);
+      }
+
+      if (changes["autoSync"]) {
+        setAutoSync(changes["autoSync"].newValue);
       }
 
       if (changes["tab"]) {
@@ -98,6 +108,7 @@ const Options = () => {
       <__KeyboardShortcuts />
       <__Options
         sync={sync}
+        autoSync={autoSync}
         tab={tab}
         tabSize={tabSize}
       />

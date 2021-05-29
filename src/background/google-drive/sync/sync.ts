@@ -16,29 +16,53 @@ const createFile = api.createFile;
 const updateFile = api.updateFile;
 const deleteFile = api.deleteFile;
 
+let syncInProgress = false;
+
+const onStart = () => {
+  syncInProgress = true;
+  Log("SYNC - START");
+  sendMessage(MessageType.SYNC_START);
+};
+
+const onFail = () => {
+  syncInProgress = false;
+  Log("SYNC - FAIL");
+  sendMessage(MessageType.SYNC_FAIL);
+};
+
+const onDone = () => {
+  syncInProgress = false;
+  Log("SYNC - DONE");
+  sendMessage(MessageType.SYNC_DONE);
+};
+
 const sync = async (): Promise<boolean> => {
+  if (syncInProgress) {
+    Log("SYNC - ALREADY IN PROGRESS");
+    return false;
+  }
+
+  onStart();
+
   const fulfilled = await runSyncPreconditions("SYNC");
   if (!fulfilled) {
-    sendMessage(MessageType.SYNC_FAIL);
+    onFail();
     return false;
   }
 
   const { folderId, folderLocation, files } = fulfilled;
   const notes = await getItem<NotesObject>("notes");
   if (!notes) {
+    onDone();
     return false;
   }
-
-  Log("SYNC - START");
-  sendMessage(MessageType.SYNC_START);
 
   const notesAfterPull = await pull(notes, files, { getFile });
   const notesAfterPush = await push(folderId, notesAfterPull, { createFile, updateFile });
   await setItem("notes", notesAfterPush);
   await setItem("sync", { folderId, folderLocation, files, lastSync: new Date().toISOString() });
 
-  Log("SYNC - DONE");
-  sendMessage(MessageType.SYNC_DONE);
+  onDone();
 
   return true;
 };

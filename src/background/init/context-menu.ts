@@ -88,7 +88,19 @@ const recreateContextMenu = (noteNames: string[]): void => {
   });
 };
 
-export const recreateContextMenuFromNotes = (notes: NotesObject): void => {
+const recreateContextMenuFromNotes = (notes: NotesObject): void => {
   const noteNames = Object.keys(notes).sort();
   recreateContextMenu(noteNames);
+};
+
+export const createAndUpdateContextMenuFromNotes = (): void => {
+  chrome.storage.local.get("notes", (local) => {
+    recreateContextMenuFromNotes(local.notes as NotesObject);
+  });
+
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === "local" && changes["notes"]) {
+      recreateContextMenuFromNotes(changes.notes.newValue as NotesObject);
+    }
+  });
 };
