@@ -1,45 +1,49 @@
 import { Theme } from "shared/storage/schema";
 
-const reset = () => {
+const reset = (document: Document) => {
   const elem = document.getElementById("theme");
   elem && elem.remove();
 };
 
-const insertTheme = (theme: Theme) => {
+const appendTheme = (document: Document, element: HTMLLinkElement | HTMLStyleElement, theme: Theme) => {
+  document.head.appendChild(element);
+  document.body.id = theme;
+  document.body.style.opacity = "1";
+};
+
+const insertTheme = (document: Document, theme: Theme) => {
   const link = document.createElement("link");
   link.id = "theme";
   link.rel = "stylesheet";
   link.href = `themes/${theme}.css`;
-  document.getElementsByTagName("head")[0].appendChild(link);
-  document.body.id = theme;
+  appendTheme(document, link, theme);
 };
 
-const insertCustomTheme = (customTheme: string) => {
+const insertCustomTheme = (document: Document, customTheme: string) => {
   const style = document.createElement("style");
   style.id = "theme";
   style.innerHTML = customTheme;
   document.getElementsByTagName("head")[0].appendChild(style);
-  document.body.id = "custom";
+  appendTheme(document, style, "custom");
 };
 
 export interface SetThemeOptions {
-  name: Theme
+  theme: Theme
   customTheme?: string
 }
 
-export default function setTheme({ name, customTheme }: SetThemeOptions): void {
-  reset();
+export function setTheme(document: Document, { theme, customTheme }: SetThemeOptions): void {
+  reset(document);
 
-  if (name === "light" || name === "dark") {
-    insertTheme(name);
+  if (theme === "light" || theme === "dark") {
+    insertTheme(document, theme);
   }
 
-  if (name === "custom") {
+  if (theme === "custom") {
     if (customTheme && customTheme.trim().length > 0) {
-      const protectedCustomTheme = "body{opacity:1;}" + customTheme;
-      insertCustomTheme(protectedCustomTheme);
+      insertCustomTheme(document, customTheme);
     } else {
-      insertTheme("light");
+      insertTheme(document, "light");
     }
   }
 }

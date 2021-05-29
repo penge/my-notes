@@ -11,7 +11,7 @@ import {
   Message,
   MessageType,
 } from "shared/storage/schema";
-import setThemeCore from "themes/set-theme";
+import { setTheme as setThemeCore } from "themes/set-theme";
 
 import __Notification from "notes/components/Notification";
 import __Sidebar from "notes/components/Sidebar";
@@ -319,7 +319,7 @@ const Notes = () => {
     // - light.css
     // - dark.css
     // - customTheme string
-    theme && setThemeCore({ name: theme, customTheme: customTheme });
+    theme && setThemeCore(document, { theme, customTheme: customTheme });
   }, [theme, customTheme]);
 
   // Focus
