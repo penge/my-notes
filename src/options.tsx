@@ -14,7 +14,7 @@ import {
   Theme,
   Sync,
 } from "shared/storage/schema";
-import setThemeCore from "themes/set-theme";
+import { setTheme as setThemeCore } from "themes/set-theme";
 
 const Options = () => {
   const [version] = useState<string>(chrome.runtime.getManifest().version);
@@ -85,7 +85,7 @@ const Options = () => {
     // - light.css
     // - dark.css
     // - customTheme string
-    theme && setThemeCore({ name: theme, customTheme: customTheme });
+    theme && setThemeCore(document, { theme, customTheme: customTheme });
   }, [theme, customTheme]);
 
   return (
