@@ -24,8 +24,8 @@
     "@types/chrome": "0.0.143",
     "@types/jest": "^26.0.23",
     "@types/jsdom": "^16.2.10",
-    "@typescript-eslint/eslint-plugin": "^4.17.0",
-    "@typescript-eslint/parser": "^4.17.0",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
     "chokidar-cli": "^2.1.0",
     "copyfiles": "^2.4.1",
     "esbuild": "0.11.12",
@@ -34,7 +34,7 @@
     "jsdom": "^16.5.3",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.1",
-    "typescript": "4.2.4"
+    "typescript": "4.3.2"
   },
   "dependencies": {
     "clsx": "^1.1.1",
