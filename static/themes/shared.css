@@ -38,7 +38,7 @@ a:hover {
 
 .keyboard-shortcut, .url {
   border-radius: 3px;
-  padding: 3px 8px;
+  padding: 5px 10px;
   display: inline-block;
   font-family: "Courier New", Courier, monospace;
   background: var(--keyboard-shortcut-background-color);

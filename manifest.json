@@ -13,7 +13,8 @@
     "contextMenus"
   ],
   "optional_permissions": [
-    "identity"
+    "identity",
+    "alarms"
   ],
   "oauth2": {
     "client_id": "813847979218-unbbh8m0el8vjdi74rnqdarm1mhv3985.apps.googleusercontent.com",

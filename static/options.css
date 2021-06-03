@@ -9,18 +9,28 @@ body {
 h2 { padding-top: 50px; }
 h3 { padding-top: 20px; }
 
-label, li { padding: 0 8px; line-height: 1.5em; }
+label, li { padding: 0 6px; line-height: 1.5em; }
+
 input, select {
   font-family: inherit;
   font-size: inherit;
 }
+
+input[type="radio"], input[type='checkbox'] {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  margin: 0 10px 0 2px;
+}
+
+select { border-radius: 3px; }
 
 .separator { padding: 0 12px; }
 .bold { font-weight: bold; }
 .space-top { margin-top: 1em; }
 .space-left { margin-left: 1em; }
 
-/* Radio or Checkbox selection */
+/* Selection */
 
 .selection { padding: 10px 0; }
 .comment {
@@ -43,6 +53,8 @@ input, select {
 
 .font-area .selection {
   font-size: 80%;
+  display: flex;
+  align-items: center;
 }
 
 #google-fonts-area {
@@ -59,6 +71,20 @@ input, select {
   outline: none;
   border: 1px solid silver;
   padding: 12px;
+}
+
+#dark #google-fonts-area input, select {
+  border-color: transparent;
+}
+
+#google-fonts-area input[type="text"] {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+#google-fonts-area input[type="submit"] {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 /* Font size */
@@ -97,15 +123,24 @@ input, select {
   color: var(--comment-text-color);
 }
 
-.selection.with-comment .comment label {
+.selection.with-comment .selection {
+  display: flex;
+  align-items: center;
+}
+
+#tab-selection .comment label {
   padding-left: 0;
+}
+
+#tab-selection .comment select {
+  padding-left: 10px;
 }
 
 /* Theme labels */
 
 .theme-label {
   display: inline-block;
-  margin: 5px 0;
+  margin: 5px;
   padding: 10px 8px;
   border-radius: 3px;
 }
@@ -146,6 +181,16 @@ input, select {
   word-break: break-all;
 }
 
+div.disabled {
+  opacity: .3;
+  user-select: none;
+}
+
+div.disabled input,
+div.disabled select {
+  pointer-events: none;
+}
+
 /* Media Queries */
 
 @media only screen and (max-width: 600px) {
@@ -155,5 +200,13 @@ input, select {
 
   .separator {
     display: none;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #keyboard-shortcuts tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
   }
 }

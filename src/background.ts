@@ -1,15 +1,28 @@
 import { setId } from "background/init/id";
 import { runMigrations } from "background/init/migrations";
 import { showNewVersionNotification } from "background/init/notifications";
-import { openMyNotesOnIconClick, openMyNotesOnKeyboardShortcut } from "background/init/open";
-import { registerGoogleDriveMessages } from "background/init/google-drive";
-import { attachContextMenuOnClicked, recreateContextMenuFromNotes } from "background/init/context-menu";
-import { saveTextOnDrop, saveTextToLocalMyNotes } from "background/init/saving";
 
 import {
-  NotesObject,
-  ContextMenuSelection,
-} from "shared/storage/schema";
+  openMyNotesOnIconClick,
+  openMyNotesOnKeyboardShortcut,
+} from "background/init/open";
+
+import {
+  registerGoogleDriveMessages,
+  registerGoogleDriveAutoSync,
+} from "background/init/google-drive";
+
+import {
+  attachContextMenuOnClicked,
+  createAndUpdateContextMenuFromNotes,
+} from "background/init/context-menu";
+
+import {
+  saveTextOnDrop,
+  saveTextOnRemoteTransfer,
+} from "background/init/saving";
+
+import { handleChangedPermissions } from "background/init/permissions";
 
 // Run when Installed or Updated
 chrome.runtime.onInstalled.addListener((details) => {
@@ -22,37 +35,17 @@ chrome.runtime.onInstalled.addListener((details) => {
 openMyNotesOnIconClick();
 openMyNotesOnKeyboardShortcut();
 
-// Drop text onto a note in Sidebar
-saveTextOnDrop();
-
 // Google Drive Sync
 registerGoogleDriveMessages();
+registerGoogleDriveAutoSync();
 
-// Context menu (recreate on initial load)
+// Context menu
 attachContextMenuOnClicked();
-chrome.storage.local.get("notes", (local) => {
-  recreateContextMenuFromNotes(local.notes as NotesObject);
-});
+createAndUpdateContextMenuFromNotes();
 
-// Context menu (recreate when notes are renamed/created/deleted)
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local" && changes["notes"]) {
-    recreateContextMenuFromNotes(changes.notes.newValue as NotesObject);
-  }
+// Other ways to update note
+saveTextOnDrop(); // when you drop text onto a note in Sidebar
+saveTextOnRemoteTransfer(); // when you use "Save to remotely open My Notes" from the context menu
 
-  // Used by "Save to remotely open My Notes"
-  if (areaName === "sync" && changes["selection"]) {
-    const selection = changes["selection"].newValue as ContextMenuSelection;
-    if (!selection || !selection.text) {
-      return;
-    }
-
-    chrome.storage.local.get(["id"], local => {
-      if (selection.sender === local.id) {
-        return;
-      }
-
-      saveTextToLocalMyNotes(selection.text, "@Received");
-    });
-  }
-});
+// Permissions
+handleChangedPermissions(); // react to granted/removed optional permissions "identity" and "alarms"

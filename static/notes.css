@@ -95,7 +95,8 @@ svg {
   margin: .5em .25em;
   border-radius: 3px;
   height: 1.2em;
-  width: .82em
+  width: .82em;
+  flex-shrink: 0;
 }
 
 .bar > .button.disabled {

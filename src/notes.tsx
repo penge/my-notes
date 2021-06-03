@@ -2,6 +2,7 @@ import { h, render, Fragment } from "preact"; // eslint-disable-line @typescript
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 
 import {
+  Storage,
   Notification,
   RegularFont,
   GoogleFont,
@@ -29,7 +30,8 @@ import deleteNote from "notes/state/delete-note";
 import createNote from "notes/state/create-note";
 
 import { saveNote } from "notes/content/save";
-import { syncNotes } from "notes/content/sync";
+import { sendMessage } from "messages";
+
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 
@@ -71,6 +73,7 @@ const Notes = () => {
   syncRef.current = sync;
 
   const [initialized, setInitialized] = useState<boolean>(false);
+  const [initialAutoSync, setInitialAutoSync] = useState<boolean>(false);
 
   const [contextMenuProps, setContextMenuProps] = useState<ContextMenuProps | null>(null);
   const [renameNoteModalProps, setRenameNoteModalProps] = useState<RenameNoteModalProps | null>(null);
@@ -106,12 +109,15 @@ const Notes = () => {
 
       // Options
       "focus",
+      "autoSync",
       "tab",
       "tabSize",
 
       // Sync
-      "sync"
-    ], local => {
+      "sync",
+    ], items => {
+      const local = items as Storage;
+
       // Notifications
       setNotification(local.notification);
 
@@ -138,6 +144,7 @@ const Notes = () => {
 
       // Options
       setFocus(getFocusOverride() || local.focus);
+      setInitialAutoSync(Boolean(local.sync) && local.autoSync);
       setTab(local.tab);
       setTabSize(local.tabSize);
 
@@ -272,8 +279,14 @@ const Notes = () => {
     });
 
     chrome.runtime.onMessage.addListener((message: Message) => {
+      if (message.type === MessageType.SYNC_START) {
+        document.body.classList.add("syncing");
+        return;
+      }
+
       if (message.type === MessageType.SYNC_DONE || message.type === MessageType.SYNC_FAIL) {
         document.body.classList.remove("syncing");
+        return;
       }
     });
 
@@ -326,6 +339,15 @@ const Notes = () => {
   useEffect(() => {
     document.body.classList.toggle("focus", focus);
   }, [focus]);
+
+  // Auto Sync on open My Notes
+  useEffect(() => {
+    if (!initialized || !initialAutoSync) {
+      return;
+    }
+
+    sendMessage(MessageType.SYNC); // Auto Sync on open My Notes
+  }, [initialized, initialAutoSync]);
 
   // Hide context menu on click anywhere
   useEffect(() => {
@@ -386,7 +408,7 @@ const Notes = () => {
       });
     });
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnSync, () => syncNotes(syncRef.current));
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnSync, () => sendMessage(MessageType.SYNC));
   }, [os]);
 
   useEffect(() => {

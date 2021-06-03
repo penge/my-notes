@@ -60,5 +60,8 @@ it("sets custom values", () => {
     // Automatically added properties to make a complete object (interface Storage)
     sidebar: true,
     toolbar: true,
+    autoSync: false,
+    setBy: "",
+    lastEdit: "",
   }, local));
 });
