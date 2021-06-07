@@ -12,13 +12,13 @@
     "__prepare-folder": "rimraf out && copyfiles LICENSE manifest.json out && copyup static/images/icon128.png static/* out && cp -R static/themes out",
     "__prepare-folder-develop": "npm run __prepare-folder && cp -R static/integration out && node ./env/set-client-id.js out/manifest.json",
     "__check-types": "tsc --noEmit",
-    "__develop-core": "npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --sourcemap=inline --outdir=out",
+    "__develop-core": "npm run __check-types && NODE_ENV=development node build.js",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "LOG_LEVEL=SILENT TZ=UTC jest --maxWorkers=4",
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",
     "develop-watch": "npm run develop && chokidar \"src/**/*.(ts|tsx)\" -c \"npm run __develop-core\"",
     "develop-watch-static": "chokidar \"static/*.(html|css)\" -c \"cp {path} out\"",
-    "build": "npm run __prepare-folder && npm run __check-types && esbuild --define:process.env.LOG_LEVEL=\\\"ALL\\\" src/*.ts src/*.tsx src/themes/custom/custom.ts src/integration/index.ts --bundle --minify --outdir=out"
+    "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node build.js"
   },
   "devDependencies": {
     "@types/chrome": "0.0.143",
