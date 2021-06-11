@@ -1,2 +1,3 @@
 out/*
 jest.config.js
+build.js
