@@ -58,7 +58,7 @@ const files: GoogleDriveFile[] = [
 
 const getFile: GetFileFunction = (fileId: string) => Promise.resolve(`content from ${fileId}`);
 
-test("pullCreate() creates notes for every new file where note with file's name doest NOT exist (no conflict)", async () => {
+test("pullCreate() creates notes for every file where note with file's name does NOT exist and file is NOT synced to any existing note", async () => {
   const notesAfterPullCreate = await pullCreate(notes, files, getFile);
   expect(notesAfterPullCreate).toEqual({
     // "Books" should be downloaded (file is new, note did not exist)

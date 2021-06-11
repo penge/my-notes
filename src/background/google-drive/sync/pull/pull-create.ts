@@ -2,16 +2,16 @@ import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
 import { Log } from "shared/logger";
 import { GetFileFunction } from "background/google-drive/api";
 
-const getFilesThatHaveNoNote = (notes: NotesObject, remoteFiles: GoogleDriveFile[]): GoogleDriveFile[] => {
+const getNewFiles = (notes: NotesObject, remoteFiles: GoogleDriveFile[]): GoogleDriveFile[] => {
   const existingNoteNames = Object.keys(notes);
   const syncedFileIds = Object.values(notes).map((note) => note.sync?.file.id);
 
   const newFiles = remoteFiles.filter((file) => {
-    const canCreateNote =
+    const isNewFile =
       !existingNoteNames.includes(file.name) // note with file's name does NOT exist (no conflict)
       && !syncedFileIds.includes(file.id); // file is NOT synced to any note
 
-    return canCreateNote;
+    return isNewFile;
   });
 
   return newFiles;
@@ -19,7 +19,7 @@ const getFilesThatHaveNoNote = (notes: NotesObject, remoteFiles: GoogleDriveFile
 
 export const pullCreate = async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFile: GetFileFunction): Promise<NotesObject> => {
   const notesCopy = Object.assign({}, notes);
-  const newFiles = getFilesThatHaveNoNote(notesCopy, remoteFiles);
+  const newFiles = getNewFiles(notesCopy, remoteFiles);
 
   for (const file of newFiles) {
     const fileContent = await getFile(file.id) || "";
