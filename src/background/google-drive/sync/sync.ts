@@ -1,5 +1,5 @@
 import { NotesObject, MessageType } from "shared/storage/schema";
-import { getItem, setItem } from "shared/storage/index";
+import { getItem, setItems } from "shared/storage/index";
 import { sendMessage } from "messages/index";
 
 import { runSyncPreconditions } from "../preconditions/sync-preconditions";
@@ -50,7 +50,7 @@ const sync = async (): Promise<boolean> => {
     return false;
   }
 
-  const { folderId, folderLocation, files } = fulfilled;
+  const { folderId, folderLocation, assetsFolderId, files } = fulfilled;
   const notes = await getItem<NotesObject>("notes");
   if (!notes) {
     onDone();
@@ -59,8 +59,20 @@ const sync = async (): Promise<boolean> => {
 
   const notesAfterPull = await pull(notes, files, { getFile });
   const notesAfterPush = await push(folderId, notesAfterPull, { createFile, updateFile });
-  await setItem("notes", notesAfterPush);
-  await setItem("sync", { folderId, folderLocation, files, lastSync: new Date().toISOString() });
+
+  const lastSync = new Date().toISOString();
+
+  await setItems({
+    notes: notesAfterPush,
+    sync: {
+      folderId,
+      folderLocation,
+      assetsFolderId,
+      lastSync,
+    },
+    setBy: `sync-${lastSync}`,
+    lastEdit: lastSync,
+  });
 
   onDone();
 
