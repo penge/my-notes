@@ -1,9 +1,12 @@
 import { Log } from "shared/logger";
+import { havingPermission } from "shared/permissions";
 import { MessageType } from "shared/storage/schema";
 import { handleGoogleDriveMessage } from "./google-drive";
 
+type OptionalPermission = "identity" | "alarms";
+
 type PermissionHandlers = {
-  [permissionName: string]: (having: boolean) => void
+  [permissionName in OptionalPermission]: (having: boolean) => void
 }
 
 const __handlers: PermissionHandlers = {
@@ -22,11 +25,16 @@ const handlePermissions = (permissionHandlers: PermissionHandlers, permissions: 
 
   Object
     .keys(permissionHandlers)
-    .filter((permissionName) => diffPermissions.includes(permissionName))
+    .filter((permissionName) => diffPermissions.includes(permissionName as OptionalPermission))
     .forEach((permissionName) => {
       Log(`Permissions - Acting on ${having ? "added" : "removed"} permission "${permissionName}"`);
-      permissionHandlers[permissionName](having);
+      permissionHandlers[permissionName as OptionalPermission](having);
     });
+};
+
+export const handleInitialPermissions = (): void => {
+  havingPermission("identity").then((having) => __handlers["identity"](having));
+  havingPermission("alarms").then((having) => __handlers["alarms"](having));
 };
 
 export const handleChangedPermissions = (): void => {

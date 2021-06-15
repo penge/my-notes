@@ -14,6 +14,14 @@ export const setItem = <T>(key: string, value: T): Promise<void> => {
   });
 };
 
+export const setItems = (items: Record<string, unknown>): Promise<void> => {
+  return new Promise(resolve => {
+    chrome.storage.local.set(items, () => {
+      resolve();
+    });
+  });
+};
+
 export const removeItem = (key: string): Promise<void> => {
   return new Promise(resolve => {
     chrome.storage.local.remove(key, () => {

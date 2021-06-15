@@ -88,34 +88,34 @@ it("fallbacks active and clipboard if possible", () => {
     notes: {
       Todo: {
         content: "buy milk",
-        createdTime: "2020-04-20T09:02:00.000Z",
-        modifiedTime: "2020-04-20T09:02:02.000Z",
+        createdTime: "2020-04-20T09:02:00Z",
+        modifiedTime: "2020-04-20T09:02:02Z",
         sync: {
           file: {
             id: "6073",
             name: "Todo",
-            createdTime: "2020-04-20T09:02:00.000Z",
-            modifiedTime: "2020-04-20T09:02:02.000Z",
+            createdTime: "2020-04-20T09:02:00Z",
+            modifiedTime: "2020-04-20T09:02:02Z",
           }
         }
       },
       Clipboard: {
         content: "Clipboard content",
-        createdTime: "2020-04-20T09:07:00.000Z",
-        modifiedTime: "2020-04-20T09:07:07.000Z",
+        createdTime: "2020-04-20T09:07:00Z",
+        modifiedTime: "2020-04-20T09:07:07Z",
         sync: {
           file: {
             id: "2931",
             name: "Clipboard",
-            createdTime: "2020-04-20T09:07:00.000Z",
-            modifiedTime: "2020-04-20T09:07:07.000Z",
+            createdTime: "2020-04-20T09:07:00Z",
+            modifiedTime: "2020-04-20T09:07:07Z",
           }
         }
       },
       Math: {
         content: "some equations",
-        createdTime: "2020-04-20T09:09:00.000Z",
-        modifiedTime: "2020-04-20T09:09:09.000Z",
+        createdTime: "2020-04-20T09:09:00Z",
+        modifiedTime: "2020-04-20T09:09:09Z",
       },
     } as NotesObject
   };

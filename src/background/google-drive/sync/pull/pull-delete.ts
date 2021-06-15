@@ -5,12 +5,12 @@ const getNoteNamesToDelete = (notes: NotesObject, remoteFiles: GoogleDriveFile[]
   const notesNamesToDelete = Object.keys(notes).filter(noteName => {
     const note = notes[noteName];
     const fileId = note.sync?.file.id;
-    const canDelete =
+    const canDeleteNote =
       note.sync?.file.id // note was before synced to a file in Google Drive
       && note.sync?.file.modifiedTime === note.modifiedTime // note was NOT modified since the last sync
       && remoteFiles.find(file => file.id === fileId) === undefined; // file in Google Drive is not found
 
-    return canDelete;
+    return canDeleteNote;
   });
 
   return notesNamesToDelete;

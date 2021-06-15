@@ -32,7 +32,7 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
 
     // 2. Update file for every updated note
     //    COND: note.modifiedTime > note.sync.file.modifiedTime
-    if (new Date(note.modifiedTime).getTime() > new Date(note.sync.file.modifiedTime).getTime()) {
+    if (note.modifiedTime > note.sync.file.modifiedTime) {
       Log(`SYNC - OUT - UPDATING FILE - ${noteName} (name before: ${note.sync.file.name})`);
       const file = await updateFile(note.sync.file.id, { ...note, name: noteName }); // Returns { id, name, content, modifiedTime }
       note.sync = { file: merge(note, file) };
