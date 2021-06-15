@@ -22,7 +22,10 @@ import {
   saveTextOnRemoteTransfer,
 } from "background/init/saving";
 
-import { handleChangedPermissions } from "background/init/permissions";
+import {
+  handleInitialPermissions,
+  handleChangedPermissions,
+} from "background/init/permissions";
 
 // Run when Installed or Updated
 chrome.runtime.onInstalled.addListener((details) => {
@@ -48,4 +51,5 @@ saveTextOnDrop(); // when you drop text onto a note in Sidebar
 saveTextOnRemoteTransfer(); // when you use "Save to remotely open My Notes" from the context menu
 
 // Permissions
+handleInitialPermissions(); // react to removed permissions between restarts
 handleChangedPermissions(); // react to granted/removed optional permissions "identity" and "alarms"
