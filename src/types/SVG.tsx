@@ -1,14 +1,18 @@
 import { h } from "preact";
 
-const SVG = (loadedText: string) => (): h.JSX.Element => {
-  const doc = new DOMParser().parseFromString(loadedText, "application/xml");
+interface SVGProps {
+  text: string
+}
+
+const SVG = ({ text }: SVGProps): h.JSX.Element => {
+  const doc = new DOMParser().parseFromString(text, "application/xml");
   const elem = doc.documentElement;
 
   const { innerHTML } = elem;
 
-  const width = elem.getAttribute("width") || "";
-  const height = elem.getAttribute("height") || "";
-  const viewBox = elem.getAttribute("viewBox") || "";
+  const width = elem.getAttribute("width") || undefined;
+  const height = elem.getAttribute("height") || undefined;
+  const viewBox = elem.getAttribute("viewBox") || undefined;
 
   return (
     <svg

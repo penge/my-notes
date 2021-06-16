@@ -1,6 +1,6 @@
 import __range, { withRange } from "../range";
 
-type Callback = () => void
+type Callback = () => void;
 
 const withClosest = <T>(nodeName: string, fn: (el: T) => void) => withRange((range: Range) => {
   const el = range.startContainer.nodeName === nodeName
