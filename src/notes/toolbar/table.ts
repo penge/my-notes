@@ -1,6 +1,6 @@
 import __range, { withRange } from "../range";
 
-type Callback = () => void
+type Callback = () => void;
 
 const withClosest = <T>(nodeName: string, fn: (el: T) => void) => withRange((range: Range) => {
   const el = range.startContainer.nodeName === nodeName
@@ -18,7 +18,8 @@ const withtr = (fn: (tr: HTMLTableRowElement) => void) => withClosest<HTMLTableR
 const insertRow = (table: HTMLTableElement, rowIndex: number, cellCount: number) => {
   const row = table.insertRow(rowIndex);
   for (let c = 0; c < cellCount; c += 1) {
-    row.insertCell(-1);
+    const newCell = row.insertCell(-1); // insert empty cell at the end of the row
+    newCell.appendChild(document.createElement("BR")); // put BR into the empty cell so it has default font's height (by default it could have tiny height)
   }
 };
 

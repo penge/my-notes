@@ -1,6 +1,6 @@
 import __range, { withRange } from "../range";
 
-type Callback = () => void
+type Callback = () => void;
 
 export const HIGHLIGHT_COLORS: string[] = [
   "orange",
