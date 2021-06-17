@@ -30,7 +30,7 @@ const updateNote = async (
   const previousNoteName = Object.keys(notesCopy).find((key) => notesCopy[key] === syncedNote);
   const fileContent = await getFile(file.id) || "";
 
-  Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName || file.name}, modified local, remote: ${syncedNote.modifiedTime}, ${file.modifiedTime})`, "blue");
+  Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
   notesCopy[file.name] = prepareNote(
     contentResolution === "replace" ? fileContent : mergeContent(syncedNote.content, fileContent),
     file,
@@ -69,7 +69,7 @@ export const pullUpdate = async (notes: NotesObject, remoteFiles: GoogleDriveFil
       !syncedNote && file.name in notesCopy // note is NOT synced
       && notesCopy[file.name].modifiedTime === file.modifiedTime // note and file have the same modified time
     ) {
-      Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${file.name}, modified local, remote: ${notesCopy[file.name].modifiedTime}, ${file.modifiedTime})`, "blue");
+      Log(`SYNC - IN - CONNECTING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
       notesCopy[file.name] = prepareNote(notesCopy[file.name].content, file);
     }
 
@@ -78,7 +78,7 @@ export const pullUpdate = async (notes: NotesObject, remoteFiles: GoogleDriveFil
       && notesCopy[file.name].modifiedTime !== file.modifiedTime // note and file do NOT have the same modified time
     ) {
       const fileContent = await getFile(file.id) || "";
-      Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${file.name}, modified local, remote: ${notesCopy[file.name].modifiedTime}, ${file.modifiedTime})`, "blue");
+      Log(`SYNC - IN - UPDATING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
       notesCopy[file.name] = prepareNote(
         mergeContent(notesCopy[file.name].content, fileContent),
         file,

@@ -5,6 +5,8 @@ import { handleGoogleDriveMessage } from "./google-drive";
 
 type OptionalPermission = "identity" | "alarms";
 
+const optionalPermissions: OptionalPermission[] = ["identity", "alarms"];
+
 type PermissionHandlers = {
   [permissionName in OptionalPermission]: (having: boolean) => void
 }
@@ -32,12 +34,11 @@ const handlePermissions = (permissionHandlers: PermissionHandlers, permissions: 
     });
 };
 
-export const handleInitialPermissions = (): void => {
-  havingPermission("identity").then((having) => __handlers["identity"](having));
-  havingPermission("alarms").then((having) => __handlers["alarms"](having));
-};
-
 export const handleChangedPermissions = (): void => {
+  optionalPermissions.forEach((optionalPermission) => {
+    havingPermission(optionalPermission).then((having) => !having && __handlers["identity"](having));
+  });
+
   chrome.permissions.onAdded.addListener((permissions) => handlePermissions(__handlers, permissions, { having: true }));
   chrome.permissions.onRemoved.addListener((permissions) => handlePermissions(__handlers, permissions, { having: false }));
 };
