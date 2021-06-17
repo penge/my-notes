@@ -50,7 +50,12 @@ const autoSyncOnAlarmListener = (alarm: chrome.alarms.Alarm) => {
   });
 };
 
-const attachGoogleDriveAutoSyncAlarm = (): void => withGrantedPermission("alarms", () => {
+const attachGoogleDriveAutoSyncAlarm = (): void => withGrantedPermission("alarms", async () => {
+  const existingAlarm = await chrome.alarms.get(AUTO_SYNC_ALARM_NAME);
+  if (existingAlarm) {
+    return; // AUTO_SYNC_ALARM_NAME is already registered
+  }
+
   chrome.alarms.onAlarm.removeListener(autoSyncOnAlarmListener);
   chrome.alarms.clear(AUTO_SYNC_ALARM_NAME, () => {
     chrome.alarms.onAlarm.addListener(autoSyncOnAlarmListener);
@@ -81,22 +86,35 @@ export const registerGoogleDriveAutoSync = (): void => {
 
   // Attach/Detach alarm depending on storage changes
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== "local" || !changes["autoSync"]) { // only local, only "autoSync"
+    if (areaName !== "local") {
       return;
     }
 
-    const autoSync = changes["autoSync"].newValue;
-    if (!autoSync) {
-      detachGoogleDriveAutoSyncAlarm(); // we can detach alarm now, no need to check "sync"
+    // Interested only in changes of "sync" or "autoSync"
+    const interest: chrome.storage.StorageChange[] = [changes["sync"], changes["autoSync"]];
+    const matchesInterest: boolean = interest.some((change) => typeof change === "object");
+    if (!matchesInterest) {
       return;
     }
 
-    chrome.storage.local.get("sync", (local) => {
-      if (!local.sync) {
+    // If "sync" or "autoSync" was disabled, detach the alarm
+    const shouldDetachAutoSyncAlarm: boolean = interest.some((change) => change && Boolean(change.newValue) === false);
+    if (shouldDetachAutoSyncAlarm) {
+      detachGoogleDriveAutoSyncAlarm();
+      return;
+    }
+
+    // At this point, either "sync" or "autoSync" was enabled, we need to check the other key
+    const changedKey = changes["sync"] ? "sync" : "autoSync";
+    const otherKey = changedKey === "sync" ? "autoSync" : "sync";
+
+    chrome.storage.local.get(otherKey, (local) => {
+      if (!local[otherKey]) {
         detachGoogleDriveAutoSyncAlarm();
       }
 
-      attachGoogleDriveAutoSyncAlarm(); // both "sync" and "autoSync" are true here (required to attach the alarm)
+      // Both "sync" and "autoSync" are enabled, we can attach the alarm
+      attachGoogleDriveAutoSyncAlarm();
     });
   });
 };

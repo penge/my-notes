@@ -23,7 +23,6 @@ import {
 } from "background/init/saving";
 
 import {
-  handleInitialPermissions,
   handleChangedPermissions,
 } from "background/init/permissions";
 
@@ -51,5 +50,4 @@ saveTextOnDrop(); // when you drop text onto a note in Sidebar
 saveTextOnRemoteTransfer(); // when you use "Save to remotely open My Notes" from the context menu
 
 // Permissions
-handleInitialPermissions(); // react to removed permissions between restarts
 handleChangedPermissions(); // react to granted/removed optional permissions "identity" and "alarms"
