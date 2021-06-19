@@ -1,4 +1,4 @@
-import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, Fragment } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
 import commands from "../toolbar/commands";
@@ -6,7 +6,7 @@ import InsertImageModal, { InsertImageModalProps } from "./modals/InsertImageMod
 import InsertLinkModal, { InsertLinkModalProps } from "./modals/InsertLinkModal";
 import range from "../range";
 import Tooltip from "./Tooltip";
-import { Note, Theme } from "shared/storage/schema";
+import { Os, Note } from "shared/storage/schema";
 import NoteInfo from "./NoteInfo";
 import { capitalize } from "shared/string/capitalize-string";
 import { HIGHLIGHT_COLORS } from "notes/toolbar/highlight";
@@ -79,9 +79,8 @@ const titles = {
 } as { [key in Title]: { mac: string, other: string } };
 
 interface ToolbarProps {
-  os?: "mac" | "other"
+  os?: Os
   note?: Note
-  theme?: Theme
 }
 
 const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {

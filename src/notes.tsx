@@ -1,7 +1,8 @@
-import { h, render, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, render, Fragment } from "preact";
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 
 import {
+  Os,
   Storage,
   Notification,
   RegularFont,
@@ -44,8 +45,8 @@ interface NotesProps {
   active: string
 }
 
-const Notes = () => {
-  const [os, setOs] = useState<"mac" | "other" | undefined>(undefined);
+const Notes = (): h.JSX.Element => {
+  const [os, setOs] = useState<Os | undefined>(undefined);
   const [tabId, setTabId] = useState<string>("");
 
   const [notification, setNotification] = useState<Notification | undefined>(undefined);
