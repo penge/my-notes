@@ -66,6 +66,7 @@ const Modal = ({
           id="input"
           ref={inputRef}
           onBlur={() => inputRef.current?.focus()}
+          autocomplete="off"
         />
       )}
 
