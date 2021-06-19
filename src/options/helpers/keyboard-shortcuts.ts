@@ -24,6 +24,16 @@ const keyboardShortcuts: KeyboardShortcut[] = [
     other: "Ctrl + R",
   },
   {
+    description: "Open Command palette",
+    mac: "⌘ + P",
+    other: "Ctrl + P",
+  },
+  {
+    description: "Repeat last command",
+    mac: "⌘ + Shift + P",
+    other: "Ctrl + Shift + P",
+  },
+  {
     description: "Toggle Focus mode",
     mac: "⌘ + Shift + F",
     other: "Ctrl + Shift + F",
@@ -65,17 +75,12 @@ const keyboardShortcuts: KeyboardShortcut[] = [
     other: "Ctrl + Shift+ Click",
   },
   {
-    description: "Close context menu",
+    description: "Close",
     mac: "Esc",
     other: "Esc",
   },
   {
-    description: "Close modal",
-    mac: "Esc",
-    other: "Esc",
-  },
-  {
-    description: "Confirm modal",
+    description: "Confirm",
     mac: "Enter",
     other: "Enter",
   },

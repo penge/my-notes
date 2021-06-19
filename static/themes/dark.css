@@ -81,7 +81,7 @@
   --tooltip-text-color: white;
 
 
-  /* Editor */
+  /* Note */
 
   --pre-border-color: #454545;
   --highlight-background-color: yellow;
@@ -89,6 +89,15 @@
   --table-border: 3px solid #454545;
   --table-td-border: 1px solid #222;
   --table-td-heading-background-color: #222;
+
+
+  /* Command palette */
+
+  --command-palette-border-color: #454545;
+  --command-palette-item-background-color: #121212;
+  --command-palette-item-text-color: #626262;
+  --command-palette-active-item-background-color: #222;
+  --command-palette-active-item-text-color: white;
 
 
   /* Only in Options */

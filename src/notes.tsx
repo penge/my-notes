@@ -1,5 +1,5 @@
 import { h, render, Fragment } from "preact";
-import { useState, useEffect, useRef, useCallback } from "preact/hooks";
+import { useState, useEffect, useRef, useCallback, useMemo } from "preact/hooks";
 
 import {
   Os,
@@ -18,7 +18,9 @@ import { setTheme as setThemeCore } from "themes/set-theme";
 import __Notification from "notes/components/Notification";
 import __Sidebar from "notes/components/Sidebar";
 import __Content from "notes/components/Content";
+import __CommandPalette, { CommandPaletteProps } from "notes/components/CommandPalette";
 import __Toolbar from "notes/components/Toolbar";
+import range from "notes/range";
 
 import __ContextMenu, { ContextMenuProps } from "notes/components/ContextMenu";
 import __RenameNoteModal, { RenameNoteModalProps } from "notes/components/modals/RenameNoteModal";
@@ -35,10 +37,35 @@ import { sendMessage } from "messages";
 
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
+import { Command, commands } from "notes/commands";
 
 const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
 const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
 const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
+
+let latestOnToggleCommandPaletteCallback: () => void;
+const detachOnToggleCommandPaletteCallback = () => {
+  if (latestOnToggleCommandPaletteCallback) {
+    keyboardShortcuts.unsubscribe(latestOnToggleCommandPaletteCallback);
+  }
+};
+const reatachOnToggleCommandPalette = (callback: () => void) => {
+  detachOnToggleCommandPaletteCallback();
+  latestOnToggleCommandPaletteCallback = callback;
+  keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleCommandPalette, latestOnToggleCommandPaletteCallback);
+};
+
+let latestOnRepeatLastExecutedCommand: () => void;
+const detachOnRepeatLastExecutedCommandCallback = () => {
+  if (latestOnRepeatLastExecutedCommand) {
+    keyboardShortcuts.unsubscribe(latestOnRepeatLastExecutedCommand);
+  }
+};
+const reatachOnExecuteLastCommand = (callback: () => void) => {
+  detachOnRepeatLastExecutedCommandCallback();
+  latestOnRepeatLastExecutedCommand = callback;
+  keyboardShortcuts.subscribe(KeyboardShortcut.OnRepeatLastExecutedCommand, latestOnRepeatLastExecutedCommand);
+};
 
 interface NotesProps {
   notes: NotesObject
@@ -80,6 +107,7 @@ const Notes = (): h.JSX.Element => {
   const [renameNoteModalProps, setRenameNoteModalProps] = useState<RenameNoteModalProps | null>(null);
   const [deleteNoteModalProps, setDeleteNoteModalProps] = useState<DeleteNoteModalProps | null>(null);
   const [newNoteModalProps, setNewNoteModalProps] = useState<NewNoteModalProps | null>(null);
+  const [commandPaletteProps, setCommandPaletteProps] = useState<CommandPaletteProps | null>(null);
 
   useEffect(() => {
     chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
@@ -374,7 +402,10 @@ const Notes = (): h.JSX.Element => {
     }
 
     keyboardShortcuts.register(os);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, () => setContextMenuProps(null));
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, () => {
+      setContextMenuProps(null);
+      setCommandPaletteProps(null);
+    });
     keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, () => {
       if (getFocusOverride()) {
@@ -429,6 +460,76 @@ const Notes = (): h.JSX.Element => {
     });
   }, [notesProps]);
 
+  const handleOnActivateNote = useCallback((noteName: string) => {
+    if (notesProps.active === noteName || !(noteName in notesProps.notes)) {
+      return;
+    }
+    setNotesProps((prev) => ({ ...prev, active: noteName }));
+    notesHistory.push(noteName);
+    chrome.storage.local.set({ active: noteName });
+  }, [notesProps]);
+
+  // Command Palette
+  const commandPaletteCommands = useMemo((): Command[] => [
+    commands.InsertCurrentDate,
+    commands.InsertCurrentTime,
+    commands.InsertCurrentDateAndTime,
+  ], []);
+
+  const [lastExecutedCommand, setLastExecutedCommand] = useState<Command | undefined>(undefined);
+  useEffect(() => {
+    if (!lastExecutedCommand) {
+      detachOnRepeatLastExecutedCommandCallback();
+      return;
+    }
+
+    reatachOnExecuteLastCommand(lastExecutedCommand.execute);
+  }, [lastExecutedCommand]);
+
+  // Command Palette
+  useEffect(() => {
+    const noteNames = Object.keys(notesProps.notes);
+    if (!noteNames.length) {
+      detachOnToggleCommandPaletteCallback();
+      setCommandPaletteProps(null);
+      return;
+    }
+
+    const commands = commandPaletteCommands.map((command) => command.name);
+
+    const props: CommandPaletteProps = {
+      noteNames,
+      commands,
+      onActivateNote: (noteName: string) => {
+        setCommandPaletteProps(null);
+        range.restore(() => handleOnActivateNote(noteName));
+      },
+      onExecuteCommand: (commandName: string) => {
+        const foundCommand = commandPaletteCommands.find((command) => command.name === commandName);
+        if (foundCommand) {
+          setCommandPaletteProps(null);
+          range.restore(() => {
+            foundCommand.execute();
+            setLastExecutedCommand(foundCommand);
+          });
+        }
+      },
+    };
+
+    reatachOnToggleCommandPalette(() => {
+      setCommandPaletteProps((prev) => {
+        if (prev) {
+          return null;
+        }
+
+        range.save();
+        return props;
+      });
+    });
+
+    setCommandPaletteProps((prev) => !prev ? prev : props);
+  }, [os, notesProps, handleOnActivateNote, commandPaletteCommands]);
+
   useEffect(() => {
     if (!initialized || !tabId) {
       return;
@@ -454,16 +555,10 @@ const Notes = (): h.JSX.Element => {
 
       <__Sidebar
         os={os}
-        {...notesProps}
+        noteNames={Object.keys(notesProps.notes)}
+        active={notesProps.active}
         width={sidebarWidth}
-        onActivateNote={(noteName) => {
-          if (notesProps.active === noteName) {
-            return;
-          }
-          setNotesProps((prev) => ({ ...prev, active: noteName }));
-          notesHistory.push(noteName);
-          chrome.storage.local.set({ active: noteName });
-        }}
+        onActivateNote={handleOnActivateNote}
         onNoteContextMenu={(noteName, x, y) => setContextMenuProps({
           noteName, x, y,
           onRename: (noteName) => setRenameNoteModalProps({
@@ -488,20 +583,28 @@ const Notes = (): h.JSX.Element => {
         sync={sync}
       />
 
-      <__Content
-        active={notesProps.active}
-        initialContent={initialContent}
-        onEdit={(active, content) => {
-          saveNote(active, content, tabId, notesRef.current);
-        }}
-        indentOnTab={tab}
-        tabSize={tabSize}
-      />
+      <div id="content-container">
+        <__Content
+          active={notesProps.active}
+          initialContent={initialContent}
+          onEdit={(active, content) => {
+            saveNote(active, content, tabId, notesRef.current);
+          }}
+          indentOnTab={tab}
+          tabSize={tabSize}
+        />
 
-      <__Toolbar
-        os={os}
-        note={notesProps.notes[notesProps.active]}
-      />
+        {commandPaletteProps && (
+          <__CommandPalette {...commandPaletteProps} />
+        )}
+      </div>
+
+      {os && notesProps.active && notesProps.active in notesProps.notes && (
+        <__Toolbar
+          os={os}
+          note={notesProps.notes[notesProps.active]}
+        />
+      )}
 
       {contextMenuProps && (
         <__ContextMenu {...contextMenuProps} />

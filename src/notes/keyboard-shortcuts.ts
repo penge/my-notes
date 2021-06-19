@@ -10,12 +10,16 @@ export enum KeyboardShortcut {
   OnToggleFocusMode,
   OnToggleSidebar,
   OnToggleToolbar,
+  OnToggleCommandPalette,
 
   // Controls
   OnControl,
   OnEscape,
   OnEnter,
   OnTab,
+
+  // Commands
+  OnRepeatLastExecutedCommand,
 
   // Formatting
   OnUnderline,
@@ -90,10 +94,19 @@ const registerToggleToolbar = (event: KeyboardEvent, os: Os) => {
   }
 };
 
+const registerToggleCommandPalette = (event: KeyboardEvent, os: Os) => {
+  if (
+    (isMac(os) && event.metaKey && !event.shiftKey && event.code === "KeyP") ||
+    (!isMac(os) && event.ctrlKey && !event.shiftKey && event.code === "KeyP")
+  ) {
+    publish(KeyboardShortcut.OnToggleCommandPalette, event);
+  }
+};
+
 const registerControl = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey) ||
-    (!isMac(os) && event.ctrlKey)
+    (isMac(os) && event.metaKey && !event.shiftKey) ||
+    (!isMac(os) && event.ctrlKey && !event.shiftKey)
   ) {
     publish(KeyboardShortcut.OnControl, event);
   }
@@ -114,6 +127,15 @@ const registerEnter = (event: KeyboardEvent) => {
 const registerTab = (event: KeyboardEvent) => {
   if (event.key === "Tab") {
     publish(KeyboardShortcut.OnTab, event);
+  }
+};
+
+const registerRepeatLastExecutedCommand = (event: KeyboardEvent, os: Os) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyP") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyP")
+  ) {
+    publish(KeyboardShortcut.OnRepeatLastExecutedCommand, event);
   }
 };
 
@@ -203,12 +225,16 @@ const keydown = (os: Os) => document.addEventListener("keydown", (event) => {
   registerToggleFocusMode(event, os);
   registerToggleSidebar(event, os);
   registerToggleToolbar(event, os);
+  registerToggleCommandPalette(event, os);
 
   // Controls
   registerControl(event, os);
   registerEscape(event);
   registerEnter(event);
   registerTab(event);
+
+  // Commands
+  registerRepeatLastExecutedCommand(event, os);
 
   // Formatting
   registerUnderline(event, os);

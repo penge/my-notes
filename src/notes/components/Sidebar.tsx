@@ -1,7 +1,7 @@
 import { h, Fragment } from "preact";
 import { useRef, useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
-import { Os, NotesObject, Sync, MessageType } from "shared/storage/schema";
+import { Os, Sync, MessageType } from "shared/storage/schema";
 import Drag from "./Drag";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
@@ -31,7 +31,7 @@ const syncNowTitles = {
 
 interface SidebarProps {
   os?: Os
-  notes: NotesObject
+  noteNames: string[]
   active: string
   width?: string
   onActivateNote: (noteName: string) => void
@@ -41,7 +41,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({
-  os, notes, active, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
+  os, noteNames, active, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
 }: SidebarProps): h.JSX.Element => {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -85,7 +85,7 @@ const Sidebar = ({
       minWidth: width,
     }}>
       <div id="sidebar-notes" class="notes">
-        {Object.keys(notes).map((noteName) =>
+        {noteNames.map((noteName) =>
           <div
             class={clsx(
               "note",

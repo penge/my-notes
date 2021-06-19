@@ -16,9 +16,15 @@ const KeyboardShortcuts = ({ os }: KeyboardShortcutsProps): h.JSX.Element => (
           <td>
             {shortcut.configurable && <span>e.g.&nbsp;</span>}
             {shortcut.hold && <span>hold&nbsp;</span>}
-            {os === "mac" && <span class="keyboard-shortcut os-mac">{shortcut.mac}</span>}
-            {os === "other" && <span class="keyboard-shortcut os-other">{shortcut.other}</span>}
+            <span class="keyboard-shortcut">{shortcut[os]}</span>
             {shortcut.configurable && <span>&nbsp;(open <span class="url">chrome://extensions/shortcuts</span> to configure)</span>}
+
+            {shortcut.description === "Open Command palette" && (
+              <span>
+                &nbsp;
+                (type <span class="keyboard-shortcut">&gt;</span> for commands)
+              </span>
+            )}
           </td>
         </tr>
       )}
