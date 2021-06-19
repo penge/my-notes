@@ -1,4 +1,4 @@
-import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, Fragment } from "preact";
 import { Theme } from "shared/storage/schema";
 import { capitalize } from "shared/string/capitalize-string";
 

@@ -1,4 +1,4 @@
-import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h } from "preact";
 import { Note } from "shared/storage/schema";
 import parseDate from "shared/date/parse-date";
 import formatNumber from "shared/number/format-number";

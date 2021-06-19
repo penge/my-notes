@@ -1,4 +1,4 @@
-import { h, render, cloneElement, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, render, cloneElement, Fragment } from "preact";
 import { useRef, useState, useEffect, useMemo, useCallback } from "preact/hooks";
 
 interface TooltipProps {

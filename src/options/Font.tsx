@@ -1,4 +1,4 @@
-import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, Fragment } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import clsx from "clsx";
 import { RegularFont, GoogleFont } from "shared/storage/schema";
