@@ -1,4 +1,6 @@
-const isMac = (os: string) => os === "mac";
+import { Os } from "shared/storage/schema";
+
+const isMac = (os: Os) => os === "mac";
 
 export enum KeyboardShortcut {
   // Options
@@ -52,7 +54,7 @@ const publish = (keyboardShortcut: KeyboardShortcut, event: KeyboardEvent): void
   callbacks.forEach((callback) => callback());
 };
 
-const registerOpenOptions = (event: KeyboardEvent, os: string) => {
+const registerOpenOptions = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyO") ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyO")
@@ -61,7 +63,7 @@ const registerOpenOptions = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerToggleFocusMode = (event: KeyboardEvent, os: string) => {
+const registerToggleFocusMode = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyF") ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyF")
@@ -70,7 +72,7 @@ const registerToggleFocusMode = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerToggleSidebar = (event: KeyboardEvent, os: string) => {
+const registerToggleSidebar = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && !event.shiftKey && event.code === "KeyS") ||
     (!isMac(os) && event.ctrlKey && !event.shiftKey && event.code === "KeyS")
@@ -79,7 +81,7 @@ const registerToggleSidebar = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerToggleToolbar = (event: KeyboardEvent, os: string) => {
+const registerToggleToolbar = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.code === "KeyE") ||
     (!isMac(os) && event.ctrlKey && event.code === "KeyE")
@@ -88,7 +90,7 @@ const registerToggleToolbar = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerControl = (event: KeyboardEvent, os: string) => {
+const registerControl = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey) ||
     (!isMac(os) && event.ctrlKey)
@@ -115,13 +117,13 @@ const registerTab = (event: KeyboardEvent) => {
   }
 };
 
-const registerUnderline = (event: KeyboardEvent, os: string) => {
+const registerUnderline = (event: KeyboardEvent, os: Os) => {
   if (isMac(os) && event.metaKey && event.code === "KeyU") {
     publish(KeyboardShortcut.OnUnderline, event);
   }
 };
 
-const registerStrikethrough = (event: KeyboardEvent, os: string) => {
+const registerStrikethrough = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyX") ||
     (!isMac(os) && event.altKey && event.shiftKey && event.code === "Digit5")
@@ -130,7 +132,7 @@ const registerStrikethrough = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerRemoveFormat = (event: KeyboardEvent, os: string) => {
+const registerRemoveFormat = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.code === "Backslash") ||
     (!isMac(os) && event.ctrlKey && event.code === "Backslash")
@@ -139,7 +141,7 @@ const registerRemoveFormat = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerUnorderedList = (event: KeyboardEvent, os: string) => {
+const registerUnorderedList = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit7") ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit7")
@@ -148,7 +150,7 @@ const registerUnorderedList = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerOrderedList = (event: KeyboardEvent, os: string) => {
+const registerOrderedList = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit8") ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit8")
@@ -157,7 +159,7 @@ const registerOrderedList = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerInsertDate = (event: KeyboardEvent, os: string) => {
+const registerInsertDate = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && !event.shiftKey && !event.altKey && event.code === "Semicolon") ||
     (!isMac(os) && event.ctrlKey && !event.shiftKey && !event.altKey && event.code === "Semicolon")
@@ -166,7 +168,7 @@ const registerInsertDate = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerInsertTime = (event: KeyboardEvent, os: string) => {
+const registerInsertTime = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && !event.altKey && event.code === "Semicolon") ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && !event.altKey && event.code === "Semicolon")
@@ -175,7 +177,7 @@ const registerInsertTime = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerInsertDateAndTime = (event: KeyboardEvent, os: string) => {
+const registerInsertDateAndTime = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.shiftKey && event.altKey && event.code === "Semicolon") ||
     (!isMac(os) && event.ctrlKey && event.shiftKey && event.altKey && event.code === "Semicolon")
@@ -184,7 +186,7 @@ const registerInsertDateAndTime = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const registerSyncNotes = (event: KeyboardEvent, os: string) => {
+const registerSyncNotes = (event: KeyboardEvent, os: Os) => {
   if (
     (isMac(os) && event.metaKey && event.code === "KeyR") ||
     (!isMac(os) && event.ctrlKey && event.code === "KeyR")
@@ -193,7 +195,7 @@ const registerSyncNotes = (event: KeyboardEvent, os: string) => {
   }
 };
 
-const keydown = (os: string) => document.addEventListener("keydown", (event) => {
+const keydown = (os: Os) => document.addEventListener("keydown", (event) => {
   // Options
   registerOpenOptions(event, os);
 
@@ -230,7 +232,7 @@ const keyup = () => document.addEventListener("keyup", () => {
   document.body.classList.remove("with-control");
 });
 
-const register = (os: "mac" | "other"): void => {
+const register = (os: Os): void => {
   keydown(os);
   keyup();
 };

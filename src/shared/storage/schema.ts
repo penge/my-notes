@@ -1,3 +1,5 @@
+export type Os = "mac" | "other";
+
 export interface Note {
   content: string
   createdTime: string

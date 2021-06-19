@@ -1,4 +1,4 @@
-import { h, render, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, render, Fragment } from "preact";
 import { useState, useEffect } from "preact/hooks";
 
 import __Font from "options/Font";
@@ -9,6 +9,7 @@ import __Options from "options/Options";
 import __Version from "options/Version";
 
 import {
+  Os,
   Storage,
   RegularFont,
   GoogleFont,
@@ -17,7 +18,8 @@ import {
 } from "shared/storage/schema";
 import { setTheme as setThemeCore } from "themes/set-theme";
 
-const Options = () => {
+const Options = (): h.JSX.Element => {
+  const [os, setOs] = useState<Os | undefined>(undefined);
   const [version] = useState<string>(chrome.runtime.getManifest().version);
   const [font, setFont] = useState<RegularFont | GoogleFont | undefined>(undefined);
   const [size, setSize] = useState<number>(0);
@@ -29,6 +31,8 @@ const Options = () => {
   const [tabSize, setTabSize] = useState<number>(-1);
 
   useEffect(() => {
+    chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
+
     chrome.storage.local.get([
       "font",
       "size",
@@ -105,7 +109,7 @@ const Options = () => {
       <__Font font={font} />
       <__Size size={size} />
       <__Theme theme={theme} />
-      <__KeyboardShortcuts />
+      {os && <__KeyboardShortcuts os={os} />}
       <__Options
         sync={sync}
         autoSync={autoSync}

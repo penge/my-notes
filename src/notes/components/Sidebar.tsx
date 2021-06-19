@@ -1,7 +1,7 @@
-import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, Fragment } from "preact";
 import { useRef, useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
-import { NotesObject, Sync, MessageType } from "shared/storage/schema";
+import { Os, NotesObject, Sync, MessageType } from "shared/storage/schema";
 import Drag from "./Drag";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
@@ -30,7 +30,7 @@ const syncNowTitles = {
 };
 
 interface SidebarProps {
-  os?: "mac" | "other"
+  os?: Os
   notes: NotesObject
   active: string
   width?: string
