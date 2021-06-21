@@ -16,6 +16,9 @@
     "identity",
     "alarms"
   ],
+  "host_permissions": [
+    "https://drive.google.com/"
+  ],
   "oauth2": {
     "client_id": "813847979218-unbbh8m0el8vjdi74rnqdarm1mhv3985.apps.googleusercontent.com",
     "scopes": [
