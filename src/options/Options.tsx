@@ -1,4 +1,4 @@
-import { h, Fragment } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h, Fragment } from "preact";
 import { useCallback } from "preact/hooks";
 import { Sync } from "shared/storage/schema";
 import formatDate from "shared/date/format-date";

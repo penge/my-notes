@@ -1,4 +1,4 @@
-import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import commands from "../toolbar/commands";

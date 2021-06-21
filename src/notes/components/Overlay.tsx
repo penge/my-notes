@@ -1,4 +1,4 @@
-import { h } from "preact"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { h } from "preact";
 import { useEffect } from "preact/hooks";
 
 interface OverlayProps {
