@@ -1,4 +1,4 @@
-import { MessageType } from "shared/storage/schema";
+import { NotesObject, Note, MessageType } from "shared/storage/schema";
 import { sendMessage } from "messages/index";
 
 export default function deleteNote(noteNameToDelete: string): void {
@@ -7,19 +7,29 @@ export default function deleteNote(noteNameToDelete: string): void {
   }
 
   chrome.storage.local.get(["notes"], local => {
-    const notes = { ...local.notes };
+    const notes: NotesObject = { ...local.notes };
 
-    // Check if the note exists
+    // Check if note exists
     if (!(noteNameToDelete in notes)) {
+      console.debug(`DELETE - Fail ("${noteNameToDelete}" doesn't exist)`);
       return;
     }
 
-    // Delete the note
-    const deletedNote = notes[noteNameToDelete];
+    const noteToDelete: Note = notes[noteNameToDelete];
+
+    // Check if note is NOT locked
+    if (noteToDelete.locked) {
+      console.debug(`DELETE - Fail ("${noteNameToDelete}" is locked)`);
+      return;
+    }
+
+    // Delete note
     delete notes[noteNameToDelete];
 
     chrome.storage.local.set({ notes }, () => {
-      const fileId = deletedNote.sync && deletedNote.sync.file && deletedNote.sync.file.id;
+      console.debug(`DELETE - OK "${noteNameToDelete}"`);
+
+      const fileId = noteToDelete.sync?.file.id;
       if (fileId) {
         sendMessage(MessageType.SYNC_DELETE_FILE, fileId);
       }

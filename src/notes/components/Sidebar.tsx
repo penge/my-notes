@@ -1,7 +1,7 @@
 import { h, Fragment } from "preact";
 import { useRef, useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
-import { Os, Sync, MessageType } from "shared/storage/schema";
+import { Os, Sync, MessageType, NotesObject } from "shared/storage/schema";
 import Drag from "./Drag";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
@@ -11,6 +11,7 @@ import Tooltip from "./Tooltip";
 import FileSvgText from "svg/file.svg";
 import GearSvgText from "svg/gear.svg";
 import RefreshSvgText from "svg/refresh.svg";
+import LockSvgText from "svg/lock.svg";
 import SVG from "types/SVG";
 
 const syncNowTitles = {
@@ -31,7 +32,7 @@ const syncNowTitles = {
 
 interface SidebarProps {
   os?: Os
-  noteNames: string[]
+  notes: NotesObject
   active: string
   width?: string
   onActivateNote: (noteName: string) => void
@@ -41,7 +42,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({
-  os, noteNames, active, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
+  os, notes, active, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
 }: SidebarProps): h.JSX.Element => {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -85,7 +86,7 @@ const Sidebar = ({
       minWidth: width,
     }}>
       <div id="sidebar-notes" class="notes">
-        {noteNames.map((noteName) =>
+        {Object.keys(notes).map((noteName) =>
           <div
             class={clsx(
               "note",
@@ -124,6 +125,7 @@ const Sidebar = ({
             }}
           >
             {noteName}
+            {notes[noteName].locked && <SVG text={LockSvgText} />}
           </div>
         )}
       </div>

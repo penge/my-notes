@@ -1,3 +1,5 @@
+import { NotesObject } from "shared/storage/schema";
+
 export default function renameNote(oldName: string, newName: string): void {
   if (!oldName || !newName || (oldName === newName)) {
     console.debug(`RENAME - Fail ("${oldName}" => "${newName}")`);
@@ -5,11 +7,11 @@ export default function renameNote(oldName: string, newName: string): void {
   }
 
   chrome.storage.local.get(["notes"], local => {
-    const notes = { ...local.notes };
+    const notes: NotesObject = { ...local.notes };
 
     // newName must be available
     if (newName in notes) {
-      console.debug(`RENAME - Fail ("${newName}" not available)`);
+      console.debug(`RENAME - Fail ("${newName}" is not available)`);
       return;
     }
 
@@ -21,6 +23,14 @@ export default function renameNote(oldName: string, newName: string): void {
 
     // Backup old note
     const note = notes[oldName];
+
+    // Check if note is NOT locked
+    if (note.locked) {
+      console.debug(`RENAME - Fail ("${oldName}" is locked)`);
+      return;
+    }
+
+    // Delete note with the old name
     delete notes[oldName];
 
     // Create a note under the new name

@@ -32,7 +32,7 @@ import renameNote from "notes/state/rename-note";
 import deleteNote from "notes/state/delete-note";
 import createNote from "notes/state/create-note";
 
-import { saveNote } from "notes/content/save";
+import { saveNote, setLocked } from "notes/content/save";
 import { sendMessage } from "messages";
 
 import notesHistory from "notes/history";
@@ -380,7 +380,11 @@ const Notes = (): h.JSX.Element => {
 
   // Hide context menu on click anywhere
   useEffect(() => {
-    document.addEventListener("click", () => setContextMenuProps(null));
+    document.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("#context-menu") === null) {
+        setContextMenuProps(null);
+      }
+    });
   }, []);
 
   // Activate note
@@ -495,11 +499,12 @@ const Notes = (): h.JSX.Element => {
       return;
     }
 
+    const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
     const commands = commandPaletteCommands.map((command) => command.name);
 
     const props: CommandPaletteProps = {
       noteNames,
-      commands,
+      commands: currentNoteLocked ? [] : commands,
       onActivateNote: (noteName: string) => {
         setCommandPaletteProps(null);
         range.restore(() => handleOnActivateNote(noteName));
@@ -555,44 +560,58 @@ const Notes = (): h.JSX.Element => {
 
       <__Sidebar
         os={os}
-        noteNames={Object.keys(notesProps.notes)}
+        notes={notesProps.notes}
         active={notesProps.active}
         width={sidebarWidth}
         onActivateNote={handleOnActivateNote}
         onNoteContextMenu={(noteName, x, y) => setContextMenuProps({
           noteName, x, y,
-          onRename: (noteName) => setRenameNoteModalProps({
-            noteName,
-            validate: (newNoteName: string) => newNoteName.length > 0 && newNoteName !== noteName && !(newNoteName in notesProps.notes),
-            onCancel: () => setRenameNoteModalProps(null),
-            onConfirm: (newNoteName) => {
-              setRenameNoteModalProps(null);
-              renameNote(noteName, newNoteName);
-            },
-          }),
-          onDelete: (noteName) => setDeleteNoteModalProps({
-            noteName,
-            onCancel: () => setDeleteNoteModalProps(null),
-            onConfirm: () => {
-              setDeleteNoteModalProps(null);
-              deleteNote(noteName);
-            },
-          }),
+          onRename: (noteName) => {
+            setContextMenuProps(null);
+            setRenameNoteModalProps({
+              noteName,
+              validate: (newNoteName: string) => newNoteName.length > 0 && newNoteName !== noteName && !(newNoteName in notesProps.notes),
+              onCancel: () => setRenameNoteModalProps(null),
+              onConfirm: (newNoteName) => {
+                setRenameNoteModalProps(null);
+                renameNote(noteName, newNoteName);
+              },
+            });
+          },
+          onDelete: (noteName) => {
+            setContextMenuProps(null);
+            setDeleteNoteModalProps({
+              noteName,
+              onCancel: () => setDeleteNoteModalProps(null),
+              onConfirm: () => {
+                setDeleteNoteModalProps(null);
+                deleteNote(noteName);
+              },
+            });
+          },
+          locked: notesProps.notes[noteName].locked ?? false,
+          toggleLocked: (noteName) => {
+            setContextMenuProps(null);
+            setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+          },
         })}
         onNewNote={() => onNewNote()}
         sync={sync}
       />
 
       <div id="content-container">
-        <__Content
-          active={notesProps.active}
-          initialContent={initialContent}
-          onEdit={(active, content) => {
-            saveNote(active, content, tabId, notesRef.current);
-          }}
-          indentOnTab={tab}
-          tabSize={tabSize}
-        />
+        {notesProps.active && (
+          <__Content
+            active={notesProps.active}
+            locked={notesProps.notes[notesProps.active].locked ?? false}
+            initialContent={initialContent}
+            onEdit={(active, content) => {
+              saveNote(active, content, tabId, notesRef.current);
+            }}
+            indentOnTab={tab}
+            tabSize={tabSize}
+          />
+        )}
 
         {commandPaletteProps && (
           <__CommandPalette {...commandPaletteProps} />

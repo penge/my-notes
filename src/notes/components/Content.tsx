@@ -10,6 +10,7 @@ import { runUploadPreconditions } from "background/google-drive/preconditions/up
 
 interface ContentProps {
   active: string
+  locked: boolean
   initialContent: string
   onEdit: (active: string, content: string) => void
   indentOnTab: boolean
@@ -48,7 +49,7 @@ const reattachIndentOnTab = (indentOnTab: boolean, tabSize: number) => {
   }
 };
 
-const Content = ({ active, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
+const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
   const contentRef = useRef<HTMLDivElement>();
 
   const onInput = useCallback(() => {
@@ -98,6 +99,7 @@ const Content = ({ active, initialContent, onEdit, indentOnTab, tabSize }: Conte
   return (
     <div
       id="content"
+      className={locked ? "locked" : undefined}
       ref={contentRef}
       contentEditable
       spellcheck

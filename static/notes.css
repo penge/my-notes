@@ -144,11 +144,19 @@ body:not(.with-sidebar) { left: 0 !important; }
 }
 
 #sidebar-notes .note {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   cursor: pointer;
   font-weight: bold;
   padding: .5em 1em;
   margin-top: 3px;
   border-radius: 3px;
+}
+
+#sidebar-notes .note svg {
+  height: 1em;
+  flex-shrink: 0;
 }
 
 #sidebar-notes .note:hover,
@@ -316,14 +324,16 @@ body.with-control #content a {
 }
 
 body.locked #sidebar,
-body.locked #toolbar {
+body.locked #toolbar,
+#content.locked,
+#toolbar.locked .button:not(#INFO) {
   user-select: none;
   pointer-events: none;
+  -webkit-user-modify: read-only;
 }
 
-body.locked #content {
-  user-select: none;
-  -webkit-user-modify: read-only;
+#toolbar.locked .button:not(#INFO) {
+  opacity: .4;
 }
 
 .my-notes-image {
@@ -397,7 +407,7 @@ body.with-command-palette #toolbar {
   padding: .8em;
 }
 
-#context-menu .action:hover {
+#context-menu .action:hover:not(.disabled) {
   background: var(--context-menu-hover-background-color);
   color: var(--context-menu-hover-text-color);
 }
@@ -410,6 +420,11 @@ body.with-command-palette #toolbar {
 #context-menu .action:last-child {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+
+#context-menu .action.disabled {
+  cursor: default;
+  color: var(--context-menu-disabled-text-color);
 }
 
 /* Toolbar */

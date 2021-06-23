@@ -7,6 +7,7 @@ export interface Note {
   sync?: {
     file: GoogleDriveFile
   }
+  locked?: boolean
 }
 
 export interface RegularFont {

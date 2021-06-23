@@ -76,7 +76,7 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
 
   return (
     <Fragment>
-      <div id="toolbar" class="bar">
+      <div id="toolbar" class={clsx("bar", note.locked && "locked")}>
         <Tooltip tooltip={commands.Bold.title(os)}>
           <div id="B" class="button" onClick={commands.Bold.execute}>
             <SVG text={BoldSvgText} />
