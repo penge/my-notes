@@ -99,7 +99,7 @@ svg {
   margin: .5em .25em;
   border-radius: 3px;
   height: 1.2em;
-  width: .82em;
+  width: 1em;
   flex-shrink: 0;
 }
 
@@ -475,9 +475,9 @@ body.with-toolbar #toolbar { transform: translateY(0); }
   position: fixed;
   background-color: var(--tooltip-background-color);
   color: var(--tooltip-text-color);
-  padding: 5px 8px;
+  padding: .22em .35em;
   border-radius: 3px;
-  font-size: 1.2rem;
+  font-size: .7em;
   user-select: none;
 }
 
