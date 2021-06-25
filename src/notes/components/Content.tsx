@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
-import commands from "../toolbar/commands";
+import { commands, InsertTabFactory } from "../commands";
 import __range from "notes/range";
 
 import { isImageFile } from "./image/read-image";
@@ -10,6 +10,7 @@ import { runUploadPreconditions } from "background/google-drive/preconditions/up
 
 interface ContentProps {
   active: string
+  locked: boolean
   initialContent: string
   onEdit: (active: string, content: string) => void
   indentOnTab: boolean
@@ -30,7 +31,7 @@ const autofocus = (content: HTMLDivElement) => content && setTimeout(() => {
   selection.addRange(range);
 });
 
-const indentOnTabCallbackFactory = (tabSize: number) => () => commands.insertTab(tabSize);
+const indentOnTabCallbackFactory = (tabSize: number) => InsertTabFactory({ tabSize }).execute;
 
 let latestCb: () => void;
 const reattachEditNote = (cb: () => void) => {
@@ -48,7 +49,7 @@ const reattachIndentOnTab = (indentOnTab: boolean, tabSize: number) => {
   }
 };
 
-const Content = ({ active, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
+const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
   const contentRef = useRef<HTMLDivElement>();
 
   const onInput = useCallback(() => {
@@ -83,21 +84,22 @@ const Content = ({ active, initialContent, onEdit, indentOnTab, tabSize }: Conte
   useEffect(() => reattachIndentOnTab(indentOnTab, tabSize), [indentOnTab, tabSize]);
 
   useEffect(() => {
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.underline);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnStrikethrough, commands.strikeThrough);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnRemoveFormat, commands.removeFormat);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.Underline.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnStrikethrough, commands.StrikeThrough.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnRemoveFormat, commands.RemoveFormat.execute);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnorderedList, commands.ul);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnOrderedList, commands.ol);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnorderedList, commands.UL.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnOrderedList, commands.OL.execute);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, commands.insertDate);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, commands.insertTime);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, commands.insertDateAndTime);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, commands.InsertCurrentDate.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, commands.InsertCurrentTime.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, commands.InsertCurrentDateAndTime.execute);
   }, []);
 
   return (
     <div
       id="content"
+      className={locked ? "locked" : undefined}
       ref={contentRef}
       contentEditable
       spellcheck

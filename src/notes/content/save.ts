@@ -1,7 +1,7 @@
-import { NotesObject } from "shared/storage/schema";
+import { NotesObject, Note } from "shared/storage/schema";
 
-export const saveNote = (active: string, content: string, tabId: string, notes: NotesObject): void => {
-  if (!active || !tabId || !notes) {
+const saveNoteCore = (noteName: string, tabId: string, notes: NotesObject, props: Partial<Note>) => {
+  if (!noteName || !tabId || !notes) {
     return;
   }
 
@@ -9,9 +9,9 @@ export const saveNote = (active: string, content: string, tabId: string, notes: 
 
   const notesCopy: NotesObject = {
     ...notes,
-    [active]: {
-      ...notes[active],
-      content,
+    [noteName]: {
+      ...notes[noteName],
+      ...props,
       modifiedTime,
     },
   };
@@ -21,4 +21,12 @@ export const saveNote = (active: string, content: string, tabId: string, notes: 
     setBy: `${tabId}-${modifiedTime}`,
     lastEdit: modifiedTime,
   });
+};
+
+export const saveNote = (noteName: string, content: string, tabId: string, notes: NotesObject): void => {
+  saveNoteCore(noteName, tabId, notes, { content });
+};
+
+export const setLocked = (noteName: string, locked: boolean, tabId: string, notes: NotesObject): void => {
+  saveNoteCore(noteName, tabId, notes, { locked });
 };

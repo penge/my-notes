@@ -24,7 +24,7 @@ const getContainer = () => {
 };
 
 const MINIMAL_OFFSET = 5;
-const EDGE_OFFSET = ".75em";
+const EDGE_OFFSET = ".5em";
 
 const getTooltipPosition = (childrenRect: DOMRect, rect: DOMRect): h.JSX.CSSProperties => {
   const styles: h.JSX.CSSProperties = {

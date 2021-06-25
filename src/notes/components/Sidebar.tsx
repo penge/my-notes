@@ -1,7 +1,7 @@
 import { h, Fragment } from "preact";
 import { useRef, useCallback, useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
-import { Os, NotesObject, Sync, MessageType } from "shared/storage/schema";
+import { Os, Sync, MessageType, NotesObject } from "shared/storage/schema";
 import Drag from "./Drag";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
@@ -11,6 +11,7 @@ import Tooltip from "./Tooltip";
 import FileSvgText from "svg/file.svg";
 import GearSvgText from "svg/gear.svg";
 import RefreshSvgText from "svg/refresh.svg";
+import LockSvgText from "svg/lock.svg";
 import SVG from "types/SVG";
 
 const syncNowTitles = {
@@ -124,6 +125,7 @@ const Sidebar = ({
             }}
           >
             {noteName}
+            {notes[noteName].locked && <SVG text={LockSvgText} />}
           </div>
         )}
       </div>
