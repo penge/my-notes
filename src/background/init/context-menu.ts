@@ -26,18 +26,19 @@ const getTextToSave = (info: chrome.contextMenus.OnClickData) => {
  *
  * Required permission: "contextMenus" (see manifest.json)
  */
-const createContextMenu = (noteNames: string[]): void => {
+const createContextMenu = (notes: NotesObject): void => {
   chrome.contextMenus.create({
     id: ID,
     title: "My Notes",
     contexts,
   }, () => {
-    noteNames.forEach((noteName) => {
+    Object.keys(notes).sort().forEach((noteName) => {
       chrome.contextMenus.create({
         parentId: ID,
         id: `${MY_NOTES_SAVE_TO_NOTE_PREFIX}${noteName}`,
         title: `Save to ${noteName}`,
         contexts,
+        enabled: notes[noteName].locked !== true,
       });
     });
     chrome.contextMenus.create({
@@ -55,7 +56,7 @@ const createContextMenu = (noteNames: string[]): void => {
   });
 };
 
-let lastNoteNames: string[] = [];
+let currentNotesString: string;
 
 export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClicked.addListener((info) => {
   const menuId: string = info.menuItemId;
@@ -75,22 +76,19 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
   }
 });
 
-const recreateContextMenu = (noteNames: string[]): void => {
-  // re-create context menu only if noteNames changed
-  if (JSON.stringify(lastNoteNames) === JSON.stringify(noteNames)) {
+const recreateContextMenuFromNotes = (notes: NotesObject): void => {
+  const notesString = JSON.stringify(Object.keys(notes).map((noteName) => `${noteName}_${notes[noteName].locked}`));
+
+  // re-create context menu only when note names have changed or their "locked" property
+  if (notesString === currentNotesString) {
     return;
   }
 
-  lastNoteNames = [...noteNames];
+  currentNotesString = notesString;
 
   chrome.contextMenus.removeAll(() => {
-    createContextMenu(noteNames);
+    createContextMenu(notes);
   });
-};
-
-const recreateContextMenuFromNotes = (notes: NotesObject): void => {
-  const noteNames = Object.keys(notes).sort();
-  recreateContextMenu(noteNames);
 };
 
 export const createAndUpdateContextMenuFromNotes = (): void => {
