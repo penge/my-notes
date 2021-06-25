@@ -31,6 +31,8 @@
 
 → &nbsp; Keyboard shortcuts
 
+→ &nbsp; Command palette ([<ins>Command palette</ins>](#command-palette))
+
 → &nbsp; Works offline
 
 <br>
@@ -79,6 +81,19 @@ Then, modify CSS variables as you like to change background colors, text colors,
 You can add any valid CSS as well to make further changes.
 Click on the **"Save"** button to save the custom theme.
 
+<br><br>
+
+## Command palette
+
+Command palette can be used to quickly open notes or execute commands using a keyboard.
+
+By default, notes are filtered. To filter commands, type `>` into the Search first.
+
+To navigate between the results, you can use up and down arrow keys. If there is only one search result, it is automatically selected.
+To open the selected note or execute the selected command, press `Enter`.
+The last executed command can be easily repeated when needed.
+
+See Options for shortcuts to use.
 
 <br><br>
 
