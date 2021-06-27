@@ -5,26 +5,25 @@ const saveNoteCore = (noteName: string, tabId: string, notes: NotesObject, props
     return;
   }
 
-  const modifiedTime = new Date().toISOString();
-
   const notesCopy: NotesObject = {
     ...notes,
     [noteName]: {
       ...notes[noteName],
       ...props,
-      modifiedTime,
     },
   };
 
   chrome.storage.local.set({
     notes: notesCopy,
-    setBy: `${tabId}-${modifiedTime}`,
-    lastEdit: modifiedTime,
+    ...(props.modifiedTime ? {
+      setBy: `${tabId}-${props.modifiedTime}`,
+      lastEdit: props.modifiedTime,
+    } : {})
   });
 };
 
 export const saveNote = (noteName: string, content: string, tabId: string, notes: NotesObject): void => {
-  saveNoteCore(noteName, tabId, notes, { content });
+  saveNoteCore(noteName, tabId, notes, { content, modifiedTime: new Date().toISOString() });
 };
 
 export const setLocked = (noteName: string, locked: boolean, tabId: string, notes: NotesObject): void => {

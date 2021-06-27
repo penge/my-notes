@@ -65,7 +65,7 @@ const Sidebar = ({
     }
 
     onActivateNote(note);
-  }, []);
+  }, [onActivateNote]);
 
   useEffect(openEnteredNote, [enteredNote]);
   useEffect(() => {
