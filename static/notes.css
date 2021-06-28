@@ -325,10 +325,13 @@ body.with-control #content a {
 
 body.locked #sidebar,
 body.locked #toolbar,
-#content.locked,
 #toolbar.locked .button:not(#INFO) {
   user-select: none;
   pointer-events: none;
+  -webkit-user-modify: read-only;
+}
+
+#content.locked {
   -webkit-user-modify: read-only;
 }
 
