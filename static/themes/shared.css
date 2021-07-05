@@ -5,13 +5,6 @@
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb-background-color); }
 ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover-background-color); }
 
-/* Selection */
-
-::selection {
-  background: var(--selection-background-color);
-  color: var(--selection-text-color);
-}
-
 /* Generic */
 
 body {
