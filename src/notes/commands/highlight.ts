@@ -42,14 +42,14 @@ const highlight = (cssClass: string, cb: Callback): void => withRange((range: Ra
     ? range.startContainer.parentElement
     : null;
 
-  const isParentHighlighted = parent && ["SPAN", "A"].includes(parent.tagName) &&
+  const isParentHighlighted = parent &&
     validCssClasses.some((clazz) => parent.classList.contains(clazz));
 
   if (!parent) {
     // Surround text with a new highlight <span>
     range.surroundContents(createSpan(cssClass));
 
-  } else if (!isParentHighlighted && parent.tagName === "SPAN") { // having "SPAN" parent which is not highlighted
+  } else if (!isParentHighlighted && parent.tagName !== "A") { // having "DIV" or "SPAN" or other parent which is not highlighted
     // Surround text with a new highlight <span>
     range.surroundContents(createSpan(cssClass));
 

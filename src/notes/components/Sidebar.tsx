@@ -103,15 +103,24 @@ const Sidebar = ({
               onNoteContextMenu(noteName, event.pageX, event.pageY);
             }}
             onDragOver={(event) => {
+              if (notes[noteName].locked) {
+                return;
+              }
               event.preventDefault();
               setDragOverNote(noteName);
               setDragOverNoteConfirmation(null);
             }}
             onDragLeave={(event) => {
+              if (notes[noteName].locked) {
+                return;
+              }
               event.preventDefault();
               setDragOverNote(null);
             }}
             onDrop={(event) => {
+              if (notes[noteName].locked) {
+                return;
+              }
               event.preventDefault();
               const data = event.dataTransfer?.getData("text");
               if (data) {

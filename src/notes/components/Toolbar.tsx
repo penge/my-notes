@@ -76,236 +76,250 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
 
   return (
     <Fragment>
-      <div id="toolbar" class={clsx("bar", note.locked && "locked")}>
-        <Tooltip tooltip={commands.Bold.title(os)}>
-          <div id="B" class="button" onClick={commands.Bold.execute}>
-            <SVG text={BoldSvgText} />
+      <div id="toolbar" class={clsx(note.locked && "locked")}>
+        {submenu === "H" && (
+          <div class="submenu bar" style={{ paddingLeft: ".33em" }}>
+            <Tooltip tooltip="Heading 1">
+              <div id="H1" class="button auto" onClick={commands.H1.execute}>H<span>1</span></div>
+            </Tooltip>
+            <Tooltip tooltip="Heading 2">
+              <div id="H2" class="button auto" onClick={commands.H2.execute}>H<span>2</span></div>
+            </Tooltip>
+            <Tooltip tooltip="Heading 3">
+              <div id="H3" class="button auto" onClick={commands.H3.execute}>H<span>3</span></div>
+            </Tooltip>
           </div>
-        </Tooltip>
+        )}
 
-        <Tooltip tooltip={commands.Italic.title(os)}>
-          <div id="I" class="button" onClick={commands.Italic.execute}>
-            <SVG text={ItalicSvgText} />
+        {submenu === "DT" && (
+          <div class="submenu bar" style={{ paddingLeft: ".4em" }}>
+            <Tooltip tooltip={commands.InsertCurrentDate.name}>
+              <div class="button auto" onClick={commands.InsertCurrentDate.execute}>D</div>
+            </Tooltip>
+            <Tooltip tooltip={commands.InsertCurrentTime.name}>
+              <div class="button auto" onClick={commands.InsertCurrentTime.execute}>T</div>
+            </Tooltip>
+            <Tooltip tooltip={commands.InsertCurrentDateAndTime.name}>
+              <div class="button auto" onClick={commands.InsertCurrentDateAndTime.execute}>D+T</div>
+            </Tooltip>
           </div>
-        </Tooltip>
+        )}
 
-        <Tooltip tooltip={commands.Underline.title(os)}>
-          <div id="U" class="button" onClick={commands.Underline.execute}>
-            <SVG text={UnderlineSvgText} />
+        {submenu === "TABLE" && (
+          <div class="submenu bar" style={{ paddingLeft: ".33em" }}>
+            <Tooltip tooltip="Insert table (3x3)">
+              <div id="TABLE_INSERT" class="button wide" onClick={() => table.insertTable(callback)}>
+                <SVG text={TableSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Insert row above">
+              <div id="TABLE_ROW_ABOVE" class="button" onClick={() => table.insertRowAbove(callback)}>
+                <SVG text={TableRowAboveSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Insert row below">
+              <div id="TABLE_ROW_BELOW" class="button" onClick={() => table.insertRowBelow(callback)}>
+                <SVG text={TableRowBelowSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Insert column left">
+              <div id="TABLE_COLUMN_LEFT" class="button" onClick={() => table.insertColumnLeft(callback)}>
+                <SVG text={TableColumnLeftSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Insert column right">
+              <div id="TABLE_COLUMN_RIGHT" class="button wide" onClick={() => table.insertColumnRight(callback)}>
+                <SVG text={TableColumnRightSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Toggle heading row">
+              <div id="TABLE_HEADING_ROW" class="button" onClick={() => table.toggleHeadingRow(callback)}>
+                <SVG text={TableLineSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Toggle heading column">
+              <div id="TABLE_HEADING_COLUMN" class="button wide rotate90" onClick={() => table.toggleHeadingColumn(callback)}>
+                <SVG text={TableLineSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Delete row">
+              <div id="TABLE_DELETE_ROW" class="button" onClick={() => table.deleteRow(callback)}>
+                <SVG text={TableDeleteRowSvgText} />
+              </div>
+            </Tooltip>
+            <Tooltip tooltip="Delete column">
+              <div id="TABLE_DELETE_COLUMN" class="button" onClick={() => table.deleteColumn(callback)}>
+                <SVG text={TableDeleteColumnSvgText} />
+              </div>
+            </Tooltip>
           </div>
-        </Tooltip>
+        )}
 
-        <Tooltip tooltip={commands.StrikeThrough.title(os)}>
-          <div id="S" class="button wide" onClick={commands.StrikeThrough.execute}>
-            <SVG text={StrikethroughSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip="Heading">
-          <div id="H" class={clsx("button", submenu === "H" && "active")} onClick={toggleSubmenu}>
-            <SVG text={TextSvgText} />
-            <div class="menu bar" style={{ paddingLeft: ".33em" }}>
-              <Tooltip tooltip="Heading 1">
-                <div id="H1" class="button auto" onClick={commands.H1.execute}>H<span>1</span></div>
+        {submenu === "TC" && (
+          <div class="submenu bar">
+            {HIGHLIGHT_COLORS.map((color) => (
+              <Tooltip tooltip={`Change selected text color to ${capitalize(color)}`}>
+                <div class={`plain button letter my-notes-text-color-${color}`} onClick={() => highlight(`my-notes-text-color-${color}`, callback)}>A</div>
               </Tooltip>
-              <Tooltip tooltip="Heading 2">
-                <div id="H2" class="button auto" onClick={commands.H2.execute}>H<span>2</span></div>
-              </Tooltip>
-              <Tooltip tooltip="Heading 3">
-                <div id="H3" class="button auto" onClick={commands.H3.execute}>H<span>3</span></div>
-              </Tooltip>
+            ))}
+            <Tooltip tooltip="Change selected text color to default text color">
+              <div class="plain button letter my-notes-text-color-auto" onClick={() => highlight("my-notes-text-color-auto", callback)}>Auto</div>
+            </Tooltip>
+            <Tooltip tooltip="Highlight selected text">
+              <div class="last plain button auto letter my-notes-highlight" onClick={() => highlight("my-notes-highlight", callback)}>Hi</div>
+            </Tooltip>
+          </div>
+        )}
+
+        <div class="topmenu bar">
+          <Tooltip tooltip={commands.Bold.title(os)}>
+            <div id="B" class="button" onClick={commands.Bold.execute}>
+              <SVG text={BoldSvgText} />
             </div>
-          </div>
-        </Tooltip>
+          </Tooltip>
 
-        <Tooltip tooltip={commands.UL.title(os)}>
-          <div id="UL" class="button" onClick={commands.UL.execute}>
-            <SVG text={BulletedListSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip={commands.OL.title(os)}>
-          <div id="OL" class="button" onClick={commands.OL.execute}>
-            <SVG text={NumberedListSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip={commands.Outdent.name}>
-          <div id="OUTDENT" class="button" onClick={commands.Outdent.execute}>
-            <SVG text={OutdentSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip={commands.Indent.name}>
-          <div id="INDENT" class="button" onClick={commands.Indent.execute}>
-            <SVG text={IndentSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip={commands.AlignLeft.name}>
-          <div id="CL" class="button" onClick={commands.AlignLeft.execute}>
-            <SVG text={AlignLeftSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip={commands.AlignCenter.name}>
-          <div id="CC" class="button" onClick={commands.AlignCenter.execute}>
-            <SVG text={AlignCenterSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip={commands.AlignRight.name}>
-          <div id="CR" class="button" onClick={commands.AlignRight.execute}>
-            <SVG text={AlignRightSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip="Insert Image">
-          <div id="IMG" class="button" onClick={() => {
-            range.save();
-            setInsertImageModalProps({
-              onCancel: () => {
-                setInsertImageModalProps(null);
-                range.restore();
-              },
-              onConfirm: (src) => {
-                setInsertImageModalProps(null);
-                range.restore(() => {
-                  InsertImageFactory({ src }).execute();
-                });
-              }
-            });
-          }}>
-            <SVG text={ImageSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip="Insert Link">
-          <div id="LINK" class="button" onClick={() => {
-            range.save();
-            setInsertLinkModalProps({
-              onCancel: () => {
-                setInsertLinkModalProps(null);
-                range.restore();
-              },
-              onConfirm: (href) => {
-                setInsertLinkModalProps(null);
-                range.restore(() => {
-                  InsertLinkFactory({ href }).execute();
-                });
-              }
-            });
-          }}>
-            <SVG text={LinkSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip={commands.Pre.name}>
-          <div id="PRE" class="button" onClick={commands.Pre.execute}>
-            <SVG text={CodeSvgText} />
-          </div>
-        </Tooltip>
-
-        <Tooltip tooltip="Date and Time">
-          <div id="DT" class={clsx("button", submenu === "DT" && "active")} onClick={toggleSubmenu}>
-            <SVG text={ClockSvgText} />
-            <div class="menu bar" style={{ paddingLeft: ".4em" }}>
-              <Tooltip tooltip={commands.InsertCurrentDate.name}>
-                <div class="button auto" onClick={commands.InsertCurrentDate.execute}>D</div>
-              </Tooltip>
-              <Tooltip tooltip={commands.InsertCurrentTime.name}>
-                <div class="button auto" onClick={commands.InsertCurrentTime.execute}>T</div>
-              </Tooltip>
-              <Tooltip tooltip={commands.InsertCurrentDateAndTime.name}>
-                <div class="button auto" onClick={commands.InsertCurrentDateAndTime.execute}>D+T</div>
-              </Tooltip>
+          <Tooltip tooltip={commands.Italic.title(os)}>
+            <div id="I" class="button" onClick={commands.Italic.execute}>
+              <SVG text={ItalicSvgText} />
             </div>
-          </div>
-        </Tooltip>
+          </Tooltip>
 
-        <Tooltip tooltip="Table">
-          <div id="TABLE" class={clsx("button", submenu === "TABLE" && "active")} onClick={toggleSubmenu}>
-            <SVG text={TableSvgText} />
-            <div class="menu bar" style={{ paddingLeft: ".33em" }}>
-              <Tooltip tooltip="Insert table (3x3)">
-                <div id="TABLE_INSERT" class="button wide" onClick={() => table.insertTable(callback)}>
-                  <SVG text={TableSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Insert row above">
-                <div id="TABLE_ROW_ABOVE" class="button" onClick={() => table.insertRowAbove(callback)}>
-                  <SVG text={TableRowAboveSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Insert row below">
-                <div id="TABLE_ROW_BELOW" class="button" onClick={() => table.insertRowBelow(callback)}>
-                  <SVG text={TableRowBelowSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Insert column left">
-                <div id="TABLE_COLUMN_LEFT" class="button" onClick={() => table.insertColumnLeft(callback)}>
-                  <SVG text={TableColumnLeftSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Insert column right">
-                <div id="TABLE_COLUMN_RIGHT" class="button wide" onClick={() => table.insertColumnRight(callback)}>
-                  <SVG text={TableColumnRightSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Toggle heading row">
-                <div id="TABLE_HEADING_ROW" class="button" onClick={() => table.toggleHeadingRow(callback)}>
-                  <SVG text={TableLineSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Toggle heading column">
-                <div id="TABLE_HEADING_COLUMN" class="button wide rotate90" onClick={() => table.toggleHeadingColumn(callback)}>
-                  <SVG text={TableLineSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Delete row">
-                <div id="TABLE_DELETE_ROW" class="button" onClick={() => table.deleteRow(callback)}>
-                  <SVG text={TableDeleteRowSvgText} />
-                </div>
-              </Tooltip>
-              <Tooltip tooltip="Delete column">
-                <div id="TABLE_DELETE_COLUMN" class="button" onClick={() => table.deleteColumn(callback)}>
-                  <SVG text={TableDeleteColumnSvgText} />
-                </div>
-              </Tooltip>
+          <Tooltip tooltip={commands.Underline.title(os)}>
+            <div id="U" class="button" onClick={commands.Underline.execute}>
+              <SVG text={UnderlineSvgText} />
             </div>
-          </div>
-        </Tooltip>
+          </Tooltip>
 
-        <Tooltip tooltip="Text Color">
-          <div id="TC" class={clsx("button", submenu === "TC" && "active")} onClick={toggleSubmenu}>
-            <SVG text={TextColorSvgText} />
-            <div class="menu bar" style={{ paddingLeft: ".3em" }}>
-              {HIGHLIGHT_COLORS.map((color) => (
-                <Tooltip tooltip={`Change selected text color to ${capitalize(color)}`}>
-                  <div class={`plain button letter my-notes-text-color-${color}`} onClick={() => highlight(`my-notes-text-color-${color}`, callback)}>A</div>
-                </Tooltip>
-              ))}
-              <Tooltip tooltip="Change selected text color to default text color">
-                <div class="plain button letter my-notes-text-color-auto" onClick={() => highlight("my-notes-text-color-auto", callback)}>Auto</div>
-              </Tooltip>
-              <Tooltip tooltip="Highlight selected text">
-                <div class="last plain button auto letter my-notes-highlight" onClick={() => highlight("my-notes-highlight", callback)}>Hi</div>
-              </Tooltip>
+          <Tooltip tooltip={commands.StrikeThrough.title(os)}>
+            <div id="S" class="button wide" onClick={commands.StrikeThrough.execute}>
+              <SVG text={StrikethroughSvgText} />
             </div>
-          </div>
-        </Tooltip>
+          </Tooltip>
 
-        <Tooltip tooltip={commands.RemoveFormat.title(os)}>
-          <div id="RF" class="button" onClick={commands.RemoveFormat.execute}>
-            <SVG text={RemoveFormatSvgText} />
-          </div>
-        </Tooltip>
+          <Tooltip tooltip="Heading">
+            <div id="H" class={clsx("button", submenu === "H" && "active")} onClick={toggleSubmenu}>
+              <SVG text={TextSvgText} />
+            </div>
+          </Tooltip>
 
-        <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
-          <div id="INFO" class="button last">
-            <SVG text={InfoSvgText} />
-          </div>
-        </Tooltip>
+          <Tooltip tooltip={commands.UL.title(os)}>
+            <div id="UL" class="button" onClick={commands.UL.execute}>
+              <SVG text={BulletedListSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.OL.title(os)}>
+            <div id="OL" class="button" onClick={commands.OL.execute}>
+              <SVG text={NumberedListSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.Outdent.name}>
+            <div id="OUTDENT" class="button" onClick={commands.Outdent.execute}>
+              <SVG text={OutdentSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.Indent.name}>
+            <div id="INDENT" class="button" onClick={commands.Indent.execute}>
+              <SVG text={IndentSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.AlignLeft.name}>
+            <div id="CL" class="button" onClick={commands.AlignLeft.execute}>
+              <SVG text={AlignLeftSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.AlignCenter.name}>
+            <div id="CC" class="button" onClick={commands.AlignCenter.execute}>
+              <SVG text={AlignCenterSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.AlignRight.name}>
+            <div id="CR" class="button" onClick={commands.AlignRight.execute}>
+              <SVG text={AlignRightSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip="Insert Image">
+            <div id="IMG" class="button" onClick={() => {
+              range.save();
+              setInsertImageModalProps({
+                onCancel: () => {
+                  setInsertImageModalProps(null);
+                  range.restore();
+                },
+                onConfirm: (src) => {
+                  setInsertImageModalProps(null);
+                  range.restore(() => {
+                    InsertImageFactory({ src }).execute();
+                  });
+                }
+              });
+            }}>
+              <SVG text={ImageSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip="Insert Link">
+            <div id="LINK" class="button" onClick={() => {
+              range.save();
+              setInsertLinkModalProps({
+                onCancel: () => {
+                  setInsertLinkModalProps(null);
+                  range.restore();
+                },
+                onConfirm: (href) => {
+                  setInsertLinkModalProps(null);
+                  range.restore(() => {
+                    InsertLinkFactory({ href }).execute();
+                  });
+                }
+              });
+            }}>
+              <SVG text={LinkSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.Pre.name}>
+            <div id="PRE" class="button" onClick={commands.Pre.execute}>
+              <SVG text={CodeSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip="Date and Time">
+            <div id="DT" class={clsx("button", submenu === "DT" && "active")} onClick={toggleSubmenu}>
+              <SVG text={ClockSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip="Table">
+            <div id="TABLE" class={clsx("button", submenu === "TABLE" && "active")} onClick={toggleSubmenu}>
+              <SVG text={TableSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip="Text Color">
+            <div id="TC" class={clsx("button", submenu === "TC" && "active")} onClick={toggleSubmenu}>
+              <SVG text={TextColorSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.RemoveFormat.title(os)}>
+            <div id="RF" class="button" onClick={commands.RemoveFormat.execute}>
+              <SVG text={RemoveFormatSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
+            <div id="INFO" class="button last">
+              <SVG text={InfoSvgText} />
+            </div>
+          </Tooltip>
+        </div>
       </div>
 
       {insertImageModalProps && (

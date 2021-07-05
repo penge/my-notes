@@ -115,8 +115,7 @@ svg {
   width: auto;
 }
 
-.bar > .button > svg,
-.menu.bar > .button > * {
+.bar > .button > * {
   pointer-events: none;
 }
 
@@ -325,10 +324,13 @@ body.with-control #content a {
 
 body.locked #sidebar,
 body.locked #toolbar,
-#content.locked,
 #toolbar.locked .button:not(#INFO) {
   user-select: none;
   pointer-events: none;
+  -webkit-user-modify: read-only;
+}
+
+#content.locked {
   -webkit-user-modify: read-only;
 }
 
@@ -461,16 +463,8 @@ body.with-toolbar #toolbar { transform: translateY(0); }
 #H2 > span { font-size: .85em; }
 #H3 > span { font-size: .65em; }
 
-#toolbar .button .menu {
-  position: absolute;
-  bottom: calc(100% + 1px);
+#toolbar > .submenu {
   background: var(--toolbar-submenu-background-color);
-  left: 0;
-  right: 0;
-}
-
-#toolbar .button:not(.active) .menu {
-  display: none;
 }
 
 #toolbar .button.letter {
