@@ -36,7 +36,7 @@ const handlePermissions = (permissionHandlers: PermissionHandlers, permissions: 
 
 export const handleChangedPermissions = (): void => {
   optionalPermissions.forEach((optionalPermission) => {
-    havingPermission(optionalPermission).then((having) => !having && __handlers["identity"](having));
+    havingPermission(optionalPermission).then((having) => !having && __handlers[optionalPermission](having));
   });
 
   chrome.permissions.onAdded.addListener((permissions) => handlePermissions(__handlers, permissions, { having: true }));
