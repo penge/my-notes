@@ -51,20 +51,20 @@ const autoSyncOnAlarmListener = (alarm: chrome.alarms.Alarm) => {
 };
 
 const attachGoogleDriveAutoSyncAlarm = (): void => withGrantedPermission("alarms", async () => {
+  if (!chrome.alarms.onAlarm.hasListener(autoSyncOnAlarmListener)) {
+    chrome.alarms.onAlarm.addListener(autoSyncOnAlarmListener);
+  }
+
   const existingAlarm = await chrome.alarms.get(AUTO_SYNC_ALARM_NAME);
   if (existingAlarm) {
     return; // AUTO_SYNC_ALARM_NAME is already registered
   }
 
-  chrome.alarms.onAlarm.removeListener(autoSyncOnAlarmListener);
-  chrome.alarms.clear(AUTO_SYNC_ALARM_NAME, () => {
-    chrome.alarms.onAlarm.addListener(autoSyncOnAlarmListener);
-    chrome.alarms.create(AUTO_SYNC_ALARM_NAME, {
-      periodInMinutes: 0.1, // Every 6 seconds
-    });
-
-    Log(`${PREFIX} - ${AUTO_SYNC_ALARM_NAME} was registered`);
+  chrome.alarms.create(AUTO_SYNC_ALARM_NAME, {
+    periodInMinutes: 0.1, // Every 6 seconds
   });
+
+  Log(`${PREFIX} - ${AUTO_SYNC_ALARM_NAME} was registered`);
 });
 
 const detachGoogleDriveAutoSyncAlarm = (): void => withGrantedPermission("alarms", () => {

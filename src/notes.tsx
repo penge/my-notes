@@ -275,7 +275,11 @@ const Notes = (): h.JSX.Element => {
             (newActive in newNotes) &&
             (newNotes[newActive].content !== oldNotes[newActive].content)
           ) {
-            setInitialContent(newNotes[newActive].content);
+            if (newNotes[newActive].modifiedTime > oldNotes[newActive].modifiedTime) {
+              setInitialContent(newNotes[newActive].content);
+            } else {
+              saveNote(newActive, oldNotes[newActive].content, tabId, notesRef.current);
+            }
           }
 
           if (!(newActive in oldNotes)) {
