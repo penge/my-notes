@@ -111,6 +111,7 @@ export const registerGoogleDriveAutoSync = (): void => {
     chrome.storage.local.get(otherKey, (local) => {
       if (!local[otherKey]) {
         detachGoogleDriveAutoSyncAlarm();
+        return;
       }
 
       // Both "sync" and "autoSync" are enabled, we can attach the alarm

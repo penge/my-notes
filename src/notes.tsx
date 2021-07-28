@@ -412,7 +412,13 @@ const Notes = (): h.JSX.Element => {
     keyboardShortcuts.register(os);
     keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, () => {
       setContextMenuProps(null);
-      setCommandPaletteProps(null);
+      setCommandPaletteProps((prev) => {
+        if (prev) {
+          range.restore();
+        }
+
+        return null;
+      });
     });
     keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, () => {
