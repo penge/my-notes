@@ -99,13 +99,13 @@ See Options for shortcuts to use.
 
 ## Google Drive Sync
 
-Google Drive Sync (see Options) saves your notes to your personal Google Drive and synchronizes the changes between your local My Notes and your Google Drive every time you hit the Sync button (bottom left corner).
+Google Drive Sync (see Options) saves your notes to your personal Google Drive and synchronizes the changes between your local My Notes and your Google Drive every time you click on the "Sync now" button (bottom left corner).
 
-**Why:**
+**Why sync:**
 
-- having a backup of notes (notes can be restored)
-- can edit notes from other sources (Google Drive, My Notes, vice versa)
-- can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)
+- Having a backup of your notes (notes can be restored)
+- Can edit notes from other sources (Google Drive, My Notes, vice versa)
+- Can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)
 
 ### Location
 
@@ -116,9 +116,9 @@ If the folder exists from a previous installation, notes are downloaded and uplo
 
 Synchronization works in both ways — to Google Drive, from Google Drive.
 
-Notes are synchronized every time you hit the Sync button.
-While the synchronization is in progress, Sync button will spin.
-Sync button tooltip shows the time of the most recent synchronization.
+Notes are synchronized every time you click on the "Sync now" button.
+While the synchronization is in progress, "Sync now" button will spin.
+"Sync now" button has a tooltip that shows the time of the most recent synchronization.
 
 ### Auto Sync
 
