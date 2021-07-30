@@ -31,7 +31,7 @@ const InsertImageModal = ({ onCancel, onConfirm }: InsertImageModalProps): h.JSX
     onConfirm={(src) => onConfirm(transformImageUrl(src))}
     description={(
       <div className="modal-description">
-        You can <strong>Drag & Drop</strong> an image to note to upload it to Google Drive when Google Drive Sync is enabled.
+        You can <strong>Drag & Drop</strong> an image to the note to upload it to Google Drive when Google Drive Sync is enabled.
       </div>
     )}
   />

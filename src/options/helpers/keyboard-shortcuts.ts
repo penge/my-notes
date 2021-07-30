@@ -105,7 +105,7 @@ const keyboardShortcuts: KeyboardShortcut[] = [
     other: "Alt + Shift + 5",
   },
   {
-    description: "Remove Format",
+    description: "Remove Formatting",
     mac: "⌘ + \\",
     other: "Ctrl + \\",
   },

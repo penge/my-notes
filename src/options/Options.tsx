@@ -41,16 +41,17 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
         <div>
           <label class="bold">Enable Google Drive Sync</label>
           <div class="comment">
-            Creates a folder <b>My Notes</b> (automatically, once) in your Google Drive, and uses it to backup the notes.
+            Creates a folder <b>My Notes</b> (automatically, once) in your Google Drive, and uses it to back up your notes.
             Notes are synchronized to and from Google Drive once the feature is enabled, and then on every click on the <b>Sync now</b> button in the Sidebar.<br /><br />
 
-            <b>Why:</b><br />
+            <b>Why sync:</b><br />
             <ul>
-              <li>having a backup of notes (notes can be restored)</li>
-              <li>can edit notes from other sources (Google Drive, My Notes, vice versa)</li>
-              <li>can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)</li>
+              <li>Having a backup of your notes (notes can be restored)</li>
+              <li>Can edit notes from other sources (Google Drive, My Notes, vice versa)</li>
+              <li>Can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)</li>
             </ul>
 
+            <b>Permission:</b><br />
             My Notes can only access the files it created. It cannot see other files in your Google Drive.<br />
             My Notes will request a permission to enable this feature.<br /><br />
 

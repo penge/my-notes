@@ -166,10 +166,10 @@ const Pre: Command = {
 };
 
 const RemoveFormat: Command = {
-  name: "Remove Format",
+  name: "Remove Formatting",
   title: (os) => ({
-    mac: "Remove Format (⌘ + \\)",
-    other: "Remove Format (Ctrl + \\)"
+    mac: "Remove Formatting (⌘ + \\)",
+    other: "Remove Formatting (Ctrl + \\)"
   })[os],
   execute: (): void => {
     exec("removeFormat");
