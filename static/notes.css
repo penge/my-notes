@@ -188,6 +188,19 @@ body:not(.with-sidebar) { left: 0 !important; }
   cursor: pointer;
 }
 
+#sidebar-buttons.drag-over {
+  background: var(--selection-background-color);
+  color: var(--selection-text-color);
+}
+
+#sidebar-buttons.drag-over .button {
+  pointer-events: none;
+}
+
+#sidebar-buttons.drag-over svg {
+  fill: white;
+}
+
 body.syncing #sync-now > svg {
   animation: rotating .5s linear infinite;
 }

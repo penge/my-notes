@@ -7,6 +7,7 @@ import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import formatDate from "shared/date/format-date";
 import { sendMessage } from "messages";
 import Tooltip from "./Tooltip";
+import { importNoteFromTxtFile } from "notes/import";
 
 import FileSvgText from "svg/file.svg";
 import GearSvgText from "svg/gear.svg";
@@ -52,6 +53,8 @@ const Sidebar = ({
   const [enteredNote, setEnteredNote] = useState<string | null>(null);
   const enteredNoteRef = useRef<string | null>(null);
   enteredNoteRef.current = enteredNote;
+
+  const [dragOverButtons, setDragOverButtons] = useState<boolean>(false);
 
   const openOptions = useCallback(() => chrome.tabs.create({ url: "/options.html" }), []);
   const openEnteredNote = useCallback(() => {
@@ -139,7 +142,28 @@ const Sidebar = ({
         )}
       </div>
 
-      <div id="sidebar-buttons" class="bar">
+      <div
+        id="sidebar-buttons"
+        class={clsx("bar", dragOverButtons && "drag-over")}
+        onDragOver={(event) => {
+          event.preventDefault();
+          setDragOverButtons(true);
+        }}
+        onDragLeave={(event) => {
+          event.preventDefault();
+          setDragOverButtons(false);
+        }}
+        onDrop={(event) => {
+          event.preventDefault();
+          const file = event.dataTransfer?.files[0];
+          if (!file) {
+            setDragOverButtons(false);
+            return;
+          }
+
+          importNoteFromTxtFile(file, () => setDragOverButtons(false));
+        }}
+      >
         <Tooltip tooltip="New note">
           <div id="new-note" class="button" onClick={onNewNote}>
             <SVG text={FileSvgText} />
