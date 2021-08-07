@@ -502,19 +502,21 @@ const Notes = (): h.JSX.Element => {
 
   // Command Palette
   useEffect(() => {
-    const noteNames = Object.keys(notesProps.notes);
-    if (!noteNames.length) {
+    // Detach when there are no notes
+    if (!Object.keys(notesProps.notes).length) {
       detachOnToggleCommandPaletteCallback();
       setCommandPaletteProps(null);
       return;
     }
 
+    // Start preparing props for Command Palette
     const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
-    const commands = commandPaletteCommands.map((command) => command.name);
+    const commands = currentNoteLocked ? [] : commandPaletteCommands.map((command) => command.name); // no commands if the current note is locked
 
+    // Props for Command Palette
     const props: CommandPaletteProps = {
-      noteNames,
-      commands: currentNoteLocked ? [] : commands,
+      notes: notesProps.notes,
+      commands,
       onActivateNote: (noteName: string) => {
         setCommandPaletteProps(null);
         range.restore(() => handleOnActivateNote(noteName));
@@ -531,6 +533,7 @@ const Notes = (): h.JSX.Element => {
       },
     };
 
+    // Update event to show Command Palette and props to use
     reatachOnToggleCommandPalette(() => {
       setCommandPaletteProps((prev) => {
         if (prev) {
@@ -543,6 +546,7 @@ const Notes = (): h.JSX.Element => {
       });
     });
 
+    // Update props for already visible Command Palette
     setCommandPaletteProps((prev) => !prev ? prev : props);
   }, [os, notesProps, handleOnActivateNote, commandPaletteCommands]);
 
