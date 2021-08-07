@@ -534,6 +534,7 @@ const Notes = (): h.JSX.Element => {
     reatachOnToggleCommandPalette(() => {
       setCommandPaletteProps((prev) => {
         if (prev) {
+          range.restore();
           return null;
         }
 
