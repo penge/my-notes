@@ -1,6 +1,6 @@
 import { NotesObject, Note } from "shared/storage/schema";
 
-const saveNoteCore = (noteName: string, tabId: string, notes: NotesObject, props: Partial<Note>) => {
+const saveNoteCore = (noteName: string, tabId: number, notes: NotesObject, props: Partial<Note>) => {
   if (!noteName || !tabId || !notes) {
     return;
   }
@@ -22,10 +22,10 @@ const saveNoteCore = (noteName: string, tabId: string, notes: NotesObject, props
   });
 };
 
-export const saveNote = (noteName: string, content: string, tabId: string, notes: NotesObject): void => {
+export const saveNote = (noteName: string, content: string, tabId: number, notes: NotesObject): void => {
   saveNoteCore(noteName, tabId, notes, { content, modifiedTime: new Date().toISOString() });
 };
 
-export const setLocked = (noteName: string, locked: boolean, tabId: string, notes: NotesObject): void => {
+export const setLocked = (noteName: string, locked: boolean, tabId: number, notes: NotesObject): void => {
   saveNoteCore(noteName, tabId, notes, { locked });
 };

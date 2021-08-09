@@ -18,7 +18,7 @@ interface ModalProps {
 const Modal = ({
   className, title, input, inputValue, cancelValue, confirmValue, validate, onCancel, onConfirm, description,
 }: ModalProps): h.JSX.Element => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     document.body.classList.add("with-modal");

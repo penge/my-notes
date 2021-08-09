@@ -61,9 +61,10 @@ const sync = async (): Promise<boolean> => {
   const notesAfterPush = await push(folderId, notesAfterPull, { createFile, updateFile });
 
   const lastSync = new Date().toISOString();
+  const areNotesTheSame = JSON.stringify(notes) === JSON.stringify(notesAfterPush);
 
   await setItems({
-    notes: notesAfterPush,
+    ...(areNotesTheSame ? {} : { notes: notesAfterPush }),
     sync: {
       folderId,
       folderLocation,
@@ -75,7 +76,6 @@ const sync = async (): Promise<boolean> => {
   });
 
   onDone();
-
   return true;
 };
 

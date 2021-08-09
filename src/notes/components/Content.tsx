@@ -50,10 +50,10 @@ const reattachIndentOnTab = (indentOnTab: boolean, tabSize: number) => {
 };
 
 const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
-  const contentRef = useRef<HTMLDivElement>();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const onInput = useCallback(() => {
-    if (active) {
+    if (active && contentRef.current) {
       const content = contentRef.current.innerHTML;
       onEdit(active, content);
     }
@@ -73,8 +73,10 @@ const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize 
   }, []);
 
   useEffect(() => {
-    contentRef.current.innerHTML = initialContent;
-    autofocus(contentRef.current);
+    if (contentRef.current) {
+      contentRef.current.innerHTML = initialContent;
+      autofocus(contentRef.current);
+    }
   }, [active, initialContent]);
 
   // Toolbar controls (e.g. TABLE_INSERT) can change #content.innerHTML.

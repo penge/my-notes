@@ -77,7 +77,7 @@ export const prepareItems = (notes: NotesObject, commands: string[], filter: Fil
 };
 
 const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: CommandPaletteProps): h.JSX.Element => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [filter, setFilter] = useState<Filter | undefined>(undefined);
 
   // Items to show in Command Palette

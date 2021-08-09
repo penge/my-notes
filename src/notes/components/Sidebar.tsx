@@ -56,7 +56,7 @@ const Sidebar = ({
 
   const [dragOverButtons, setDragOverButtons] = useState<boolean>(false);
 
-  const openOptions = useCallback(() => chrome.tabs.create({ url: "/options.html" }), []);
+  const openOptions = useCallback(() => chrome.runtime.openOptionsPage(), []);
   const openEnteredNote = useCallback(() => {
     if (!document.body.classList.contains("with-control")) {
       return;
