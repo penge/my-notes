@@ -33,9 +33,26 @@ select { border-radius: 3px; }
 /* Selection */
 
 .selection { padding: 10px 0; }
+
+/* Comment */
+
 .comment {
+  margin: 15px 35px 30px 35px;
+  padding: 20px;
+  border-radius: 6px;
+  line-height: 1.5em;
+  background: var(--comment-background-color);
+  color: var(--comment-text-color);
   font-size: 90%;
   font-weight: normal;
+}
+
+body#light .comment {
+  border-left: 6px solid silver;
+}
+
+body#dark .comment {
+  border-left: 6px solid var(--comment-background-color);
 }
 
 /* Font type */
@@ -112,15 +129,6 @@ select { border-radius: 3px; }
 .selection.with-comment {
   display: flex;
   align-items: baseline;
-}
-
-.selection.with-comment .comment {
-  margin: 15px 35px 30px 35px;
-  padding: 20px;
-  border-radius: 6px;
-  line-height: 1.5em;
-  background: var(--comment-background-color);
-  color: var(--comment-text-color);
 }
 
 .selection.with-comment .selection {

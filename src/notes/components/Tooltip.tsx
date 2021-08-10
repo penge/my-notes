@@ -51,7 +51,7 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
     return null;
   }
 
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<DOMRect | undefined>(undefined);
 
   useEffect(() => {

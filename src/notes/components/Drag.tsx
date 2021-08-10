@@ -1,9 +1,13 @@
-import { h } from "preact";
-import { Ref, useCallback } from "preact/hooks";
+import { h, RefObject } from "preact";
+import { useCallback } from "preact/hooks";
 
 let m_pos: number;
 
-function resize(e: MouseEvent, sidebar: Ref<HTMLDivElement>) {
+function resize(e: MouseEvent, sidebar: RefObject<HTMLDivElement>) {
+  if (!sidebar.current) {
+    return;
+  }
+
   const dx = (m_pos - e.x) * -1;
   m_pos = e.x;
 
@@ -28,11 +32,11 @@ function resize(e: MouseEvent, sidebar: Ref<HTMLDivElement>) {
 }
 
 interface DragProps {
-  sidebar: Ref<HTMLDivElement>
+  sidebar: RefObject<HTMLDivElement>
 }
 
 const Drag = ({ sidebar }: DragProps): h.JSX.Element => {
-  const mousemoveListener = useCallback((e: MouseEvent) => resize(e, sidebar), []);
+  const mousemoveListener = useCallback((e: MouseEvent) => resize(e, sidebar), [sidebar]);
   const mouseupListener = useCallback(() => {
     if (!document.body.classList.contains("resizing-sidebar")) {
       return;
@@ -43,15 +47,23 @@ const Drag = ({ sidebar }: DragProps): h.JSX.Element => {
     document.removeEventListener("mouseup", mouseupListener);
     document.body.classList.remove("resizing-sidebar", "resizing-sidebar-locked-min", "resizing-sidebar-locked-max");
 
+    if (!sidebar.current) {
+      return;
+    }
+
     // Apply new sidebar width
     const sidebarWidth = sidebar.current.style.width;
     sidebar.current.style.minWidth = sidebarWidth;
     chrome.storage.local.set({ sidebarWidth });
-  }, []);
+  }, [sidebar]);
 
   return (
     <div id="drag"
       onMouseDown={(e) => {
+        if (!sidebar.current) {
+          return;
+        }
+
         m_pos = e.x;
         document.body.classList.add("resizing-sidebar");
         sidebar.current.style.minWidth = "";
@@ -61,6 +73,10 @@ const Drag = ({ sidebar }: DragProps): h.JSX.Element => {
         document.addEventListener("mouseup", mouseupListener);
       }}
       onDblClick={() => {
+        if (!sidebar.current) {
+          return;
+        }
+
         chrome.storage.local.remove("sidebarWidth");
 
         // Reset sidebar width

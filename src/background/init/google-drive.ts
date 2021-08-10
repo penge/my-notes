@@ -28,7 +28,8 @@ export const registerGoogleDriveMessages = (): void => {
   chrome.runtime.onMessage.addListener(handleGoogleDriveMessage);
 };
 
-const AUTO_SYNC_ALARM_NAME = "Auto Sync";
+export const AUTO_SYNC_ALARM_NAME = "Auto Sync";
+
 const autoSyncOnAlarmListener = (alarm: chrome.alarms.Alarm) => {
   if (alarm.name !== AUTO_SYNC_ALARM_NAME) {
     return;
@@ -41,7 +42,7 @@ const autoSyncOnAlarmListener = (alarm: chrome.alarms.Alarm) => {
       return;
     }
 
-    if (lastEdit <= (syncObj.lastSync ?? "")) { // lastEdit should be GTE than sync.lastSync
+    if (lastEdit <= (syncObj.lastSync ?? "")) { // to auto sync, lastEdit needs to be greater-than sync.lastSync
       return; // no need to auto sync
     }
 
@@ -114,7 +115,7 @@ export const registerGoogleDriveAutoSync = (): void => {
         return;
       }
 
-      // Both "sync" and "autoSync" are enabled, we can attach the alarm
+      // Both "sync" and "autoSync" are enabled, we can attach the alarm (but only if not already attached)
       attachGoogleDriveAutoSyncAlarm();
     });
   });

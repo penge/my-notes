@@ -16,14 +16,19 @@ const ContextMenu = ({
   noteName, x, y, onRename, onDelete, locked, toggleLocked,
 }: ContextMenuProps): h.JSX.Element => {
   const [offsetHeight, setOffsetHeight] = useState<number>(0);
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
     if (offsetHeight) {
       return; // offsetHeight already set
     }
+
     setOffsetHeight(ref.current.offsetHeight);
-  }, [ref.current]);
+  }, [ref.current, offsetHeight]);
 
   return (
     <div id="context-menu" ref={ref} style={offsetHeight ? {

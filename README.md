@@ -85,15 +85,19 @@ Click on the **"Save"** button to save the custom theme.
 
 ## Command palette
 
-Command palette can be used to quickly open notes or execute commands using a keyboard.
+Command palette is a window which you can open with `Cmd + P` (or `Ctrl + P`) and use your keyboard to quickly perform any of the following actions:
 
-By default, notes are filtered. To filter commands, type `>` into the Search first.
+<ol type="A">
+  <li>Find note(s) <b>by their name,</b> and open one. (default behavior)</li>
+  <li>Find note(s) <b>by their content,</b> and open one. (type <code>?</code> first, then continue)</li>
+  <li>Find <b>commands,</b> and execute one. (type <code>></code> first, then continue)</li>
+</ol>
 
-To navigate between the results, you can use up and down arrow keys. If there is only one search result, it is automatically selected.
-To open the selected note or execute the selected command, press `Enter`.
-The last executed command can be easily repeated when needed.
+To navigate between the results, use `Up` and `Down` arrow keys.
 
-See Options for shortcuts to use.
+To open a selected note or execute a selected command, press `Enter`.
+
+Last executed command can be repeated with `Cmd + Shift + P` (or `Ctrl + Shift + P`).
 
 <br><br>
 
@@ -291,7 +295,7 @@ My Notes has the permissions listed in `manifest.json`.
 
 **Required:**
 
-- `"storage"` — used to save the notes and options to Chrome Storage
+- `"storage"` — used to save your notes and options to Chrome Storage (locally in your Chrome)
 - `"contextMenus"` — used to create My Notes Context menu
 
 Required permissions are shown to the user before installing the extension, and are needed at all times to provide the basic functionality.

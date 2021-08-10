@@ -15,7 +15,7 @@ const Version = ({ version }: VersionProps): h.JSX.Element => (
       <br />
       <span>Created by <a href={`mailto:${process.env.MY_NOTES_AUTHOR_EMAIL}`}>Pavel Bucka</a></span>
       &nbsp;
-      (<a href="https://www.buymeacoffee.com/penge" target="_blank">Buy me a coffee</a>)
+      (Support this project, <a href="https://www.buymeacoffee.com/penge" target="_blank">Buy me a coffee</a>)
     </div>
   </Fragment>
 );

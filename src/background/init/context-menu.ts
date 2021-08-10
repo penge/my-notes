@@ -59,7 +59,7 @@ const createContextMenu = (notes: NotesObject): void => {
 let currentNotesString: string;
 
 export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClicked.addListener((info) => {
-  const menuId: string = info.menuItemId;
+  const menuId: string = info.menuItemId.toString();
   const textToSave = getTextToSave(info);
 
   if (menuId.startsWith(MY_NOTES_SAVE_TO_NOTE_PREFIX)) {

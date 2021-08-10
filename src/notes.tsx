@@ -74,7 +74,7 @@ interface NotesProps {
 
 const Notes = (): h.JSX.Element => {
   const [os, setOs] = useState<Os | undefined>(undefined);
-  const [tabId, setTabId] = useState<string>("");
+  const [tabId, setTabId] = useState<number | undefined>(undefined);
 
   const [notification, setNotification] = useState<Notification | undefined>(undefined);
   const [font, setFont] = useState<RegularFont | GoogleFont | undefined>(undefined);
@@ -101,7 +101,6 @@ const Notes = (): h.JSX.Element => {
   syncRef.current = sync;
 
   const [initialized, setInitialized] = useState<boolean>(false);
-  const [initialAutoSync, setInitialAutoSync] = useState<boolean>(false);
 
   const [contextMenuProps, setContextMenuProps] = useState<ContextMenuProps | null>(null);
   const [renameNoteModalProps, setRenameNoteModalProps] = useState<RenameNoteModalProps | null>(null);
@@ -111,7 +110,7 @@ const Notes = (): h.JSX.Element => {
 
   useEffect(() => {
     chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
-    chrome.tabs.getCurrent((tab) => tab && setTabId(String(tab.id)));
+    chrome.tabs.getCurrent((tab) => tab && setTabId(tab.id));
   }, []);
 
   useEffect(() => {
@@ -173,14 +172,19 @@ const Notes = (): h.JSX.Element => {
 
       // Options
       setFocus(getFocusOverride() || local.focus);
-      setInitialAutoSync(Boolean(local.sync) && local.autoSync);
       setTab(local.tab);
       setTabSize(local.tabSize);
 
       // Sync
       setSync(local.sync);
 
+      // Initialized
       setInitialized(true);
+
+      // Auto Sync on start
+      if (local.sync && local.autoSync) {
+        sendMessage(MessageType.SYNC);
+      }
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -278,7 +282,7 @@ const Notes = (): h.JSX.Element => {
             if (newNotes[newActive].modifiedTime > oldNotes[newActive].modifiedTime) {
               setInitialContent(newNotes[newActive].content);
             } else {
-              saveNote(newActive, oldNotes[newActive].content, tabId, notesRef.current);
+              notesRef.current && saveNote(newActive, oldNotes[newActive].content, tabId, notesRef.current);
             }
           }
 
@@ -373,15 +377,6 @@ const Notes = (): h.JSX.Element => {
     document.body.classList.toggle("focus", focus);
   }, [focus]);
 
-  // Auto Sync on open My Notes
-  useEffect(() => {
-    if (!initialized || !initialAutoSync) {
-      return;
-    }
-
-    sendMessage(MessageType.SYNC); // Auto Sync on open My Notes
-  }, [initialized, initialAutoSync]);
-
   // Hide context menu on click anywhere
   useEffect(() => {
     document.addEventListener("click", (event) => {
@@ -420,7 +415,7 @@ const Notes = (): h.JSX.Element => {
         return null;
       });
     });
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, () => chrome.tabs.create({ url: "/options.html" }));
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, chrome.runtime.openOptionsPage);
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, () => {
       if (getFocusOverride()) {
         return;
@@ -502,19 +497,21 @@ const Notes = (): h.JSX.Element => {
 
   // Command Palette
   useEffect(() => {
-    const noteNames = Object.keys(notesProps.notes);
-    if (!noteNames.length) {
+    // Detach when there are no notes
+    if (!Object.keys(notesProps.notes).length) {
       detachOnToggleCommandPaletteCallback();
       setCommandPaletteProps(null);
       return;
     }
 
+    // Start preparing props for Command Palette
     const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
-    const commands = commandPaletteCommands.map((command) => command.name);
+    const commands = currentNoteLocked ? [] : commandPaletteCommands.map((command) => command.name); // no commands if the current note is locked
 
+    // Props for Command Palette
     const props: CommandPaletteProps = {
-      noteNames,
-      commands: currentNoteLocked ? [] : commands,
+      notes: notesProps.notes,
+      commands,
       onActivateNote: (noteName: string) => {
         setCommandPaletteProps(null);
         range.restore(() => handleOnActivateNote(noteName));
@@ -531,6 +528,7 @@ const Notes = (): h.JSX.Element => {
       },
     };
 
+    // Update event to show Command Palette and props to use
     reatachOnToggleCommandPalette(() => {
       setCommandPaletteProps((prev) => {
         if (prev) {
@@ -543,18 +541,17 @@ const Notes = (): h.JSX.Element => {
       });
     });
 
+    // Update props for already visible Command Palette
     setCommandPaletteProps((prev) => !prev ? prev : props);
   }, [os, notesProps, handleOnActivateNote, commandPaletteCommands]);
 
+  // Automatically show modal to create a new note if there are 0 notes
   useEffect(() => {
-    if (!initialized || !tabId) {
+    if (!initialized || !tabId || Object.keys(notesProps.notes).length > 0) {
       return;
     }
 
-    const empty = Object.keys(notesProps.notes).length === 0;
-    if (empty) {
-      onNewNote(empty);
-    }
+    onNewNote(true);
   }, [initialized, tabId, notesProps, onNewNote]);
 
   return (
@@ -603,7 +600,7 @@ const Notes = (): h.JSX.Element => {
           locked: notesProps.notes[noteName].locked ?? false,
           toggleLocked: (noteName) => {
             setContextMenuProps(null);
-            setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+            tabId && notesRef.current && setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
           },
         })}
         onNewNote={() => onNewNote()}
@@ -617,7 +614,7 @@ const Notes = (): h.JSX.Element => {
             locked={notesProps.notes[notesProps.active].locked ?? false}
             initialContent={initialContent}
             onEdit={(active, content) => {
-              saveNote(active, content, tabId, notesRef.current);
+              tabId && notesRef.current && saveNote(active, content, tabId, notesRef.current);
             }}
             indentOnTab={tab}
             tabSize={tabSize}

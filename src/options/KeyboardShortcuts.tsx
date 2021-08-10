@@ -20,10 +20,11 @@ const KeyboardShortcuts = ({ os }: KeyboardShortcutsProps): h.JSX.Element => (
             {shortcut.configurable && <span>&nbsp;(open <span class="url">chrome://extensions/shortcuts</span> to configure)</span>}
 
             {shortcut.description === "Open Command palette" && (
-              <span>
-                &nbsp;
-                (type <span class="keyboard-shortcut">&gt;</span> for commands)
-              </span>
+              <div class="comment">
+                <div>By default, Command palette looks for notes <b>by their name.</b></div>
+                <div>Type <span class="keyboard-shortcut">&gt;</span> first, and continue to start search for <b>commands.</b></div>
+                <div>Type <span class="keyboard-shortcut">?</span> first, and continue to start search for notes <b>by their content.</b></div>
+              </div>
             )}
           </td>
         </tr>
