@@ -146,11 +146,12 @@ It cannot see, access nor modify, any other files in your Google Drive.
 3. Hold down the Shift key (`Cmd + Shift + V`) to paste text in a plain format (without styles).
 4. Hide Toolbar and Sidebar if you prefer a simple interface.
 5. See [<ins>Google Fonts</ins>](https://fonts.google.com) for a font you like, write its name into My Notes Options to use it.
-6. Note name is present in the URL, therefore you can save it to bookmarks for quick access (if you append saved URL with `&focus`, it will always open that note in Focus mode).
+6. Note name is present in the URL, therefore you can save it to bookmarks for quick access. If you append saved URL with `&focus`, it will always open that note in Focus mode.
 7. Use [<ins>Context menu</ins>](#context-menu) to transfer selected text to My Notes in other computer(s).
 8. Use [<ins>Custom theme</ins>](#custom-theme) to customize the look of My Notes in any way needed.
-9. Drag and Drop text onto a note's name in the Sidebar to insert the text into the note.
-10. Drag the Sidebar line to resize the Sidebar, double-click on the Sidebar line to restore the original Sidebar width.
+9. Drag and Drop selected text onto a note's name in the Sidebar to insert the text into the note.
+10. Drag and Drop a TXT file anywhere in the bottom part of the Sidebar (area with 3 icons) to import the file as a new note.
+11. Drag the Sidebar line to resize the Sidebar, double-click on the Sidebar line to restore the original Sidebar width.
 
 <br><br>
 
