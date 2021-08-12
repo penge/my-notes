@@ -71,7 +71,6 @@ const sync = async (): Promise<boolean> => {
       lastSync,
     },
     setBy: `sync-${lastSync}`,
-    lastEdit: lastSync,
   });
 
   onDone();
