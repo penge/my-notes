@@ -265,18 +265,18 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
 #content pre {
   overflow: auto;
   padding: .5em;
-  border: 1px solid var(--pre-border-color, red);
+  border: 1px solid var(--pre-border-color);
 }
 
 #content table {
-  border: var(--table-border, 3px solid red);
+  border: var(--table-border);
   border-spacing: 0;
   border-collapse: collapse;
 }
 
 #content table td {
   padding: .25em;
-  border: var(--table-td-border, 1px solid red);
+  border: var(--table-td-border);
   min-width: 1em;
 }
 
