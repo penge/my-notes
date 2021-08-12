@@ -13,8 +13,7 @@
     "contextMenus"
   ],
   "optional_permissions": [
-    "identity",
-    "alarms"
+    "identity"
   ],
   "host_permissions": [
     "https://drive.google.com/"

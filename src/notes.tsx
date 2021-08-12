@@ -67,6 +67,8 @@ const reatachOnExecuteLastCommand = (callback: () => void) => {
   keyboardShortcuts.subscribe(KeyboardShortcut.OnRepeatLastExecutedCommand, latestOnRepeatLastExecutedCommand);
 };
 
+let autoSyncIntervalId: number | undefined;
+
 interface NotesProps {
   notes: NotesObject
   active: string
@@ -99,6 +101,8 @@ const Notes = (): h.JSX.Element => {
   const [sync, setSync] = useState<Sync | undefined>(undefined);
   const syncRef = useRef<Sync | undefined>(undefined);
   syncRef.current = sync;
+  const [autoSync, setAutoSync] = useState<boolean>(false);
+  const lastEditRef = useRef<string>("");
 
   const [initialized, setInitialized] = useState<boolean>(false);
 
@@ -143,6 +147,8 @@ const Notes = (): h.JSX.Element => {
 
       // Sync
       "sync",
+      "autoSync",
+      "lastEdit",
     ], items => {
       const local = items as Storage;
 
@@ -177,14 +183,11 @@ const Notes = (): h.JSX.Element => {
 
       // Sync
       setSync(local.sync);
+      setAutoSync(local.autoSync);
+      lastEditRef.current = local.lastEdit;
 
       // Initialized
       setInitialized(true);
-
-      // Auto Sync on start
-      if (local.sync && local.autoSync) {
-        sendMessage(MessageType.SYNC);
-      }
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -312,6 +315,14 @@ const Notes = (): h.JSX.Element => {
       if (changes["sync"]) {
         setSync(changes["sync"].newValue);
         document.body.classList.remove("syncing");
+      }
+
+      if (changes["autoSync"]) {
+        setAutoSync(changes["autoSync"].newValue);
+      }
+
+      if (changes["lastEdit"]) {
+        lastEditRef.current = changes["lastEdit"].newValue;
       }
     });
 
@@ -553,6 +564,28 @@ const Notes = (): h.JSX.Element => {
 
     onNewNote(true);
   }, [initialized, tabId, notesProps, onNewNote]);
+
+  // Auto Sync
+  useEffect(() => {
+    if (!initialized || !autoSync || !syncRef.current) {
+      window.clearInterval(autoSyncIntervalId);
+      autoSyncIntervalId = undefined;
+      return;
+    }
+
+    if (autoSyncIntervalId) {
+      return; // interval is already set
+    }
+
+    window.setTimeout(() => sendMessage(MessageType.SYNC), 100); // Auto Sync on start
+    autoSyncIntervalId = window.setInterval(() => {
+      if (!syncRef.current || lastEditRef.current <= (syncRef.current.lastSync ?? "")) {
+        return;
+      }
+
+      sendMessage(MessageType.SYNC);
+    }, 6000); // and then Auto Sync every 6 seconds
+  }, [initialized, autoSync]);
 
   return (
     <Fragment>

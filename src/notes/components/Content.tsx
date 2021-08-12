@@ -17,7 +17,7 @@ interface ContentProps {
   tabSize: number
 }
 
-const autofocus = (content: HTMLDivElement) => content && setTimeout(() => {
+const autofocus = (content: HTMLDivElement) => content && window.setTimeout(() => {
   const selection = window.getSelection();
   if (!selection) {
     return;
