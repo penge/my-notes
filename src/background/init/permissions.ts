@@ -3,9 +3,9 @@ import { havingPermission } from "shared/permissions";
 import { MessageType } from "shared/storage/schema";
 import { handleGoogleDriveMessage } from "./google-drive";
 
-type OptionalPermission = "identity" | "alarms";
+type OptionalPermission = "identity";
 
-const optionalPermissions: OptionalPermission[] = ["identity", "alarms"];
+const optionalPermissions: OptionalPermission[] = ["identity"];
 
 type PermissionHandlers = {
   [permissionName in OptionalPermission]: (having: boolean) => void
@@ -16,7 +16,6 @@ const __handlers: PermissionHandlers = {
     ? MessageType.SYNC_INITIATE
     : MessageType.SYNC_STOP
   }),
-  alarms: (having: boolean) => chrome.storage.local.set({ autoSync: having }),
 };
 
 const handlePermissions = (permissionHandlers: PermissionHandlers, permissions: chrome.permissions.Permissions, { having }: { having: boolean }): void => {

@@ -304,7 +304,6 @@ Required permissions are shown to the user before installing the extension, and 
 **Optional:**
 
 - `"identity"` — needed for "Enable Google Drive Sync" (see Options)
-- `"alarms"` — needed for "Enable Auto Sync" (see Options)
 
 Optional permissions are needed only to provide additional functionality that can be enabled via a checkbox in Options.
 

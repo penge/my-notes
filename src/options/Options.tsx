@@ -65,7 +65,7 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
                 <input
                   type="checkbox"
                   checked={autoSync}
-                  onClick={togglePermissionRequiredOption("alarms")}
+                  onClick={toggleOption("autoSync")}
                 />
                 <label class="bold">Enable Auto Sync</label>
               </div>
@@ -73,7 +73,6 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
               <div>
                 Auto Sync will automatically sync your notes to and from Google Drive every time you open My Notes,
                 and every 6 seconds if your local notes were updated since the last sync.
-                My Notes will request a permission to enable this feature.
               </div>
             </div>
           </div>

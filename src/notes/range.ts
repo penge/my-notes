@@ -13,7 +13,7 @@ const save = (): Range | null => {
 };
 
 const restore = (cb?: () => void): void => {
-  setTimeout(() => {
+  window.setTimeout(() => {
     if (selection && range) {
       selection.removeAllRanges();
       selection.addRange(range);

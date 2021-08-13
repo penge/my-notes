@@ -18,6 +18,8 @@ const deleteFile = api.deleteFile;
 
 let syncInProgress = false;
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 const onStart = () => {
   syncInProgress = true;
   Log("SYNC - START");
@@ -31,7 +33,7 @@ const onFail = () => {
 };
 
 const onDone = () => {
-  syncInProgress = false;
+  delay(1500).then(() => syncInProgress = false); // prevent to sync more often than 1x per 1500ms
   Log("SYNC - DONE");
   sendMessage(MessageType.SYNC_DONE);
 };
@@ -71,7 +73,6 @@ const sync = async (): Promise<boolean> => {
       lastSync,
     },
     setBy: `sync-${lastSync}`,
-    lastEdit: lastSync,
   });
 
   onDone();

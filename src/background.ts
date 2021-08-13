@@ -9,7 +9,6 @@ import {
 
 import {
   registerGoogleDriveMessages,
-  registerGoogleDriveAutoSync,
 } from "background/init/google-drive";
 
 import {
@@ -39,7 +38,6 @@ openMyNotesOnKeyboardShortcut();
 
 // Google Drive Sync
 registerGoogleDriveMessages();
-registerGoogleDriveAutoSync();
 
 // Context menu
 attachContextMenuOnClicked();
@@ -50,4 +48,4 @@ saveTextOnDrop(); // when you drop text onto a note in Sidebar
 saveTextOnRemoteTransfer(); // when you use "Save to remotely open My Notes" from the context menu
 
 // Permissions
-handleChangedPermissions(); // react to granted/removed optional permissions "identity" and "alarms"
+handleChangedPermissions(); // react to granted/removed optional permissions: "identity"
