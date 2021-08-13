@@ -7,6 +7,7 @@ import __range from "notes/range";
 import { isImageFile } from "./image/read-image";
 import { dropImage } from "./image/drop-image";
 import { runUploadPreconditions } from "background/google-drive/preconditions/upload-preconditions";
+import { reinitTables } from "notes/content/table";
 
 interface ContentProps {
   active: string
@@ -76,6 +77,12 @@ const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize 
     if (contentRef.current) {
       contentRef.current.innerHTML = initialContent;
       autofocus(contentRef.current);
+      reinitTables({
+        onResize: () => {
+          const event = new Event("editnote");
+          document.dispatchEvent(event);
+        }
+      });
     }
   }, [active, initialContent]);
 

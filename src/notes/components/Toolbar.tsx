@@ -46,10 +46,18 @@ import TextColorSvgText from "svg/text-color.svg";
 import RemoveFormatSvgText from "svg/remove-format.svg";
 import InfoSvgText from "svg/info.svg";
 import SVG from "types/SVG";
+import { reinitTables } from "notes/content/table";
 
 const callback = () => {
   const event = new Event("editnote");
   document.dispatchEvent(event);
+};
+
+const tableCallback = () => {
+  callback();
+  reinitTables({
+    onResize: callback,
+  });
 };
 
 interface ToolbarProps {
@@ -109,27 +117,27 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
         {submenu === "TABLE" && (
           <div class="submenu bar" style={{ paddingLeft: ".33em" }}>
             <Tooltip tooltip="Insert table (3x3)">
-              <div id="TABLE_INSERT" class="button wide" onClick={() => table.insertTable(callback)}>
+              <div id="TABLE_INSERT" class="button wide" onClick={() => table.insertTable(tableCallback)}>
                 <SVG text={TableSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip="Insert row above">
-              <div id="TABLE_ROW_ABOVE" class="button" onClick={() => table.insertRowAbove(callback)}>
+              <div id="TABLE_ROW_ABOVE" class="button" onClick={() => table.insertRowAbove(tableCallback)}>
                 <SVG text={TableRowAboveSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip="Insert row below">
-              <div id="TABLE_ROW_BELOW" class="button" onClick={() => table.insertRowBelow(callback)}>
+              <div id="TABLE_ROW_BELOW" class="button" onClick={() => table.insertRowBelow(tableCallback)}>
                 <SVG text={TableRowBelowSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip="Insert column left">
-              <div id="TABLE_COLUMN_LEFT" class="button" onClick={() => table.insertColumnLeft(callback)}>
+              <div id="TABLE_COLUMN_LEFT" class="button" onClick={() => table.insertColumnLeft(tableCallback)}>
                 <SVG text={TableColumnLeftSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip="Insert column right">
-              <div id="TABLE_COLUMN_RIGHT" class="button wide" onClick={() => table.insertColumnRight(callback)}>
+              <div id="TABLE_COLUMN_RIGHT" class="button wide" onClick={() => table.insertColumnRight(tableCallback)}>
                 <SVG text={TableColumnRightSvgText} />
               </div>
             </Tooltip>
@@ -144,12 +152,12 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
               </div>
             </Tooltip>
             <Tooltip tooltip="Delete row">
-              <div id="TABLE_DELETE_ROW" class="button" onClick={() => table.deleteRow(callback)}>
+              <div id="TABLE_DELETE_ROW" class="button" onClick={() => table.deleteRow(tableCallback)}>
                 <SVG text={TableDeleteRowSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip="Delete column">
-              <div id="TABLE_DELETE_COLUMN" class="button" onClick={() => table.deleteColumn(callback)}>
+              <div id="TABLE_DELETE_COLUMN" class="button" onClick={() => table.deleteColumn(tableCallback)}>
                 <SVG text={TableDeleteColumnSvgText} />
               </div>
             </Tooltip>
