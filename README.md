@@ -17,7 +17,7 @@
 
 → &nbsp; Context menu to save selected text to note or My Notes in second computer ([<ins>Context menu</ins>](#context-menu))
 
-→ &nbsp; Backup notes to Google Drive ([<ins>Google Drive Sync</ins>](#google-drive-sync))
+→ &nbsp; Back up notes to Google Drive ([<ins>Google Drive Sync</ins>](#google-drive-sync))
 
 → &nbsp; Sync notes between My Notes and Google Drive, edit them from other devices or My Notes ([<ins>Google Drive Sync</ins>](#google-drive-sync))
 
@@ -59,14 +59,14 @@
 
 ## Context menu
 
-Context menu allows you to quickly save selected text from any website to My Notes, or to transfer selected text to My Notes in other computer.
+Context menu allows you to quickly save selected text from any website to My Notes, or to transfer selected text to My Notes in another computer.
 
 To use Context menu, select the text on website, right-click and see "My Notes" Context menu.
 
 Context menu has these options:
 
 - `Save to [note name]` – Option for every note. As you create new notes, they are automatically added to the list. My Notes doesn't have to be open. Google Drive Sync is not required.
-- `Save to remotely open My Notes` – My Notes in other computer needs to be open. Same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@Received"** (created automatically if doesn't exist, otherwise updated).
+- `Save to remotely open My Notes` – My Notes in another computer needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@Received"** (created automatically if it doesn't exist, otherwise updated).
 
 <br><br>
 
@@ -97,7 +97,7 @@ To navigate between the results, use `Up` and `Down` arrow keys.
 
 To open a selected note or execute a selected command, press `Enter`.
 
-Last executed command can be repeated with `Cmd + Shift + P` (or `Ctrl + Shift + P`).
+The last executed command can be repeated with `Cmd + Shift + P` (or `Ctrl + Shift + P`).
 
 <br><br>
 
@@ -113,12 +113,12 @@ Google Drive Sync (see Options) saves your notes to your personal Google Drive a
 
 ### Location
 
-Notes are uploaded to your Google Drive to the folder "My Notes". This folder is created automatically.
+Notes are uploaded to your Google Drive under the folder "My Notes". This folder is created automatically.
 If the folder exists from a previous installation, notes are downloaded and uploaded and the synchronization continues.
 
 ### Synchronization
 
-Synchronization works in both ways — to Google Drive, from Google Drive.
+Synchronization works both ways — to Google Drive, from Google Drive.
 
 Notes are synchronized every time you click on the "Sync now" button.
 While the synchronization is in progress, "Sync now" button will spin.
@@ -130,7 +130,7 @@ Auto Sync (see Options) can automatically sync your notes to and from Google Dri
 
 ### Image upload
 
-When Google Drive Sync is enabled and having an internet connection, you can Drag and Drop images into notes, one image at a time. Image is immediately uploaded to your Google Drive under "My Notes" / "assets" folder, which is created automatically.
+When Google Drive Sync is enabled and having an internet connection, you can Drag and Drop one image at a time into a note. Each image is immediately uploaded to your Google Drive under "My Notes" / "assets" folder, which is created automatically.
 
 ### Access
 
@@ -147,7 +147,7 @@ It cannot see, access nor modify, any other files in your Google Drive.
 4. Hide Toolbar and Sidebar if you prefer a simple interface.
 5. See [<ins>Google Fonts</ins>](https://fonts.google.com) for a font you like, write its name into My Notes Options to use it.
 6. Note name is present in the URL, therefore you can save it to bookmarks for quick access. If you append saved URL with `&focus`, it will always open that note in Focus mode.
-7. Use [<ins>Context menu</ins>](#context-menu) to transfer selected text to My Notes in other computer(s).
+7. Use [<ins>Context menu</ins>](#context-menu) to transfer selected text to My Notes in another computer(s).
 8. Use [<ins>Custom theme</ins>](#custom-theme) to customize the look of My Notes in any way needed.
 9. Drag and Drop selected text onto a note's name in the Sidebar to insert the text into the note.
 10. Drag and Drop a TXT file anywhere in the bottom part of the Sidebar (area with 3 icons) to import the file as a new note.
