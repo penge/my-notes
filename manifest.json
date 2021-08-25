@@ -10,6 +10,7 @@
   "options_page": "options.html",
   "permissions": [
     "storage",
+    "unlimitedStorage",
     "contextMenus"
   ],
   "optional_permissions": [

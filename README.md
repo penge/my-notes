@@ -297,6 +297,7 @@ My Notes has the permissions listed in `manifest.json`.
 **Required:**
 
 - `"storage"` — used to save your notes and options to Chrome Storage (locally in your Chrome)
+- `"unlimitedStorage"` — used to increase the default storage limit (which is 5MB)
 - `"contextMenus"` — used to create My Notes Context menu
 
 Required permissions are shown to the user before installing the extension, and are needed at all times to provide the basic functionality.
