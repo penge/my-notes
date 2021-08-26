@@ -364,10 +364,7 @@ You can then chose a preferred editor from the list.
 
 **6. What is the size limit for my notes?**
 
-Notes are limited to 5MB in total.
-
-This limit comes with the default setting of the browser.
-In case of interest, future versions of My Notes could be having a new optional **"unlimitedStorage"** permission, which if enabled, would increase the storage infinitely (as your hard drive allows).
+Notes are _NOT_ limited in size due to the used `"unlimitedStorage"` permission.
 
 <br>
 
