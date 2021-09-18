@@ -33,7 +33,9 @@ export const dropImage = async ({ event, sync, token, file, onComplete }: DropIm
   // 1. Insert image skeleton
   const skeleton = createImageSkeleton(imageProps);
   const range = document.caretRangeFromPoint(event.clientX, event.clientY);
-  range.insertNode(skeleton);
+  if (range) {
+    range.insertNode(skeleton);
+  }
 
   // 2. Upload the image
   uploadImage({
