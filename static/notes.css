@@ -289,6 +289,10 @@ body.with-control #content a {
   cursor: pointer;
 }
 
+body.with-control #content a > * {
+  pointer-events: none;
+}
+
 /* My Notes classes */
 
 .my-notes-highlight {
