@@ -59,14 +59,14 @@
 
 ## Context menu
 
-Context menu allows you to quickly save selected text from any website to My Notes, or to transfer selected text to My Notes in another computer.
+Context menu allows you to quickly save selected text from any website to My Notes, or to transfer selected text to My Notes on other computers.
 
 To use Context menu, select the text on website, right-click and see "My Notes" Context menu.
 
 Context menu has these options:
 
 - `Save to [note name]` – Option for every note. As you create new notes, they are automatically added to the list. My Notes doesn't have to be open. Google Drive Sync is not required.
-- `Save to remotely open My Notes` – My Notes in another computer needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@Received"** (created automatically if it doesn't exist, otherwise updated).
+- `Save to remotely open My Notes` – My Notes on other computers needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@Received"** (created automatically if it doesn't exist, otherwise updated).
 
 <br><br>
 
@@ -147,10 +147,10 @@ It cannot see, access nor modify, any other files in your Google Drive.
 4. Hide Toolbar and Sidebar if you prefer a simple interface.
 5. See [<ins>Google Fonts</ins>](https://fonts.google.com) for a font you like, write its name into My Notes Options to use it.
 6. Note name is present in the URL, therefore you can save it to bookmarks for quick access. If you append saved URL with `&focus`, it will always open that note in Focus mode.
-7. Use [<ins>Context menu</ins>](#context-menu) to transfer selected text to My Notes in another computer(s).
-8. Use [<ins>Custom theme</ins>](#custom-theme) to customize the look of My Notes in any way needed.
+7. Use [<ins>Context menu</ins>](#context-menu) to transfer selected text to My Notes on other computers.
+8. Use [<ins>Custom theme</ins>](#custom-theme) to customize the look of My Notes in any way as needed.
 9. Drag and Drop selected text onto a note's name in the Sidebar to insert the text into the note.
-10. Drag and Drop a TXT file anywhere in the bottom part of the Sidebar (area with 3 icons) to import the file as a new note.
+10. Drag and Drop a TXT file anywhere in the bottom part of the Sidebar (the area with 3 icons) to import the file as a new note.
 11. Drag the Sidebar line to resize the Sidebar, double-click on the Sidebar line to restore the original Sidebar width.
 
 <br><br>
@@ -273,7 +273,7 @@ README.md
 
 ## Browser support
 
-My Notes has full support in Google Chrome only. Although it may be possible to install it in other browsers, the support is not complete.
+My Notes has full support for Google Chrome only. Although it may be possible to install it in other browsers, the support is not complete.
 
 Support for other Chromium-based browsers will be added if possible.
 
@@ -283,7 +283,7 @@ Support for other Chromium-based browsers will be added if possible.
 
 My Notes doesn't collect any personal information or data.
 All your notes are stored locally in your browser.
-If you use Google Drive Sync, My Notes can backup the notes to your personal Google Drive.
+If you use Google Drive Sync, My Notes can back up the notes to your personal Google Drive.
 
 To provide Google Drive functionality, My Notes has an application in Google Cloud.
 The sole purpose of this application is to authenticate you securely towards Google Drive and to allow the synchronization of notes.
@@ -332,12 +332,12 @@ Finally, open `chrome://extensions` address in Google Chrome and click the **"Lo
 
 <br>
 
-**3. Google Drive Sync isn't working. What's the cause?**
+**3. Why isn't Google Drive Sync working?**
 
-Google Drive Sync works only if My Notes is installed from Web Store and in Google Chrome.
-The reasons for this are two.
+Google Drive Sync works only if My Notes is installed from Web Store on Google Chrome.
+There are two reasons for this.
 First, Google Chrome provides an "identity" API that My Notes relies on.
-Second, for security reasons, Google Drive Sync works only if My Notes has an ID equal to **"lkeeogfaiembcblonahillacpaabmiop"**, which is the ID it has on Web Store (also in the URL).
+Secondly, for security reasons, Google Drive Sync works only if My Notes has an ID equal to **"lkeeogfaiembcblonahillacpaabmiop"**, which is the ID it has on Web Store (also in the URL).
 When My Notes is installed manually, it gets an ID that is different to the one on Web Store.
 
 <br>
@@ -346,58 +346,58 @@ When My Notes is installed manually, it gets an ID that is different to the one 
 
 Currently, only Google Chrome is supported.
 Other Chromium-based browsers are next to come, if possible.
-Any common OS (Windows, Linux, OSX) is supported.
+Common OS's (Windows, Linux, macOS) are supported.
 Chromebooks are supported as well.
 
 <br>
 
 **5. How can I open or edit notes from my phone?**
 
-If Google Drive Sync is enabled, My Notes will sync your notes to/from your personal Google Drive into a folder **"My Notes"**.
+If Google Drive Sync is enabled, My Notes will sync your notes to/from your personal Google Drive into a folder called **"My Notes"**.
 
-To get access to your Google Drive from a phone, install Google Drive application.
-To open the note, click on in from the list.
-To edit the note, click on the three-circles icon next to the note, and select "Open with" from the context menu.
-You can then chose a preferred editor from the list.
+To get access to your Google Drive from a phone, install the Google Drive app.
+To open the note, click on it from the list in the folder.
+To edit the note, click on the overflow menu (the three-circle icon) next to the note, and select "Open with" from the context menu.
+You can then choose a preferred editor from the list.
 
 <br>
 
 **6. What is the size limit for my notes?**
 
-Notes are _NOT_ limited in size due to the used `"unlimitedStorage"` permission.
+Notes are _NOT_ limited in size with the addition of `"unlimitedStorage"` permission.
 
 <br>
 
 **7. (Google Drive) Where are images uploaded?**
 
-Images are uploaded to your personal Google Drive under the folder My Notes / assets. Folder **"assets"** is created automatically when needed.
+Images are uploaded to your personal Google Drive under the folder My Notes / assets. The folder **"assets"** is created automatically when needed.
 
 <br>
 
 **8. (Google Drive) Are images stored privately?**
 
-Yes. Only you can see the images. If you'd like to share the image(s) publicly or to someone specific, see **Share** button in Google Drive.
+Yes, only you can see the images. If you'd like to share the image(s) publicly or with someone specific, use the **Share** button in Google Drive.
 
 <br>
 
 **9. (Google Drive) Are images deleted from my Google Drive after I remove them from a note?**
 
-No. Images continue to be stored in your Google Drive for future uses. This way images don't have to be uploaded again.
-If you'd like to delete the image permanently, go to Google Drive to delete the image.
+No, images continue to be stored in your Google Drive for future use. This way images don't have to be uploaded again.
+If you'd like to delete an image permanently, delete the image in Google Drive.
 
 <br>
 
-**10. (Google Drive) How can I insert the once uploaded image after I have removed it from a note?**
+**10. (Google Drive) How can I reuse a previously uploaded image after I have removed it from a note?**
 
-Go to your Google Drive, see the image you'd like to insert, right-click on the image and click on "Get link".
-Copy the link and paste to My Notes using the "Insert Image" button.
+Go to your Google Drive, find the image you'd like to insert, right-click on the image and click on "Get link".
+Copy the link and paste it into My Notes using the "Insert Image" button.
 
 <br>
 
-**11. Is My Notes for free?**
+**11. Is My Notes free?**
 
-My Notes is available as open-source, free to download, install, and use.
-Preferred way to install My Notes is from [<ins>Web Store</ins>](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+My Notes is open source, free to download, install, and use.
+The recommended way to install My Notes is from [<ins>Web Store</ins>](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 
 <br><br>
 
