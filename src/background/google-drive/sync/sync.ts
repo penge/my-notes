@@ -33,7 +33,7 @@ const onFail = () => {
 };
 
 const onDone = () => {
-  delay(1500).then(() => syncInProgress = false); // prevent to sync more often than 1x per 1500ms
+  delay(2000).then(() => syncInProgress = false); // prevent to sync more often than 1x per 2000ms
   Log("SYNC - DONE");
   sendMessage(MessageType.SYNC_DONE);
 };
