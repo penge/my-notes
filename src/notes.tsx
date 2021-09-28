@@ -274,19 +274,16 @@ const Notes = (): h.JSX.Element => {
           // Auto-active new note
           const newActive = newNoteName || prev.active;
 
-          // Re-activate note updated from background or from other tab
-          const setBy: string = changes["setBy"] && changes["setBy"].newValue;
+          // Update note content if updated from background
+          const setBy: string | undefined = changes["setBy"] && changes["setBy"].newValue;
           if (
-            (setBy && !setBy.startsWith(`${tabId}-`)) &&
+            (setBy && !setBy.startsWith(`${tabId}-`)) && // expecting "worker-*" or "sync-*"
             (newActive in oldNotes) &&
             (newActive in newNotes) &&
-            (newNotes[newActive].content !== oldNotes[newActive].content)
+            (newNotes[newActive].content !== oldNotes[newActive].content) &&
+            (newNotes[newActive].modifiedTime > oldNotes[newActive].modifiedTime)
           ) {
-            if (newNotes[newActive].modifiedTime > oldNotes[newActive].modifiedTime) {
-              setInitialContent(newNotes[newActive].content);
-            } else {
-              notesRef.current && saveNote(newActive, oldNotes[newActive].content, tabId, notesRef.current);
-            }
+            setInitialContent(newNotes[newActive].content);
           }
 
           if (!(newActive in oldNotes)) {
