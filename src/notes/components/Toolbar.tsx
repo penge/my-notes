@@ -29,6 +29,7 @@ import IndentSvgText from "svg/indent.svg";
 import AlignLeftSvgText from "svg/align-left.svg";
 import AlignCenterSvgText from "svg/align-center.svg";
 import AlignRightSvgText from "svg/align-right.svg";
+import HorizontalRuleSvgText from "svg/horizontal-rule.svg";
 import ImageSvgText from "svg/image.svg";
 import LinkSvgText from "svg/link.svg";
 import CodeSvgText from "svg/code.svg";
@@ -241,6 +242,12 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
           <Tooltip tooltip={commands.AlignRight.name}>
             <div id="CR" class="button" onClick={commands.AlignRight.execute}>
               <SVG text={AlignRightSvgText} />
+            </div>
+          </Tooltip>
+
+          <Tooltip tooltip={commands.InsertHorizontalRule.name}>
+            <div id="HR" class="button" onClick={commands.InsertHorizontalRule.execute}>
+              <SVG text={HorizontalRuleSvgText} />
             </div>
           </Tooltip>
 

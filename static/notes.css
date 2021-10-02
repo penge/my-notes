@@ -29,6 +29,12 @@ svg {
 .italic { font-style: italic; }
 .line-through { text-decoration: line-through; }
 
+hr {
+  height: 0;
+  border: none;
+  border-bottom: var(--horizontal-rule);
+}
+
 /* Layers */
 
 #tooltip-container {
