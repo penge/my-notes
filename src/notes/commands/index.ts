@@ -141,6 +141,12 @@ const InsertLinkFactory: CommandFactory<{ href: string }> = (props): Command => 
   execute: (): void => { exec("createLink", props.href); }
 });
 
+const InsertHorizontalRule: Command = {
+  name: "Insert Horizontal Rule",
+  title: () => "",
+  execute: (): void => { exec("insertHorizontalRule"); }
+};
+
 const InsertCurrentDate: Command = {
   name: "Insert current Date",
   title: () => "",
@@ -183,6 +189,7 @@ type AvailableCommand =
   "UL" | "OL" |
   "Outdent" | "Indent" |
   "AlignLeft" | "AlignCenter" | "AlignRight" |
+  "InsertHorizontalRule" |
   "InsertCurrentDate" | "InsertCurrentTime" | "InsertCurrentDateAndTime" |
   "Pre" |
   "RemoveFormat"
@@ -207,6 +214,8 @@ const commands: { [key in AvailableCommand]: Command } = {
   AlignLeft,
   AlignCenter,
   AlignRight,
+
+  InsertHorizontalRule,
 
   InsertCurrentDate,
   InsertCurrentTime,
