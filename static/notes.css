@@ -237,6 +237,9 @@ body.resizing-sidebar { cursor: col-resize; }
 body.resizing-sidebar-locked-min { cursor: e-resize; }
 body.resizing-sidebar-locked-max { cursor: w-resize; }
 
+body.resizing-table-column { cursor: col-resize; }
+body.resizing-table-row { cursor: row-resize; }
+
 /* Note */
 
 #content-container {
@@ -284,6 +287,7 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
   padding: .25em;
   border: var(--table-td-border);
   min-width: 1em;
+  position: relative;
 }
 
 #content table td.heading {
@@ -345,6 +349,38 @@ body.with-control #content a > * {
   background: white;
 }
 
+.my-notes-image {
+  background: #f9f9f9;
+}
+
+/* Table */
+
+.table-resizing-div {
+  position: absolute;
+}
+
+.table-resizing-div.active {
+  background: var(--table-resizing-line-color);
+}
+
+.table-column-resizing-div {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  cursor: col-resize;
+  width: 4px;
+}
+
+.table-row-resizing-div {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: row-resize;
+  height: 4px;
+}
+
+/* Locked */
+
 body.locked #sidebar,
 body.locked #toolbar,
 #toolbar.locked .button:not(#INFO) {
@@ -361,8 +397,9 @@ body.locked #toolbar,
   opacity: .4;
 }
 
-.my-notes-image {
-  background: #f9f9f9;
+table.locked {
+  user-select: none;
+  -webkit-user-modify: read-only;
 }
 
 /* Command palette */

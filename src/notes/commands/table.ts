@@ -12,7 +12,7 @@ const withClosest = <T>(nodeName: string, fn: (el: T) => void) => withRange((ran
   }
 });
 
-const withtd = (fn: (tr: HTMLTableDataCellElement) => void) => withClosest<HTMLTableDataCellElement>("TD", fn);
+const withtd = (fn: (tr: HTMLTableCellElement) => void) => withClosest<HTMLTableCellElement>("TD", fn);
 const withtr = (fn: (tr: HTMLTableRowElement) => void) => withClosest<HTMLTableRowElement>("TR", fn);
 
 const insertRow = (table: HTMLTableElement, rowIndex: number, cellCount: number) => {
@@ -46,7 +46,7 @@ const insertRowRelative = (delta: number, cb: Callback) => withtr((tr: HTMLTable
 const insertRowAbove = (cb: Callback): void => insertRowRelative(0, cb);
 const insertRowBelow = (cb: Callback): void => insertRowRelative(1, cb);
 
-const insertColumnRelative = (delta: number, cb: Callback) => withtd((td: HTMLTableDataCellElement) => {
+const insertColumnRelative = (delta: number, cb: Callback) => withtd((td: HTMLTableCellElement) => {
   const table = td.closest("table") as HTMLTableElement;
   const index = td.cellIndex + delta;
   for (let row = 0; row < table.rows.length; row += 1) {
@@ -59,7 +59,7 @@ const insertColumnRelative = (delta: number, cb: Callback) => withtd((td: HTMLTa
 const insertColumnLeft = (cb: Callback): void => insertColumnRelative(0, cb);
 const insertColumnRight = (cb: Callback): void => insertColumnRelative(1, cb);
 
-const toggleHeadingRow = (cb: Callback): void => withtd((td: HTMLTableDataCellElement) => {
+const toggleHeadingRow = (cb: Callback): void => withtd((td: HTMLTableCellElement) => {
   const containsHeading = td.classList.contains("heading");
 
   const tr = td.closest("tr") as HTMLTableRowElement;
@@ -99,7 +99,7 @@ const deleteRow = (cb: Callback): void => withtr((tr: HTMLTableRowElement) => {
   cb();
 });
 
-const deleteColumn = (cb: Callback): void => withtd((td: HTMLTableDataCellElement) => {
+const deleteColumn = (cb: Callback): void => withtd((td: HTMLTableCellElement) => {
   const table = td.closest("table") as HTMLTableElement;
   const cellIndex = td.cellIndex;
   for (let row = 0; row < table.rows.length; row += 1) {
