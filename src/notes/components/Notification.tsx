@@ -12,8 +12,8 @@ const Notification = ({ notification, onClose }: NotificationProps): h.JSX.Eleme
       <Fragment>
         <div>New version <span class="version">{notification.payload}</span> installed.</div>
         <div>
-          <a href="https://github.com/penge/my-notes/releases" target="_blank">What's new</a><span>,&nbsp;</span>
-          <a href="https://www.buymeacoffee.com/penge" target="_blank">Buy me a coffee</a><span>,&nbsp;</span>
+          <a href="https://github.com/penge/my-notes/releases" target="_blank">What's new</a><span>{", "}</span>
+          <a href="https://www.buymeacoffee.com/penge" target="_blank">Buy me a coffee</a><span>{", "}</span>
           <a href="#" onClick={(event) => {
             event.preventDefault();
             onClose();
