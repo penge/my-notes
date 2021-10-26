@@ -13,7 +13,7 @@ const Version = ({ version }: VersionProps): h.JSX.Element => (
       <a href="https://github.com/penge/my-notes" target="_blank" class="space-left">Homepage</a>
       <br />
       <br />
-      <span>Created by <a href={`mailto:${process.env.MY_NOTES_AUTHOR_EMAIL}`}>Pavel Bucka</a></span>
+      <span>Created by <a href="https://github.com/penge" target="_blank">Pavel Bucka</a></span>
       {" "}
       (<a href="https://www.buymeacoffee.com/penge" target="_blank">Buy me a coffee</a>)
     </div>
