@@ -1,7 +1,12 @@
 import { readFile } from "./read-file";
 
+const SUPPORTED_FILE_TYPES = [
+  "text/plain",
+  "text/html",
+];
+
 export const importNoteFromTxtFile = (file: File, callback: () => void): void => {
-  if (!file.type.match("text/plain")) {
+  if (!SUPPORTED_FILE_TYPES.includes(file.type)) {
     callback();
     return;
   }
