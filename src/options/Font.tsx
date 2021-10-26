@@ -88,6 +88,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
           <input
             type="text"
             placeholder="Font Name (E.g. Roboto Mono)"
+            class="input"
             value={googleFontName}
             onInput={(event) => {
               setGoogleFontName((event.target as HTMLInputElement).value);
@@ -96,8 +97,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
           />
           <input
             type="submit"
-            id="submit"
-            class={clsx("bold", (googleFontName !== font?.name) && "active")}
+            class={clsx("bold", "button", (googleFontName === font?.name) && "disabled")}
             value={googleSubmitButtonText}
             onClick={() => {
               const trimmedGoogleFontName = googleFontName.trim();

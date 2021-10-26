@@ -94,7 +94,7 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
             </div>
             <div class={clsx("space-top", !tab && "disabled")}>
               <label>Tab size:</label>
-              <select name="tab-size" value={tabSize} onChange={(event) => {
+              <select name="tab-size" class="select" value={tabSize} onChange={(event) => {
                 const newTabSize: number = parseInt((event.target as HTMLSelectElement).value);
                 chrome.storage.local.set({ tabSize: newTabSize });
               }}>
