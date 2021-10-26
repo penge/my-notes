@@ -622,7 +622,7 @@ body.with-modal #toolbar {
 
 #modal #buttons {
   text-align: right;
-  margin-top: 1em;
+  margin-top: .5em;
 }
 
 #modal #buttons input {
@@ -630,6 +630,7 @@ body.with-modal #toolbar {
   background: var(--modal-button-background-color);
   color: var(--modal-button-text-color);
   margin-left: .5em;
+  margin-top: .5em;
 }
 
 #modal .modal-description {
