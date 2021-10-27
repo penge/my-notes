@@ -9,11 +9,12 @@ export interface ContextMenuProps {
   onRename: (noteName: string) => void
   onDelete: (noteName: string) => void
   locked: boolean
-  toggleLocked: (noteName: string) => void
+  onToggleLocked: (noteName: string) => void
+  onExport: (noteName: string) => void
 }
 
 const ContextMenu = ({
-  noteName, x, y, onRename, onDelete, locked, toggleLocked,
+  noteName, x, y, onRename, onDelete, locked, onToggleLocked, onExport,
 }: ContextMenuProps): h.JSX.Element => {
   const [offsetHeight, setOffsetHeight] = useState<number>(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -40,7 +41,8 @@ const ContextMenu = ({
     }}>
       <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onRename(noteName)}>Rename</div>
       <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete(noteName)}>Delete</div>
-      <div class="action" onClick={() => toggleLocked(noteName)}>{locked ? "Unlock" : "Lock"}</div>
+      <div class="action" onClick={() => onToggleLocked(noteName)}>{locked ? "Unlock" : "Lock"}</div>
+      <div class="action" onClick={() => onExport(noteName)}>Export</div>
     </div>
   );
 };

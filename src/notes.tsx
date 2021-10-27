@@ -38,6 +38,7 @@ import { sendMessage } from "messages";
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { Command, commands } from "notes/commands";
+import { exportNote } from "notes/export";
 
 const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
 const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
@@ -628,9 +629,13 @@ const Notes = (): h.JSX.Element => {
             });
           },
           locked: notesProps.notes[noteName].locked ?? false,
-          toggleLocked: (noteName) => {
+          onToggleLocked: (noteName) => {
             setContextMenuProps(null);
             tabId && notesRef.current && setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+          },
+          onExport: (noteName) => {
+            setContextMenuProps(null);
+            exportNote(noteName);
           },
         })}
         onNewNote={() => onNewNote()}

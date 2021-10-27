@@ -150,7 +150,7 @@ It cannot see, access nor modify, any other files in your Google Drive.
 7. Use [<ins>Context menu</ins>](#context-menu) to transfer selected text to My Notes on other computers.
 8. Use [<ins>Custom theme</ins>](#custom-theme) to customize the look of My Notes in any way as needed.
 9. Drag and Drop selected text onto a note's name in the Sidebar to insert the text into the note.
-10. Drag and Drop a TXT file anywhere in the bottom part of the Sidebar (the area with 3 icons) to import the file as a new note.
+10. Drag and Drop a TXT or HTML file anywhere in the bottom part of the Sidebar (the area with 3 icons) to import the file as a new note.
 11. Drag the Sidebar line to resize the Sidebar, double-click on the Sidebar line to restore the original Sidebar width.
 
 <br><br>
