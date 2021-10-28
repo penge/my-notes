@@ -3,6 +3,7 @@ import { useState, useEffect } from "preact/hooks";
 
 import __Font from "options/Font";
 import __Size from "options/Size";
+import __NotesOrder from "options/NotesOrder";
 import __Theme from "options/Theme";
 import __KeyboardShortcuts from "options/KeyboardShortcuts";
 import __Options from "options/Options";
@@ -13,6 +14,7 @@ import {
   Os,
   Storage,
   NotesObject,
+  NotesOrder,
   RegularFont,
   GoogleFont,
   Theme,
@@ -24,6 +26,7 @@ const Options = (): h.JSX.Element => {
   const [os, setOs] = useState<Os | undefined>(undefined);
   const [version] = useState<string>(chrome.runtime.getManifest().version);
   const [notesCount, setNotesCount] = useState<number>(0);
+  const [notesOrder, setNotesOrder] = useState<NotesOrder>(NotesOrder.Alphabetical);
   const [font, setFont] = useState<RegularFont | GoogleFont | undefined>(undefined);
   const [size, setSize] = useState<number>(0);
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
@@ -37,38 +40,48 @@ const Options = (): h.JSX.Element => {
     chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
 
     chrome.storage.local.get([
-      "notes",
+      // Appearance
       "font",
       "size",
       "theme",
       "customTheme",
-      "sync",
-      "autoSync",
+
+      // Notes
+      "notes",
+
+      // Options
+      "notesOrder",
       "tab",
       "tabSize",
+      "autoSync",
+
+      // Sync
+      "sync",
     ], items => {
       const local = items as Storage;
 
-      setNotesCount(Object.keys(local.notes).length);
+      // Appearance
       setFont(local.font);
       setSize(local.size);
       setTheme(local.theme);
       setCustomTheme(local.customTheme);
-      setSync(local.sync);
-      setAutoSync(local.autoSync);
+
+      // Notes
+      setNotesCount(Object.keys(local.notes).length);
+
+      // Options
+      setNotesOrder(local.notesOrder);
       setTab(local.tab);
       setTabSize(local.tabSize);
+      setAutoSync(local.autoSync);
+
+      // Sync
+      setSync(local.sync);
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== "local") {
         return;
-      }
-
-      if (changes["notes"]) {
-        const newValue: NotesObject = changes["notes"].newValue;
-        const newNotesCount = Object.keys(newValue).length;
-        setNotesCount(newNotesCount);
       }
 
       if (changes["font"]) {
@@ -87,12 +100,14 @@ const Options = (): h.JSX.Element => {
         setCustomTheme(changes["customTheme"].newValue);
       }
 
-      if (changes["sync"]) {
-        setSync(changes["sync"].newValue);
+      if (changes["notes"]) {
+        const newValue: NotesObject = changes["notes"].newValue;
+        const newNotesCount = Object.keys(newValue).length;
+        setNotesCount(newNotesCount);
       }
 
-      if (changes["autoSync"]) {
-        setAutoSync(changes["autoSync"].newValue);
+      if (changes["notesOrder"]) {
+        setNotesOrder(changes["notesOrder"].newValue);
       }
 
       if (changes["tab"]) {
@@ -101,6 +116,14 @@ const Options = (): h.JSX.Element => {
 
       if (changes["tabSize"]) {
         setTabSize(changes["tabSize"].newValue);
+      }
+
+      if (changes["autoSync"]) {
+        setAutoSync(changes["autoSync"].newValue);
+      }
+
+      if (changes["sync"]) {
+        setSync(changes["sync"].newValue);
       }
     });
   }, []);
@@ -119,6 +142,7 @@ const Options = (): h.JSX.Element => {
 
       <__Font font={font} />
       <__Size size={size} />
+      <__NotesOrder notesOrder={notesOrder} />
       <__Theme theme={theme} />
       {os && <__KeyboardShortcuts os={os} />}
       <__Options

@@ -9,6 +9,7 @@ import {
   GoogleFont,
   Theme,
   NotesObject,
+  NotesOrder,
   Sync,
   Message,
   MessageType,
@@ -39,6 +40,7 @@ import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { Command, commands } from "notes/commands";
 import { exportNote } from "notes/export";
+import { notesToSidebarNotes } from "notes/adapters";
 
 const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
 const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
@@ -94,8 +96,10 @@ const Notes = (): h.JSX.Element => {
   });
   const notesRef = useRef<NotesObject>();
   notesRef.current = notesProps.notes;
+  const [order, setOrder] = useState<string[] | undefined>(undefined);
 
   const [initialContent, setInitialContent] = useState<string>("");
+  const [notesOrder, setNotesOrder] = useState<NotesOrder | undefined>(undefined);
   const [focus, setFocus] = useState<boolean>(false);
   const [tab, setTab] = useState<boolean>(false);
   const [tabSize, setTabSize] = useState<number>(-1);
@@ -138,9 +142,11 @@ const Notes = (): h.JSX.Element => {
 
       // Notes
       "notes",
+      "order",
       "active",
 
       // Options
+      "notesOrder",
       "focus",
       "autoSync",
       "tab",
@@ -176,8 +182,10 @@ const Notes = (): h.JSX.Element => {
       if (active !== activeFromUrl) {
         notesHistory.replace(active);
       }
+      setOrder(local.order);
 
       // Options
+      setNotesOrder(local.notesOrder);
       setFocus(getFocusOverride() || local.focus);
       setTab(local.tab);
       setTabSize(local.tabSize);
@@ -296,6 +304,14 @@ const Notes = (): h.JSX.Element => {
             active: newActive,
           };
         });
+      }
+
+      if (changes["order"]) {
+        setOrder(changes["order"].newValue);
+      }
+
+      if (changes["notesOrder"]) {
+        setNotesOrder(changes["notesOrder"].newValue);
       }
 
       if (changes["focus"]) {
@@ -597,50 +613,54 @@ const Notes = (): h.JSX.Element => {
         />
       )}
 
-      <__Sidebar
-        os={os}
-        notes={notesProps.notes}
-        active={notesProps.active}
-        width={sidebarWidth}
-        onActivateNote={handleOnActivateNote}
-        onNoteContextMenu={(noteName, x, y) => setContextMenuProps({
-          noteName, x, y,
-          onRename: (noteName) => {
-            setContextMenuProps(null);
-            setRenameNoteModalProps({
-              noteName,
-              validate: (newNoteName: string) => newNoteName.length > 0 && newNoteName !== noteName && !(newNoteName in notesProps.notes),
-              onCancel: () => setRenameNoteModalProps(null),
-              onConfirm: (newNoteName) => {
-                setRenameNoteModalProps(null);
-                renameNote(noteName, newNoteName);
-              },
-            });
-          },
-          onDelete: (noteName) => {
-            setContextMenuProps(null);
-            setDeleteNoteModalProps({
-              noteName,
-              onCancel: () => setDeleteNoteModalProps(null),
-              onConfirm: () => {
-                setDeleteNoteModalProps(null);
-                deleteNote(noteName);
-              },
-            });
-          },
-          locked: notesProps.notes[noteName].locked ?? false,
-          onToggleLocked: (noteName) => {
-            setContextMenuProps(null);
-            tabId && notesRef.current && setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
-          },
-          onExport: (noteName) => {
-            setContextMenuProps(null);
-            exportNote(noteName);
-          },
-        })}
-        onNewNote={() => onNewNote()}
-        sync={sync}
-      />
+      {notesOrder && order && (
+        <__Sidebar
+          os={os}
+          notes={notesToSidebarNotes(notesProps.notes, notesOrder, order)}
+          active={notesProps.active}
+          width={sidebarWidth}
+          onActivateNote={handleOnActivateNote}
+          onNoteContextMenu={(noteName, x, y) => setContextMenuProps({
+            noteName, x, y,
+            onRename: (noteName) => {
+              setContextMenuProps(null);
+              setRenameNoteModalProps({
+                noteName,
+                validate: (newNoteName: string) => newNoteName.length > 0 && newNoteName !== noteName && !(newNoteName in notesProps.notes),
+                onCancel: () => setRenameNoteModalProps(null),
+                onConfirm: (newNoteName) => {
+                  setRenameNoteModalProps(null);
+                  renameNote(noteName, newNoteName);
+                },
+              });
+            },
+            onDelete: (noteName) => {
+              setContextMenuProps(null);
+              setDeleteNoteModalProps({
+                noteName,
+                onCancel: () => setDeleteNoteModalProps(null),
+                onConfirm: () => {
+                  setDeleteNoteModalProps(null);
+                  deleteNote(noteName);
+                },
+              });
+            },
+            locked: notesProps.notes[noteName].locked ?? false,
+            onToggleLocked: (noteName) => {
+              setContextMenuProps(null);
+              tabId && notesRef.current && setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+            },
+            onExport: (noteName) => {
+              setContextMenuProps(null);
+              exportNote(noteName);
+            },
+          })}
+          onNewNote={() => onNewNote()}
+          canChangeOrder={notesOrder === NotesOrder.Custom}
+          onChangeOrder={(newOrder) => chrome.storage.local.set({ order: newOrder })}
+          sync={sync}
+        />
+      )}
 
       <div id="content-container">
         {notesProps.active && (
