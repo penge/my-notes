@@ -1,4 +1,4 @@
-import { Storage } from "shared/storage/schema";
+import { NotesOrder, Storage } from "shared/storage/schema";
 import migrate from "../core";
 import { expectItems } from "./core-default-values.test";
 
@@ -58,6 +58,8 @@ it("sets custom values", () => {
   // Compare objects
   expect(items).toEqual(Object.assign({
     // Automatically added properties to make a complete object (interface Storage)
+    order: [],
+    notesOrder: NotesOrder.Alphabetical,
     sidebar: true,
     toolbar: true,
     autoSync: false,

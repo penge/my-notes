@@ -1,4 +1,4 @@
-import { RegularFont, GoogleFont, Theme } from "./schema";
+import { RegularFont, GoogleFont, Theme, NotesOrder } from "./schema";
 
 export const validFont = (obj: unknown): obj is RegularFont | GoogleFont => {
   const isRegularFont = typeof obj === "object" && obj !== null
@@ -36,6 +36,14 @@ export const validBoolean = (value: unknown): value is boolean => {
   return typeof value === "boolean";
 };
 
+export const validStringArray = (value: unknown): value is Array<string> => {
+  return Array.isArray(value) && value.every((entry) => typeof entry === "string");
+};
+
 export const validTabSize = (value: unknown): value is number => {
   return typeof value === "number" && [-1, 2, 4].includes(value);
+};
+
+export const validNotesOrder = (value: unknown): value is NotesOrder => {
+  return Object.values(NotesOrder).includes(value as NotesOrder);
 };
