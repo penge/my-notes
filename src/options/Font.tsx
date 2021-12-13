@@ -29,7 +29,10 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
   return (
     <Fragment>
       <h2>Font</h2>
-      <p>Current font: <span id="current-font-name">{font?.name}</span></p>
+      <p>
+        <span>Current font: </span>
+        <span id="current-font-name">{font?.name}</span>
+      </p>
 
       {/* Title containing font family names (current underlined) */}
       <h3>

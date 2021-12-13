@@ -1,13 +1,15 @@
 
-import { NotesObject, Storage } from "shared/storage/schema";
+import { NotesObject, NotesOrder, Storage } from "shared/storage/schema";
 import { defaultValuesFactory } from "shared/storage/default-values";
 import {
   validBoolean,
+  validStringArray,
   validCustomTheme,
   validFont,
   validSize,
   validTabSize,
-  validTheme
+  validTheme,
+  validNotesOrder,
 } from "shared/storage/validations";
 
 export const expectedKeys = [
@@ -21,11 +23,13 @@ export const expectedKeys = [
 
   // Notes
   "notes",
+  "order",
   "active",
   "setBy",
   "lastEdit",
 
   // Options
+  "notesOrder",
   "focus",
   "tab",
   "tabSize",
@@ -81,11 +85,13 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
 
     // Notes
     notes: notes as NotesObject, // already migrated to [3.x]
+    order: validStringArray(local.order) ? local.order : [],
     active: tryNote(local.active as string) || tryNote(defaultValues.active as string) || firstAvailableNote,
     setBy: local.setBy as string || "",
     lastEdit: local.lastEdit as string || "",
 
     // Options
+    notesOrder: validNotesOrder(local.notesOrder) ? local.notesOrder : NotesOrder.Alphabetical,
     focus: validBoolean(local.focus) ? local.focus : defaultValues.focus,
     tab: validBoolean(local.tab) ? local.tab : defaultValues.tab,
     tabSize: validTabSize(local.tabSize) ? local.tabSize : defaultValues.tabSize,

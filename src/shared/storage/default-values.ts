@@ -1,5 +1,6 @@
 import {
   NotesObject,
+  NotesOrder,
   Storage,
 } from "./schema";
 
@@ -34,11 +35,13 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
 
     // Notes
     notes,
+    order: [],
     active: "One",
     setBy: "",
     lastEdit: "",
 
     // Options
+    notesOrder: NotesOrder.Alphabetical,
     focus: false,
     tab: false,
     tabSize: -1,

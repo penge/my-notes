@@ -190,6 +190,20 @@ body:not(.with-sidebar) { left: 0 !important; }
   animation: confirmation .3s cubic-bezier(1, 0, 0.5, 1) 2 alternate;
 }
 
+#sidebar-notes.dragging .note,
+#sidebar-notes.dragging .note.active,
+#sidebar-notes.dragging .note.drag-over {
+  background: none !important;
+  color: var(--sidebar-notes-text-color) !important;
+}
+
+#sidebar-notes.dragging .note.dragging {
+  background: transparent !important;
+  color: transparent !important;
+  box-shadow: inset 0 0 0px 1px silver;
+  cursor: grabbing;
+}
+
 #sidebar-buttons .button {
   cursor: pointer;
 }

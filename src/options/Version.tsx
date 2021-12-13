@@ -8,7 +8,7 @@ const Version = ({ version }: VersionProps): h.JSX.Element => (
   <Fragment>
     <h2>Version</h2>
     <div>
-      <strong id="version" class="space-right">{version}</strong>
+      <strong id="version">{version}</strong>
       <a href="https://github.com/penge/my-notes/releases" target="_blank" class="space-left">Changelog</a>
       <a href="https://github.com/penge/my-notes" target="_blank" class="space-left">Homepage</a>
       <br />

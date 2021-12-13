@@ -58,6 +58,12 @@ export type NotesObject = {
   [key: string]: Note
 }
 
+export enum NotesOrder {
+  Alphabetical = "Alphabetical",
+  NewestFirst = "NewestFirst",
+  Custom = "Custom",
+}
+
 export interface Storage {
   // Notifications
   notification?: Notification
@@ -73,11 +79,13 @@ export interface Storage {
 
   // Notes
   notes: NotesObject
+  order: string[]
   active: string | null
   setBy: string     // e.g. "worker-[ISOString]", "[tabId]-[ISOString]"
   lastEdit: string  // e.g. "[ISOString]"
 
   // Options
+  notesOrder: NotesOrder
   focus: boolean
   tab: boolean
   tabSize: number
