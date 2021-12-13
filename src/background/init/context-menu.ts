@@ -6,7 +6,7 @@ import {
 } from "./saving";
 
 const ID = "my-notes";
-const contexts = ["selection"];
+const contexts: chrome.contextMenus.ContextType[] = ["selection"];
 
 const MY_NOTES_SAVE_TO_NOTE_PREFIX = "my-notes-save-to-note-";
 const MY_NOTES_SAVE_TO_REMOTE = "my-notes-save-to-remote";
