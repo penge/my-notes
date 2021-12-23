@@ -4,7 +4,7 @@ import Modal from "./Modal";
 export interface DeleteNoteModalProps {
   noteName: string
   onCancel: () => void
-  onConfirm: (newNoteName: string) => void
+  onConfirm: () => void
 }
 
 const DeleteNoteModal = ({ noteName, onCancel, onConfirm }: DeleteNoteModalProps): h.JSX.Element => (
