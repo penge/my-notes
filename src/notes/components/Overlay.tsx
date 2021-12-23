@@ -1,19 +1,14 @@
 import { h } from "preact";
-import { useEffect } from "preact/hooks";
+import { useBodyClass } from "notes/hooks/use-body-class";
 
 interface OverlayProps {
   type: "to-rename" | "to-delete" | "to-create"
 }
 
 const Overlay = ({ type }: OverlayProps): h.JSX.Element => {
-  useEffect(() => {
-    document.body.classList.add("with-overlay", type);
-    return () => {
-      document.body.classList.remove("with-overlay", type);
-    };
-  }, []);
+  useBodyClass("with-overlay");
 
-  return <div id="overlay"></div>;
+  return <div id="overlay" className={type}></div>;
 };
 
 export default Overlay;

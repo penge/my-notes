@@ -591,9 +591,9 @@ body.with-toolbar #toolbar { transform: translateY(0); }
   pointer-events: none;
 }
 
-body.to-create #overlay { background: var(--to-create-overlay-background-color); }
-body.to-rename #overlay { background: var(--to-rename-overlay-background-color); }
-body.to-delete #overlay { background: var(--to-delete-overlay-background-color); }
+body #overlay.to-create { background: var(--to-create-overlay-background-color); }
+body #overlay.to-rename { background: var(--to-rename-overlay-background-color); }
+body #overlay.to-delete { background: var(--to-delete-overlay-background-color); }
 
 /* Modal */
 
