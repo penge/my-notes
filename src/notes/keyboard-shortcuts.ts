@@ -39,7 +39,7 @@ export enum KeyboardShortcut {
   OnSync,
 }
 
-type Callback = () => void;
+export type Callback = () => void;
 
 const callbacksByKeyboardShortcut: {
   [shortcut: string]: Callback[] | undefined
@@ -273,7 +273,18 @@ const subscribe = (keyboardShortcut: KeyboardShortcut, callback: Callback): void
 
 const unsubscribe = (callbackToRemove: Callback): void => {
   Object.keys(callbacksByKeyboardShortcut).forEach((shortcut) => {
-    callbacksByKeyboardShortcut[shortcut] = (callbacksByKeyboardShortcut[shortcut] || []).filter((callback) => callback !== callbackToRemove);
+    const callbacks = callbacksByKeyboardShortcut[shortcut];
+    if (!callbacks) {
+      return;
+    }
+
+    const filteredCallbacks = callbacks.filter((callback) => callback !== callbackToRemove);
+    if (!filteredCallbacks.length) {
+      delete callbacksByKeyboardShortcut[shortcut];
+      return;
+    }
+
+    callbacksByKeyboardShortcut[shortcut] = filteredCallbacks;
   });
 };
 

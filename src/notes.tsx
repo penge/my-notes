@@ -38,6 +38,7 @@ import { sendMessage } from "messages";
 
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
+import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 import { Command, commands } from "notes/commands";
 import { exportNote } from "notes/export";
 import { notesToSidebarNotes } from "notes/adapters";
@@ -45,30 +46,6 @@ import { notesToSidebarNotes } from "notes/adapters";
 const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
 const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
 const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
-
-let latestOnToggleCommandPaletteCallback: () => void;
-const detachOnToggleCommandPaletteCallback = () => {
-  if (latestOnToggleCommandPaletteCallback) {
-    keyboardShortcuts.unsubscribe(latestOnToggleCommandPaletteCallback);
-  }
-};
-const reatachOnToggleCommandPalette = (callback: () => void) => {
-  detachOnToggleCommandPaletteCallback();
-  latestOnToggleCommandPaletteCallback = callback;
-  keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleCommandPalette, latestOnToggleCommandPaletteCallback);
-};
-
-let latestOnRepeatLastExecutedCommand: () => void;
-const detachOnRepeatLastExecutedCommandCallback = () => {
-  if (latestOnRepeatLastExecutedCommand) {
-    keyboardShortcuts.unsubscribe(latestOnRepeatLastExecutedCommand);
-  }
-};
-const reatachOnExecuteLastCommand = (callback: () => void) => {
-  detachOnRepeatLastExecutedCommandCallback();
-  latestOnRepeatLastExecutedCommand = callback;
-  keyboardShortcuts.subscribe(KeyboardShortcut.OnRepeatLastExecutedCommand, latestOnRepeatLastExecutedCommand);
-};
 
 let autoSyncIntervalId: number | undefined;
 
@@ -510,21 +487,17 @@ const Notes = (): h.JSX.Element => {
     commands.InsertCurrentDateAndTime,
   ], []);
 
+  // Repeat last executed command
   const [lastExecutedCommand, setLastExecutedCommand] = useState<Command | undefined>(undefined);
-  useEffect(() => {
-    if (!lastExecutedCommand) {
-      detachOnRepeatLastExecutedCommandCallback();
-      return;
-    }
-
-    reatachOnExecuteLastCommand(lastExecutedCommand.execute);
-  }, [lastExecutedCommand]);
+  const [setHandlerOnRepeatLastExecutedCommand] = useKeyboardShortcut(KeyboardShortcut.OnRepeatLastExecutedCommand);
+  useEffect(() => setHandlerOnRepeatLastExecutedCommand(lastExecutedCommand?.execute), [lastExecutedCommand]);
 
   // Command Palette
+  const [setHandlerOnToggleCommandPalette] = useKeyboardShortcut(KeyboardShortcut.OnToggleCommandPalette);
   useEffect(() => {
     // Detach when there are no notes
     if (!Object.keys(notesProps.notes).length) {
-      detachOnToggleCommandPaletteCallback();
+      setHandlerOnToggleCommandPalette(undefined);
       setCommandPaletteProps(null);
       return;
     }
@@ -554,7 +527,7 @@ const Notes = (): h.JSX.Element => {
     };
 
     // Update event to show Command Palette and props to use
-    reatachOnToggleCommandPalette(() => {
+    setHandlerOnToggleCommandPalette(() => {
       setCommandPaletteProps((prev) => {
         if (prev) {
           range.restore();
