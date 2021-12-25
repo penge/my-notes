@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { useRef, useState, useMemo, useCallback, useEffect } from "preact/hooks";
+import { useBodyClass } from "notes/hooks/use-body-class";
 import { NotesObject } from "shared/storage/schema";
 import clsx from "clsx";
 
@@ -77,6 +78,8 @@ export const prepareItems = (notes: NotesObject, commands: string[], filter: Fil
 };
 
 const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: CommandPaletteProps): h.JSX.Element => {
+  useBodyClass("with-command-palette");
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [filter, setFilter] = useState<Filter | undefined>(undefined);
 
@@ -96,11 +99,6 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
     onActivateNote(name);
     return;
   }, [filter, onActivateNote, onExecuteCommand]);
-
-  useEffect(() => {
-    document.body.classList.add("with-command-palette");
-    return () => document.body.classList.remove("with-command-palette");
-  }, []);
 
   useEffect(() => inputRef.current?.focus(), [inputRef]); // auto-focus the input when Command Palette is open
 

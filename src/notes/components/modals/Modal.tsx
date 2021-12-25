@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { useRef, useEffect, useCallback } from "preact/hooks";
+import { useBodyClass } from "notes/hooks/use-body-class";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 
 interface ModalProps {
@@ -18,12 +19,10 @@ interface ModalProps {
 const Modal = ({
   className, title, input, inputValue, cancelValue, confirmValue, validate, onCancel, onConfirm, description,
 }: ModalProps): h.JSX.Element => {
+  useBodyClass("with-modal");
+
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    document.body.classList.add("with-modal");
-    return () => document.body.classList.remove("with-modal");
-  }, []);
 
   useEffect(() => {
     if (inputRef.current) {
