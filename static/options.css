@@ -27,6 +27,8 @@ input[type="radio"], input[type='checkbox'] {
 .bold { font-weight: bold; }
 .space-top { margin-top: 1em; }
 .space-left { margin-left: 1em; }
+.space-right-small { margin-right: .5em; }
+.space-bottom-small { margin-bottom: .5em; }
 
 .disabled {
   opacity: .3;
