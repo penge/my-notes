@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { useRef, useEffect, useCallback } from "preact/hooks";
 import { useBodyClass } from "notes/hooks/use-body-class";
-import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
+import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 
 interface ModalProps {
   className?: string
@@ -23,13 +23,15 @@ const Modal = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [setOnCancelHandlerOnEscape] = useKeyboardShortcut(KeyboardShortcut.OnEscape);
+  const [setOnSubmitHandlerOnEnter] = useKeyboardShortcut(KeyboardShortcut.OnEnter);
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.value = inputValue ?? "";
       inputRef.current.focus();
     }
-  }, [inputRef]);
+  }, [inputRef, inputValue]);
 
   const onSubmit = useCallback(() => {
     const value = inputRef.current ? inputRef.current.value.trim() : "";
@@ -37,21 +39,10 @@ const Modal = ({
     if (isValid) {
       onConfirm(value);
     }
-  }, []);
+  }, [onConfirm, validate]);
 
-  useEffect(() => {
-    if (cancelValue && onCancel) {
-      keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, onCancel);
-    }
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnEnter, onSubmit);
-
-    return () => {
-      if (cancelValue && onCancel) {
-        keyboardShortcuts.unsubscribe(onCancel);
-      }
-      keyboardShortcuts.unsubscribe(onSubmit);
-    };
-  }, []);
+  useEffect(() => setOnCancelHandlerOnEscape(onCancel), [onCancel]);
+  useEffect(() => setOnSubmitHandlerOnEnter(onSubmit), [onSubmit]);
 
   return (
     <div id="modal" className={className}>

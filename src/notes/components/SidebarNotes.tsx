@@ -5,7 +5,7 @@ import { SidebarNote } from "notes/adapters";
 import clsx from "clsx";
 import SVG from "types/SVG";
 import LockSvgText from "svg/lock.svg";
-import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
+import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 import { sendMessage } from "messages";
 
 interface SidebarNotesProps {
@@ -26,6 +26,8 @@ const SidebarNotes = ({
   const [dragOverNote, setDragOverNote] = useState<string | null>(null);
   const [dragOverNoteConfirmation, setDragOverNoteConfirmation] = useState<string | null>(null);
 
+  const [setOnControlHandler] = useKeyboardShortcut(KeyboardShortcut.OnControl);
+
   const [enteredNote, setEnteredNote] = useState<string | null>(null);
   const enteredNoteRef = useRef<string | null>(null);
   enteredNoteRef.current = enteredNote;
@@ -41,7 +43,7 @@ const SidebarNotes = ({
     }
 
     onActivateNote(note);
-  }, [onActivateNote]);
+  }, [active, onActivateNote]);
 
   useEffect(() => {
     setDragOverNote(null);
@@ -51,15 +53,10 @@ const SidebarNotes = ({
   useEffect(() => setNotes(sidebarNotes), [sidebarNotes]);
   useEffect(openEnteredNote, [enteredNote]);
 
-  useEffect(() => {
-    const onControlHandle = () => {
-      document.body.classList.add("with-control");
-      openEnteredNote();
-    };
-
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnControl, onControlHandle);
-    return () => keyboardShortcuts.unsubscribe(onControlHandle);
-  }, []);
+  useEffect(() => setOnControlHandler(() => {
+    document.body.classList.add("with-control");
+    openEnteredNote();
+  }), [openEnteredNote]);
 
   return (
     <Fragment>

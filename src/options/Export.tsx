@@ -1,5 +1,6 @@
 import { h, Fragment } from "preact";
 import clsx from "clsx";
+import { preventEnter } from "shared/components/inputs";
 import { exportNotes } from "notes/export";
 
 let locked = false;
@@ -15,6 +16,7 @@ const Export = ({ canExport }: ExportProps): h.JSX.Element => (
       type="button"
       class={clsx("bold", "button", !canExport && "disabled")}
       value="Export all notes"
+      onKeyPress={preventEnter}
       onClick={() => {
         if (!canExport || locked) {
           return;

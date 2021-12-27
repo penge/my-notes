@@ -1,6 +1,7 @@
 import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
+import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 import { commands, InsertTabFactory } from "../commands";
 import __range from "notes/range";
 
@@ -32,8 +33,6 @@ const autofocus = (content: HTMLDivElement) => content && window.setTimeout(() =
   selection.addRange(range);
 });
 
-const indentOnTabCallbackFactory = (tabSize: number) => InsertTabFactory({ tabSize }).execute;
-
 let latestCb: () => void;
 const reattachEditNote = (cb: () => void) => {
   document.removeEventListener("editnote", latestCb);
@@ -41,17 +40,10 @@ const reattachEditNote = (cb: () => void) => {
   document.addEventListener("editnote", latestCb);
 };
 
-let latestIndentOnTabCallback: () => void;
-const reattachIndentOnTab = (indentOnTab: boolean, tabSize: number) => {
-  keyboardShortcuts.unsubscribe(latestIndentOnTabCallback);
-  if (indentOnTab) {
-    latestIndentOnTabCallback = indentOnTabCallbackFactory(tabSize);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnTab, latestIndentOnTabCallback);
-  }
-};
-
 const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const [setIndentOnTabHandlerOnTab] = useKeyboardShortcut(KeyboardShortcut.OnTab);
 
   const onInput = useCallback(() => {
     if (active && contentRef.current) {
@@ -90,7 +82,11 @@ const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize 
   // To save the changed content, "editnote" event is triggered from Toolbar.
   useEffect(() => reattachEditNote(onInput), [onInput]);
 
-  useEffect(() => reattachIndentOnTab(indentOnTab, tabSize), [indentOnTab, tabSize]);
+  useEffect(() => setIndentOnTabHandlerOnTab(
+    indentOnTab
+      ? InsertTabFactory({ tabSize }).execute
+      : undefined
+  ), [indentOnTab, tabSize]);
 
   useEffect(() => {
     keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.Underline.execute);
