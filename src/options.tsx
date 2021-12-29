@@ -7,7 +7,7 @@ import __NotesOrder from "options/NotesOrder";
 import __Theme from "options/Theme";
 import __KeyboardShortcuts from "options/KeyboardShortcuts";
 import __Options from "options/Options";
-import __Export from "options/Export";
+import __ExportImport from "options/ExportImport";
 import __Version from "options/Version";
 
 import {
@@ -151,7 +151,7 @@ const Options = (): h.JSX.Element => {
         tab={tab}
         tabSize={tabSize}
       />
-      <__Export canExport={notesCount > 0} />
+      <__ExportImport canExport={notesCount > 0} />
       <__Version version={version} />
     </Fragment>
   );

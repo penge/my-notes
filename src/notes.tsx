@@ -546,6 +546,7 @@ const Notes = (): h.JSX.Element => {
   // Automatically show modal to create a new note if there are 0 notes
   useEffect(() => {
     if (!initialized || !tabId || Object.keys(notesProps.notes).length > 0) {
+      setNewNoteModalProps(null);
       return;
     }
 

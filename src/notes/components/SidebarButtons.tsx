@@ -7,7 +7,7 @@ import SVG from "types/SVG";
 import FileSvgText from "svg/file.svg";
 import GearSvgText from "svg/gear.svg";
 import RefreshSvgText from "svg/refresh.svg";
-import { importNoteFromTxtFile } from "notes/import";
+import { importNoteFromTextFile } from "notes/import";
 import { sendMessage } from "messages";
 import formatDate from "shared/date/format-date";
 
@@ -59,7 +59,7 @@ const SidebarButtons = ({
           return;
         }
 
-        importNoteFromTxtFile(file, () => setDragOver(false));
+        importNoteFromTextFile(file).then(() => setDragOver(false));
       }}
     >
       <Tooltip tooltip="New note">
