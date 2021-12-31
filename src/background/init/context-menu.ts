@@ -1,10 +1,10 @@
-import { Log } from "shared/logger";
 import { NotesObject } from "shared/storage/schema";
 import {
   saveTextToLocalMyNotes,
   saveTextToRemotelyOpenMyNotes,
   CLIPBOARD_NOTE_NAME,
 } from "./saving";
+import { notify } from "./notifications";
 
 const ID = "my-notes";
 
@@ -96,35 +96,35 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
   const menuId: string = info.menuItemId.toString();
 
   if (menuId === MY_NOTES_SAVE_URL_TO_CLIPBOARD) {
-    Log(`Context menu is saving URL to ${CLIPBOARD_NOTE_NAME}`);
-
     const urlToSave = getUrlToSave(info);
     saveTextToLocalMyNotes(urlToSave, CLIPBOARD_NOTE_NAME);
+
+    notify(`Saved URL to ${CLIPBOARD_NOTE_NAME}`);
     return;
   }
 
   if (menuId === MY_NOTES_SAVE_SELECTION_TO_CLIPBOARD) {
-    Log(`Context menu is saving selection to ${CLIPBOARD_NOTE_NAME}`);
-
     const selectionToSave = getSelectionToSave(info);
     saveTextToLocalMyNotes(selectionToSave, CLIPBOARD_NOTE_NAME);
+
+    notify(`Saved text to ${CLIPBOARD_NOTE_NAME}`);
     return;
   }
 
   if (menuId.startsWith(MY_NOTES_SAVE_SELECTION_TO_NOTE_PREFIX)) {
     const destinationNoteName = menuId.replace(MY_NOTES_SAVE_SELECTION_TO_NOTE_PREFIX, "");
-    Log(`Context menu is saving selection to ${destinationNoteName}`);
-
     const selectionToSave = getSelectionToSave(info);
     saveTextToLocalMyNotes(selectionToSave, destinationNoteName);
+
+    notify(`Saved text to ${destinationNoteName}`);
     return;
   }
 
   if (info.menuItemId === MY_NOTES_SAVE_SELECTION_TO_REMOTE) {
-    Log("Context menu is saving selection to be picked up by the remotely open My Notes");
-
     const selectionToSave = getSelectionToSave(info);
     saveTextToRemotelyOpenMyNotes(selectionToSave);
+
+    notify("Sent text to remotely open My Notes");
     return;
   }
 });

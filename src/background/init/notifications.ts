@@ -13,3 +13,11 @@ export const showNewVersionNotification = (details: chrome.runtime.InstalledDeta
 
   chrome.storage.local.set({ notification });
 };
+
+// Shows a Chrome notification in the top-right corner
+export const notify = (message: string) => chrome.notifications.create({
+  type: "basic",
+  title: "My Notes",
+  message,
+  iconUrl: "images/icon128.png",
+});

@@ -11,7 +11,8 @@
   "permissions": [
     "storage",
     "unlimitedStorage",
-    "contextMenus"
+    "contextMenus",
+    "notifications"
   ],
   "optional_permissions": [
     "identity"
