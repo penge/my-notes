@@ -5,6 +5,9 @@ import {
   Message,
 } from "shared/storage/schema";
 
+export const CLIPBOARD_NOTE_NAME = "@clipboard";
+const RECEIVED_NOTE_NAME = "@received";
+
 export const saveTextToLocalMyNotes = (textToSave: string, noteName: string): void => {
   chrome.storage.local.get(["notes"], local => {
     const notes = local.notes as NotesObject;
@@ -93,7 +96,7 @@ export const saveTextOnRemoteTransfer = (): void => {
           return;
         }
 
-        saveTextToLocalMyNotes(selection.text, "@Received");
+        saveTextToLocalMyNotes(selection.text, RECEIVED_NOTE_NAME);
       });
     }
   });

@@ -66,7 +66,9 @@ To use Context menu, select the text on website, right-click and see "My Notes" 
 Context menu has these options:
 
 - `Save to [note name]` – Option for every note. As you create new notes, they are automatically added to the list. My Notes doesn't have to be open. Google Drive Sync is not required.
-- `Save to remotely open My Notes` – My Notes on other computers needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@Received"** (created automatically if it doesn't exist, otherwise updated).
+- `Save to remotely open My Notes` – My Notes on other computers needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@received"** (created automatically if it doesn't exist, otherwise updated).
+
+Context menu also allows you to save current page URL (no text selected) to **"@clipboard"** (created automatically if it doesn't exist, otherwise updated).
 
 <br><br>
 
