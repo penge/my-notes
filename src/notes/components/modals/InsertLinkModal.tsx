@@ -10,12 +10,18 @@ const InsertLinkModal = ({ onCancel, onConfirm }: InsertLinkModalProps): h.JSX.E
   <Modal
     className="with-border"
     title="Link URL"
-    input
-    cancelValue="Cancel"
-    confirmValue="Insert"
+    input={{
+      type: "text",
+    }}
     validate={(href) => href.length > 0}
-    onCancel={onCancel}
-    onConfirm={onConfirm}
+    cancel={{
+      cancelValue: "Cancel",
+      onCancel,
+    }}
+    confirm={{
+      confirmValue: "Insert",
+      onConfirm,
+    }}
     description={(
       <div className="modal-description">
         The link can start with <span class="url">http</span>, <span class="url">https</span>, or <span class="url">chrome-extension</span> if referencing another note.

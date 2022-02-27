@@ -5,6 +5,7 @@ import {
   commands,
   InsertImageFactory,
   InsertLinkFactory,
+  EmbedHtmlFactory,
   table,
   highlight,
 } from "../commands";
@@ -32,6 +33,7 @@ import AlignRightSvgText from "svg/align-right.svg";
 import HorizontalRuleSvgText from "svg/horizontal-rule.svg";
 import ImageSvgText from "svg/image.svg";
 import LinkSvgText from "svg/link.svg";
+import EmbedHtmlSvgText from "svg/embed.svg";
 import CodeSvgText from "svg/code.svg";
 import ClockSvgText from "svg/clock.svg";
 import TableSvgText from "svg/table.svg";
@@ -47,6 +49,7 @@ import RemoveFormatSvgText from "svg/remove-format.svg";
 import InfoSvgText from "svg/info.svg";
 import SVG from "types/SVG";
 import { reinitTables } from "notes/content/table";
+import EmbedHtmlModal, { EmbedHtmlModalProps } from "./modals/EmbedHtmlModal";
 
 const callback = () => {
   const event = new Event("editnote");
@@ -82,6 +85,7 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
 
   const [insertImageModalProps, setInsertImageModalProps] = useState<InsertImageModalProps | null>(null);
   const [insertLinkModalProps, setInsertLinkModalProps] = useState<InsertLinkModalProps | null>(null);
+  const [embedHtmlModalProps, setEmbedHtmlModalProps] = useState<EmbedHtmlModalProps | null>(null);
 
   return (
     <Fragment>
@@ -299,6 +303,26 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
             </div>
           </Tooltip>
 
+          <Tooltip tooltip="Embed HTML">
+            <div id="EMBED-HTML" class="button" onClick={() => {
+              range.save();
+              setEmbedHtmlModalProps({
+                onCancel: () => {
+                  setEmbedHtmlModalProps(null);
+                  range.restore();
+                },
+                onConfirm: (html) => {
+                  setEmbedHtmlModalProps(null);
+                  range.restore(() => {
+                    EmbedHtmlFactory({ html }).execute();
+                  });
+                }
+              });
+            }}>
+              <SVG text={EmbedHtmlSvgText} />
+            </div>
+          </Tooltip>
+
           <Tooltip tooltip={commands.Pre.name}>
             <div id="PRE" class="button" onClick={commands.Pre.execute}>
               <SVG text={CodeSvgText} />
@@ -343,6 +367,10 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
 
       {insertLinkModalProps && (
         <InsertLinkModal {...insertLinkModalProps} />
+      )}
+
+      {embedHtmlModalProps && (
+        <EmbedHtmlModal {...embedHtmlModalProps} />
       )}
     </Fragment>
   );
