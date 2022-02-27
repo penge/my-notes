@@ -18,6 +18,7 @@ body, #sidebar {
 
 body {
   right: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 svg {
