@@ -2,6 +2,7 @@ body {
   padding: 2em;
   font-family: Helvetica, Calibri, Arial, sans-serif;
   font-size: 150%;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Generic styles */

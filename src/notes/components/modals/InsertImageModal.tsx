@@ -23,12 +23,18 @@ const InsertImageModal = ({ onCancel, onConfirm }: InsertImageModalProps): h.JSX
   <Modal
     className="with-border"
     title="Image URL"
-    input
-    cancelValue="Cancel"
-    confirmValue="Insert"
+    input={{
+      type: "text",
+    }}
     validate={(src) => src.length > 0}
-    onCancel={onCancel}
-    onConfirm={(src) => onConfirm(transformImageUrl(src))}
+    cancel={{
+      cancelValue: "Cancel",
+      onCancel,
+    }}
+    confirm={{
+      confirmValue: "Insert",
+      onConfirm: (src) => onConfirm(transformImageUrl(src)),
+    }}
     description={(
       <div className="modal-description">
         You can <strong>Drag & Drop</strong> an image to the note to upload it to Google Drive when Google Drive Sync is enabled.

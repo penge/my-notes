@@ -141,6 +141,12 @@ const InsertLinkFactory: CommandFactory<{ href: string }> = (props): Command => 
   execute: (): void => { exec("createLink", props.href); }
 });
 
+const EmbedHtmlFactory: CommandFactory<{ html: string }> = (props): Command => ({
+  name: "Embed HTML",
+  title: () => "",
+  execute: (): void => { exec("insertHTML", props.html); }
+});
+
 const InsertHorizontalRule: Command = {
   name: "Insert Horizontal Rule",
   title: () => "",
@@ -166,7 +172,7 @@ const InsertCurrentDateAndTime: Command = {
 };
 
 const Pre: Command = {
-  name: "Code Block",
+  name: "Code",
   title: () => "",
   execute: (): void => { exec("formatBlock", "<PRE>"); }
 };
@@ -232,6 +238,7 @@ export {
   InsertTabFactory,
   InsertImageFactory,
   InsertLinkFactory,
+  EmbedHtmlFactory,
 
   table,
   highlight,

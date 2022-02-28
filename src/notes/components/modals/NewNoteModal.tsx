@@ -10,12 +10,18 @@ export interface NewNoteModalProps {
 const NewNoteModal = ({ validate, onCancel, onConfirm }: NewNoteModalProps): h.JSX.Element => (
   <Modal
     title="New note"
-    input
-    cancelValue="Cancel"
-    confirmValue="Create"
+    input={{
+      type: "text",
+    }}
     validate={validate}
-    onCancel={onCancel}
-    onConfirm={onConfirm}
+    cancel={onCancel && {
+      cancelValue: "Cancel",
+      onCancel,
+    }}
+    confirm={{
+      confirmValue: "Create",
+      onConfirm,
+    }}
   />
 );
 

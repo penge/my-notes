@@ -10,13 +10,19 @@ export interface RenameNoteModalProps {
 
 const RenameNoteModal = ({ noteName, validate, onCancel, onConfirm }: RenameNoteModalProps): h.JSX.Element =>
   <Modal
-    input
-    inputValue={noteName}
-    cancelValue="Cancel"
-    confirmValue="Rename"
+    input={{
+      type: "text",
+      defaultValue: noteName,
+    }}
     validate={validate}
-    onCancel={onCancel}
-    onConfirm={onConfirm}
+    cancel={{
+      cancelValue: "Cancel",
+      onCancel,
+    }}
+    confirm={{
+      confirmValue: "Rename",
+      onConfirm,
+    }}
   />;
 
 export default RenameNoteModal;

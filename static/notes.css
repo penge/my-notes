@@ -18,6 +18,7 @@ body, #sidebar {
 
 body {
   right: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 svg {
@@ -28,6 +29,11 @@ svg {
 .underline { text-decoration: underline; }
 .italic { font-style: italic; }
 .line-through { text-decoration: line-through; }
+
+.disabled {
+  opacity: .4;
+  cursor: default !important;
+}
 
 hr {
   height: 0;
@@ -107,10 +113,6 @@ hr {
   height: 1.2em;
   width: 1em;
   flex-shrink: 0;
-}
-
-.bar > .button.disabled {
-  opacity: .4;
 }
 
 .bar > .button.last {
@@ -289,6 +291,7 @@ body.resizing-table-row { cursor: row-resize; }
   overflow: auto;
   padding: .5em;
   border: 1px solid var(--pre-border-color);
+  font-family: 'Courier New', Courier, monospace;
 }
 
 #content table {
@@ -618,7 +621,7 @@ body.with-modal #toolbar {
   border: 1px solid var(--modal-border-color);
 }
 
-#modal input {
+#modal input, #modal #textarea {
   box-sizing: border-box;
   outline: none;
   border: none;
@@ -628,10 +631,17 @@ body.with-modal #toolbar {
   font-size: .8em;
 }
 
-#modal #input {
+#modal #input, #modal #textarea {
   width: 100%;
   background: white;
   border: 1px solid var(--modal-input-border-color);
+}
+
+#modal #textarea {
+  resize: none;
+  height: 40vh;
+  max-height: 400px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 #modal #buttons {

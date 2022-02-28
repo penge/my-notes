@@ -1,47 +1,74 @@
 import { h } from "preact";
-import { useRef, useEffect, useCallback } from "preact/hooks";
+import { useRef, useState, useEffect, useMemo, useCallback } from "preact/hooks";
+import clsx from "clsx";
 import { useBodyClass } from "notes/hooks/use-body-class";
 import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 
 interface ModalProps {
   className?: string
   title?: string
-  input?: boolean
-  inputValue?: string
-  cancelValue?: string
-  confirmValue: string
+  input?: {
+    type: "text" | "textarea"
+    defaultValue?: string
+  }
   validate?: (inputValue: string) => boolean
-  onCancel?: () => void
-  onConfirm: (inputValue: string) => void
+  cancel?: {
+    cancelValue: string
+    onCancel: () => void
+  }
+  confirm: {
+    confirmValue: string
+    onConfirm: (inputValue: string) => void
+  }
   description?: h.JSX.Element
 }
 
 const Modal = ({
-  className, title, input, inputValue, cancelValue, confirmValue, validate, onCancel, onConfirm, description,
+  className, title, input, validate, cancel, confirm, description,
 }: ModalProps): h.JSX.Element => {
   useBodyClass("with-modal");
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const [inputValue, setInputValue] = useState<string>(input?.defaultValue || "");
+
+  useEffect(() => {
+    if (!input) {
+      return;
+    }
+
+    const inputToFocus = {
+      text: inputRef.current,
+      textarea: textareaRef.current,
+    }[input.type];
+
+    if (!inputToFocus) {
+      return;
+    }
+
+    inputToFocus.value = inputValue;
+    inputToFocus.focus();
+  }, [input, inputValue]);
+
+  const onInput = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement | HTMLTextAreaElement, Event>) => {
+    const { value } = event.target as HTMLInputElement | HTMLTextAreaElement;
+    setInputValue(value);
+  }, []);
+
+  const onSubmit = useMemo(() => {
+    const value = inputValue.trim();
+    const isValid = validate ? validate(value) : true;
+    if (!isValid) {
+      return;
+    }
+    return () => confirm.onConfirm(value);
+  }, [inputValue, validate, confirm.onConfirm]);
 
   const [setOnCancelHandlerOnEscape] = useKeyboardShortcut(KeyboardShortcut.OnEscape);
   const [setOnSubmitHandlerOnEnter] = useKeyboardShortcut(KeyboardShortcut.OnEnter);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.value = inputValue ?? "";
-      inputRef.current.focus();
-    }
-  }, [inputRef, inputValue]);
-
-  const onSubmit = useCallback(() => {
-    const value = inputRef.current ? inputRef.current.value.trim() : "";
-    const isValid = validate ? validate(value) : true;
-    if (isValid) {
-      onConfirm(value);
-    }
-  }, [onConfirm, validate]);
-
-  useEffect(() => setOnCancelHandlerOnEscape(onCancel), [onCancel]);
+  useEffect(() => setOnCancelHandlerOnEscape(cancel?.onCancel), [cancel?.onCancel]);
   useEffect(() => setOnSubmitHandlerOnEnter(onSubmit), [onSubmit]);
 
   return (
@@ -50,28 +77,41 @@ const Modal = ({
         <div class="bold">{title}</div>
       )}
 
-      {input && (
+      {input?.type === "text" && (
         <input
-          type="text"
           id="input"
+          type="text"
           ref={inputRef}
           onBlur={() => inputRef.current?.focus()}
           autocomplete="off"
+          value={inputValue}
+          onInput={onInput}
+        />
+      )}
+
+      {input?.type === "textarea" && (
+        <textarea
+          id="textarea"
+          ref={textareaRef}
+          onBlur={() => textareaRef.current?.focus()}
+          autocomplete="off"
+          value={inputValue}
+          onInput={onInput}
         />
       )}
 
       <div id="buttons">
-        {cancelValue && onCancel && (
+        {cancel && (
           <input
             type="button"
-            value={cancelValue}
-            onClick={onCancel}
+            value={cancel.cancelValue}
+            onClick={cancel.onCancel}
           />
         )}
         <input
           type="submit"
-          value={confirmValue}
-          class="bold"
+          value={confirm.confirmValue}
+          class={clsx("bold", !onSubmit && "disabled")}
           onClick={onSubmit}
         />
       </div>
