@@ -7,15 +7,20 @@ import {
   ACCEPTED_TEXT_TYPES, importNotesFromTextFiles,
   ACCEPTED_ZIP_TYPE, importNotesFromZipFile,
 } from "notes/import";
+import { t, tString } from "i18n";
 
 const alertImported = (importedNoteNames: string[]) => {
   if (!importedNoteNames.length) {
-    alert("No notes were imported.");
+    alert(tString("No notes were imported"));
     return;
   }
 
+  const summary = importedNoteNames.length === 1
+    ? tString("Imported.one")
+    : tString("Imported.other", { count: importedNoteNames.length });
+
   alert(
-    `Imported ${importedNoteNames.length} ${importedNoteNames.length === 1 ? "note" : "notes"}:`
+    summary
     + "\r\n"
     + importedNoteNames.map((noteName) => `- ${noteName}`).join("\r\n"));
 };
@@ -37,14 +42,14 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
 
   return (
     <Fragment>
-      <h2>Export & Import</h2>
+      <h2>{t("Export & Import")}</h2>
 
       {/* Buttons */}
 
       <input
         type="button"
         class={clsx(commonButtonClasses, !canExport && "disabled")}
-        value="Export notes"
+        value={tString("Export notes")}
         onKeyPress={preventEnter}
         onClick={() => {
           if (!canExport || lockedExport) {
@@ -60,7 +65,7 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
       <input
         type="button"
         class={clsx(commonButtonClasses)}
-        value="Import notes from text files"
+        value={tString("Import notes from text files")}
         onKeyPress={preventEnter}
         onClick={() => textRef.current?.click()}
       />
@@ -68,7 +73,7 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
       <input
         type="button"
         class={clsx(commonButtonClasses)}
-        value="Import notes from a ZIP file"
+        value={tString("Import notes from a ZIP file")}
         onKeyPress={preventEnter}
         onClick={() => zipRef.current?.click()}
       />

@@ -1,5 +1,6 @@
 import { h, Fragment } from "preact";
 import { NotesOrder as NotesOrderEnum } from "shared/storage/schema";
+import { t } from "i18n";
 
 interface OrderProps {
   notesOrder: NotesOrderEnum
@@ -7,9 +8,9 @@ interface OrderProps {
 
 const NotesOrder = ({ notesOrder }: OrderProps): h.JSX.Element => (
   <Fragment>
-    <h2>Order</h2>
+    <h2>{t("Order")}</h2>
     <p>
-      <span>Current order: </span>
+      <span>{t("Current order:")}{" "}</span>
       <select
         class="select"
         value={notesOrder}
@@ -18,12 +19,16 @@ const NotesOrder = ({ notesOrder }: OrderProps): h.JSX.Element => (
           chrome.storage.local.set({ notesOrder: newNotesOrder });
         }}
       >
-        <option value={NotesOrderEnum.Alphabetical}>Alphabetical</option>
-        <option value={NotesOrderEnum.NewestFirst}>Newest first</option>
-        <option value={NotesOrderEnum.Custom}>Custom</option>
+        {[
+          NotesOrderEnum.Alphabetical,
+          NotesOrderEnum.NewestFirst,
+          NotesOrderEnum.Custom,
+        ].map((oneOrder) =>
+          <option value={oneOrder}>{t(`Orders.${oneOrder}`)}</option>
+        )}
       </select>
     </p>
-    <p>When <b>"Custom"</b> is selected, you can <b>Drag & Drop</b> notes to change their order.</p>
+    <p>{t("Orders description")}</p>
   </Fragment>
 );
 

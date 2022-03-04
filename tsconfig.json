@@ -24,6 +24,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
+    "resolveJsonModule": true,
+
     "moduleResolution": "node",
     "jsx": "react",
     "jsxFactory": "h",

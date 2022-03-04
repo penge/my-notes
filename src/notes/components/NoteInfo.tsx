@@ -2,6 +2,7 @@ import { h } from "preact";
 import { Note } from "shared/storage/schema";
 import parseDate from "shared/date/parse-date";
 import formatNumber from "shared/number/format-number";
+import { t } from "i18n";
 
 interface NoteInfoProps {
   note: Note
@@ -21,14 +22,14 @@ const NoteInfo = ({ note }: NoteInfoProps): h.JSX.Element => {
     <div className="row">
 
       <div className="column">
-        <div>Created</div>
-        <div>Modified</div>
-        {synced && <div>Synced</div>}
+        <div>{t("Created")}</div>
+        <div>{t("Modified")}</div>
+        {synced && <div>{t("Synced")}</div>}
 
         <div>&nbsp;</div>
-        <div>Words</div>
-        <div>Characters</div>
-        <div>Characters excluding spaces</div>
+        <div>{t("Words")}</div>
+        <div>{t("Characters")}</div>
+        <div>{t("Characters excluding spaces")}</div>
       </div>
 
       <div className="column">

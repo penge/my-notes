@@ -3,7 +3,7 @@ require("esbuild").build({
     "./src/background.ts",
     "./src/notes.tsx",
     "./src/options.tsx",
-    "./src/themes/custom/custom.ts",
+    "./src/themes/custom/custom.tsx",
     ...(process.env.NODE_ENV === "development" ? ["./src/integration/index.ts"] : []),
   ],
   bundle: true,

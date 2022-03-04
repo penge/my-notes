@@ -1,0 +1,228 @@
+{
+  "New note": "New note",
+  "Cancel": "Cancel",
+  "Create": "Create",
+  "Options": "Options",
+  "Rename": "Rename",
+  "Delete": "Delete",
+  "Delete note": "Delete {{note}}?",
+  "No": "No",
+  "Yes": "Yes",
+  "Lock": "Lock",
+  "Unlock": "Unlock",
+  "Export": "Export",
+  "Google Drive Sync is disabled (see Options)": "Google Drive Sync is disabled (see Options)",
+  "Click to sync notes to and from Google Drive": {
+    "mac": "Click to sync notes to and from Google Drive (⌘ + R)",
+    "other": "Click to sync notes to and from Google Drive (Ctrl + R)"
+  },
+  "Last sync": "Last sync: {{time}}",
+  "Bold": {
+    "mac": "Bold (⌘ + B)",
+    "other": "Bold (Ctrl + B)"
+  },
+  "Italic": {
+    "mac": "Italic (⌘ + I)",
+    "other": "Italic (Ctrl + I)"
+  },
+  "Underline": {
+    "mac": "Underline (⌘ + U)",
+    "other": "Underline (Ctrl + U)"
+  },
+  "StrikeThrough": {
+    "mac": "Strikethrough (⌘ + Shift + X)",
+    "other": "Strikethrough (Alt + Shift + 5)"
+  },
+  "Heading": "Heading",
+  "Heading 1": "Heading 1",
+  "Heading 2": "Heading 2",
+  "Heading 3": "Heading 3",
+  "UL": {
+    "mac": "Bulleted List (⌘ + Shift + 7)",
+    "other": "Bulleted List (Ctrl + Shift + 7)"
+  },
+  "OL": {
+    "mac": "Numbered List (⌘ + Shift + 8)",
+    "other": "Numbered List (Ctrl + Shift + 8)"
+  },
+  "Outdent": "Outdent",
+  "Indent": "Indent",
+  "Align Left": "Align Left",
+  "Align Center": "Align Center",
+  "Align Right": "Align Right",
+  "Insert Horizontal Rule": "Insert Horizontal Rule",
+  "Insert Image": "Insert Image",
+  "Image URL": "Image URL",
+  "Insert": "Insert",
+  "Insert Image description": "You can <strong>Drag & Drop</strong> an image to the note to upload it to Google Drive when Google Drive Sync is enabled.",
+  "Insert Link": "Insert Link",
+  "Link URL": "Link URL",
+  "Insert Link description": {
+    "line1": "The link can start with {{http}}, {{https}}, or {{chrome-extension}} if referencing another note.",
+    "line2": "See <strong>Shortcuts</strong> for how to open the inserted link."
+  },
+  "Embed HTML": "Embed HTML",
+  "Embed": "Embed",
+  "Code": "Code",
+  "Date and Time": "Date and Time",
+  "Insert current Date": "Insert current Date",
+  "Insert current Time": "Insert current Time",
+  "Insert current Date and Time": "Insert current Date and Time",
+  "Table": "Table",
+  "Insert table (3x3)": "Insert table (3x3)",
+  "Insert row above": "Insert row above",
+  "Insert row below": "Insert row below",
+  "Insert column left": "Insert column left",
+  "Insert column right": "Insert column right",
+  "Toggle heading row": "Toggle heading row",
+  "Toggle heading column": "Toggle heading column",
+  "Delete row": "Delete row",
+  "Delete column": "Delete column",
+  "Text Color": "Text Color",
+  "Change selected text color to": "Change selected text color to {{color}}",
+  "Change selected text color to default text color": "Change selected text color to default text color",
+  "Highlight selected text": "Highlight selected text",
+  "Remove Formatting": {
+    "mac": "Remove Formatting (⌘ + \\)",
+    "other": "Remove Formatting (Ctrl + \\)"
+  },
+  "Created": "Created",
+  "Modified": "Modified",
+  "Synced": "Synced",
+  "Words": "Words",
+  "Characters": "Characters",
+  "Characters excluding spaces": "Characters excluding spaces",
+  "Search": "Search",
+  "(No matching commands)": "(No matching commands)",
+  "(No matching notes)": "(No matching notes)",
+  "Font": "Font",
+  "Current font:": "Current font:",
+  "Font example": "The quick brown fox jumps over the lazy dog ({{font}})",
+  "Google Fonts": {
+    "step1": "Open <a href=\"{{website}}\" target=\"_blank\">{{website}}</a> to see the available fonts",
+    "step2": "Type in the Font Name, e.g.: <b>Roboto Mono</b>",
+    "step3": "Click <b>Apply</b> to use the font",
+    "placeholder": "Font Name (e.g. Roboto Mono)"
+  },
+  "Apply": "Apply",
+  "Applied": "Applied",
+  "Font Name Doesn't Exist": "Font Name Doesn't Exist",
+  "Size": "Size",
+  "Order": "Order",
+  "Current order:": "Current order:",
+  "Orders": {
+    "Alphabetical": "Alphabetical",
+    "NewestFirst": "Newest first",
+    "Custom": "Custom"
+  },
+  "Orders description": "When <b>\"Custom\"</b> is selected, you can <b>Drag & Drop</b> notes to change their order.",
+  "Theme": "Theme",
+  "Themes": {
+    "light": "Light",
+    "dark": "Dark",
+    "custom": "Custom"
+  },
+  "Customize": "Customize",
+  "Custom theme": "Custom theme",
+  "Custom theme hint": "See {{light}} or {{dark}} for reference.",
+  "Save": "Save",
+  "Saved!": "Saved!",
+  "Shortcuts": "Shortcuts",
+  "Shortcuts descriptions": {
+    "Open My Notes": "Open My Notes",
+    "Open Options": "Open Options",
+    "Sync notes to and from Google Drive": "Sync notes to and from Google Drive",
+    "Open Command palette": "Open Command palette",
+    "Open Command palette detail": {
+      "line1": "By default, Command palette looks for notes <b>by their name.</b>",
+      "line2": "Type {{symbol}} first, and continue to start search for <b>commands.</b>",
+      "line3": "Type {{symbol}} first, and continue to start search for notes <b>by their content.</b>"
+    },
+    "Repeat last command": "Repeat last command",
+    "Toggle Focus mode": "Toggle Focus mode",
+    "Toggle Sidebar": "Toggle Sidebar",
+    "Toggle Toolbar": "Toggle Toolbar",
+    "Open previous note": "Open previous note",
+    "Open next note": "Open next note",
+    "Open note on mouse hover": "Open note on mouse hover",
+    "Open link in a New Tab": "Open link in a New Tab",
+    "Open link in a New Tab and make it active": "Open link in a New Tab and make it active",
+    "Close": "Close",
+    "Confirm": "Confirm",
+    "Bold": "Bold",
+    "Italic": "Italic",
+    "Underline": "Underline",
+    "Strikethrough": "Strikethrough",
+    "Remove Formatting": "Remove Formatting",
+    "Bulleted List": "Bulleted List",
+    "Numbered List": "Numbered List",
+    "Current date": "Current date",
+    "Current time": "Current time",
+    "Current date and time": "Current date and time"
+  },
+  "Shortcuts other": {
+    "example given": "e.g.",
+    "open to configure": "(open {{shortcuts}} to configure)",
+    "hold": "hold"
+  },
+  "Options available": {
+    "Enable Google Drive Sync": "Enable Google Drive Sync",
+    "Enable Google Drive Sync detail": {
+      "description": "Creates a folder <b>My Notes</b> (automatically, once) in your Google Drive, and uses it to back up your notes. Notes are synchronized to and from Google Drive once the feature is enabled, and then on every click on the <b>Sync now</b> button in the Sidebar.",
+      "Why sync:": "Why sync:",
+      "Why sync reasons": {
+        "reason1": "Having a backup of your notes (notes can be restored)",
+        "reason2": "Can edit notes from other sources (Google Drive, My Notes, vice versa)",
+        "reason3": "Can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)"
+      },
+      "Permission:": "Permission:",
+      "Permission details": {
+        "detail1": "My Notes can only access the files it created. It cannot see other files in your Google Drive.",
+        "detail2": "My Notes will request a permission to enable this feature."
+      },
+      "Location:": "Location:",
+      "Last sync:": "Last sync:",
+      "Enable Auto Sync": "Enable Auto Sync",
+      "Enable Auto Sync description": "Auto Sync will automatically sync your notes to and from Google Drive every time you open My Notes, and every 6 seconds if your local notes were updated since the last sync."
+    },
+    "Indent text on Tab": "Indent text on {{Tab}}",
+    "Indent text on Tab detail": {
+      "description": "By default, Tab key changes focus between the address bar and a note. This can be changed to indent the text instead.",
+      "Tab size:": "Tab size:",
+      "Tab": "Tab",
+      "2 spaces": "2 spaces",
+      "4 spaces": "4 spaces"
+    }
+  },
+  "Export & Import": "Export & Import",
+  "Export notes": "Export notes",
+  "Import notes from text files": "Import notes from text files",
+  "Import notes from a ZIP file": "Import notes from a ZIP file",
+  "No notes were imported": "No notes were imported.",
+  "Imported": {
+    "one": "Imported 1 note:",
+    "other": "Imported {{count}} notes:"
+  },
+  "Version": "Version",
+  "Changelog": "Changelog",
+  "Homepage": "Homepage",
+  "Created by": "Created by",
+  "Buy me a coffee": "Buy me a coffee",
+  "Context Menu": {
+    "menus": {
+      "Save URL to": "Save URL to {{note}}",
+      "Save to": "Save to {{note}}",
+      "Save to remotely open My Notes": "Save to remotely open My Notes"
+    },
+    "notifications": {
+      "Saved URL to": "Saved URL to {{note}}",
+      "Saved text to": "Saved text to {{note}}",
+      "Sent text to remotely open My Notes": "Sent text to remotely open My Notes"
+    }
+  },
+  "Notifications": {
+    "New version installed": "New version {{version}} installed.",
+    "What's new": "What's new",
+    "Close": "Close"
+  }
+}

@@ -1,5 +1,6 @@
 import { h } from "preact";
 import Modal from "./Modal";
+import { t, tString } from "i18n";
 
 export interface InsertImageModalProps {
   onCancel: () => void
@@ -22,22 +23,22 @@ export const transformImageUrl = (src: string): string => {
 const InsertImageModal = ({ onCancel, onConfirm }: InsertImageModalProps): h.JSX.Element => (
   <Modal
     className="with-border"
-    title="Image URL"
+    title={tString("Image URL")}
     input={{
       type: "text",
     }}
     validate={(src) => src.length > 0}
     cancel={{
-      cancelValue: "Cancel",
+      cancelValue: tString("Cancel"),
       onCancel,
     }}
     confirm={{
-      confirmValue: "Insert",
+      confirmValue: tString("Insert"),
       onConfirm: (src) => onConfirm(transformImageUrl(src)),
     }}
     description={(
       <div className="modal-description">
-        You can <strong>Drag & Drop</strong> an image to the note to upload it to Google Drive when Google Drive Sync is enabled.
+        {t("Insert Image description")}
       </div>
     )}
   />

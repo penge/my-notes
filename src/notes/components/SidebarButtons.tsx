@@ -10,22 +10,7 @@ import RefreshSvgText from "svg/refresh.svg";
 import { importNoteFromTextFile } from "notes/import";
 import { sendMessage } from "messages";
 import formatDate from "shared/date/format-date";
-
-const syncNowTitles = {
-  mac: (lastSync: string) => (
-    <Fragment>
-      <div>Click to sync notes to and from Google Drive (⌘ + R)</div>
-      <div>Last sync: {formatDate(lastSync)}</div>
-    </Fragment>
-  ),
-  other: (lastSync: string) => (
-    <Fragment>
-      <div>Click to sync notes to and from Google Drive (Ctrl + R)</div>
-      <div>Last sync: {formatDate(lastSync)}</div>
-    </Fragment>
-  ),
-  disabled: "Google Drive Sync is disabled (see Options)",
-};
+import { t } from "i18n";
 
 interface SidebarButtonsProps {
   os?: Os
@@ -62,19 +47,26 @@ const SidebarButtons = ({
         importNoteFromTextFile(file).then(() => setDragOver(false));
       }}
     >
-      <Tooltip tooltip="New note">
+      <Tooltip tooltip={t("New note")}>
         <div id="new-note" class="button" onClick={onNewNote}>
           <SVG text={FileSvgText} />
         </div>
       </Tooltip>
 
-      <Tooltip tooltip="Options">
+      <Tooltip tooltip={t("Options")}>
         <div id="open-options" class="button" onClick={openOptions}>
           <SVG text={GearSvgText} />
         </div>
       </Tooltip>
 
-      <Tooltip id="sync-now-tooltip" tooltip={(sync && sync.lastSync) ? (os ? syncNowTitles[os](sync.lastSync) : "") : syncNowTitles.disabled}>
+      <Tooltip id="sync-now-tooltip" tooltip={
+        (sync && sync.lastSync)
+          ? <Fragment>
+            <div>{t(`Click to sync notes to and from Google Drive.${os}`)}</div>
+            <div>{t("Last sync", { time: formatDate(sync.lastSync) })}</div>
+          </Fragment>
+          : t("Google Drive Sync is disabled (see Options)")
+      }>
         <div id="sync-now"
           class={clsx("button", (!sync || !sync.lastSync) && "disabled")}
           onClick={() => sync && sendMessage(MessageType.SYNC)}

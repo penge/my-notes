@@ -1,5 +1,6 @@
 import { h } from "preact";
 import Modal from "./Modal";
+import { tString } from "i18n";
 
 export interface NewNoteModalProps {
   validate: (newNoteName: string) => boolean
@@ -9,17 +10,17 @@ export interface NewNoteModalProps {
 
 const NewNoteModal = ({ validate, onCancel, onConfirm }: NewNoteModalProps): h.JSX.Element => (
   <Modal
-    title="New note"
+    title={tString("New note")}
     input={{
       type: "text",
     }}
     validate={validate}
     cancel={onCancel && {
-      cancelValue: "Cancel",
+      cancelValue: tString("Cancel"),
       onCancel,
     }}
     confirm={{
-      confirmValue: "Create",
+      confirmValue: tString("Create"),
       onConfirm,
     }}
   />

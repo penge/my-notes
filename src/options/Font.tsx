@@ -3,6 +3,7 @@ import { useState, useEffect } from "preact/hooks";
 import clsx from "clsx";
 import { RegularFont, GoogleFont } from "shared/storage/schema";
 import { FontFamily, fontFamilies, ideizeFont, getGoogleFontHref } from "options/helpers/fonts";
+import { t, tString } from "i18n";
 
 interface FontProps {
   font?: RegularFont | GoogleFont
@@ -12,7 +13,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
   const [fontFamily, setFontFamily] = useState<FontFamily | undefined>(undefined);
 
   const [googleFontName, setGoogleFontName] = useState<string>("");
-  const [googleSubmitButtonText, setGoogleSubmitButtonText] = useState<string>("Apply");
+  const [googleSubmitButtonText, setGoogleSubmitButtonText] = useState<string>(tString("Apply"));
 
   useEffect(() => {
     if (!font) {
@@ -28,9 +29,9 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
 
   return (
     <Fragment>
-      <h2>Font</h2>
+      <h2>{t("Font")}</h2>
       <p>
-        <span>Current font: </span>
+        <span>{t("Current font:")}{" "}</span>
         <span id="current-font-name">{font?.name}</span>
       </p>
 
@@ -73,7 +74,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
                 for={ideizeFont(commonFontName)}
                 style={`font-family: ${commonFontName}, ${fontFamily.id};`}
               >
-                The quick brown fox jumps over the lazy dog (<span>{commonFontName}</span>)
+                {t("Font example", { font: commonFontName })}
               </label>
             </div>
           )}
@@ -84,18 +85,18 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
       {fontFamily && !fontFamily.fonts && (
         <div class="font-area" id="google-fonts-area">
           <ol>
-            <li>Open <a href="https://fonts.google.com" target="_blank">https://fonts.google.com</a> to see the available fonts</li>
-            <li>Type in the Font Name, e.g.: <b>Roboto Mono</b></li>
-            <li>Click <b>Apply</b> to use the font</li>
+            <li>{t("Google Fonts.step1", { website: "https://fonts.google.com" })}</li>
+            <li>{t("Google Fonts.step2")}</li>
+            <li>{t("Google Fonts.step3")}</li>
           </ol>
           <input
             type="text"
-            placeholder="Font Name (E.g. Roboto Mono)"
+            placeholder={tString("Google Fonts.placeholder")}
             class="input"
             value={googleFontName}
             onInput={(event) => {
               setGoogleFontName((event.target as HTMLInputElement).value);
-              setGoogleSubmitButtonText("Apply");
+              setGoogleSubmitButtonText(tString("Apply"));
             }}
           />
           <input
@@ -118,9 +119,9 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
               fetch(googleFont.href, { method: "HEAD" }).then(() => {
                 chrome.storage.local.set({ font: googleFont });
                 setGoogleFontName(trimmedGoogleFontName);
-                setGoogleSubmitButtonText("Applied");
+                setGoogleSubmitButtonText(tString("Applied"));
               }).catch(() => {
-                setGoogleSubmitButtonText("Font Name Doesn't Exist");
+                setGoogleSubmitButtonText(tString("Font Name Doesn't Exist"));
               });
             }}
           />
