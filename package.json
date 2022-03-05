@@ -21,6 +21,7 @@
     "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node build.js"
   },
   "devDependencies": {
+    "@testing-library/preact": "^2.0.1",
     "@types/chrome": "0.0.170",
     "@types/jest": "^27.0.3",
     "@types/jsdom": "^16.2.13",
