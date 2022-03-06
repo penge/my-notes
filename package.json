@@ -4,9 +4,10 @@
   "description": "Simple and fast note-taking.",
   "author": "Pavel Bucka",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/penge/my-notes.git"
+  "repository": "github:penge/my-notes",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   },
   "scripts": {
     "__prepare-folder": "rimraf out && copyfiles LICENSE manifest.json out && copyup static/images/icon128.png static/* out && cp -R static/themes out",
