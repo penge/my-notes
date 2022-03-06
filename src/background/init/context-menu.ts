@@ -5,6 +5,7 @@ import {
   CLIPBOARD_NOTE_NAME,
 } from "./saving";
 import { notify } from "./notifications";
+import { tString } from "i18n";
 
 const ID = "my-notes";
 
@@ -49,14 +50,14 @@ const createContextMenu = (notes: NotesObject): void => {
     chrome.contextMenus.create({
       parentId: ID,
       id: MY_NOTES_SAVE_URL_TO_CLIPBOARD,
-      title: `Save URL to ${CLIPBOARD_NOTE_NAME}`,
+      title: tString("Context Menu.menus.Save URL to", { note: CLIPBOARD_NOTE_NAME }),
       contexts: ["page"],
       enabled: !isLocked(notes, CLIPBOARD_NOTE_NAME),
     });
     chrome.contextMenus.create({
       parentId: ID,
       id: MY_NOTES_SAVE_SELECTION_TO_CLIPBOARD,
-      title: `Save to ${CLIPBOARD_NOTE_NAME}`,
+      title: tString("Context Menu.menus.Save to", { note: CLIPBOARD_NOTE_NAME }),
       contexts: ["selection"],
       enabled: !isLocked(notes, CLIPBOARD_NOTE_NAME),
     });
@@ -70,7 +71,7 @@ const createContextMenu = (notes: NotesObject): void => {
       chrome.contextMenus.create({
         parentId: ID,
         id: `${MY_NOTES_SAVE_SELECTION_TO_NOTE_PREFIX}${noteName}`,
-        title: `Save to ${noteName}`,
+        title: tString("Context Menu.menus.Save to", { note: noteName }),
         contexts: ["selection"],
         enabled: !isLocked(notes, noteName),
       });
@@ -84,7 +85,7 @@ const createContextMenu = (notes: NotesObject): void => {
     chrome.contextMenus.create({
       parentId: ID,
       id: MY_NOTES_SAVE_SELECTION_TO_REMOTE,
-      title: "Save to remotely open My Notes",
+      title: tString("Context Menu.menus.Save to remotely open My Notes"),
       contexts: ["selection"],
     });
   });
@@ -99,7 +100,7 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
     const urlToSave = getUrlToSave(info);
     saveTextToLocalMyNotes(urlToSave, CLIPBOARD_NOTE_NAME);
 
-    notify(`Saved URL to ${CLIPBOARD_NOTE_NAME}`);
+    notify(tString("Context Menu.notifications.Saved URL to", { note: CLIPBOARD_NOTE_NAME }));
     return;
   }
 
@@ -107,7 +108,7 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
     const selectionToSave = getSelectionToSave(info);
     saveTextToLocalMyNotes(selectionToSave, CLIPBOARD_NOTE_NAME);
 
-    notify(`Saved text to ${CLIPBOARD_NOTE_NAME}`);
+    notify(tString("Context Menu.notifications.Saved text to", { note: CLIPBOARD_NOTE_NAME }));
     return;
   }
 
@@ -116,7 +117,7 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
     const selectionToSave = getSelectionToSave(info);
     saveTextToLocalMyNotes(selectionToSave, destinationNoteName);
 
-    notify(`Saved text to ${destinationNoteName}`);
+    notify(tString("Context Menu.notifications.Saved text to", { note: destinationNoteName }));
     return;
   }
 
@@ -124,7 +125,7 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
     const selectionToSave = getSelectionToSave(info);
     saveTextToRemotelyOpenMyNotes(selectionToSave);
 
-    notify("Sent text to remotely open My Notes");
+    notify(tString("Context Menu.notifications.Sent text to remotely open My Notes"));
     return;
   }
 });

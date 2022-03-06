@@ -1,5 +1,6 @@
 import { h } from "preact";
 import Modal from "./Modal";
+import { t, tString } from "i18n";
 
 export interface InsertLinkModalProps {
   onCancel: () => void
@@ -9,24 +10,30 @@ export interface InsertLinkModalProps {
 const InsertLinkModal = ({ onCancel, onConfirm }: InsertLinkModalProps): h.JSX.Element => (
   <Modal
     className="with-border"
-    title="Link URL"
+    title={tString("Link URL")}
     input={{
       type: "text",
     }}
     validate={(href) => href.length > 0}
     cancel={{
-      cancelValue: "Cancel",
+      cancelValue: tString("Cancel"),
       onCancel,
     }}
     confirm={{
-      confirmValue: "Insert",
+      confirmValue: tString("Insert"),
       onConfirm,
     }}
     description={(
       <div className="modal-description">
-        The link can start with <span class="url">http</span>, <span class="url">https</span>, or <span class="url">chrome-extension</span> if referencing another note.
+        {t("Insert Link description.line1", {
+          http: "<span class=\"url\">http</span>",
+          https: "<span class=\"url\">https</span>",
+          "chrome-extension": "<span class=\"url\">chrome-extension</span>",
+        })}
+
         <br /><br />
-        See <strong>Shortcuts</strong> for how to open the inserted link.
+
+        {t("Insert Link description.line2")}
       </div>
     )}
   />

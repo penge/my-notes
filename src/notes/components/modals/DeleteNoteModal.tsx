@@ -1,5 +1,6 @@
 import { h } from "preact";
 import Modal from "./Modal";
+import { tString } from "i18n";
 
 export interface DeleteNoteModalProps {
   noteName: string
@@ -9,13 +10,13 @@ export interface DeleteNoteModalProps {
 
 const DeleteNoteModal = ({ noteName, onCancel, onConfirm }: DeleteNoteModalProps): h.JSX.Element => (
   <Modal
-    title={`Delete ${noteName}?`}
+    title={tString("Delete note", { note: noteName })}
     cancel={{
-      cancelValue: "No",
+      cancelValue: tString("No"),
       onCancel,
     }}
     confirm={{
-      confirmValue: "Yes",
+      confirmValue: tString("Yes"),
       onConfirm,
     }}
   />

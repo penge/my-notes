@@ -12,7 +12,7 @@ body {
   bottom: 0;
 }
 
-span {
+#hint {
   font-size: .7em;
   float: right;
 }
@@ -44,4 +44,9 @@ a:hover {
   font-weight: bold;
   cursor: pointer;
   margin-left: auto;
+}
+
+.disabled {
+  opacity: .4;
+  cursor: default !important;
 }

@@ -33,6 +33,19 @@ const autofocus = (content: HTMLDivElement) => content && window.setTimeout(() =
   selection.addRange(range);
 });
 
+const openLink = (event: MouseEvent) => {
+  if (!document.body.classList.contains("with-control")) {
+    return;
+  }
+
+  event.preventDefault();
+  const target = event.target;
+  const href = target && (target as HTMLLinkElement).href;
+  if (href && ["http", "chrome-extension"].some((protocol) => href.startsWith(protocol))) {
+    window.open(href, "_blank");
+  }
+};
+
 let latestCb: () => void;
 const reattachEditNote = (cb: () => void) => {
   document.removeEventListener("editnote", latestCb);
@@ -51,19 +64,6 @@ const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize 
       onEdit(active, content);
     }
   }, [active]);
-
-  const openLink = useCallback((event: MouseEvent) => {
-    if (!document.body.classList.contains("with-control")) {
-      return;
-    }
-
-    event.preventDefault();
-    const target = event.target;
-    const href = target && (target as HTMLLinkElement).href;
-    if (href && ["http", "chrome-extension"].some((protocol) => href.startsWith(protocol))) {
-      window.open(href, "_blank");
-    }
-  }, []);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -84,21 +84,21 @@ const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize 
 
   useEffect(() => setIndentOnTabHandlerOnTab(
     indentOnTab
-      ? InsertTabFactory({ tabSize }).execute
+      ? InsertTabFactory({ tabSize })
       : undefined
   ), [indentOnTab, tabSize]);
 
   useEffect(() => {
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.Underline.execute);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnStrikethrough, commands.StrikeThrough.execute);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnRemoveFormat, commands.RemoveFormat.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.Underline);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnStrikethrough, commands.StrikeThrough);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnRemoveFormat, commands.RemoveFormat);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnorderedList, commands.UL.execute);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnOrderedList, commands.OL.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnorderedList, commands.UL);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnOrderedList, commands.OL);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, commands.InsertCurrentDate.execute);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, commands.InsertCurrentTime.execute);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, commands.InsertCurrentDateAndTime.execute);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, commands.InsertCurrentDate);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, commands.InsertCurrentTime);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, commands.InsertCurrentDateAndTime);
   }, []);
 
   return (

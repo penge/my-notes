@@ -42,6 +42,7 @@ import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 import { Command, commands } from "notes/commands";
 import { exportNote } from "notes/export";
 import { notesToSidebarNotes } from "notes/adapters";
+import { t } from "i18n";
 
 const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
 const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
@@ -481,16 +482,28 @@ const Notes = (): h.JSX.Element => {
   }, [notesProps]);
 
   // Command Palette
-  const commandPaletteCommands = useMemo((): Command[] => [
-    commands.InsertCurrentDate,
-    commands.InsertCurrentTime,
-    commands.InsertCurrentDateAndTime,
+  const commandPaletteCommands: { name: string, translation: h.JSX.Element, command: Command }[] = useMemo(() => [
+    {
+      name: "Insert current Date",
+      translation: t("Insert current Date"),
+      command: commands.InsertCurrentDate,
+    },
+    {
+      name: "Insert current Time",
+      translation: t("Insert current Time"),
+      command: commands.InsertCurrentTime,
+    },
+    {
+      name: "Insert current Date and Time",
+      translation: t("Insert current Date and Time"),
+      command: commands.InsertCurrentDateAndTime,
+    },
   ], []);
 
   // Repeat last executed command
   const [lastExecutedCommand, setLastExecutedCommand] = useState<Command | undefined>(undefined);
   const [setHandlerOnRepeatLastExecutedCommand] = useKeyboardShortcut(KeyboardShortcut.OnRepeatLastExecutedCommand);
-  useEffect(() => setHandlerOnRepeatLastExecutedCommand(lastExecutedCommand?.execute), [lastExecutedCommand]);
+  useEffect(() => setHandlerOnRepeatLastExecutedCommand(lastExecutedCommand), [lastExecutedCommand]);
 
   // Command Palette
   const [setHandlerOnToggleCommandPalette] = useKeyboardShortcut(KeyboardShortcut.OnToggleCommandPalette);
@@ -504,7 +517,10 @@ const Notes = (): h.JSX.Element => {
 
     // Start preparing props for Command Palette
     const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
-    const commands = currentNoteLocked ? [] : commandPaletteCommands.map((command) => command.name); // no commands if the current note is locked
+    const commands = currentNoteLocked ? [] : commandPaletteCommands.map((command) => ({
+      name: command.name,
+      translation: command.translation
+    })); // no commands if the current note is locked
 
     // Props for Command Palette
     const props: CommandPaletteProps = {
@@ -519,8 +535,8 @@ const Notes = (): h.JSX.Element => {
         if (foundCommand) {
           setCommandPaletteProps(null);
           range.restore(() => {
-            foundCommand.execute();
-            setLastExecutedCommand(foundCommand);
+            foundCommand.command();
+            setLastExecutedCommand(foundCommand.command);
           });
         }
       },

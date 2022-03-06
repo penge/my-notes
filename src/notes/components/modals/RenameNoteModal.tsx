@@ -1,5 +1,6 @@
 import { h } from "preact";
 import Modal from "./Modal";
+import { tString } from "i18n";
 
 export interface RenameNoteModalProps {
   noteName: string
@@ -16,11 +17,11 @@ const RenameNoteModal = ({ noteName, validate, onCancel, onConfirm }: RenameNote
     }}
     validate={validate}
     cancel={{
-      cancelValue: "Cancel",
+      cancelValue: tString("Cancel"),
       onCancel,
     }}
     confirm={{
-      confirmValue: "Rename",
+      confirmValue: tString("Rename"),
       onConfirm,
     }}
   />;

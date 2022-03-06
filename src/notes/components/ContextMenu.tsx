@@ -1,6 +1,7 @@
 import { h } from "preact";
 import { useState, useRef, useEffect } from "preact/hooks";
 import clsx from "clsx";
+import { t } from "i18n";
 
 export interface ContextMenuProps {
   noteName: string
@@ -39,9 +40,9 @@ const ContextMenu = ({
     }: {
       opacity: 0, // offsetHeight NOT set, yet
     }}>
-      <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onRename(noteName)}>Rename</div>
-      <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete(noteName)}>Delete</div>
-      <div class="action" onClick={() => onToggleLocked(noteName)}>{locked ? "Unlock" : "Lock"}</div>
+      <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onRename(noteName)}>{t("Rename")}</div>
+      <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete(noteName)}>{t("Delete")}</div>
+      <div class="action" onClick={() => onToggleLocked(noteName)}>{locked ? t("Unlock") : t("Lock")}</div>
       <div class="action" onClick={() => onExport(noteName)}>Export</div>
     </div>
   );

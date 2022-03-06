@@ -1,6 +1,6 @@
 import { h, Fragment } from "preact";
 import { Theme } from "shared/storage/schema";
-import { capitalize } from "shared/string/capitalize-string";
+import { t } from "i18n";
 
 const THEMES = ["light", "dark", "custom"] as Theme[];
 
@@ -28,11 +28,11 @@ const Theme = ({ theme }: ThemeProps): h.JSX.Element => (
           id={`${aTheme}-theme-label`}
           class="bold theme-label"
         >
-          {capitalize(aTheme)}
+          {t(`Themes.${aTheme}`)}
         </label>
 
         {aTheme === "custom" && (
-          <a href="themes/custom/index.html" target="_blank" class="space-left">Customize</a>
+          <a href="themes/custom/index.html" target="_blank" class="space-left">{t("Customize")}</a>
         )}
       </div>
     )}

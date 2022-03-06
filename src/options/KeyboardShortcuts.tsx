@@ -1,6 +1,7 @@
 import { h, Fragment } from "preact";
 import { Os } from "shared/storage/schema";
 import keyboardShortcuts from "./helpers/keyboard-shortcuts";
+import { t, tString } from "i18n";
 
 interface KeyboardShortcutsProps {
   os: Os
@@ -8,22 +9,24 @@ interface KeyboardShortcutsProps {
 
 const KeyboardShortcuts = ({ os }: KeyboardShortcutsProps): h.JSX.Element => (
   <Fragment>
-    <h2>Shortcuts</h2>
+    <h2>{t("Shortcuts")}</h2>
     <table id="keyboard-shortcuts">
       {keyboardShortcuts.map((shortcut) =>
         <tr>
-          <td class="description">{shortcut.description}</td>
+          <td class="description">{t(`Shortcuts descriptions.${shortcut.description}`)}</td>
           <td>
-            {shortcut.configurable && <span>{"e.g. "}</span>}
-            {shortcut.hold && <span>{"hold "}</span>}
+            {shortcut.configurable && <span>{tString("Shortcuts other.example given")}{" "}</span>}
+            {shortcut.hold && <span>{tString("Shortcuts other.hold")}{" "}</span>}
             <span class="keyboard-shortcut">{shortcut[os]}</span>
-            {shortcut.configurable && <span>{" "}(open <span class="url">chrome://extensions/shortcuts</span> to configure)</span>}
+            {shortcut.configurable && (
+              <span>{" "}{t("Shortcuts other.open to configure", { shortcuts: "<span class=\"url\">chrome://extensions/shortcuts</span>" })}</span>
+            )}
 
             {shortcut.description === "Open Command palette" && (
               <div class="comment">
-                <div>By default, Command palette looks for notes <b>by their name.</b></div>
-                <div>Type <span class="keyboard-shortcut">&gt;</span> first, and continue to start search for <b>commands.</b></div>
-                <div>Type <span class="keyboard-shortcut">?</span> first, and continue to start search for notes <b>by their content.</b></div>
+                <div>{t("Shortcuts descriptions.Open Command palette detail.line1")}</div>
+                <div>{t("Shortcuts descriptions.Open Command palette detail.line2", { symbol: "<span class=\"keyboard-shortcut\">&gt;</span>" })}</div>
+                <div>{t("Shortcuts descriptions.Open Command palette detail.line3", { symbol: "<span class=\"keyboard-shortcut\">?</span>" })}</div>
               </div>
             )}
           </td>

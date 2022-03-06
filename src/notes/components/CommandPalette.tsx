@@ -3,10 +3,11 @@ import { useRef, useState, useMemo, useCallback, useEffect } from "preact/hooks"
 import { useBodyClass } from "notes/hooks/use-body-class";
 import { NotesObject } from "shared/storage/schema";
 import clsx from "clsx";
+import { t, tString } from "i18n";
 
 export interface CommandPaletteProps {
   notes: NotesObject
-  commands: string[]
+  commands: { name: string, translation: h.JSX.Element }[]
   onActivateNote: (noteName: string) => void
   onExecuteCommand: (commandName: string) => void
 }
@@ -84,7 +85,7 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
   const [filter, setFilter] = useState<Filter | undefined>(undefined);
 
   // Items to show in Command Palette
-  const items: string[] = useMemo(() => prepareItems(notes, commands, filter), [notes, commands, filter]);
+  const items: string[] = useMemo(() => prepareItems(notes, commands.map((command) => command.name), filter), [notes, commands, filter]);
 
   // Selected item; can be changed with Up / Down arrow keys
   const [selectedItemIndex, setSelectedItemIndex] = useState<number>(-1);
@@ -131,7 +132,7 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
       <input
         id="command-palette-input"
         type="text"
-        placeholder="Search"
+        placeholder={tString("Search")}
         ref={inputRef}
         onBlur={() => inputRef.current?.focus()}
         onInput={(event) => {
@@ -147,7 +148,12 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
             <div
               className={clsx("command-palette-list-item", index === selectedItemIndex && "active")}
               onClick={() => handleItem(name)}
-            >{name}</div>
+            >
+              {(filter?.type === FilterType.CommandsByName)
+                ? commands.find((command) => command.name === name)?.translation
+                : name
+              }
+            </div>
           )}
         </div>
       )}
@@ -155,9 +161,9 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
       {items.length === 0 && filter && (
         <div className="command-palette-list">
           <div className="command-palette-list-item plain">
-            {filter.type === FilterType.CommandsByName && "(No matching commands)"}
-            {filter.type === FilterType.NotesByContent && "(No matching notes)"}
-            {filter.type === FilterType.NotesByName && "(No matching notes)"}
+            {filter.type === FilterType.CommandsByName && t("(No matching commands)")}
+            {filter.type === FilterType.NotesByContent && t("(No matching notes)")}
+            {filter.type === FilterType.NotesByName && t("(No matching notes)")}
           </div>
         </div>
       )}

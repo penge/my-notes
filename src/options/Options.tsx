@@ -4,6 +4,10 @@ import { Sync } from "shared/storage/schema";
 import formatDate from "shared/date/format-date";
 import { requestPermission, removePermission } from "shared/permissions";
 import clsx from "clsx";
+import { t } from "i18n";
+
+const D1 = "Options available.Enable Google Drive Sync detail";
+const D2 = "Options available.Indent text on Tab detail";
 
 interface OptionsProps {
   sync?: Sync
@@ -29,7 +33,7 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
 
   return (
     <Fragment>
-      <h2>Options</h2>
+      <h2>{t("Options")}</h2>
 
       {/* "sync" */}
       <div id="sync-selection" class="selection with-comment">
@@ -39,24 +43,24 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
           onClick={togglePermissionRequiredOption("identity")}
         />
         <div>
-          <label class="bold">Enable Google Drive Sync</label>
+          <label class="bold">{t("Options available.Enable Google Drive Sync")}</label>
           <div class="comment">
-            Creates a folder <b>My Notes</b> (automatically, once) in your Google Drive, and uses it to back up your notes.
-            Notes are synchronized to and from Google Drive once the feature is enabled, and then on every click on the <b>Sync now</b> button in the Sidebar.<br /><br />
+            {t(`${D1}.description`)}
+            <br /><br />
 
-            <b>Why sync:</b><br />
+            <b>{t(`${D1}.Why sync:`)}</b><br />
             <ul>
-              <li>Having a backup of your notes (notes can be restored)</li>
-              <li>Can edit notes from other sources (Google Drive, My Notes, vice versa)</li>
-              <li>Can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)</li>
+              <li>{t(`${D1}.Why sync reasons.reason1`)}</li>
+              <li>{t(`${D1}.Why sync reasons.reason2`)}</li>
+              <li>{t(`${D1}.Why sync reasons.reason3`)}</li>
             </ul>
 
-            <b>Permission:</b><br />
-            My Notes can only access the files it created. It cannot see other files in your Google Drive.<br />
-            My Notes will request a permission to enable this feature.<br /><br />
+            <b>{t(`${D1}.Permission:`)}</b><br />
+            {t(`${D1}.Permission details.detail1`)}<br />
+            {t(`${D1}.Permission details.detail2`)}<br /><br />
 
-            <b>Location: </b>{sync && <a id="sync-folder-location" class="bold" href={sync.folderLocation} target="_blank">{sync.folderLocation}</a>}<br />
-            <b>Last sync: </b>{sync && <span id="sync-last-sync" class="bold">{sync.lastSync ? formatDate(sync.lastSync) : "In progress..."}</span>}
+            <b>{t(`${D1}.Location:`)}{" "}</b>{sync && <a id="sync-folder-location" class="bold" href={sync.folderLocation} target="_blank">{sync.folderLocation}</a>}<br />
+            <b>{t(`${D1}.Last sync:`)}{" "}</b>{sync && <span id="sync-last-sync" class="bold">{sync.lastSync ? formatDate(sync.lastSync) : "In progress..."}</span>}
 
             <br /><br />
 
@@ -67,12 +71,11 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
                   checked={autoSync}
                   onClick={toggleOption("autoSync")}
                 />
-                <label class="bold">Enable Auto Sync</label>
+                <label class="bold">{t(`${D1}.Enable Auto Sync`)}</label>
               </div>
 
               <div>
-                Auto Sync will automatically sync your notes to and from Google Drive every time you open My Notes,
-                and every 6 seconds if your local notes were updated since the last sync.
+                {t(`${D1}.Enable Auto Sync description`)}
               </div>
             </div>
           </div>
@@ -87,13 +90,13 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
           onClick={toggleOption("tab")}
         />
         <div>
-          <label class="bold">Indent text on <span class="keyboard-shortcut">Tab</span></label>
+          <label class="bold">{t("Options available.Indent text on Tab", { Tab: "<span class=\"keyboard-shortcut\">Tab</span>" })}</label>
           <div class="comment">
             <div>
-              By default, Tab key changes focus between the address bar and a note. This can be changed to indent the text instead.
+              {t(`${D2}.description`)}
             </div>
             <div class={clsx("space-top", !tab && "disabled")}>
-              <label>Tab size:</label>
+              <label>{t(`${D2}.Tab size:`)}</label>
               <select
                 class="select"
                 value={tabSize}
@@ -102,9 +105,9 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
                   chrome.storage.local.set({ tabSize: newTabSize });
                 }}
               >
-                <option value="-1">Tab</option>
-                <option value="2">2 spaces</option>
-                <option value="4">4 spaces</option>
+                <option value="-1">{t(`${D2}.Tab`)}</option>
+                <option value="2">{t(`${D2}.2 spaces`)}</option>
+                <option value="4">{t(`${D2}.4 spaces`)}</option>
               </select>
             </div>
           </div>
