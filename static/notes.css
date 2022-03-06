@@ -30,7 +30,7 @@ svg {
 .italic { font-style: italic; }
 .line-through { text-decoration: line-through; }
 
-.disabled {
+input.disabled, .button.disabled {
   opacity: .4;
   cursor: default !important;
 }
