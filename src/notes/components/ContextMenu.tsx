@@ -43,7 +43,7 @@ const ContextMenu = ({
       <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onRename(noteName)}>{t("Rename")}</div>
       <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete(noteName)}>{t("Delete")}</div>
       <div class="action" onClick={() => onToggleLocked(noteName)}>{locked ? t("Unlock") : t("Lock")}</div>
-      <div class="action" onClick={() => onExport(noteName)}>Export</div>
+      <div class="action" onClick={() => onExport(noteName)}>{t("Export")}</div>
     </div>
   );
 };
