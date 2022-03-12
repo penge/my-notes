@@ -29,9 +29,10 @@ import __DeleteNoteModal, { DeleteNoteModalProps } from "notes/components/modals
 import __NewNoteModal, { NewNoteModalProps } from "notes/components/modals/NewNoteModal";
 import __Overlay from "notes/components/Overlay";
 
+import createNote from "notes/state/create-note";
 import renameNote from "notes/state/rename-note";
 import deleteNote from "notes/state/delete-note";
-import createNote from "notes/state/create-note";
+import duplicateNote from "notes/state/duplicate-note";
 
 import { saveNote, setLocked } from "notes/content/save";
 import { sendMessage } from "messages";
@@ -639,6 +640,10 @@ const Notes = (): h.JSX.Element => {
             onToggleLocked: (noteName) => {
               setContextMenuProps(null);
               tabId && notesRef.current && setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+            },
+            onDuplicate: (noteName) => {
+              setContextMenuProps(null);
+              duplicateNote(noteName);
             },
             onExport: (noteName) => {
               setContextMenuProps(null);
