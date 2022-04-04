@@ -1,8 +1,9 @@
 import { h, Fragment } from "preact";
 import { useCallback } from "preact/hooks";
-import { Sync } from "shared/storage/schema";
+import { Os, Sync } from "shared/storage/schema";
 import formatDate from "shared/date/format-date";
 import { requestPermission, removePermission } from "shared/permissions";
+import keyboardShortcuts from "./helpers/keyboard-shortcuts";
 import clsx from "clsx";
 import { t } from "i18n";
 
@@ -10,13 +11,18 @@ const D1 = "Options available.Enable Google Drive Sync detail";
 const D2 = "Options available.Indent text on Tab detail";
 
 interface OptionsProps {
+  os: Os
   sync?: Sync
   autoSync: boolean
   tab: boolean
   tabSize: number
+  openNoteOnMouseHover: boolean
 }
 
-const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element => {
+const Options = ({ os, sync, autoSync, tab, tabSize, openNoteOnMouseHover }: OptionsProps): h.JSX.Element => {
+  const openNoteOnMouseHoverKeyboardShortcut = keyboardShortcuts.find((item) => item.description === "Open note on mouse hover");
+  const openNoteOnMouseHoverKey = openNoteOnMouseHoverKeyboardShortcut && openNoteOnMouseHoverKeyboardShortcut[os];
+
   const toggleOption = useCallback((key: string) => (event: h.JSX.TargetedMouseEvent<HTMLInputElement>) => {
     const checked = (event.target as HTMLInputElement).checked;
     chrome.storage.local.set({ [key]: checked });
@@ -113,6 +119,24 @@ const Options = ({ sync, autoSync, tab, tabSize }: OptionsProps): h.JSX.Element 
           </div>
         </div>
       </div>
+
+      {/* "openNoteOnMouseHover" */}
+      {openNoteOnMouseHoverKey && (
+        <div id="open-note-on-mouse-hover-selection" class="selection with-comment">
+          <input
+            type="checkbox"
+            checked={openNoteOnMouseHover}
+            onClick={toggleOption("openNoteOnMouseHover")}
+          />
+          <div>
+            <label class="bold">
+              {t("Options available.Open note on mouse hover", {
+                key: `<span class="keyboard-shortcut">${openNoteOnMouseHoverKey}</span>`
+              })}
+            </label>
+          </div>
+        </div>
+      )}
     </Fragment>
   );
 };

@@ -1,4 +1,4 @@
-import { Fragment, h } from "preact";
+import { h, Fragment } from "preact";
 import { useState, useEffect, useCallback, useRef } from "preact/hooks";
 import { MessageType } from "shared/storage/schema";
 import { SidebarNote } from "notes/adapters";
@@ -15,10 +15,11 @@ interface SidebarNotesProps {
   onNoteContextMenu: (noteName: string, x: number, y: number) => void
   canChangeOrder: boolean
   onChangeOrder: (newOrder: string[]) => void
+  openNoteOnMouseHover: boolean
 }
 
 const SidebarNotes = ({
-  notes: sidebarNotes, active, onActivateNote, onNoteContextMenu, canChangeOrder, onChangeOrder,
+  notes: sidebarNotes, active, onActivateNote, onNoteContextMenu, canChangeOrder, onChangeOrder, openNoteOnMouseHover,
 }: SidebarNotesProps): h.JSX.Element => {
   const [notes, setNotes] = useState<SidebarNote[]>(sidebarNotes);
 
@@ -33,7 +34,7 @@ const SidebarNotes = ({
   enteredNoteRef.current = enteredNote;
 
   const openEnteredNote = useCallback(() => {
-    if (!document.body.classList.contains("with-control")) {
+    if (!openNoteOnMouseHover || !document.body.classList.contains("with-control")) {
       return;
     }
 
@@ -43,7 +44,7 @@ const SidebarNotes = ({
     }
 
     onActivateNote(note);
-  }, [active, onActivateNote]);
+  }, [openNoteOnMouseHover, active, onActivateNote]);
 
   useEffect(() => {
     setDragOverNote(null);

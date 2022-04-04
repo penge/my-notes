@@ -17,10 +17,11 @@ interface SidebarProps {
   onNoteContextMenu: (noteName: string, x: number, y: number) => void
   onNewNote: () => void
   sync?: Sync
+  openNoteOnMouseHover: boolean
 }
 
 const Sidebar = ({
-  os, notes, canChangeOrder, onChangeOrder, active, width, onActivateNote, onNoteContextMenu, onNewNote, sync,
+  os, notes, canChangeOrder, onChangeOrder, active, width, onActivateNote, onNoteContextMenu, onNewNote, sync, openNoteOnMouseHover,
 }: SidebarProps): h.JSX.Element => {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -40,6 +41,7 @@ const Sidebar = ({
         onNoteContextMenu={onNoteContextMenu}
         canChangeOrder={canChangeOrder}
         onChangeOrder={onChangeOrder}
+        openNoteOnMouseHover={openNoteOnMouseHover}
       />
 
       <SidebarButtons

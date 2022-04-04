@@ -1,11 +1,11 @@
-import { NotesObject, Note } from "shared/storage/schema";
+import { Storage, NotesObject, Note } from "shared/storage/schema";
 import migrate, { expectedKeys } from "../core";
 
-export const expectItems = (items: Record<string, unknown>): void => {
+export const expectItems = (items: Storage): void => {
   expect(Object.keys(items).sort()).toEqual(expectedKeys.sort());
 };
 
-const expectDefaultValues = (myItems?: Record<string, unknown>) => {
+const expectDefaultValues = (myItems?: Storage) => {
   const items = (myItems || migrate({}, {})) as Storage;
   expectItems(items);
 
@@ -57,6 +57,9 @@ const expectDefaultValues = (myItems?: Record<string, unknown>) => {
 
   // tab size
   expect(items.tabSize).toBe(-1);
+
+  // openNoteOnMouseHover
+  expect(items.openNoteOnMouseHover).toBe(false);
 };
 
 it("returns default values", () => {
@@ -77,10 +80,11 @@ it("fallbacks to default values", () => {
     active: "Todo", // must be in "notes"
     focus: 1,       // must be boolean
     tab: 1,         // must be boolean
-    tabSize: "Tab"  // must be number
+    tabSize: "Tab", // must be number
+    openNoteOnMouseHover: "yes" // must be boolean
   });
 
-  expectDefaultValues(Object.assign({}, items as unknown));
+  expectDefaultValues(Object.assign({}, items));
 });
 
 it("fallbacks active and clipboard if possible", () => {

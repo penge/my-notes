@@ -53,7 +53,7 @@ it("sets custom values", () => {
   };
 
   const items: Storage = migrate({}, local);
-  expectItems(Object.assign({}, items as unknown));
+  expectItems(Object.assign({}, items));
 
   // Compare objects
   expect(items).toEqual(Object.assign({
@@ -65,5 +65,6 @@ it("sets custom values", () => {
     autoSync: false,
     setBy: "",
     lastEdit: "",
+    openNoteOnMouseHover: false,
   }, local));
 });

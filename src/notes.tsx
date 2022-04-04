@@ -82,6 +82,7 @@ const Notes = (): h.JSX.Element => {
   const [focus, setFocus] = useState<boolean>(false);
   const [tab, setTab] = useState<boolean>(false);
   const [tabSize, setTabSize] = useState<number>(-1);
+  const [openNoteOnMouseHover, setOpenNoteOnMouseHover] = useState<boolean>(false);
   const [sync, setSync] = useState<Sync | undefined>(undefined);
   const syncRef = useRef<Sync | undefined>(undefined);
   syncRef.current = sync;
@@ -130,6 +131,7 @@ const Notes = (): h.JSX.Element => {
       "autoSync",
       "tab",
       "tabSize",
+      "openNoteOnMouseHover",
 
       // Sync
       "sync",
@@ -168,6 +170,7 @@ const Notes = (): h.JSX.Element => {
       setFocus(getFocusOverride() || local.focus);
       setTab(local.tab);
       setTabSize(local.tabSize);
+      setOpenNoteOnMouseHover(local.openNoteOnMouseHover);
 
       // Sync
       setSync(local.sync);
@@ -303,6 +306,10 @@ const Notes = (): h.JSX.Element => {
 
       if (changes["tabSize"]) {
         setTabSize(changes["tabSize"].newValue);
+      }
+
+      if (changes["openNoteOnMouseHover"]) {
+        setOpenNoteOnMouseHover(changes["openNoteOnMouseHover"].newValue);
       }
 
       if (changes["sync"]) {
@@ -654,6 +661,7 @@ const Notes = (): h.JSX.Element => {
           canChangeOrder={notesOrder === NotesOrder.Custom}
           onChangeOrder={(newOrder) => chrome.storage.local.set({ order: newOrder })}
           sync={sync}
+          openNoteOnMouseHover={openNoteOnMouseHover}
         />
       )}
 

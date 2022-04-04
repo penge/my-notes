@@ -89,10 +89,11 @@ export interface Storage {
   focus: boolean
   tab: boolean
   tabSize: number
-  autoSync: boolean
+  openNoteOnMouseHover: boolean
 
   // Sync
   sync?: Sync // Google Drive Sync
+  autoSync: boolean
 }
 
 export interface ContextMenuSelection {

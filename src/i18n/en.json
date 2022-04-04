@@ -164,7 +164,8 @@
   "Shortcuts other": {
     "example given": "e.g.",
     "open to configure": "(open {{shortcuts}} to configure)",
-    "hold": "hold"
+    "hold": "hold",
+    "if enabled": "(if enabled)"
   },
   "Options available": {
     "Enable Google Drive Sync": "Enable Google Drive Sync",
@@ -193,7 +194,8 @@
       "Tab": "Tab",
       "2 spaces": "2 spaces",
       "4 spaces": "4 spaces"
-    }
+    },
+    "Open note on mouse hover": "Open note on mouse hover holding {{key}}"
   },
   "Export & Import": "Export & Import",
   "Export notes": "Export notes",

@@ -34,6 +34,7 @@ export const expectedKeys = [
   "tab",
   "tabSize",
   "autoSync",
+  "openNoteOnMouseHover",
 ];
 
 export default (sync: { [key: string]: unknown }, local: { [key: string]: unknown }): Storage => {
@@ -96,6 +97,7 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     tab: validBoolean(local.tab) ? local.tab : defaultValues.tab,
     tabSize: validTabSize(local.tabSize) ? local.tabSize : defaultValues.tabSize,
     autoSync: validBoolean(local.autoSync) ? local.autoSync : defaultValues.autoSync,
+    openNoteOnMouseHover: validBoolean(local.openNoteOnMouseHover) ? local.openNoteOnMouseHover : defaultValues.openNoteOnMouseHover,
   };
 
   return storage;
