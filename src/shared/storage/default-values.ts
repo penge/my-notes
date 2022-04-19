@@ -46,6 +46,7 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
     tab: false,
     tabSize: -1,
     autoSync: false,
+    openNoteOnMouseHover: false,
   };
 };
 

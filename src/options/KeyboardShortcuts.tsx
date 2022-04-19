@@ -21,6 +21,7 @@ const KeyboardShortcuts = ({ os }: KeyboardShortcutsProps): h.JSX.Element => (
             {shortcut.configurable && (
               <span>{" "}{t("Shortcuts other.open to configure", { shortcuts: "<span class=\"url\">chrome://extensions/shortcuts</span>" })}</span>
             )}
+            {shortcut.needsToBeEnabled && <span>{" "}{t("Shortcuts other.if enabled")}</span>}
 
             {shortcut.description === "Open Command palette" && (
               <div class="comment">

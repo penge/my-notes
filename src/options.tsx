@@ -31,10 +31,11 @@ const Options = (): h.JSX.Element => {
   const [size, setSize] = useState<number>(0);
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
   const [customTheme, setCustomTheme] = useState<string>("");
-  const [sync, setSync] = useState<Sync | undefined>(undefined);
-  const [autoSync, setAutoSync] = useState<boolean>(false);
   const [tab, setTab] = useState<boolean>(false);
   const [tabSize, setTabSize] = useState<number>(-1);
+  const [openNoteOnMouseHover, setOpenNoteOnMouseHover] = useState<boolean>(false);
+  const [sync, setSync] = useState<Sync | undefined>(undefined);
+  const [autoSync, setAutoSync] = useState<boolean>(false);
 
   useEffect(() => {
     chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
@@ -53,10 +54,11 @@ const Options = (): h.JSX.Element => {
       "notesOrder",
       "tab",
       "tabSize",
-      "autoSync",
+      "openNoteOnMouseHover",
 
       // Sync
       "sync",
+      "autoSync",
     ], items => {
       const local = items as Storage;
 
@@ -73,10 +75,11 @@ const Options = (): h.JSX.Element => {
       setNotesOrder(local.notesOrder);
       setTab(local.tab);
       setTabSize(local.tabSize);
-      setAutoSync(local.autoSync);
+      setOpenNoteOnMouseHover(local.openNoteOnMouseHover);
 
       // Sync
       setSync(local.sync);
+      setAutoSync(local.autoSync);
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -118,12 +121,16 @@ const Options = (): h.JSX.Element => {
         setTabSize(changes["tabSize"].newValue);
       }
 
-      if (changes["autoSync"]) {
-        setAutoSync(changes["autoSync"].newValue);
+      if (changes["openNoteOnMouseHover"]) {
+        setOpenNoteOnMouseHover(changes["openNoteOnMouseHover"].newValue);
       }
 
       if (changes["sync"]) {
         setSync(changes["sync"].newValue);
+      }
+
+      if (changes["autoSync"]) {
+        setAutoSync(changes["autoSync"].newValue);
       }
     });
   }, []);
@@ -145,12 +152,14 @@ const Options = (): h.JSX.Element => {
       <__NotesOrder notesOrder={notesOrder} />
       <__Theme theme={theme} />
       {os && <__KeyboardShortcuts os={os} />}
-      <__Options
+      {os && <__Options
+        os={os}
         sync={sync}
         autoSync={autoSync}
         tab={tab}
         tabSize={tabSize}
-      />
+        openNoteOnMouseHover={openNoteOnMouseHover}
+      />}
       <__ExportImport canExport={notesCount > 0} />
       <__Version version={version} />
     </Fragment>

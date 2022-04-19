@@ -4,6 +4,7 @@ interface KeyboardShortcut {
   other: string
   configurable?: boolean
   hold?: boolean
+  needsToBeEnabled?: boolean
 }
 
 const keyboardShortcuts: KeyboardShortcut[] = [
@@ -63,6 +64,7 @@ const keyboardShortcuts: KeyboardShortcut[] = [
     mac: "⌘",
     other: "Ctrl",
     hold: true,
+    needsToBeEnabled: true,
   },
   {
     description: "Open link in a New Tab",
