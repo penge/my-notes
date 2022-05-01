@@ -37,17 +37,15 @@ import duplicateNote from "notes/state/duplicate-note";
 import { saveNote, setLocked } from "notes/content/save";
 import { sendMessage } from "messages";
 
+import { getActiveFromUrl, getFocusOverride } from "notes/location";
+import { getFirstAvailableNoteName } from "notes/filters";
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
-import { Command, commands } from "notes/commands";
+import { Command, commands, toggleSidebar, toggleToolbar } from "notes/commands";
 import { exportNote } from "notes/export";
 import { notesToSidebarNotes } from "notes/adapters";
 import { t } from "i18n";
-
-const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
-const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
-const getFirstAvailableNote = (notes: NotesObject): string => Object.keys(notes).sort().shift() || "";
 
 let autoSyncIntervalId: number | undefined;
 
@@ -154,7 +152,7 @@ const Notes = (): h.JSX.Element => {
 
       // Notes
       const activeFromUrl = getActiveFromUrl();
-      const activeCandidates: string[] = [activeFromUrl, local.active as string, getFirstAvailableNote(local.notes)]; // ordered by importance
+      const activeCandidates: string[] = [activeFromUrl, local.active as string, getFirstAvailableNoteName(local.notes)]; // ordered by importance
       const active: string = activeCandidates.find((candidate) => candidate && candidate in local.notes) || "";
       setNotesProps({
         notes: local.notes,
@@ -238,7 +236,7 @@ const Notes = (): h.JSX.Element => {
           setNotesProps((prev) => {
             const newActive = prev.active in newNotes
               ? prev.active // active is NOT deleted => keep unchanged
-              : getFirstAvailableNote(newNotes); // active is deleted => use first available
+              : getFirstAvailableNoteName(newNotes); // active is deleted => use first available
 
             if (newActive !== prev.active) {
               notesHistory.replace(newActive); // active is deleted => replace history
@@ -436,29 +434,9 @@ const Notes = (): h.JSX.Element => {
       });
     });
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleSidebar, () => {
-      if (getFocusOverride()) {
-        return;
-      }
-      chrome.storage.local.get(["focus"], local => {
-        if (!local.focus) { // toggle only if not in focus mode
-          const hasSidebar = document.body.classList.toggle("with-sidebar");
-          chrome.storage.local.set({ sidebar: hasSidebar });
-        }
-      });
-    });
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleSidebar, toggleSidebar);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleToolbar, () => {
-      if (getFocusOverride()) {
-        return;
-      }
-      chrome.storage.local.get(["focus"], local => {
-        if (!local.focus) { // toggle only if not in focus mode
-          const hasToolbar = document.body.classList.toggle("with-toolbar");
-          chrome.storage.local.set({ toolbar: hasToolbar });
-        }
-      });
-    });
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleToolbar, toggleToolbar);
 
     keyboardShortcuts.subscribe(KeyboardShortcut.OnSync, () => sendMessage(MessageType.SYNC));
   }, [os]);
@@ -508,6 +486,16 @@ const Notes = (): h.JSX.Element => {
       name: "Insert current Date and Time",
       translation: t("Insert current Date and Time"),
       command: commands.InsertCurrentDateAndTime,
+    },
+    {
+      name: "Toggle Sidebar",
+      translation: t("Shortcuts descriptions.Toggle Sidebar"),
+      command: toggleSidebar,
+    },
+    {
+      name: "Toggle Toolbar",
+      translation: t("Shortcuts descriptions.Toggle Toolbar"),
+      command: toggleToolbar,
     },
   ], []);
 

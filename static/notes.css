@@ -444,6 +444,8 @@ table.locked {
   font-family: inherit;
   font-size: 1em;
   width: 100%;
+  background: var(--command-palette-input-background-color);
+  color: var(--command-palette-input-text-color);
 }
 
 .command-palette-list {
@@ -452,17 +454,24 @@ table.locked {
 }
 
 .command-palette-list-item {
-  cursor: pointer;
   font-weight: bold;
   padding: .5em 1em;
   background: var(--command-palette-item-background-color);
   color: var(--command-palette-item-text-color);
 }
 
-.command-palette-list-item:not(.plain):hover,
-.command-palette-list-item:not(.plain).active {
-  background: var(--command-palette-active-item-background-color);
-  color: var(--command-palette-active-item-text-color);
+.command-palette-list-item:not(.plain) {
+  cursor: pointer;
+}
+
+.command-palette-list-item:not(.plain):hover {
+  background: var(--command-palette-item-hover-background-color);
+  color: var(--command-palette-item-hover-text-color);
+}
+
+.command-palette-list-item.active {
+  background: var(--command-palette-active-item-background-color) !important;
+  color: var(--command-palette-active-item-text-color) !important;
 }
 
 body.with-command-palette #sidebar,

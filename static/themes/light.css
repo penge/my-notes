@@ -96,9 +96,13 @@
 
   /* Command palette */
 
+  --command-palette-input-background-color: white;
+  --command-palette-input-text-color: black;
   --command-palette-border-color: silver;
   --command-palette-item-background-color: #f5f5f5;
   --command-palette-item-text-color: black;
+  --command-palette-item-hover-background-color: #d6d6d6;
+  --command-palette-item-hover-text-color: black;
   --command-palette-active-item-background-color: #bdbdbd;
   --command-palette-active-item-text-color: black;
 
