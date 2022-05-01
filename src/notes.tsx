@@ -509,9 +509,7 @@ const Notes = (): h.JSX.Element => {
   ], []);
 
   // Repeat last executed command
-  const [lastExecutedCommand, setLastExecutedCommand] = useState<Command | undefined>(undefined);
   const [setHandlerOnRepeatLastExecutedCommand] = useKeyboardShortcut(KeyboardShortcut.OnRepeatLastExecutedCommand);
-  useEffect(() => setHandlerOnRepeatLastExecutedCommand(lastExecutedCommand), [lastExecutedCommand]);
 
   // Command Palette
   const [setHandlerOnToggleCommandPalette] = useKeyboardShortcut(KeyboardShortcut.OnToggleCommandPalette);
@@ -525,10 +523,7 @@ const Notes = (): h.JSX.Element => {
 
     // Start preparing props for Command Palette
     const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
-    const commands = currentNoteLocked ? [] : commandPaletteCommands.map((command) => ({
-      name: command.name,
-      translation: command.translation
-    })); // no commands if the current note is locked
+    const commands = currentNoteLocked ? [] : commandPaletteCommands;
 
     // Props for Command Palette
     const props: CommandPaletteProps = {
@@ -544,7 +539,7 @@ const Notes = (): h.JSX.Element => {
           setCommandPaletteProps(null);
           range.restore(() => {
             foundCommand.command();
-            setLastExecutedCommand(foundCommand.command);
+            setHandlerOnRepeatLastExecutedCommand(foundCommand.command);
           });
         }
       },
