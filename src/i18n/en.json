@@ -131,10 +131,11 @@
   "Shortcuts": "Shortcuts",
   "Shortcuts descriptions": {
     "Open My Notes": "Open My Notes",
-    "Open Options": "Open Options",
+    "New note": "New note",
+    "Options": "Options",
     "Sync notes to and from Google Drive": "Sync notes to and from Google Drive",
-    "Open Command palette": "Open Command palette",
-    "Open Command palette detail": {
+    "Command palette": "Command palette",
+    "Command palette detail": {
       "line1": "By default, Command palette looks for notes <b>by their name.</b>",
       "line2": "Type {{symbol}} first, and continue to start search for <b>commands.</b>",
       "line3": "Type {{symbol}} first, and continue to start search for notes <b>by their content.</b>"

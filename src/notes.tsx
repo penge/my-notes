@@ -480,6 +480,9 @@ const Notes = (): h.JSX.Element => {
     });
   }, [notesProps]);
 
+  const [setOnNewNoteHandler] = useKeyboardShortcut(KeyboardShortcut.OnNewNote);
+  useEffect(() => setOnNewNoteHandler(newNoteModalProps ? undefined : onNewNote), [onNewNote, newNoteModalProps]);
+
   const handleOnActivateNote = useCallback((noteName: string) => {
     if (notesProps.active === noteName || !(noteName in notesProps.notes)) {
       return;
@@ -509,14 +512,14 @@ const Notes = (): h.JSX.Element => {
   ], []);
 
   // Repeat last executed command
-  const [setHandlerOnRepeatLastExecutedCommand] = useKeyboardShortcut(KeyboardShortcut.OnRepeatLastExecutedCommand);
+  const [setOnRepeatLastExecutedCommandHandler] = useKeyboardShortcut(KeyboardShortcut.OnRepeatLastExecutedCommand);
 
   // Command Palette
-  const [setHandlerOnToggleCommandPalette] = useKeyboardShortcut(KeyboardShortcut.OnToggleCommandPalette);
+  const [setOnToggleCommandPaletteHandler] = useKeyboardShortcut(KeyboardShortcut.OnToggleCommandPalette);
   useEffect(() => {
     // Detach when there are no notes
     if (!Object.keys(notesProps.notes).length) {
-      setHandlerOnToggleCommandPalette(undefined);
+      setOnToggleCommandPaletteHandler(undefined);
       setCommandPaletteProps(null);
       return;
     }
@@ -539,14 +542,14 @@ const Notes = (): h.JSX.Element => {
           setCommandPaletteProps(null);
           range.restore(() => {
             foundCommand.command();
-            setHandlerOnRepeatLastExecutedCommand(foundCommand.command);
+            setOnRepeatLastExecutedCommandHandler(foundCommand.command);
           });
         }
       },
     };
 
     // Update event to show Command Palette and props to use
-    setHandlerOnToggleCommandPalette(() => {
+    setOnToggleCommandPaletteHandler(() => {
       setCommandPaletteProps((prev) => {
         if (prev) {
           range.restore();
@@ -564,12 +567,9 @@ const Notes = (): h.JSX.Element => {
 
   // Automatically show modal to create a new note if there are 0 notes
   useEffect(() => {
-    if (!initialized || !tabId || Object.keys(notesProps.notes).length > 0) {
-      setNewNoteModalProps(null);
-      return;
+    if (initialized && typeof tabId === "number" && Object.keys(notesProps.notes).length === 0) {
+      onNewNote(true);
     }
-
-    onNewNote(true);
   }, [initialized, tabId, notesProps, onNewNote]);
 
   // Auto Sync
