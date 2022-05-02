@@ -1,6 +1,7 @@
 import dateUtils from "shared/date/date-utils";
 import table from "./table";
 import highlight from "./highlight";
+import { getFocusOverride } from "notes/location";
 
 export type Command = () => void;
 type CommandFactory<P> = (props: P) => Command;
@@ -96,6 +97,32 @@ const commands: { [key in AvailableCommand]: Command } = {
   RemoveFormat,
 };
 
+const toggleSidebar: Command = () => {
+  if (getFocusOverride()) {
+    return;
+  }
+
+  chrome.storage.local.get(["focus"], local => {
+    if (!local.focus) { // toggle only if not in focus mode
+      const hasSidebar = document.body.classList.toggle("with-sidebar");
+      chrome.storage.local.set({ sidebar: hasSidebar });
+    }
+  });
+};
+
+const toggleToolbar: Command = () => {
+  if (getFocusOverride()) {
+    return;
+  }
+
+  chrome.storage.local.get(["focus"], local => {
+    if (!local.focus) { // toggle only if not in focus mode
+      const hasToolbar = document.body.classList.toggle("with-toolbar");
+      chrome.storage.local.set({ toolbar: hasToolbar });
+    }
+  });
+};
+
 export {
   commands,
 
@@ -106,4 +133,7 @@ export {
 
   table,
   highlight,
+
+  toggleSidebar,
+  toggleToolbar,
 };

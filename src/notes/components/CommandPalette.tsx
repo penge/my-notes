@@ -148,6 +148,7 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
             <div
               className={clsx("command-palette-list-item", index === selectedItemIndex && "active")}
               onClick={() => handleItem(name)}
+              onMouseEnter={() => setSelectedItemIndex(index)}
             >
               {(filter?.type === FilterType.CommandsByName)
                 ? commands.find((command) => command.name === name)?.translation

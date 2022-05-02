@@ -23,11 +23,11 @@ const KeyboardShortcuts = ({ os }: KeyboardShortcutsProps): h.JSX.Element => (
             )}
             {shortcut.needsToBeEnabled && <span>{" "}{t("Shortcuts other.if enabled")}</span>}
 
-            {shortcut.description === "Open Command palette" && (
+            {shortcut.description === "Command palette" && (
               <div class="comment">
-                <div>{t("Shortcuts descriptions.Open Command palette detail.line1")}</div>
-                <div>{t("Shortcuts descriptions.Open Command palette detail.line2", { symbol: "<span class=\"keyboard-shortcut\">&gt;</span>" })}</div>
-                <div>{t("Shortcuts descriptions.Open Command palette detail.line3", { symbol: "<span class=\"keyboard-shortcut\">?</span>" })}</div>
+                <div>{t("Shortcuts descriptions.Command palette detail.line1")}</div>
+                <div>{t("Shortcuts descriptions.Command palette detail.line2", { symbol: "<span class=\"keyboard-shortcut\">&gt;</span>" })}</div>
+                <div>{t("Shortcuts descriptions.Command palette detail.line3", { symbol: "<span class=\"keyboard-shortcut\">?</span>" })}</div>
               </div>
             )}
           </td>

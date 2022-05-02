@@ -15,7 +15,12 @@ const keyboardShortcuts: KeyboardShortcut[] = [
     configurable: true,
   },
   {
-    description: "Open Options",
+    description: "New note",
+    mac: "⌘ + Shift + I",
+    other: "Ctrl + Shift + I",
+  },
+  {
+    description: "Options",
     mac: "⌘ + Shift + O",
     other: "Ctrl + Shift + O",
   },
@@ -25,7 +30,7 @@ const keyboardShortcuts: KeyboardShortcut[] = [
     other: "Ctrl + R",
   },
   {
-    description: "Open Command palette",
+    description: "Command palette",
     mac: "⌘ + P",
     other: "Ctrl + P",
   },

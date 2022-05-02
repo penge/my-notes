@@ -3,6 +3,9 @@ import { Os } from "shared/storage/schema";
 const isMac = (os: Os) => os === "mac";
 
 export enum KeyboardShortcut {
+  // New note
+  OnNewNote,
+
   // Options
   OnOpenOptions,
 
@@ -56,6 +59,15 @@ const publish = (keyboardShortcut: KeyboardShortcut, event: KeyboardEvent): void
   }
 
   callbacks.forEach((callback) => callback());
+};
+
+const registerNewNote = (event: KeyboardEvent, os: Os) => {
+  if (
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyI") ||
+    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyI")
+  ) {
+    publish(KeyboardShortcut.OnNewNote, event);
+  }
 };
 
 const registerOpenOptions = (event: KeyboardEvent, os: Os) => {
@@ -218,6 +230,9 @@ const registerSyncNotes = (event: KeyboardEvent, os: Os) => {
 };
 
 const keydown = (os: Os) => document.addEventListener("keydown", (event) => {
+  // New note
+  registerNewNote(event, os);
+
   // Options
   registerOpenOptions(event, os);
 
