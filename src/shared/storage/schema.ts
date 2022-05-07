@@ -8,6 +8,7 @@ export interface Note {
     file: GoogleDriveFile
   }
   locked?: boolean
+  pinnedTime?: string
 }
 
 export interface RegularFont {

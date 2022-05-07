@@ -8,18 +8,21 @@ import LockSvgText from "svg/lock.svg";
 import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 import { sendMessage } from "messages";
 
-interface SidebarNotesProps {
+export interface SidebarNotesProps {
+  id: string
   notes: SidebarNote[]
   active: string
   onActivateNote: (noteName: string) => void
   onNoteContextMenu: (noteName: string, x: number, y: number) => void
+  openNoteOnMouseHover: boolean
+  canDragEnter: boolean
+  setOnDraggingNoteOriginator: (id: string | undefined) => void
   canChangeOrder: boolean
   onChangeOrder: (newOrder: string[]) => void
-  openNoteOnMouseHover: boolean
 }
 
 const SidebarNotes = ({
-  notes: sidebarNotes, active, onActivateNote, onNoteContextMenu, canChangeOrder, onChangeOrder, openNoteOnMouseHover,
+  id, notes: sidebarNotes, active, onActivateNote, onNoteContextMenu, openNoteOnMouseHover, canDragEnter, setOnDraggingNoteOriginator, canChangeOrder, onChangeOrder,
 }: SidebarNotesProps): h.JSX.Element => {
   const [notes, setNotes] = useState<SidebarNote[]>(sidebarNotes);
 
@@ -59,11 +62,13 @@ const SidebarNotes = ({
     openEnteredNote();
   }), [openEnteredNote]);
 
+  useEffect(() => setOnDraggingNoteOriginator(draggedNote ? id : undefined), [id, draggedNote]);
+
   return (
     <Fragment>
       <div
-        id="sidebar-notes"
-        className={clsx("notes", draggedNote && "dragging")}
+        id={id}
+        className={clsx("sidebar-notes", draggedNote && "dragging")}
       >
         {notes.map((note, index) =>
           <div
@@ -116,7 +121,7 @@ const SidebarNotes = ({
             }}
             onDragOver={(event) => {
               event.preventDefault();
-              if (note.locked || draggedNote) {
+              if (note.locked || draggedNote || !canDragEnter) {
                 return;
               }
 

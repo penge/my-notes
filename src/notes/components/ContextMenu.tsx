@@ -11,12 +11,14 @@ export interface ContextMenuProps {
   onDelete: (noteName: string) => void
   locked: boolean
   onToggleLocked: (noteName: string) => void
+  pinned: boolean
+  onTogglePinnedTime: (noteName: string) => void
   onDuplicate: (noteName: string) => void
   onExport: (noteName: string) => void
 }
 
 const ContextMenu = ({
-  noteName, x, y, onRename, onDelete, locked, onToggleLocked, onDuplicate, onExport,
+  noteName, x, y, onRename, onDelete, locked, onToggleLocked, pinned, onTogglePinnedTime, onDuplicate, onExport,
 }: ContextMenuProps): h.JSX.Element => {
   const [offsetHeight, setOffsetHeight] = useState<number>(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -44,6 +46,7 @@ const ContextMenu = ({
       <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onRename(noteName)}>{t("Rename")}</div>
       <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete(noteName)}>{t("Delete")}</div>
       <div class="action" onClick={() => onToggleLocked(noteName)}>{locked ? t("Unlock") : t("Lock")}</div>
+      <div class="action" onClick={() => onTogglePinnedTime(noteName)}>{pinned ? t("Unpin") : t("Pin")}</div>
       <div class="action" onClick={() => onDuplicate(noteName)}>{t("Duplicate")}</div>
       <div class="action" onClick={() => onExport(noteName)}>{t("Export")}</div>
     </div>
