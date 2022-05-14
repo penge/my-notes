@@ -96,6 +96,8 @@ export interface Storage {
   autoSync: boolean
 }
 
+export type StorageKey = keyof Storage
+
 export interface ContextMenuSelection {
   text: string
   sender: string

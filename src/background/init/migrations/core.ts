@@ -1,5 +1,5 @@
 
-import { NotesObject, NotesOrder, Storage } from "shared/storage/schema";
+import { NotesObject, NotesOrder, Storage, StorageKey } from "shared/storage/schema";
 import { defaultValuesFactory } from "shared/storage/default-values";
 import {
   validBoolean,
@@ -12,7 +12,7 @@ import {
   validNotesOrder,
 } from "shared/storage/validations";
 
-export const expectedKeys = [
+export const localKeys: StorageKey[] = [
   // Appearance
   "font",
   "size",
@@ -88,8 +88,8 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     notes: notes as NotesObject, // already migrated to [3.x]
     order: validStringArray(local.order) ? local.order : [],
     active: tryNote(local.active as string) || tryNote(defaultValues.active as string) || firstAvailableNote,
-    setBy: local.setBy as string || "",
-    lastEdit: local.lastEdit as string || "",
+    setBy: typeof local.setBy === "string" ? local.setBy : defaultValues.setBy,
+    lastEdit: typeof local.lastEdit === "string" ? local.lastEdit : defaultValues.lastEdit,
 
     // Options
     notesOrder: validNotesOrder(local.notesOrder) ? local.notesOrder : NotesOrder.Alphabetical,

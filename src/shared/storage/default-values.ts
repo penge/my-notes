@@ -28,10 +28,10 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
       fontFamily: "Helvetica, sans-serif",
     },
     size: 200,
-    sidebar: true,
-    toolbar: true,
     theme: "light",
     customTheme: "", // css string
+    sidebar: true,
+    toolbar: true,
 
     // Notes
     notes,

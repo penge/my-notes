@@ -1,40 +1,32 @@
-import { Storage, NotesObject, Note } from "shared/storage/schema";
-import migrate, { expectedKeys } from "../core";
+import { Storage, NotesObject, Note, NotesOrder } from "shared/storage/schema";
+import migrate from "../core";
+import { expectItems } from "./helpers";
 
-export const expectItems = (items: Storage): void => {
-  expect(Object.keys(items).sort()).toEqual(expectedKeys.sort());
-};
-
-const expectDefaultValues = (myItems?: Storage) => {
-  const items = (myItems || migrate({}, {})) as Storage;
+const expectDefaultValues = (items: Storage) => {
   expectItems(items);
 
-  // font
-  expect(items.font).toEqual({
+  let counter = 0;
+  const countedExpect = () => {
+    counter += 1;
+    return expect;
+  };
+
+  // Appearance
+  countedExpect()(items.font).toEqual({
     id: "helvetica",
     name: "Helvetica",
     genericFamily: "sans-serif",
     fontFamily: "Helvetica, sans-serif",
   });
+  countedExpect()(items.size).toBe(200);
+  countedExpect()(items.theme).toBe("light");
+  countedExpect()(items.customTheme).toBe("");
+  countedExpect()(items.sidebar).toBe(true);
+  countedExpect()(items.toolbar).toBe(true);
 
-  // size
-  expect(items.size).toBe(200);
-
-  // sidebar
-  expect(items.sidebar).toBe(true);
-
-  // toolbar
-  expect(items.toolbar).toBe(true);
-
-  // theme
-  expect(items.theme).toBe("light");
-
-  // custom theme
-  expect(items.customTheme).toBe("");
-
-  // notes
+  // Notes
   const notes = items.notes as NotesObject;
-  expect(Object.keys(notes).length).toBe(3); // "One", "Two", "Three"
+  countedExpect()(Object.keys(notes).length).toBe(3); // "One", "Two", "Three"
   ["One", "Two", "Three"].every((noteName: string) => {
     const note = (notes)[noteName] as Note;
 
@@ -45,39 +37,47 @@ const expectDefaultValues = (myItems?: Storage) => {
 
     expect(new Date(note.createdTime).getTime()).toEqual(new Date(note.modifiedTime).getTime()); // valid and equal
   });
+  countedExpect()(items.order).toEqual([]);
+  countedExpect()(items.active).toBe("One");
+  countedExpect()(items.setBy).toBe("");
+  countedExpect()(items.lastEdit).toBe("");
 
-  // active
-  expect(items.active).toBe("One");
+  // Options
+  countedExpect()(items.notesOrder).toBe(NotesOrder.Alphabetical);
+  countedExpect()(items.focus).toBe(false);
+  countedExpect()(items.tab).toBe(false);
+  countedExpect()(items.tabSize).toBe(-1);
+  countedExpect()(items.autoSync).toBe(false);
+  countedExpect()(items.openNoteOnMouseHover).toBe(false);
 
-  // focus
-  expect(items.focus).toBe(false);
-
-  // tab
-  expect(items.tab).toBe(false);
-
-  // tab size
-  expect(items.tabSize).toBe(-1);
-
-  // openNoteOnMouseHover
-  expect(items.openNoteOnMouseHover).toBe(false);
+  // Expect all keys to be tested
+  expect(counter).toBe(Object.keys(items).length);
 };
 
-it("returns default values", () => {
-  expectDefaultValues();
+it("migrates to default values for an empty storage", () => {
+  expectDefaultValues(migrate({}, {}));
 });
 
-it("fallbacks to default values", () => {
+it("fallbacks to default values for any bad values", () => {
   const items = migrate({}, {
+    // Appearance
     font: {         // must be a valid "font" object
       name: "Droid Sans",
     },
     size: "large",  // must be number
     theme: "green", // must be "light" or "dark"
+    customTheme: { background: "#ffffff" }, // must be string
     sidebar: "yes", // must be boolean
     toolbar: "no",  // must be boolean
-    customTheme: { background: "#ffffff" }, // must be string
+
+    // Notes
     notes: null,    // must be object
+    order: "AZ",    // must be []
     active: "Todo", // must be in "notes"
+    setBy: 1,       // must be string
+    lastEdit: 2,    // must be string
+
+    // Options
     focus: 1,       // must be boolean
     tab: 1,         // must be boolean
     tabSize: "Tab", // must be number

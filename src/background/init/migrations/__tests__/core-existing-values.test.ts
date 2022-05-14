@@ -1,9 +1,9 @@
-import { NotesOrder, Storage } from "shared/storage/schema";
+import { Storage, NotesOrder } from "shared/storage/schema";
 import migrate from "../core";
-import { expectItems } from "./core-default-values.test";
+import { expectItems } from "./helpers";
 
-it("sets custom values", () => {
-  const local = {
+it("uses existing values and adds any omitted properties set to their defaults to make a complete Storage", () => {
+  const existing: Partial<Storage> = {
     font: {
       id: "roboto-mono",
       name: "Roboto Mono",
@@ -52,12 +52,15 @@ it("sets custom values", () => {
     tabSize: 2,
   };
 
-  const items: Storage = migrate({}, local);
-  expectItems(Object.assign({}, items));
+  const items: Storage = migrate({}, existing);
+  expectItems(items);
 
-  // Compare objects
   expect(items).toEqual(Object.assign({
-    // Automatically added properties to make a complete object (interface Storage)
+    /**
+     * Omitted properties below are added and set to their defaults
+     * to make a complete Storage.
+     * See {@link Storage}
+     */
     order: [],
     notesOrder: NotesOrder.Alphabetical,
     sidebar: true,
@@ -66,5 +69,5 @@ it("sets custom values", () => {
     setBy: "",
     lastEdit: "",
     openNoteOnMouseHover: false,
-  }, local));
+  } as Partial<Storage>, existing));
 });
