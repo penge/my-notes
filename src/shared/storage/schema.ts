@@ -8,6 +8,7 @@ export interface Note {
     file: GoogleDriveFile
   }
   locked?: boolean
+  pinnedTime?: string
 }
 
 export interface RegularFont {
@@ -95,6 +96,8 @@ export interface Storage {
   sync?: Sync // Google Drive Sync
   autoSync: boolean
 }
+
+export type StorageKey = keyof Storage
 
 export interface ContextMenuSelection {
   text: string

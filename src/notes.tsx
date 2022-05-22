@@ -34,7 +34,7 @@ import renameNote from "notes/state/rename-note";
 import deleteNote from "notes/state/delete-note";
 import duplicateNote from "notes/state/duplicate-note";
 
-import { saveNote, setLocked } from "notes/content/save";
+import { saveNote, setLocked, setPinnedTime } from "notes/content/save";
 import { sendMessage } from "messages";
 
 import { getActiveFromUrl, getFocusOverride } from "notes/location";
@@ -630,6 +630,11 @@ const Notes = (): h.JSX.Element => {
             onToggleLocked: (noteName) => {
               setContextMenuProps(null);
               tabId && notesRef.current && setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+            },
+            pinned: !!notesProps.notes[noteName].pinnedTime,
+            onTogglePinnedTime: (noteName) => {
+              setContextMenuProps(null);
+              tabId && notesRef.current && setPinnedTime(noteName, (notesProps.notes[noteName].pinnedTime ?? undefined) ? undefined : new Date().toISOString(), tabId, notesRef.current);
             },
             onDuplicate: (noteName) => {
               setContextMenuProps(null);

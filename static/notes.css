@@ -142,15 +142,22 @@ body.with-sidebar #sidebar { transform: translateX(0); }
 body.with-sidebar { left: var(--default-sidebar-width); }
 body:not(.with-sidebar) { left: 0 !important; }
 
-#sidebar-notes {
-  padding: .5em;
-  overflow-y: auto;
+#sidebar-notes-container {
   flex-grow: 1;
   background: var(--sidebar-notes-background-color);
   color: var(--sidebar-notes-text-color);
 }
 
-#sidebar-notes .note {
+#sidebar-notes-separator {
+  height: 1em;
+}
+
+.sidebar-notes {
+  padding: .5em;
+  overflow-y: auto;
+}
+
+.sidebar-notes .note {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -161,18 +168,18 @@ body:not(.with-sidebar) { left: 0 !important; }
   border-radius: 3px;
 }
 
-#sidebar-notes .note svg {
+.sidebar-notes .note svg {
   height: 1em;
   flex-shrink: 0;
 }
 
-#sidebar-notes .note:hover,
-#sidebar-notes .note.active {
+.sidebar-notes .note:hover,
+.sidebar-notes .note.active {
   background: var(--sidebar-active-note-background-color);
   color: var(--sidebar-active-note-text-color);
 }
 
-#sidebar-notes .note.drag-over {
+.sidebar-notes .note.drag-over {
   background: var(--selection-background-color);
   color: var(--selection-text-color);
 }
@@ -188,18 +195,18 @@ body:not(.with-sidebar) { left: 0 !important; }
   }
 }
 
-#sidebar-notes .note.drag-confirmation {
+.sidebar-notes .note.drag-confirmation {
   animation: confirmation .3s cubic-bezier(1, 0, 0.5, 1) 2 alternate;
 }
 
-#sidebar-notes.dragging .note,
-#sidebar-notes.dragging .note.active,
-#sidebar-notes.dragging .note.drag-over {
+.sidebar-notes.dragging .note,
+.sidebar-notes.dragging .note.active,
+.sidebar-notes.dragging .note.drag-over {
   background: none !important;
   color: var(--sidebar-notes-text-color) !important;
 }
 
-#sidebar-notes.dragging .note.dragging {
+.sidebar-notes.dragging .note.dragging {
   background: transparent !important;
   color: transparent !important;
   box-shadow: inset 0 0 0px 1px silver;
@@ -242,7 +249,7 @@ body.resizing-sidebar #drag {
   border-color: var(--drag-resizing-border-color);
 }
 
-body.resizing-sidebar #sidebar-notes,
+body.resizing-sidebar #sidebar-notes-container,
 body.resizing-sidebar #sidebar-buttons,
 body.resizing-sidebar #content,
 body.resizing-sidebar #toolbar {

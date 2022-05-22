@@ -1,6 +1,6 @@
 import { h, Fragment } from "preact";
 import { useCallback } from "preact/hooks";
-import { Os, Sync } from "shared/storage/schema";
+import { Os, Sync, StorageKey } from "shared/storage/schema";
 import formatDate from "shared/date/format-date";
 import { requestPermission, removePermission } from "shared/permissions";
 import keyboardShortcuts from "./helpers/keyboard-shortcuts";
@@ -23,7 +23,7 @@ const Options = ({ os, sync, autoSync, tab, tabSize, openNoteOnMouseHover }: Opt
   const openNoteOnMouseHoverKeyboardShortcut = keyboardShortcuts.find((item) => item.description === "Open note on mouse hover");
   const openNoteOnMouseHoverKey = openNoteOnMouseHoverKeyboardShortcut && openNoteOnMouseHoverKeyboardShortcut[os];
 
-  const toggleOption = useCallback((key: string) => (event: h.JSX.TargetedMouseEvent<HTMLInputElement>) => {
+  const toggleOption = useCallback((key: StorageKey) => (event: h.JSX.TargetedMouseEvent<HTMLInputElement>) => {
     const checked = (event.target as HTMLInputElement).checked;
     chrome.storage.local.set({ [key]: checked });
   }, []);
