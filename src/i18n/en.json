@@ -20,6 +20,7 @@
     "other": "Click to sync notes to and from Google Drive (Ctrl + R)"
   },
   "Last sync": "Last sync: {{time}}",
+  "Toggle RAW": "Toggle <b>RAW</b>",
   "Bold": {
     "mac": "Bold (⌘ + B)",
     "other": "Bold (Ctrl + B)"

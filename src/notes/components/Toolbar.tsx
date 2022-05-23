@@ -68,9 +68,11 @@ const tableCallback = () => {
 interface ToolbarProps {
   os: Os
   note: Note
+  raw: boolean
+  onToggleRaw: () => void
 }
 
-const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
+const Toolbar = ({ os, note, raw, onToggleRaw }: ToolbarProps): h.JSX.Element => {
   const [submenu, setSubmenu] = useState<string | null>(null);
 
   const toggleSubmenu = useCallback((event: MouseEvent): void => {
@@ -88,6 +90,24 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
   const [insertImageModalProps, setInsertImageModalProps] = useState<InsertImageModalProps | null>(null);
   const [insertLinkModalProps, setInsertLinkModalProps] = useState<InsertLinkModalProps | null>(null);
   const [embedHtmlModalProps, setEmbedHtmlModalProps] = useState<EmbedHtmlModalProps | null>(null);
+
+  if (raw) {
+    return (
+      <div id="toolbar" class={clsx(note.locked && "locked")}>
+        <div class="topmenu bar">
+          <Tooltip tooltip={t("Toggle RAW")}>
+            <div id="RAW-ACTIVE" class="button" onClick={onToggleRaw}>RAW</div>
+          </Tooltip>
+
+          <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
+            <div id="INFO" class="button last">
+              <SVG text={InfoSvgText} />
+            </div>
+          </Tooltip>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Fragment>
@@ -173,7 +193,7 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
         {submenu === "TC" && (
           <div class="submenu bar">
             {HIGHLIGHT_COLORS.map((color) => (
-              <Tooltip tooltip={t("Change selected text color to", { color: capitalize(color)})}>
+              <Tooltip tooltip={t("Change selected text color to", { color: capitalize(color) })}>
                 <div class={`plain button letter my-notes-text-color-${color}`} onClick={() => highlight(`my-notes-text-color-${color}`, callback)}>A</div>
               </Tooltip>
             ))}
@@ -187,6 +207,10 @@ const Toolbar = ({ os, note }: ToolbarProps): h.JSX.Element => {
         )}
 
         <div class="topmenu bar">
+          <Tooltip tooltip={t("Toggle RAW")}>
+            <div id="RAW" class="button" onClick={onToggleRaw}>RAW</div>
+          </Tooltip>
+
           <Tooltip tooltip={t(`Bold.${os}`)}>
             <div id="B" class="button" onClick={commands.Bold}>
               <SVG text={BoldSvgText} />

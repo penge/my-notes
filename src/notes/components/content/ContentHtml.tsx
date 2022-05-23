@@ -1,25 +1,17 @@
 import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
-import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
+import { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
-import { commands, InsertTabFactory } from "../commands";
+import { commands, InsertTabFactory } from "../../commands";
+import { ContentProps, reattachEditNote } from "./common";
 import __range from "notes/range";
 
-import { isImageFile } from "./image/read-image";
-import { dropImage } from "./image/drop-image";
+import { isImageFile } from "../image/read-image";
+import { dropImage } from "../image/drop-image";
 import { runUploadPreconditions } from "background/google-drive/preconditions/upload-preconditions";
 import { reinitTables } from "notes/content/table";
 
-interface ContentProps {
-  active: string
-  locked: boolean
-  initialContent: string
-  onEdit: (active: string, content: string) => void
-  indentOnTab: boolean
-  tabSize: number
-}
-
-const autofocus = (content: HTMLDivElement) => content && window.setTimeout(() => {
+const focus = (content: HTMLDivElement) => content && window.setTimeout(() => {
   const selection = window.getSelection();
   if (!selection) {
     return;
@@ -46,41 +38,10 @@ const openLink = (event: MouseEvent) => {
   }
 };
 
-let latestCb: () => void;
-const reattachEditNote = (cb: () => void) => {
-  document.removeEventListener("editnote", latestCb);
-  latestCb = cb;
-  document.addEventListener("editnote", latestCb);
-};
-
-const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
-  const contentRef = useRef<HTMLDivElement>(null);
+const ContentHtml = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const [setIndentOnTabHandlerOnTab] = useKeyboardShortcut(KeyboardShortcut.OnTab);
-
-  const onInput = useCallback(() => {
-    if (active && contentRef.current) {
-      const content = contentRef.current.innerHTML;
-      onEdit(active, content);
-    }
-  }, [active]);
-
-  useEffect(() => {
-    if (contentRef.current) {
-      contentRef.current.innerHTML = initialContent;
-      autofocus(contentRef.current);
-      reinitTables({
-        onResize: () => {
-          const event = new Event("editnote");
-          document.dispatchEvent(event);
-        }
-      });
-    }
-  }, [active, initialContent]);
-
-  // Toolbar controls (e.g. TABLE_INSERT) can change #content.innerHTML.
-  // To save the changed content, "editnote" event is triggered from Toolbar.
-  useEffect(() => reattachEditNote(onInput), [onInput]);
 
   useEffect(() => setIndentOnTabHandlerOnTab(
     indentOnTab
@@ -89,22 +50,57 @@ const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize 
   ), [indentOnTab, tabSize]);
 
   useEffect(() => {
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnderline, commands.Underline);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnStrikethrough, commands.StrikeThrough);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnRemoveFormat, commands.RemoveFormat);
+    if (contentRef.current) {
+      contentRef.current.innerHTML = note.initialContent;
+      focus(contentRef.current);
+      reinitTables({
+        onResize: () => {
+          const event = new Event("editnote");
+          document.dispatchEvent(event);
+        }
+      });
+    }
+  }, [note.active, note.initialContent]);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnUnorderedList, commands.UL);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnOrderedList, commands.OL);
+  const onInput = useCallback(() => {
+    if (note.active && contentRef.current) {
+      const content = contentRef.current.innerHTML;
+      onEdit(note.active, content);
+    }
+  }, [note.active]);
 
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDate, commands.InsertCurrentDate);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertTime, commands.InsertCurrentTime);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnInsertDateAndTime, commands.InsertCurrentDateAndTime);
+  // Toolbar controls (e.g. TABLE_INSERT) can change #content.innerHTML.
+  // To save the changed content, "editnote" event is triggered from Toolbar.
+  useEffect(() => reattachEditNote(onInput), [onInput]);
+
+  const [onUnderline] = useKeyboardShortcut(KeyboardShortcut.OnUnderline);
+  const [onStrikethrough] = useKeyboardShortcut(KeyboardShortcut.OnStrikethrough);
+  const [onRemoveFormat] = useKeyboardShortcut(KeyboardShortcut.OnRemoveFormat);
+
+  const [onUnorderedList] = useKeyboardShortcut(KeyboardShortcut.OnUnorderedList);
+  const [onOrderedList] = useKeyboardShortcut(KeyboardShortcut.OnOrderedList);
+
+  const [onInsertDate] = useKeyboardShortcut(KeyboardShortcut.OnInsertDate);
+  const [onInsertTime] = useKeyboardShortcut(KeyboardShortcut.OnInsertTime);
+  const [onInsertDateAndTime] = useKeyboardShortcut(KeyboardShortcut.OnInsertDateAndTime);
+
+  useEffect(() => {
+    onUnderline(commands.Underline);
+    onStrikethrough(commands.StrikeThrough);
+    onRemoveFormat(commands.RemoveFormat);
+
+    onUnorderedList(commands.UL);
+    onOrderedList(commands.OL);
+
+    onInsertDate(commands.InsertCurrentDate);
+    onInsertTime(commands.InsertCurrentTime);
+    onInsertDateAndTime(commands.InsertCurrentDateAndTime);
   }, []);
 
   return (
     <div
       id="content"
-      className={locked ? "locked" : undefined}
+      className={note.locked ? "locked" : undefined}
       ref={contentRef}
       contentEditable
       spellcheck
@@ -142,4 +138,4 @@ const Content = ({ active, locked, initialContent, onEdit, indentOnTab, tabSize 
   );
 };
 
-export default Content;
+export default ContentHtml;

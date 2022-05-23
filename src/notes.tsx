@@ -18,7 +18,8 @@ import { setTheme as setThemeCore } from "themes/set-theme";
 
 import __Notification from "notes/components/Notification";
 import __Sidebar from "notes/components/Sidebar";
-import __Content from "notes/components/Content";
+import __Content from "notes/components/content/Content";
+import { ContentNote } from "notes/components/content/common";
 import __CommandPalette, { CommandPaletteProps } from "notes/components/CommandPalette";
 import __Toolbar from "notes/components/Toolbar";
 import range from "notes/range";
@@ -34,7 +35,7 @@ import renameNote from "notes/state/rename-note";
 import deleteNote from "notes/state/delete-note";
 import duplicateNote from "notes/state/duplicate-note";
 
-import { saveNote, setLocked, setPinnedTime } from "notes/content/save";
+import { saveNote, setLocked, setPinnedTime, setRaw } from "notes/content/save";
 import { sendMessage } from "messages";
 
 import { getActiveFromUrl, getFocusOverride } from "notes/location";
@@ -57,8 +58,12 @@ interface NotesProps {
 const Notes = (): h.JSX.Element => {
   const [os, setOs] = useState<Os | undefined>(undefined);
   const [tabId, setTabId] = useState<number | undefined>(undefined);
+  const [initialized, setInitialized] = useState<boolean>(false);
 
+  // Notifications
   const [notification, setNotification] = useState<Notification | undefined>(undefined);
+
+  // Appearance
   const [font, setFont] = useState<RegularFont | GoogleFont | undefined>(undefined);
   const [size, setSize] = useState<number>(0);
   const [sidebar, setSidebar] = useState<boolean>(false);
@@ -67,6 +72,7 @@ const Notes = (): h.JSX.Element => {
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
   const [customTheme, setCustomTheme] = useState<string>("");
 
+  // Notes
   const [notesProps, setNotesProps] = useState<NotesProps>({
     notes: {},
     active: "",
@@ -74,21 +80,23 @@ const Notes = (): h.JSX.Element => {
   const notesRef = useRef<NotesObject>();
   notesRef.current = notesProps.notes;
   const [order, setOrder] = useState<string[] | undefined>(undefined);
+  const [contentNote, setContentNote] = useState<ContentNote | undefined>(undefined);
+  const lastEditRef = useRef<string>("");
 
-  const [initialContent, setInitialContent] = useState<string>("");
+  // Options
   const [notesOrder, setNotesOrder] = useState<NotesOrder | undefined>(undefined);
   const [focus, setFocus] = useState<boolean>(false);
   const [tab, setTab] = useState<boolean>(false);
   const [tabSize, setTabSize] = useState<number>(-1);
   const [openNoteOnMouseHover, setOpenNoteOnMouseHover] = useState<boolean>(false);
+
+  // Sync
   const [sync, setSync] = useState<Sync | undefined>(undefined);
   const syncRef = useRef<Sync | undefined>(undefined);
   syncRef.current = sync;
   const [autoSync, setAutoSync] = useState<boolean>(false);
-  const lastEditRef = useRef<string>("");
 
-  const [initialized, setInitialized] = useState<boolean>(false);
-
+  // Modals
   const [contextMenuProps, setContextMenuProps] = useState<ContextMenuProps | null>(null);
   const [renameNoteModalProps, setRenameNoteModalProps] = useState<RenameNoteModalProps | null>(null);
   const [deleteNoteModalProps, setDeleteNoteModalProps] = useState<DeleteNoteModalProps | null>(null);
@@ -272,7 +280,10 @@ const Notes = (): h.JSX.Element => {
             (newNotes[newActive].content !== oldNotes[newActive].content) &&
             (newNotes[newActive].modifiedTime > oldNotes[newActive].modifiedTime)
           ) {
-            setInitialContent(newNotes[newActive].content);
+            setContentNote((prev) => prev && ({
+              ...prev,
+              initialContent: newNotes[newActive].content,
+            }));
           }
 
           if (!(newActive in oldNotes)) {
@@ -397,8 +408,22 @@ const Notes = (): h.JSX.Element => {
 
   // Activate note
   useEffect(() => {
+    if (!notesProps.active) {
+      return;
+    }
+
     const note = notesProps.notes[notesProps.active];
-    setInitialContent(note ? note.content : "");
+    if (!note) {
+      return;
+    }
+
+    setContentNote({
+      active: notesProps.active,
+      initialContent: note.content || "",
+      locked: note.locked || false,
+      raw: note.raw || false,
+    });
+
     document.title = note ? notesProps.active : "My Notes";
   }, [notesProps.active]);
 
@@ -658,11 +683,12 @@ const Notes = (): h.JSX.Element => {
       )}
 
       <div id="content-container">
-        {notesProps.active && (
+        {contentNote && (
           <__Content
-            active={notesProps.active}
-            locked={notesProps.notes[notesProps.active].locked ?? false}
-            initialContent={initialContent}
+            note={{
+              ...contentNote,
+              locked: notesProps.notes[contentNote.active].locked || false,
+            }}
             onEdit={(active, content) => {
               tabId && notesRef.current && saveNote(active, content, tabId, notesRef.current);
             }}
@@ -680,6 +706,20 @@ const Notes = (): h.JSX.Element => {
         <__Toolbar
           os={os}
           note={notesProps.notes[notesProps.active]}
+          raw={contentNote?.raw || false}
+          onToggleRaw={() => {
+            if (!tabId || !notesRef.current) {
+              return;
+            }
+
+            const newRaw = (contentNote?.raw || false) ? false : true;
+            setRaw(notesProps.active, newRaw, tabId, notesRef.current);
+            setContentNote((prev) => prev && ({
+              ...prev,
+              raw: newRaw,
+              initialContent: notesProps.notes[notesProps.active].content || "",
+            }));
+          }}
         />
       )}
 
