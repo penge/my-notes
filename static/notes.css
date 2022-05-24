@@ -146,6 +146,7 @@ body:not(.with-sidebar) { left: 0 !important; }
   flex-grow: 1;
   background: var(--sidebar-notes-background-color);
   color: var(--sidebar-notes-text-color);
+  overflow-y: auto;
 }
 
 #sidebar-notes-separator {
@@ -154,7 +155,6 @@ body:not(.with-sidebar) { left: 0 !important; }
 
 .sidebar-notes {
   padding: .5em;
-  overflow-y: auto;
 }
 
 .sidebar-notes .note {
