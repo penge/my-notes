@@ -1,12 +1,12 @@
 import { h } from "preact";
 import { useRef, useState, useMemo, useCallback, useEffect } from "preact/hooks";
-import { useBodyClass } from "notes/hooks/use-body-class";
-import { NotesObject } from "shared/storage/schema";
 import clsx from "clsx";
+import { useBodyClass } from "notes/hooks/use-body-class";
+import { SidebarNote } from "notes/adapters";
 import { t, tString } from "i18n";
 
 export interface CommandPaletteProps {
-  notes: NotesObject
+  notes: SidebarNote[]
   commands: { name: string, translation: h.JSX.Element }[]
   onActivateNote: (noteName: string) => void
   onExecuteCommand: (commandName: string) => void
@@ -56,9 +56,11 @@ export const prepareFilter = (rawInput: string): Filter => {
   };
 };
 
-export const prepareItems = (notes: NotesObject, commands: string[], filter: Filter | undefined): string[] => {
+export const prepareItems = (notes: SidebarNote[], commands: string[], filter: Filter | undefined): string[] => {
+  const noteNames = notes.map((note) => note.name);
+
   if (!filter) {
-    return Object.keys(notes); // by default, list notes
+    return noteNames;
   }
 
   const input = filter.input.trim();
@@ -66,16 +68,22 @@ export const prepareItems = (notes: NotesObject, commands: string[], filter: Fil
 
   // A) CommandsByName
   if (filter.type === FilterType.CommandsByName) {
-    return commands.filter(prepareFilterPredicate(input)); // commands that include the input in their name
+    return commands.filter(prepareFilterPredicate(input));
   }
 
   // B) NotesByContent
   if (filter.type === FilterType.NotesByContent) {
-    return input ? Object.keys(notes).filter((noteName) => prepareFilterPredicate(input)(notes[noteName].content)) : Object.keys(notes); // notes that include the input in their content
+    const filter = prepareFilterPredicate(input);
+    return input
+      ? noteNames.filter((noteName) => {
+        const foundNote = notes.find((note) => note.name === noteName);
+        return foundNote && filter(foundNote.content);
+      })
+      : noteNames;
   }
 
   // C) NotesByName
-  return Object.keys(notes).filter(prepareFilterPredicate(input)); // notes that include the input in their name
+  return noteNames.filter(prepareFilterPredicate(input));
 };
 
 const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: CommandPaletteProps): h.JSX.Element => {

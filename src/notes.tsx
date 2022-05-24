@@ -505,6 +505,10 @@ const Notes = (): h.JSX.Element => {
   // Command Palette
   const [setOnToggleCommandPaletteHandler] = useKeyboardShortcut(KeyboardShortcut.OnToggleCommandPalette);
   useEffect(() => {
+    if (!notesOrder) {
+      return;
+    }
+
     // Detach when there are no notes
     if (!Object.keys(notesProps.notes).length) {
       setOnToggleCommandPaletteHandler(undefined);
@@ -518,7 +522,7 @@ const Notes = (): h.JSX.Element => {
 
     // Props for Command Palette
     const props: CommandPaletteProps = {
-      notes: notesProps.notes,
+      notes: notesToSidebarNotes(notesProps.notes, notesOrder, order),
       commands,
       onActivateNote: (noteName: string) => {
         setCommandPaletteProps(null);
@@ -551,7 +555,7 @@ const Notes = (): h.JSX.Element => {
 
     // Update props for already visible Command Palette
     setCommandPaletteProps((prev) => !prev ? prev : props);
-  }, [os, notesProps, handleOnActivateNote, commandPaletteCommands]);
+  }, [os, notesProps, notesOrder, order, handleOnActivateNote, commandPaletteCommands]);
 
   // Automatically show modal to create a new note if there are 0 notes
   useEffect(() => {

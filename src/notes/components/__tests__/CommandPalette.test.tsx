@@ -1,4 +1,4 @@
-import { NotesObject } from "shared/storage/schema";
+import { SidebarNote } from "notes/adapters";
 import { Filter, FilterType, prepareFilter, prepareItems } from "../CommandPalette";
 
 describe("prepareFilter", () => {
@@ -38,23 +38,26 @@ describe("prepareItems", () => {
   const createdTime = "CT"; // not relevant for the test
   const modifiedTime = "MT"; // not relevant for the test
 
-  const notes: NotesObject = {
-    Clipboard: {
+  const notes: SidebarNote[] = [
+    {
+      name: "Clipboard",
       content: "",
       createdTime,
       modifiedTime,
     },
-    Article: {
+    {
+      name: "Article",
       content: "This is an interesting article",
       createdTime,
       modifiedTime,
     },
-    TODO: {
+    {
+      name: "TODO",
       content: "buy milk, buy coffee",
       createdTime,
       modifiedTime,
     },
-  };
+  ];
 
   const commands = [
     "Insert current Date",
