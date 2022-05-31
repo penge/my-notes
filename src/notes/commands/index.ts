@@ -49,10 +49,7 @@ const InsertCurrentDateAndTime: Command = () => { exec("insertHTML", dateUtils.g
 
 const Pre: Command = () => { exec("formatBlock", "<PRE>"); };
 
-const RemoveFormat: Command = () => {
-  exec("removeFormat");
-  exec("formatBlock", "<DIV>");
-};
+const RemoveFormat: Command = () => { exec("removeFormat"); };
 
 type AvailableCommand =
   "Bold" | "Italic" | "Underline" | "StrikeThrough" |
