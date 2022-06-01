@@ -21,7 +21,9 @@ describe("pullUpdate()", () => {
                   createdTime: "CT",
                   modifiedTime: "MT",
                 }
-              }
+              },
+              locked: true,
+              pinnedTime: "PT",
             }
           };
 
@@ -53,7 +55,10 @@ describe("pullUpdate()", () => {
                   createdTime: "CT",
                   modifiedTime: "MT",
                 }
-              }
+              },
+              locked: true,
+              pinnedTime: "PT",
+              raw: true,
             }
           };
 
@@ -79,7 +84,10 @@ describe("pullUpdate()", () => {
                   createdTime: "CT",
                   modifiedTime: "MT-2",
                 }
-              }
+              },
+              locked: true,
+              pinnedTime: "PT",
+              raw: true,
             }
           });
         });
