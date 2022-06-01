@@ -103,6 +103,7 @@ hr {
   box-sizing: border-box;
   border-top: 1px solid var(--bar-border-color);
   padding: 0 .25em;
+  align-items: center;
 }
 
 .bar > .button {
@@ -273,12 +274,6 @@ body.resizing-table-row { cursor: row-resize; }
 }
 
 #content {
-  white-space: break-spaces;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-#content {
   width: 100%;
   height: 100%;
   border: 0;
@@ -289,6 +284,10 @@ body.resizing-table-row { cursor: row-resize; }
   font-size: inherit;
   padding: 1em;
   overflow-y: auto;
+  white-space: break-spaces;
+  overflow-wrap: break-word;
+  background: var(--background-color);
+  color: var(--text-color);
 }
 
 #content ul { margin: 0; }
@@ -563,6 +562,23 @@ body.with-toolbar #toolbar { transform: translateY(0); }
 #toolbar .button.letter {
   display: inline-block;
   text-align: center;
+}
+
+#toolbar .button#RAW,
+#toolbar .button#RAW-ACTIVE {
+  width: auto;
+  font-size: .7em;
+  margin: 0 1em;
+}
+
+#toolbar .button#RAW {
+  background: #9e9e9e;
+  color: white;
+}
+
+#toolbar .button#RAW-ACTIVE {
+  background: #ff9800;
+  color: white;
 }
 
 /* Tooltip */

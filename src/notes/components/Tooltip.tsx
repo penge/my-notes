@@ -100,6 +100,8 @@ const Tooltip = ({ id, tooltip, children, className }: TooltipProps): h.JSX.Elem
   const show = useCallback((props: TooltipRenderProps) => render(<TooltipRender {...props} />, getContainer()), []);
   const hide = useCallback(() => render("", getContainer()), []);
 
+  useEffect(() => hide(), [id]);
+
   useEffect(() => {
     if (!renderProps || (!id || (id && renderProps.id !== id))) {
       return;

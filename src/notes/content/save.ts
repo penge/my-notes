@@ -33,3 +33,7 @@ export const setLocked = (noteName: string, locked: boolean, tabId: number, note
 export const setPinnedTime = (noteName: string, pinnedTime: string | undefined, tabId: number, notes: NotesObject): void => {
   saveNoteCore(noteName, tabId, notes, { pinnedTime });
 };
+
+export const setRaw = (noteName: string, raw: boolean, tabId: number, notes: NotesObject): void => {
+  saveNoteCore(noteName, tabId, notes, { raw });
+};

@@ -9,6 +9,7 @@ export interface Note {
   }
   locked?: boolean
   pinnedTime?: string
+  raw?: boolean
 }
 
 export interface RegularFont {

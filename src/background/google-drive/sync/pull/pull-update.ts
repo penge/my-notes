@@ -2,7 +2,8 @@ import { NotesObject, Note, GoogleDriveFile } from "shared/storage/schema";
 import { Log } from "shared/logger";
 import { GetFileFunction } from "background/google-drive/api";
 
-const prepareNote = (content: string, file: GoogleDriveFile): Note => ({
+const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile): Note => ({
+  ...existingNote,
   content,
   createdTime: file.createdTime,
   modifiedTime: file.modifiedTime,
@@ -32,6 +33,7 @@ const updateNote = async (
 
   Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
   notesCopy[file.name] = prepareNote(
+    syncedNote,
     contentResolution === "replace" ? fileContent : mergeContent(syncedNote.content, fileContent),
     file,
   );
@@ -70,7 +72,11 @@ export const pullUpdate = async (notes: NotesObject, remoteFiles: GoogleDriveFil
       && notesCopy[file.name].modifiedTime === file.modifiedTime // note and file have the same modified time
     ) {
       Log(`SYNC - IN - CONNECTING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
-      notesCopy[file.name] = prepareNote(notesCopy[file.name].content, file);
+      notesCopy[file.name] = prepareNote(
+        notesCopy[file.name],
+        notesCopy[file.name].content,
+        file,
+      );
     }
 
     if (
@@ -80,6 +86,7 @@ export const pullUpdate = async (notes: NotesObject, remoteFiles: GoogleDriveFil
       const fileContent = await getFile(file.id) || "";
       Log(`SYNC - IN - UPDATING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
       notesCopy[file.name] = prepareNote(
+        notesCopy[file.name],
         mergeContent(notesCopy[file.name].content, fileContent),
         file,
       );
