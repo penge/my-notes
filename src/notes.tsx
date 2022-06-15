@@ -687,7 +687,7 @@ const Notes = (): h.JSX.Element => {
           <__Content
             note={{
               ...contentNote,
-              locked: notesProps.notes[contentNote.active].locked || false,
+              locked: contentNote.active in notesProps.notes ? (notesProps.notes[contentNote.active].locked || false) : false,
             }}
             onEdit={(active, content) => {
               tabId && notesRef.current && saveNote(active, content, tabId, notesRef.current);
