@@ -1,7 +1,19 @@
+const locale = "en-US";
+
+const monthOptions: Intl.DateTimeFormatOptions = {
+  month: "long",
+};
+
+const timeOptions: Intl.DateTimeFormatOptions = {
+  hour: "numeric",
+  minute: "2-digit",
+  second: "2-digit"
+};
+
 export interface ParsedDate {
-  year: string
+  year: number
   month: string
-  day: string
+  day: number
 
   date: string
   time: string
@@ -18,20 +30,21 @@ export default (ISOString: string): ParsedDate | undefined => {
     return;
   }
 
-  const dateString = dateObject.toLocaleString("en-US", {
-    year: "numeric",
-    month: "long", // "May", "January"
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit"
-  });
+  const year = dateObject.getFullYear();
+  const month = dateObject.toLocaleString(locale, monthOptions);
+  const day = dateObject.getDate();
 
-  const parts = dateString.split(",").map((part) => part.trim());
-  const date = `${parts[1]} ${parts[0]}`; // e.g. "2021 April 4"
-  const time = parts[2]; // e.g. "4:03:44 PM"
-  const dateTime = `${date}, ${time}`; // e.g. "2021 April 4, 4:03:44 PM"
-  const [year, month, day] = date.split(" "); // e.g. ["2021", "April", "4"]
+  const date = `${year} ${month} ${day}`;
+  const time = dateObject.toLocaleString(locale, timeOptions);
+  const dateTime = `${date}, ${time}`;
 
-  return { year, month, day, date, time, dateTime };
+  return {
+    year,
+    month,
+    day,
+
+    date,
+    time,
+    dateTime,
+  };
 };
