@@ -23,11 +23,11 @@ test("createImageSkeleton() returns HTML skeleton", () => {
 
   /* eslint-disable quotes */
   expect(dom.window.document.body.innerHTML).toBe(
-    '<div id="my-notes-image-skeleton" style="width: 300px; height: 200px;">' +
-      '<img id="my-notes-image-to-upload" src="IMAGE_CONTENT">' +
-      '<div id="my-notes-image-to-upload-overlay-caption">Uploading...</div>' +
-      '<div id="my-notes-image-to-upload-overlay" style="width: 100%;"></div>' +
-    '</div>'
+    '<div id="my-notes-image-skeleton" style="width: 300px; height: 200px;">'
+      + '<img id="my-notes-image-to-upload" src="IMAGE_CONTENT">'
+      + '<div id="my-notes-image-to-upload-overlay-caption">Uploading...</div>'
+      + '<div id="my-notes-image-to-upload-overlay" style="width: 100%;"></div>'
+    + "</div>",
   );
 });
 

@@ -18,7 +18,7 @@ const saveNoteCore = (noteName: string, tabId: number, notes: NotesObject, props
     ...(props.modifiedTime ? {
       setBy: `${tabId}-${props.modifiedTime}`,
       lastEdit: props.modifiedTime,
-    } : {})
+    } : {}),
   });
 };
 

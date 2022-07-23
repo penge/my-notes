@@ -1,6 +1,6 @@
 import { SidebarNote } from "notes/adapters";
 import { NotesOrder } from "shared/storage/schema";
-import { sortNotes } from "..";
+import sortNotes from "..";
 
 const notes: SidebarNote[] = [
   {
@@ -33,20 +33,20 @@ const nameMap = (item: SidebarNote) => item.name;
 
 test("sortNotes() sorts notes in Alphabetical order", () => {
   expect(
-    sortNotes(notes, NotesOrder.Alphabetical).map(nameMap)
+    sortNotes(notes, NotesOrder.Alphabetical).map(nameMap),
   ).toEqual(["Article", "Clipboard", "Shopping", "Todo"]);
 });
 
 test("sortNotes() sorts notes in NewestFirst order", () => {
   expect(
-    sortNotes(notes, NotesOrder.NewestFirst).map(nameMap)
+    sortNotes(notes, NotesOrder.NewestFirst).map(nameMap),
   ).toEqual(["Todo", "Shopping", "Clipboard", "Article"]);
 });
 
 test("sortNotes() sorts notes in Custom order", () => {
   const custom = ["Article", "Todo", "Clipboard", "Shopping"];
   expect(
-    sortNotes(notes, NotesOrder.Custom, custom).map(nameMap)
+    sortNotes(notes, NotesOrder.Custom, custom).map(nameMap),
   ).toEqual(custom);
 });
 
@@ -54,10 +54,10 @@ test("sortNotes() returns original order when custom order is not provided", () 
   const original = notes.map(nameMap);
 
   expect(
-    sortNotes(notes, NotesOrder.Custom).map(nameMap) // "custom" is not provided
+    sortNotes(notes, NotesOrder.Custom).map(nameMap), // "custom" is not provided
   ).toEqual(original);
 
   expect(
-    sortNotes(notes, NotesOrder.Custom, []).map(nameMap) // "custom" is empty
+    sortNotes(notes, NotesOrder.Custom, []).map(nameMap), // "custom" is empty
   ).toEqual(original);
 });

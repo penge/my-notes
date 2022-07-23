@@ -1,10 +1,11 @@
+/* eslint-disable no-param-reassign */
 const TABLE_RESIZING_DIV_CLASSNAME = "table-resizing-div";
 const TABLE_COLUMN_RESIZING_DIV_CLASSNAME = "table-column-resizing-div";
 const TABLE_ROW_RESIZING_DIV_CLASSNAME = "table-row-resizing-div";
 
 type ResizingType = "column" | "row";
 type ComputedStyleFunction = (elt: Element) => CSSStyleDeclaration;
-type OnResizeCallback = () => void
+type OnResizeCallback = () => void;
 
 export const getAllCellsInColumn = (table: HTMLTableElement, referenceCellIndex: number): HTMLTableCellElement[] => {
   const cells: HTMLTableCellElement[] = [];
@@ -63,7 +64,7 @@ const createResizingDiv = ({
       oneCell.querySelector(`.${TABLE_RESIZING_DIV_CLASSNAME}.${specificClassname}`)?.classList.toggle("active", toggle));
 
   const resizeAllCells = (value: number) => allCells.forEach((oneCell) => {
-    oneCell.style[property] = value + "px";
+    oneCell.style[property] = `${value}px`;
     oneCell.style.wordBreak = "break-all";
   });
 
@@ -79,7 +80,7 @@ const createResizingDiv = ({
     toggleActiveCells(true);
   });
 
-  const getAchor = (event: MouseEvent) => type === "column" ? event.x : event.y;
+  const getAchor = (event: MouseEvent) => (type === "column" ? event.x : event.y);
 
   resizingDiv.addEventListener("mousedown", (mousedownEvent) => {
     document.body.classList.add("resizing-table", `resizing-table-${type}`);
@@ -91,7 +92,7 @@ const createResizingDiv = ({
       const delta = (anchor - getAchor(mousemoveEvent)) * -1;
       anchor = getAchor(mousemoveEvent);
 
-      const currentValue = parseInt(computedStyleFunction(cell)[property]);
+      const currentValue = parseInt(computedStyleFunction(cell)[property], 10);
       const newValue = currentValue + delta;
       resizeAllCells(newValue);
     };
@@ -152,7 +153,10 @@ export const makeTableResizable = ({
         if (isResizingTable(document)) {
           return;
         }
-        [...allCellsInColumn, ...allCellsInRow].forEach((oneCell) => oneCell.querySelectorAll(`.${TABLE_RESIZING_DIV_CLASSNAME}`).forEach((div) => div.remove()));
+        [
+          ...allCellsInColumn,
+          ...allCellsInRow,
+        ].forEach((oneCell) => oneCell.querySelectorAll(`.${TABLE_RESIZING_DIV_CLASSNAME}`).forEach((div) => div.remove()));
       };
 
       cell.onmouseenter = () => {

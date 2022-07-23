@@ -1,12 +1,12 @@
 import { NotesObject, Note, MessageType } from "shared/storage/schema";
-import { sendMessage } from "messages/index";
+import sendMessage from "shared/messages/send";
 
 export default function deleteNote(noteNameToDelete: string): void {
   if (!noteNameToDelete) {
     return;
   }
 
-  chrome.storage.local.get(["notes"], local => {
+  chrome.storage.local.get(["notes"], (local) => {
     const notes: NotesObject = { ...local.notes };
 
     // Check if note exists

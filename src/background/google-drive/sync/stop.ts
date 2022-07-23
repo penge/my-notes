@@ -1,10 +1,11 @@
 import { NotesObject } from "shared/storage/schema";
-import { removePermission } from "shared/permissions/index";
-import { removeItem, getItem, setItem } from "shared/storage/index";
+import { removePermission } from "shared/permissions";
+import { removeItem, getItem, setItem } from "shared/storage";
 
 // Unlinked notes are uploaded once Google Drive Sync is again enabled
 export const unlinkNotes = (notes: NotesObject): NotesObject => {
   const unlinked = { ...notes };
+  // eslint-disable-next-line no-restricted-syntax
   for (const noteName of Object.keys(unlinked)) {
     delete unlinked[noteName].sync;
   }

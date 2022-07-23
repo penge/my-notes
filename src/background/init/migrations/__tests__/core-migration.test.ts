@@ -51,8 +51,8 @@ it("migrates data", () => {
             name: "Todo",
             createdTime: "2020-04-20T09:02:00Z",
             modifiedTime: "2020-04-20T09:02:02Z",
-          }
-        }
+          },
+        },
       },
       Clipboard: {
         content: "Clipboard content",
@@ -64,15 +64,15 @@ it("migrates data", () => {
             name: "Clipboard",
             createdTime: "2020-04-20T09:07:00Z",
             modifiedTime: "2020-04-20T09:07:07Z",
-          }
-        }
+          },
+        },
       },
       Math: {
         content: "some equations",
         createdTime: "2020-04-20T09:09:00Z",
         modifiedTime: "2020-04-20T09:09:09Z",
       },
-    }
+    },
   };
   items = migrate({}, local);
   expect(Object.keys(items.notes).length).toBe(3); // Todo, Clipboard, Math

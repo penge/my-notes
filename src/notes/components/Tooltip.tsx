@@ -1,5 +1,9 @@
-import { h, render, cloneElement, Fragment } from "preact";
-import { useRef, useState, useEffect, useMemo, useCallback } from "preact/hooks";
+import {
+  h, render, cloneElement, Fragment,
+} from "preact";
+import {
+  useRef, useState, useEffect, useMemo, useCallback,
+} from "preact/hooks";
 
 interface TooltipProps {
   id?: string
@@ -9,7 +13,7 @@ interface TooltipProps {
 }
 
 interface TooltipRenderProps {
-  id?: string
+  id?: string // eslint-disable-line react/no-unused-prop-types
   tooltip: string | h.JSX.Element
   childrenRect: DOMRect
   className?: string
@@ -35,10 +39,8 @@ const getTooltipPosition = (childrenRect: DOMRect, rect: DOMRect): h.JSX.CSSProp
 
   if (leftOffset < MINIMAL_OFFSET) { // handle LEFT edge (5px gap at least)
     styles.left = EDGE_OFFSET;
-
   } else if ((leftOffset + rect.width + MINIMAL_OFFSET) > window.innerWidth) { // handle RIGHT edge (5px gap at least)
     styles.right = EDGE_OFFSET;
-
   } else {
     styles.left = leftOffset;
   }
@@ -56,14 +58,12 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
 
   useEffect(() => {
     if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      setRect(rect);
+      const newRect = ref.current.getBoundingClientRect();
+      setRect(newRect);
     }
   }, [ref]);
 
-  const position: h.JSX.CSSProperties | undefined = useMemo(() => {
-    return rect && getTooltipPosition(childrenRect, rect);
-  }, [rect, childrenRect]);
+  const position: h.JSX.CSSProperties | undefined = useMemo(() => rect && getTooltipPosition(childrenRect, rect), [rect, childrenRect]);
 
   // Render hidden tooltip first, to get the width and height,
   // and then use effect to render visible tooltip, where
@@ -80,7 +80,9 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
             top: 0,
             opacity: 0,
           }}
-        >{tooltip}</div>
+        >
+          {tooltip}
+        </div>
       )}
 
       {rect && position && (
@@ -88,7 +90,9 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
           id="tooltip"
           className={className}
           style={position}
-        >{tooltip}</div>
+        >
+          {tooltip}
+        </div>
       )}
     </Fragment>
   );
@@ -96,7 +100,10 @@ const TooltipRender = ({ tooltip, childrenRect, className }: TooltipRenderProps)
 
 let renderProps: TooltipRenderProps | undefined;
 
-const Tooltip = ({ id, tooltip, children, className }: TooltipProps): h.JSX.Element => {
+const Tooltip = ({
+  id, tooltip, children, className,
+}: TooltipProps): h.JSX.Element => {
+  // eslint-disable-next-line react/jsx-props-no-spreading
   const show = useCallback((props: TooltipRenderProps) => render(<TooltipRender {...props} />, getContainer()), []);
   const hide = useCallback(() => render("", getContainer()), []);
 
@@ -119,7 +126,9 @@ const Tooltip = ({ id, tooltip, children, className }: TooltipProps): h.JSX.Elem
         return;
       }
       const childrenRect = event.currentTarget.getBoundingClientRect();
-      renderProps = { id, tooltip, childrenRect, className };
+      renderProps = {
+        id, tooltip, childrenRect, className,
+      };
       show(renderProps);
     },
     onMouseLeave: () => {

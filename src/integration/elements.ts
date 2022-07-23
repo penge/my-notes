@@ -1,24 +1,30 @@
-import { getElementById as _get } from "dom/index";
+const get = (ID: string): HTMLElement => {
+  const elem = document.getElementById(ID);
+  if (!elem) {
+    throw new Error(`Element ${ID} not found!`);
+  }
+  return elem;
+};
 
 /* Folder */
 
-const createMyNotesFolder = _get("create-my-notes-folder");
-const getMyNotesFolderId = _get("get-my-notes-folder-id");
+const createMyNotesFolder = get("create-my-notes-folder");
+const getMyNotesFolderId = get("get-my-notes-folder-id");
 
 /* Files */
 
-const createFile = _get("create-file");
-const updateFile = _get("update-file");
-const deleteFile = _get("delete-file");
+const createFile = get("create-file");
+const updateFile = get("update-file");
+const deleteFile = get("delete-file");
 
-const listFiles = _get("list-files");
-const getFile = _get("get-file");
+const listFiles = get("list-files");
+const getFile = get("get-file");
 
 /* Backup */
 
-const initiate = _get("initiate");
-const sync = _get("sync");
-const stop = _get("stop");
+const initiate = get("initiate");
+const sync = get("sync");
+const stop = get("stop");
 
 export default {
   // Folder

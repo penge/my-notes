@@ -10,13 +10,19 @@ const Version = ({ version }: VersionProps): h.JSX.Element => (
     <h2>{t("Version")}</h2>
     <div>
       <strong id="version">{version}</strong>
-      <a href="https://github.com/penge/my-notes/releases" target="_blank" class="space-left">{t("Changelog")}</a>
-      <a href="https://github.com/penge/my-notes" target="_blank" class="space-left">{t("Homepage")}</a>
+      <a href="https://github.com/penge/my-notes/releases" target="_blank" className="space-left" rel="noreferrer">{t("Changelog")}</a>
+      <a href="https://github.com/penge/my-notes" target="_blank" className="space-left" rel="noreferrer">{t("Homepage")}</a>
       <br />
       <br />
-      <span>{tString("Created by")} <a href="https://github.com/penge" target="_blank">Pavel Bucka</a></span>
+      <span>
+        {tString("Created by")}
+        {" "}
+        <a href="https://github.com/penge" target="_blank" rel="noreferrer">Pavel Bucka</a>
+      </span>
       {" "}
-      (<a href="https://www.buymeacoffee.com/penge" target="_blank">{t("Buy me a coffee")}</a>)
+      (
+      <a href="https://www.buymeacoffee.com/penge" target="_blank" rel="noreferrer">{t("Buy me a coffee")}</a>
+      )
     </div>
   </Fragment>
 );

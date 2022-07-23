@@ -1,24 +1,28 @@
 import { NotesObject, MessageType } from "shared/storage/schema";
-import { getItem, setItems } from "shared/storage/index";
-import { sendMessage } from "messages/index";
+import { getItem, setItems } from "shared/storage";
+import sendMessage from "shared/messages/send";
+import Log from "shared/log";
 
-import { runSyncPreconditions } from "../preconditions/sync-preconditions";
+import runSyncPreconditions from "../preconditions/run-sync-preconditions";
 
 import pull from "./pull";
 import push from "./push";
 
 import * as api from "../api";
-import { Log } from "shared/logger";
 
 // File actions
-const getFile = api.getFile;
-const createFile = api.createFile;
-const updateFile = api.updateFile;
-const deleteFile = api.deleteFile;
+const {
+  getFile,
+  createFile,
+  updateFile,
+  deleteFile,
+} = api;
 
 let syncInProgress = false;
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
 
 const onStart = () => {
   syncInProgress = true;
@@ -33,7 +37,7 @@ const onFail = () => {
 };
 
 const onDone = () => {
-  delay(2000).then(() => syncInProgress = false); // prevent to sync more often than 1x per 2000ms
+  delay(2000).then(() => { syncInProgress = false; }); // prevent to sync more often than 1x per 2000ms
   Log("SYNC - DONE");
   sendMessage(MessageType.SYNC_DONE);
 };
@@ -52,7 +56,9 @@ const sync = async (): Promise<boolean> => {
     return false;
   }
 
-  const { folderId, folderLocation, assetsFolderId, files } = fulfilled;
+  const {
+    folderId, folderLocation, assetsFolderId, files,
+  } = fulfilled;
   const notes = await getItem<NotesObject>("notes");
   if (!notes) {
     onDone();
@@ -86,14 +92,14 @@ const syncDeleteFile = async (fileId: string): Promise<boolean> => {
   }
 
   const { files } = fulfilled;
-  const fileExists = fileId && files.find(file => file.id === fileId) !== undefined;
+  const fileExists = fileId && files.find((file) => file.id === fileId) !== undefined;
   if (!fileExists) {
     Log(`SYNC_DELETE_FILE - PROBLEM - cannot delete file with ID ${fileId}`);
     return false;
   }
 
   Log(`%cSYNC_DELETE_FILE - DELETING FILE - ${fileId}`, "red");
-  return await deleteFile(fileId);
+  return deleteFile(fileId);
 };
 
 export {

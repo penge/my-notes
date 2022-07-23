@@ -14,12 +14,12 @@ function randomId(): string {
  * This ID is used by "Save to remotely open My Notes"
  * to save text to remote My Notes only
  */
-export const setId = (): void => {
-  chrome.storage.local.get(["id"], local => {
+export default (): void => {
+  chrome.storage.local.get(["id"], (local) => {
     if (local.id) {
       return;
     }
     const id = randomId();
-    chrome.storage.local.set({ id: id });
+    chrome.storage.local.set({ id });
   });
 };

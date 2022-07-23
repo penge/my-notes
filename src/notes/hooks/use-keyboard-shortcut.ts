@@ -1,11 +1,15 @@
-import { useRef, useState, useEffect, useCallback } from "preact/hooks";
+import {
+  useRef, useState, useEffect, useCallback,
+} from "preact/hooks";
 import keyboardShortcuts, { KeyboardShortcut, Callback } from "notes/keyboard-shortcuts";
+
 export { KeyboardShortcut } from "notes/keyboard-shortcuts";
 
 type Handler = undefined | Callback;
 
 export const useKeyboardShortcut = (keyboardShortcut: KeyboardShortcut) => {
   const lastHandler = useRef<Handler>(undefined);
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   const [handler, __setHandler] = useState<Handler>();
 
   useEffect(() => {
@@ -25,8 +29,8 @@ export const useKeyboardShortcut = (keyboardShortcut: KeyboardShortcut) => {
     };
   }, [handler]);
 
-  const setHandler = useCallback((handler: Handler) => {
-    __setHandler(() => handler);
+  const setHandler = useCallback((newHandler: Handler) => {
+    __setHandler(() => newHandler);
   }, []);
 
   return [setHandler];

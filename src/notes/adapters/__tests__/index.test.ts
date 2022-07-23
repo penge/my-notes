@@ -1,5 +1,5 @@
 import { NotesObject, NotesOrder } from "shared/storage/schema";
-import { notesToSidebarNotes } from "../";
+import { notesToSidebarNotes } from "..";
 
 describe("notesToSidebarNotes()", () => {
   describe("unpinned notes only", () => {

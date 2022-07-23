@@ -63,9 +63,9 @@ const tableHtmlHoverI = `<table>
   </tr></tbody>
 </table>`;
 
-const prepareDom = (tableHtml: string): { dom: JSDOM, table: HTMLTableElement } => {
+const prepareDom = (tableHtmlToInsert: string): { dom: JSDOM, table: HTMLTableElement } => {
   const dom = new JSDOM();
-  dom.window.document.body.insertAdjacentHTML("afterbegin", tableHtml);
+  dom.window.document.body.insertAdjacentHTML("afterbegin", tableHtmlToInsert);
   const table = dom.window.document.body.children[0] as HTMLTableElement;
   return { dom, table };
 };
@@ -93,7 +93,7 @@ describe("reinitTable", () => {
       document: dom.window.document,
       computedStyleFunction: dom.window.getComputedStyle,
       table,
-      onResize: () => { return; }
+      onResize: () => { },
     };
     makeTableResizableFunction = jest.fn();
     reinitTable({
@@ -121,7 +121,7 @@ describe("makeTableResizable()", () => {
     const prepared = prepareDom(tableHtml);
     dom = prepared.dom;
     table = prepared.table;
-    onResize = jest.fn(),
+    onResize = jest.fn();
 
     makeTableResizable({
       document: dom.window.document,

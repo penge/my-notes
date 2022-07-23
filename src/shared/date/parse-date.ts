@@ -7,7 +7,7 @@ const monthOptions: Intl.DateTimeFormatOptions = {
 const timeOptions: Intl.DateTimeFormatOptions = {
   hour: "numeric",
   minute: "2-digit",
-  second: "2-digit"
+  second: "2-digit",
 };
 
 export interface ParsedDate {
@@ -22,12 +22,12 @@ export interface ParsedDate {
 
 export default (ISOString: string): ParsedDate | undefined => {
   if (!ISOString) {
-    return;
+    return undefined;
   }
 
   const dateObject = new Date(ISOString);
-  if (isNaN(dateObject.getTime())) {
-    return;
+  if (Number.isNaN(dateObject.getTime())) {
+    return undefined;
   }
 
   const year = dateObject.getFullYear();

@@ -1,6 +1,6 @@
 import { Storage, NotesOrder } from "shared/storage/schema";
 import migrate from "../core";
-import { expectItems } from "./helpers";
+import expectItems from "./expect-items";
 
 it("uses existing values and adds any omitted properties set to their defaults to make a complete Storage", () => {
   const existing: Partial<Storage> = {
@@ -24,8 +24,8 @@ it("uses existing values and adds any omitted properties set to their defaults t
             name: "Todo",
             createdTime: "2020-04-20T09:02:00Z",
             modifiedTime: "2020-04-20T09:02:02Z",
-          }
-        }
+          },
+        },
       },
       Notebook: {
         content: "Notebook content",
@@ -37,8 +37,8 @@ it("uses existing values and adds any omitted properties set to their defaults t
             name: "Notebook",
             createdTime: "2020-04-20T09:07:00Z",
             modifiedTime: "2020-04-20T09:07:07Z",
-          }
-        }
+          },
+        },
       },
       Math: {
         content: "some equations",

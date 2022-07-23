@@ -1,7 +1,7 @@
 import { h, RefObject, Fragment } from "preact";
 import { useRef, useCallback, useState } from "preact/hooks";
 import clsx from "clsx";
-import { preventEnter } from "shared/components/inputs";
+import preventEnter from "shared/components/prevent-enter";
 import { exportNotes } from "notes/export";
 import {
   ACCEPTED_TEXT_TYPES, importNotesFromTextFiles,
@@ -19,10 +19,9 @@ const alertImported = (importedNoteNames: string[]) => {
     ? tString("Imported.one")
     : tString("Imported.other", { count: importedNoteNames.length });
 
-  alert(
-    summary
-    + "\r\n"
-    + importedNoteNames.map((noteName) => `- ${noteName}`).join("\r\n"));
+  const notes = importedNoteNames.map((noteName) => `- ${noteName}`).join("\r\n");
+
+  alert(`${summary}\r\n${notes}`);
 };
 
 interface ExportImportProps {
@@ -36,6 +35,7 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
   const zipRef = useRef<HTMLInputElement>(null);
 
   const handleImport = useCallback((ref: RefObject<HTMLInputElement>) => (importedNoteNames: string[]) => {
+    // eslint-disable-next-line no-param-reassign
     if (ref.current) { ref.current.value = ""; } // reset input's value so can select and import the same file(s) again
     alertImported(importedNoteNames);
   }, []);
@@ -48,7 +48,7 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
 
       <input
         type="button"
-        class={clsx(commonButtonClasses, !canExport && "disabled")}
+        className={clsx(commonButtonClasses, !canExport && "disabled")}
         value={tString("Export notes")}
         onKeyPress={preventEnter}
         onClick={() => {
@@ -64,7 +64,7 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
 
       <input
         type="button"
-        class={clsx(commonButtonClasses)}
+        className={clsx(commonButtonClasses)}
         value={tString("Import notes from text files")}
         onKeyPress={preventEnter}
         onClick={() => textRef.current?.click()}
@@ -72,7 +72,7 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
 
       <input
         type="button"
-        class={clsx(commonButtonClasses)}
+        className={clsx(commonButtonClasses)}
         value={tString("Import notes from a ZIP file")}
         onKeyPress={preventEnter}
         onClick={() => zipRef.current?.click()}

@@ -1,5 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-pascal-case */
 import { h, render, Fragment } from "preact";
-import { useState, useEffect, useRef, useCallback, useMemo } from "preact/hooks";
+import {
+  useState, useEffect, useRef, useCallback, useMemo,
+} from "preact/hooks";
 
 import {
   Os,
@@ -35,15 +39,19 @@ import renameNote from "notes/state/rename-note";
 import deleteNote from "notes/state/delete-note";
 import duplicateNote from "notes/state/duplicate-note";
 
-import { saveNote, setLocked, setPinnedTime, setRaw } from "notes/content/save";
-import { sendMessage } from "messages";
+import {
+  saveNote, setLocked, setPinnedTime, setRaw,
+} from "notes/content/save";
+import sendMessage from "shared/messages/send";
 
 import { getActiveFromUrl, getFocusOverride } from "notes/location";
-import { getFirstAvailableNoteName } from "notes/filters";
+import getFirstAvailableNoteName from "notes/filters/get-first-available-note-name";
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
-import { Command, commands, toggleSidebar, toggleToolbar } from "notes/commands";
+import {
+  Command, commands, toggleSidebar, toggleToolbar,
+} from "notes/commands";
 import { exportNote } from "notes/export";
 import { notesToSidebarNotes } from "notes/adapters";
 import { t } from "i18n";
@@ -105,7 +113,7 @@ const Notes = (): h.JSX.Element => {
 
   useEffect(() => {
     chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
-    chrome.tabs.getCurrent((tab) => tab && setTabId(tab.id));
+    chrome.tabs.getCurrent((currentTab) => currentTab && setTabId(currentTab.id));
   }, []);
 
   useEffect(() => {
@@ -143,7 +151,7 @@ const Notes = (): h.JSX.Element => {
       "sync",
       "autoSync",
       "lastEdit",
-    ], items => {
+    ], (items) => {
       const local = items as Storage;
 
       // Notifications
@@ -192,32 +200,32 @@ const Notes = (): h.JSX.Element => {
         return;
       }
 
-      if (changes["font"]) {
-        setFont(changes["font"].newValue);
+      if (changes.font) {
+        setFont(changes.font.newValue);
       }
 
-      if (changes["size"]) {
-        setSize(changes["size"].newValue);
+      if (changes.size) {
+        setSize(changes.size.newValue);
       }
 
-      if (changes["theme"]) {
-        setTheme(changes["theme"].newValue);
+      if (changes.theme) {
+        setTheme(changes.theme.newValue);
       }
 
-      if (changes["customTheme"]) {
-        setCustomTheme(changes["customTheme"].newValue);
+      if (changes.customTheme) {
+        setCustomTheme(changes.customTheme.newValue);
       }
 
-      if (changes["notes"]) {
-        const oldNotes: NotesObject = changes["notes"].oldValue;
-        const newNotes: NotesObject = changes["notes"].newValue;
+      if (changes.notes) {
+        const oldNotes: NotesObject = changes.notes.oldValue;
+        const newNotes: NotesObject = changes.notes.newValue;
 
         const oldSet = new Set(Object.keys(oldNotes));
         const newSet = new Set(Object.keys(newNotes));
 
         // RENAME
         if (newSet.size === oldSet.size) {
-          const diff = new Set([...newSet].filter(x => !oldSet.has(x)));
+          const diff = new Set([...newSet].filter((x) => !oldSet.has(x)));
           if (diff.size === 1) {
             const renamedNoteName = diff.values().next().value as string;
             setNotesProps((prev) => {
@@ -262,26 +270,26 @@ const Notes = (): h.JSX.Element => {
         // NEW or UPDATE
         setNotesProps((prev) => {
           const diff = newSet.size > oldSet.size
-            ? new Set([...newSet].filter(x => !oldSet.has(x)))
+            ? new Set([...newSet].filter((x) => !oldSet.has(x)))
             : undefined;
 
-          const newNoteName = (changes["active"] && changes["active"].newValue as string)
+          const newNoteName = (changes.active && changes.active.newValue as string)
             || ((diff && diff.size === 1) ? diff.values().next().value as string : "");
 
           // Auto-active new note
           const newActive = newNoteName || prev.active;
 
           // Update note content if updated from background
-          const setBy: string | undefined = changes["setBy"] && changes["setBy"].newValue;
+          const setBy: string | undefined = changes.setBy && changes.setBy.newValue;
           if (
-            (setBy && !setBy.startsWith(`${tabId}-`)) && // expecting "worker-*" or "sync-*"
-            (newActive in oldNotes) &&
-            (newActive in newNotes) &&
-            (newNotes[newActive].content !== oldNotes[newActive].content) &&
-            (newNotes[newActive].modifiedTime > oldNotes[newActive].modifiedTime)
+            (setBy && !setBy.startsWith(`${tabId}-`)) // expecting "worker-*" or "sync-*"
+            && (newActive in oldNotes)
+            && (newActive in newNotes)
+            && (newNotes[newActive].content !== oldNotes[newActive].content)
+            && (newNotes[newActive].modifiedTime > oldNotes[newActive].modifiedTime)
           ) {
-            setContentNote((prev) => prev && ({
-              ...prev,
+            setContentNote((prevContentNote) => prevContentNote && ({
+              ...prevContentNote,
               initialContent: newNotes[newActive].content,
             }));
           }
@@ -297,41 +305,41 @@ const Notes = (): h.JSX.Element => {
         });
       }
 
-      if (changes["order"]) {
-        setOrder(changes["order"].newValue);
+      if (changes.order) {
+        setOrder(changes.order.newValue);
       }
 
-      if (changes["notesOrder"]) {
-        setNotesOrder(changes["notesOrder"].newValue);
+      if (changes.notesOrder) {
+        setNotesOrder(changes.notesOrder.newValue);
       }
 
-      if (changes["focus"]) {
-        setFocus(getFocusOverride() || changes["focus"].newValue);
+      if (changes.focus) {
+        setFocus(getFocusOverride() || changes.focus.newValue);
       }
 
-      if (changes["tab"]) {
-        setTab(changes["tab"].newValue);
+      if (changes.tab) {
+        setTab(changes.tab.newValue);
       }
 
-      if (changes["tabSize"]) {
-        setTabSize(changes["tabSize"].newValue);
+      if (changes.tabSize) {
+        setTabSize(changes.tabSize.newValue);
       }
 
-      if (changes["openNoteOnMouseHover"]) {
-        setOpenNoteOnMouseHover(changes["openNoteOnMouseHover"].newValue);
+      if (changes.openNoteOnMouseHover) {
+        setOpenNoteOnMouseHover(changes.openNoteOnMouseHover.newValue);
       }
 
-      if (changes["sync"]) {
-        setSync(changes["sync"].newValue);
+      if (changes.sync) {
+        setSync(changes.sync.newValue);
         document.body.classList.remove("syncing");
       }
 
-      if (changes["autoSync"]) {
-        setAutoSync(changes["autoSync"].newValue);
+      if (changes.autoSync) {
+        setAutoSync(changes.autoSync.newValue);
       }
 
-      if (changes["lastEdit"]) {
-        lastEditRef.current = changes["lastEdit"].newValue;
+      if (changes.lastEdit) {
+        lastEditRef.current = changes.lastEdit.newValue;
       }
     });
 
@@ -343,14 +351,13 @@ const Notes = (): h.JSX.Element => {
 
       if (message.type === MessageType.SYNC_DONE || message.type === MessageType.SYNC_FAIL) {
         document.body.classList.remove("syncing");
-        return;
       }
     });
 
     notesHistory.attach((noteName) => {
-      setNotesProps((prev) => noteName in prev.notes
+      setNotesProps((prev) => (noteName in prev.notes
         ? { ...prev, active: noteName }
-        : prev);
+        : prev));
     });
   }, [tabId]);
 
@@ -360,7 +367,7 @@ const Notes = (): h.JSX.Element => {
       return;
     }
 
-    const href = (font as GoogleFont).href;
+    const { href } = font as GoogleFont;
     if (href) {
       (document.getElementById("google-fonts") as HTMLLinkElement).href = href;
     }
@@ -389,7 +396,9 @@ const Notes = (): h.JSX.Element => {
     // - light.css
     // - dark.css
     // - customTheme string
-    theme && setThemeCore(document, { theme, customTheme: customTheme });
+    if (theme) {
+      setThemeCore(document, { theme, customTheme });
+    }
   }, [theme, customTheme]);
 
   // Focus
@@ -454,7 +463,7 @@ const Notes = (): h.JSX.Element => {
       if (getFocusOverride()) {
         return;
       }
-      chrome.storage.local.get(["focus"], local => {
+      chrome.storage.local.get(["focus"], (local) => {
         chrome.storage.local.set({ focus: !local.focus });
       });
     });
@@ -543,12 +552,12 @@ const Notes = (): h.JSX.Element => {
 
     // Start preparing props for Command Palette
     const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
-    const commands = currentNoteLocked ? [] : commandPaletteCommands;
+    const newCommands = currentNoteLocked ? [] : commandPaletteCommands;
 
     // Props for Command Palette
     const props: CommandPaletteProps = {
       notes: notesToSidebarNotes(notesProps.notes, notesOrder, order),
-      commands,
+      commands: newCommands,
       onActivateNote: (noteName: string) => {
         setCommandPaletteProps(null);
         range.restore(() => handleOnActivateNote(noteName));
@@ -579,7 +588,7 @@ const Notes = (): h.JSX.Element => {
     });
 
     // Update props for already visible Command Palette
-    setCommandPaletteProps((prev) => !prev ? prev : props);
+    setCommandPaletteProps((prev) => (!prev ? prev : props));
   }, [os, notesProps, notesOrder, order, handleOnActivateNote, commandPaletteCommands]);
 
   // Automatically show modal to create a new note if there are 0 notes
@@ -631,8 +640,9 @@ const Notes = (): h.JSX.Element => {
           width={sidebarWidth}
           onActivateNote={handleOnActivateNote}
           onNoteContextMenu={(noteName, x, y) => setContextMenuProps({
-            noteName, x, y,
-            onRename: (noteName) => {
+            x,
+            y,
+            onRename: () => {
               setContextMenuProps(null);
               setRenameNoteModalProps({
                 noteName,
@@ -644,7 +654,7 @@ const Notes = (): h.JSX.Element => {
                 },
               });
             },
-            onDelete: (noteName) => {
+            onDelete: () => {
               setContextMenuProps(null);
               setDeleteNoteModalProps({
                 noteName,
@@ -656,20 +666,29 @@ const Notes = (): h.JSX.Element => {
               });
             },
             locked: notesProps.notes[noteName].locked ?? false,
-            onToggleLocked: (noteName) => {
+            onToggleLocked: () => {
               setContextMenuProps(null);
-              tabId && notesRef.current && setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+              if (tabId && notesRef.current) {
+                setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
+              }
             },
             pinned: !!notesProps.notes[noteName].pinnedTime,
-            onTogglePinnedTime: (noteName) => {
+            onTogglePinnedTime: () => {
               setContextMenuProps(null);
-              tabId && notesRef.current && setPinnedTime(noteName, (notesProps.notes[noteName].pinnedTime ?? undefined) ? undefined : new Date().toISOString(), tabId, notesRef.current);
+              if (tabId && notesRef.current) {
+                setPinnedTime(
+                  noteName,
+                  (notesProps.notes[noteName].pinnedTime ?? undefined) ? undefined : new Date().toISOString(),
+                  tabId,
+                  notesRef.current,
+                );
+              }
             },
-            onDuplicate: (noteName) => {
+            onDuplicate: () => {
               setContextMenuProps(null);
               duplicateNote(noteName);
             },
-            onExport: (noteName) => {
+            onExport: () => {
               setContextMenuProps(null);
               exportNote(noteName);
             },
@@ -690,7 +709,9 @@ const Notes = (): h.JSX.Element => {
               locked: contentNote.active in notesProps.notes ? (notesProps.notes[contentNote.active].locked || false) : false,
             }}
             onEdit={(active, content) => {
-              tabId && notesRef.current && saveNote(active, content, tabId, notesRef.current);
+              if (tabId && notesRef.current) {
+                saveNote(active, content, tabId, notesRef.current);
+              }
             }}
             indentOnTab={tab}
             tabSize={tabSize}
@@ -712,7 +733,7 @@ const Notes = (): h.JSX.Element => {
               return;
             }
 
-            const newRaw = (contentNote?.raw || false) ? false : true;
+            const newRaw = !(contentNote?.raw || false);
             setRaw(notesProps.active, newRaw, tabId, notesRef.current);
             setContentNote((prev) => prev && ({
               ...prev,
@@ -748,7 +769,7 @@ const Notes = (): h.JSX.Element => {
         </Fragment>
       )}
 
-      <div id="tooltip-container"></div>
+      <div id="tooltip-container" />
     </Fragment>
   );
 };

@@ -1,12 +1,12 @@
 import { NotesObject, Note } from "shared/storage/schema";
-import { findFirstAvailableDuplicateName } from "./helpers";
+import findFirstAvailableDuplicateName from "./helpers/find-first-available-duplicate-name";
 
 export default function duplicateNote(noteNameToDuplicate: string): void {
   if (!noteNameToDuplicate) {
     return;
   }
 
-  chrome.storage.local.get(["notes"], local => {
+  chrome.storage.local.get(["notes"], (local) => {
     const notes: NotesObject = { ...local.notes };
 
     if (!(noteNameToDuplicate in notes)) {

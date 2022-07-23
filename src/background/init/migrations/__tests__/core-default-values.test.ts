@@ -1,6 +1,8 @@
-import { Storage, NotesObject, Note, NotesOrder } from "shared/storage/schema";
+import {
+  Storage, NotesObject, Note, NotesOrder,
+} from "shared/storage/schema";
 import migrate from "../core";
-import { expectItems } from "./helpers";
+import expectItems from "./expect-items";
 
 const expectDefaultValues = (items: Storage) => {
   expectItems(items);
@@ -27,7 +29,7 @@ const expectDefaultValues = (items: Storage) => {
   // Notes
   const notes = items.notes as NotesObject;
   countedExpect()(Object.keys(notes).length).toBe(3); // "One", "Two", "Three"
-  ["One", "Two", "Three"].every((noteName: string) => {
+  ["One", "Two", "Three"].forEach((noteName: string) => {
     const note = (notes)[noteName] as Note;
 
     expect(Object.keys(note).length).toBe(3); // "content", "createdTime", "modifiedTime"
@@ -81,10 +83,10 @@ it("fallbacks to default values for any bad values", () => {
     focus: 1,       // must be boolean
     tab: 1,         // must be boolean
     tabSize: "Tab", // must be number
-    openNoteOnMouseHover: "yes" // must be boolean
+    openNoteOnMouseHover: "yes", // must be boolean
   });
 
-  expectDefaultValues(Object.assign({}, items));
+  expectDefaultValues({ ...items });
 });
 
 it("fallbacks active and clipboard if possible", () => {
@@ -100,8 +102,8 @@ it("fallbacks active and clipboard if possible", () => {
             name: "Todo",
             createdTime: "2020-04-20T09:02:00Z",
             modifiedTime: "2020-04-20T09:02:02Z",
-          }
-        }
+          },
+        },
       },
       Clipboard: {
         content: "Clipboard content",
@@ -113,15 +115,15 @@ it("fallbacks active and clipboard if possible", () => {
             name: "Clipboard",
             createdTime: "2020-04-20T09:07:00Z",
             modifiedTime: "2020-04-20T09:07:07Z",
-          }
-        }
+          },
+        },
       },
       Math: {
         content: "some equations",
         createdTime: "2020-04-20T09:09:00Z",
         modifiedTime: "2020-04-20T09:09:09Z",
       },
-    } as NotesObject
+    } as NotesObject,
   };
 
   // Clipboard exists
@@ -133,7 +135,7 @@ it("fallbacks active and clipboard if possible", () => {
     notes: {
       Todo: local.notes.Todo,
       Math: local.notes.Math,
-    }
+    },
   });
   expect(itemsNoClipboard.active).toBe("Math"); // first available in A-Z order
 
@@ -141,7 +143,7 @@ it("fallbacks active and clipboard if possible", () => {
   const noItems = migrate({}, {
     notes: {
       // empty
-    }
+    },
   });
   expect(noItems.active).toBe(null);
 });

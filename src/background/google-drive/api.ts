@@ -9,7 +9,7 @@ import {
 } from "./bodies";
 
 import { listFoldersQuery, listFilesQuery } from "./queries";
-import files from "./files/index";
+import * as files from "./files";
 
 const createFolder = async (folderName: string, parent?: string): Promise<string> => {
   const body = createFolderBody(folderName, parent);
@@ -21,7 +21,7 @@ const createFolder = async (folderName: string, parent?: string): Promise<string
 const getFolder = async (folderName: string, parent?: string): Promise<string> => {
   const query = listFoldersQuery(folderName, parent);
   const fields = "files(id)";
-  const json = await files.list(query, fields) as { files: {id: string}[] };
+  const json = await files.list(query, fields) as { files: { id: string }[] };
   const folderId = json && json.files && json.files[0] && json.files[0].id;
   return folderId;
 };
@@ -32,11 +32,20 @@ export const getMyNotesFolderId = (): Promise<string> => getFolder("My Notes");
 export const createAssetsFolder = (parent: string): Promise<string> => createFolder("assets", parent);
 export const getAssetsFolderId = (parent: string): Promise<string> => getFolder("assets", parent);
 
-export const createFile = async (folderId: string, { name, content, createdTime, modifiedTime }: CreateFileBodyOptions): Promise<GoogleDriveFile> => {
-  const body = createFileBody(folderId, { name, content, createdTime, modifiedTime });
+export const createFile = async (
+  folderId: string,
+  {
+    name, content, createdTime, modifiedTime,
+  }: CreateFileBodyOptions,
+): Promise<GoogleDriveFile> => {
+  const body = createFileBody(folderId, {
+    name, content, createdTime, modifiedTime,
+  });
   const json = await files.create(body) as { id: string };
   const id = json && json.id;
-  return { id, name, content, createdTime, modifiedTime };
+  return {
+    id, name, content, createdTime, modifiedTime,
+  };
 };
 
 export interface GoogleDriveFileUpdate {
@@ -50,7 +59,9 @@ export const updateFile = async (fileId: string, { name, content, modifiedTime }
   const body = updateFileBody({ name, content, modifiedTime });
   const json = await files.update(fileId, body) as { id: string };
   const id = json && json.id;
-  return { id, name, content, modifiedTime };
+  return {
+    id, name, content, modifiedTime,
+  };
 };
 
 export const deleteFile = async (fileId: string): Promise<boolean> => {

@@ -1,5 +1,5 @@
 import { NotesObject, Note, GoogleDriveFile } from "shared/storage/schema";
-import { Log } from "shared/logger";
+import Log from "shared/log";
 import { GetFileFunction } from "background/google-drive/api";
 
 const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile): Note => ({
@@ -13,24 +13,25 @@ const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile)
       name: file.name,
       createdTime: file.createdTime,
       modifiedTime: file.modifiedTime,
-    }
-  }
+    },
+  },
 });
 
-const mergeContent = (noteContent: string, fileContent: string) => noteContent + "<br><br>" + fileContent;
+const mergeContent = (noteContent: string, fileContent: string) => `${noteContent}<br><br>${fileContent}`;
 
 const updateNote = async (
   notes: NotesObject,
   syncedNote: Note,
   file: GoogleDriveFile,
   getFile: GetFileFunction,
-  contentResolution: "replace" | "merge"
+  contentResolution: "replace" | "merge",
 ) => {
   const notesCopy: NotesObject = { ...notes };
 
   const previousNoteName = Object.keys(notesCopy).find((key) => notesCopy[key] === syncedNote);
   const fileContent = await getFile(file.id) || "";
 
+  // eslint-disable-next-line max-len
   Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
   notesCopy[file.name] = prepareNote(
     syncedNote,
@@ -45,10 +46,11 @@ const updateNote = async (
   return notesCopy;
 };
 
-export const pullUpdate = async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFile: GetFileFunction): Promise<NotesObject> => {
+export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFile: GetFileFunction): Promise<NotesObject> => {
   let notesCopy: NotesObject = { ...notes };
 
-  for (const file of remoteFiles) {
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const file of remoteFiles) {
     const syncedNote = Object.values(notes).find((note) => note.sync?.file.id === file.id);
 
     if (

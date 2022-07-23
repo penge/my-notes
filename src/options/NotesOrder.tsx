@@ -10,9 +10,12 @@ const NotesOrder = ({ notesOrder }: OrderProps): h.JSX.Element => (
   <Fragment>
     <h2>{t("Order")}</h2>
     <p>
-      <span>{t("Current order:")}{" "}</span>
+      <span>
+        {t("Current order:")}
+        {" "}
+      </span>
       <select
-        class="select"
+        className="select"
         value={notesOrder}
         onChange={(event) => {
           const newNotesOrder = (event.target as HTMLSelectElement).value as NotesOrderEnum;
@@ -23,9 +26,7 @@ const NotesOrder = ({ notesOrder }: OrderProps): h.JSX.Element => (
           NotesOrderEnum.Alphabetical,
           NotesOrderEnum.NewestFirst,
           NotesOrderEnum.Custom,
-        ].map((oneOrder) =>
-          <option value={oneOrder}>{t(`Orders.${oneOrder}`)}</option>
-        )}
+        ].map((oneOrder) => <option value={oneOrder}>{t(`Orders.${oneOrder}`)}</option>)}
       </select>
     </p>
     <p>{t("Orders description")}</p>

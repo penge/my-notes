@@ -1,6 +1,7 @@
-
-import { NotesObject, NotesOrder, Storage, StorageKey } from "shared/storage/schema";
-import { defaultValuesFactory } from "shared/storage/default-values";
+import {
+  NotesObject, NotesOrder, Storage, StorageKey,
+} from "shared/storage/schema";
+import defaultValuesFactory from "shared/storage/default-values-factory";
 import {
   validBoolean,
   validStringArray,
@@ -41,16 +42,16 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
   const defaultValues = defaultValuesFactory(true);
 
   // Get the notes from a previous version
-  let notes =
+  let notes = // eslint-disable-line operator-linebreak
     // 1.x
-    sync.value ||  // string => [1.4], [1.3], [1.2]
-    sync.newtab || // string => [1.1.1], [1.1], [1.0]
+    sync.value     // string => [1.4], [1.3], [1.2]
+    || sync.newtab // string => [1.1.1], [1.1], [1.0]
     // early 2.x
-    sync.notes ||  // array => [2.0], [2.0.1], [2.0.2], [2.1]
+    || sync.notes  // array => [2.0], [2.0.1], [2.0.2], [2.1]
     // later 2.x and 3.x
-    local.notes || // array => [2.2], [2.x]; object => [3.x]
+    || local.notes // array => [2.2], [2.x]; object => [3.x]
     // DEFAULT
-    defaultValues.notes; // object => [3.x]
+    || defaultValues.notes; // object => [3.x]
 
   // Migrate the notes from [1.x] to [2.x] (from a string => to an array of strings)
   if (typeof notes === "string") {
@@ -58,7 +59,7 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
   }
 
   // Migrate the notes from [2.x] to [3.x] (from an array of strings => to an object)
-  if (Array.isArray(notes) && notes.length === 3 && notes.every(note => typeof note === "string")) {
+  if (Array.isArray(notes) && notes.length === 3 && notes.every((note) => typeof note === "string")) {
     const time = new Date().toISOString();
     const createdTime = time;
     const modifiedTime = time;
@@ -69,9 +70,9 @@ export default (sync: { [key: string]: unknown }, local: { [key: string]: unknow
     };
   }
 
-  const tryNote = (noteName: string): string | null => (noteName in (notes as NotesObject))
+  const tryNote = (noteName: string): string | null => ((noteName in (notes as NotesObject))
     ? noteName
-    : null;
+    : null);
 
   const firstAvailableNote = Object.keys(notes as NotesObject).sort()[0] || null;
 

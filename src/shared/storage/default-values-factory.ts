@@ -16,7 +16,7 @@ const getDefaultNotes = (): NotesObject => {
   };
 };
 
-const defaultValuesFactory = (generateNotes?: boolean): Storage => {
+export default (generateNotes?: boolean): Storage => {
   const notes = generateNotes ? getDefaultNotes() : {};
 
   return {
@@ -48,8 +48,4 @@ const defaultValuesFactory = (generateNotes?: boolean): Storage => {
     autoSync: false,
     openNoteOnMouseHover: false,
   };
-};
-
-export {
-  defaultValuesFactory,
 };

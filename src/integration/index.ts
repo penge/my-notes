@@ -1,6 +1,5 @@
-import * as api from "./api";
-import * as backup from "./backup";
+import * as actions from "./actions";
 
-api.initFolderActions();
-api.initFileActions();
-backup.initBackupActions();
+actions.initFolderActions();
+actions.initFileActions();
+actions.initBackupActions();

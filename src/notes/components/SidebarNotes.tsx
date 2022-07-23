@@ -1,12 +1,14 @@
-import { h, Fragment } from "preact";
-import { useState, useEffect, useCallback, useRef } from "preact/hooks";
+import { h } from "preact";
+import {
+  useState, useEffect, useCallback, useRef,
+} from "preact/hooks";
 import { MessageType } from "shared/storage/schema";
 import { SidebarNote } from "notes/adapters";
 import clsx from "clsx";
-import SVG from "types/SVG";
+import SVG from "notes/components/SVG";
 import LockSvgText from "svg/lock.svg";
 import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
-import { sendMessage } from "messages";
+import sendMessage from "shared/messages/send";
 
 export interface SidebarNotesProps {
   id: string
@@ -22,7 +24,16 @@ export interface SidebarNotesProps {
 }
 
 const SidebarNotes = ({
-  id, notes: sidebarNotes, active, onActivateNote, onNoteContextMenu, openNoteOnMouseHover, canDragEnter, setOnDraggingNoteOriginator, canChangeOrder, onChangeOrder,
+  id,
+  notes: sidebarNotes,
+  active,
+  onActivateNote,
+  onNoteContextMenu,
+  openNoteOnMouseHover,
+  canDragEnter,
+  setOnDraggingNoteOriginator,
+  canChangeOrder,
+  onChangeOrder,
 }: SidebarNotesProps): h.JSX.Element => {
   const [notes, setNotes] = useState<SidebarNote[]>(sidebarNotes);
 
@@ -65,106 +76,105 @@ const SidebarNotes = ({
   useEffect(() => setOnDraggingNoteOriginator(draggedNote ? id : undefined), [id, draggedNote]);
 
   return (
-    <Fragment>
-      <div
-        id={id}
-        className={clsx("sidebar-notes", draggedNote && "dragging")}
-      >
-        {notes.map((note, index) =>
-          <div
-            draggable
-            class={clsx(
-              "note",
-              note.name === active && "active",
-              note.name === dragOverNote && "drag-over",
-              note.name === dragOverNoteConfirmation && "drag-confirmation",
-              note === draggedNote && "dragging",
-            )}
-            onClick={() => onActivateNote(note.name)}
-            onMouseEnter={() => !draggedNote && setEnteredNote(note.name)}
-            onMouseLeave={() => !draggedNote && setEnteredNote(null)}
-            onContextMenu={(event) => {
+    <div
+      id={id}
+      className={clsx("sidebar-notes", draggedNote && "dragging")}
+    >
+      {notes.map((note, index) => (
+        <div
+          draggable
+          className={clsx(
+            "note",
+            note.name === active && "active",
+            note.name === dragOverNote && "drag-over",
+            note.name === dragOverNoteConfirmation && "drag-confirmation",
+            note === draggedNote && "dragging",
+          )}
+          onClick={() => onActivateNote(note.name)}
+          onMouseEnter={() => !draggedNote && setEnteredNote(note.name)}
+          onMouseLeave={() => !draggedNote && setEnteredNote(null)}
+          onContextMenu={(event) => {
+            event.preventDefault();
+            onActivateNote(note.name);
+            onNoteContextMenu(note.name, event.pageX, event.pageY);
+          }}
+          onDragStart={(event) => {
+            if (!canChangeOrder) {
               event.preventDefault();
-              onActivateNote(note.name);
-              onNoteContextMenu(note.name, event.pageX, event.pageY);
-            }}
-            onDragStart={(event) => {
-              if (!canChangeOrder) {
-                event.preventDefault();
-                return;
-              }
+              return;
+            }
 
-              if (event.dataTransfer) {
-                event.dataTransfer.effectAllowed = "move";
-              }
-            }}
-            onDrag={() => {
-              if (draggedNote) {
-                return;
-              }
+            if (event.dataTransfer) {
+              // eslint-disable-next-line no-param-reassign
+              event.dataTransfer.effectAllowed = "move";
+            }
+          }}
+          onDrag={() => {
+            if (draggedNote) {
+              return;
+            }
 
-              setDraggedNote(note);
-            }}
-            onDragEnter={() => {
-              if (!draggedNote) {
-                return;
-              }
+            setDraggedNote(note);
+          }}
+          onDragEnter={() => {
+            if (!draggedNote) {
+              return;
+            }
 
-              setNotes((prev) => {
-                const newNotes = [...prev];
-                const draggedNoteIndex = newNotes.indexOf(draggedNote);
-                newNotes[index] = draggedNote;
-                newNotes[draggedNoteIndex] = note;
+            setNotes((prev) => {
+              const newNotes = [...prev];
+              const draggedNoteIndex = newNotes.indexOf(draggedNote);
+              newNotes[index] = draggedNote;
+              newNotes[draggedNoteIndex] = note;
 
-                return newNotes;
+              return newNotes;
+            });
+          }}
+          onDragOver={(event) => {
+            event.preventDefault();
+            if (note.locked || draggedNote || !canDragEnter) {
+              return;
+            }
+
+            setDragOverNote(note.name);
+            setDragOverNoteConfirmation(null);
+          }}
+          onDragLeave={(event) => {
+            event.preventDefault();
+            if (note.locked || draggedNote) {
+              return;
+            }
+            setDragOverNote(null);
+          }}
+          onDrop={(event) => {
+            if (note.locked) {
+              return;
+            }
+
+            event.preventDefault();
+            const data = event.dataTransfer?.getData("text");
+            if (data) {
+              sendMessage(MessageType.DROP, {
+                targetNoteName: note.name,
+                data,
               });
-            }}
-            onDragOver={(event) => {
-              event.preventDefault();
-              if (note.locked || draggedNote || !canDragEnter) {
-                return;
-              }
+              setDragOverNoteConfirmation(note.name);
+            }
 
-              setDragOverNote(note.name);
-              setDragOverNoteConfirmation(null);
-            }}
-            onDragLeave={(event) => {
-              event.preventDefault();
-              if (note.locked || draggedNote) {
-                return;
-              }
-              setDragOverNote(null);
-            }}
-            onDrop={(event) => {
-              if (note.locked) {
-                return;
-              }
+            setDragOverNote(null);
+          }}
+          onDragEnd={() => {
+            setDraggedNote(null);
 
-              event.preventDefault();
-              const data = event.dataTransfer?.getData("text");
-              if (data) {
-                sendMessage(MessageType.DROP, {
-                  targetNoteName: note.name,
-                  data,
-                });
-                setDragOverNoteConfirmation(note.name);
-              }
-
-              setDragOverNote(null);
-            }}
-            onDragEnd={() => {
-              setDraggedNote(null);
-
-              const newOrder = notes.map((sidebarNote) => sidebarNote.name);
-              onChangeOrder(newOrder);
-            }}
-          >
-            {note.name}
-            {note.locked && <SVG text={LockSvgText} />}
-          </div>
-        )}
-      </div>
-    </Fragment>
+            const newOrder = notes.map((sidebarNote) => sidebarNote.name);
+            onChangeOrder(newOrder);
+          }}
+        >
+          {note.name}
+          {note.locked && <SVG text={LockSvgText} />}
+        </div>
+      ))}
+    </div>
   );
 };
 

@@ -2,7 +2,9 @@ import { h, Fragment } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import clsx from "clsx";
 import { RegularFont, GoogleFont } from "shared/storage/schema";
-import { FontFamily, fontFamilies, ideizeFont, getGoogleFontHref } from "options/helpers/fonts";
+import {
+  FontFamily, fontFamilies, ideizeFont, getGoogleFontHref,
+} from "options/helpers/fonts";
 import { t, tString } from "i18n";
 
 interface FontProps {
@@ -21,8 +23,9 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
     }
 
     setFontFamily(
-      fontFamilies.find((family) => family.id === (font as RegularFont).genericFamily) ||
-      fontFamilies.find((family) => family.id === "google-fonts"));
+      fontFamilies.find((family) => family.id === (font as RegularFont).genericFamily)
+      || fontFamilies.find((family) => family.id === "google-fonts"),
+    );
 
     setGoogleFontName((font && (font as GoogleFont).href) ? (font as GoogleFont).name : "");
   }, [font]);
@@ -31,29 +34,33 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
     <Fragment>
       <h2>{t("Font")}</h2>
       <p>
-        <span>{t("Current font:")}{" "}</span>
+        <span>
+          {t("Current font:")}
+          {" "}
+        </span>
         <span id="current-font-name">{font?.name}</span>
       </p>
 
       {/* Title containing font family names (current underlined) */}
       <h3>
-        {fontFamilies.map((family, index) =>
+        {fontFamilies.map((family, index) => (
           <Fragment>
             <span
-              class={clsx("font-category", family.id === fontFamily?.id && "active")}
-              onClick={() =>
-                setFontFamily(fontFamilies.find((item) => item.id === family.id))
-              }>{family.name}</span>
-            {index < fontFamilies.length - 1 && <span class="separator">/</span>}
+              className={clsx("font-category", family.id === fontFamily?.id && "active")}
+              onClick={() => setFontFamily(fontFamilies.find((item) => item.id === family.id))}
+            >
+              {family.name}
+            </span>
+            {index < fontFamilies.length - 1 && <span className="separator">/</span>}
           </Fragment>
-        )}
+        ))}
       </h3>
 
       {/* Radio buttons for the current font family (except Google Fonts) */}
       {fontFamily && fontFamily.fonts && (
-        <div class="font-area">
-          {fontFamily.fonts?.map((commonFontName) =>
-            <div class="selection">
+        <div className="font-area">
+          {fontFamily.fonts?.map((commonFontName) => (
+            <div className="selection">
               <input
                 type="radio"
                 name="font"
@@ -71,19 +78,19 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
                 }}
               />
               <label
-                for={ideizeFont(commonFontName)}
+                htmlFor={ideizeFont(commonFontName)}
                 style={`font-family: ${commonFontName}, ${fontFamily.id};`}
               >
                 {t("Font example", { font: commonFontName })}
               </label>
             </div>
-          )}
+          ))}
         </div>
       )}
 
       {/* Google Fonts */}
       {fontFamily && !fontFamily.fonts && (
-        <div class="font-area" id="google-fonts-area">
+        <div className="font-area" id="google-fonts-area">
           <ol>
             <li>{t("Google Fonts.step1", { website: "https://fonts.google.com" })}</li>
             <li>{t("Google Fonts.step2")}</li>
@@ -92,7 +99,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
           <input
             type="text"
             placeholder={tString("Google Fonts.placeholder")}
-            class="input"
+            className="input"
             value={googleFontName}
             onInput={(event) => {
               setGoogleFontName((event.target as HTMLInputElement).value);
@@ -101,7 +108,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
           />
           <input
             type="submit"
-            class={clsx("bold", "button", (googleFontName === font?.name) && "disabled")}
+            className={clsx("bold", "button", (googleFontName === font?.name) && "disabled")}
             value={googleSubmitButtonText}
             onClick={() => {
               const trimmedGoogleFontName = googleFontName.trim();

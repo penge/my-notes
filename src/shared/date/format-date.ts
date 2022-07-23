@@ -2,7 +2,7 @@ import parseDate from "./parse-date";
 
 export enum FormatDateOption {
   ONLY_TIME,
-  ONLY_DATE
+  ONLY_DATE,
 }
 
 export default (ISOString: string, option?: FormatDateOption): string => {

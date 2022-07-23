@@ -19,7 +19,9 @@ const SVG = ({ text }: SVGProps): h.JSX.Element => {
       width={width}
       height={height}
       viewBox={viewBox}
-      dangerouslySetInnerHTML={{ __html: innerHTML }} />
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{ __html: innerHTML }}
+    />
   );
 };
 

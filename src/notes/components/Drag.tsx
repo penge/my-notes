@@ -1,34 +1,36 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable no-param-reassign */
 import { h, RefObject } from "preact";
 import { useCallback } from "preact/hooks";
 
-let m_pos: number;
+let mousePosition: number;
 
 function resize(e: MouseEvent, sidebar: RefObject<HTMLDivElement>) {
   if (!sidebar.current) {
     return;
   }
 
-  const dx = (m_pos - e.x) * -1;
-  m_pos = e.x;
+  const dx = (mousePosition - e.x) * -1;
+  mousePosition = e.x;
 
   const width = window.innerWidth;
   const max = width / 2; // 50%
-  if (m_pos >= max) {
+  if (mousePosition >= max) {
     document.body.classList.add("resizing-sidebar-locked-max");
     return;
   }
 
-  const min = ((width / 100) * .3); // .3%
-  if (m_pos <= min) {
+  const min = ((width / 100) * 0.3); // .3%
+  if (mousePosition <= min) {
     document.body.classList.add("resizing-sidebar-locked-min");
     return;
   }
 
   document.body.classList.remove("resizing-sidebar-locked-min", "resizing-sidebar-locked-max");
 
-  const sidebarWidth = parseInt(window.getComputedStyle(sidebar.current).width) + dx;
-  sidebar.current.style.width = sidebarWidth + "px";
-  document.body.style.left = sidebarWidth + "px";
+  const sidebarWidth = parseInt(window.getComputedStyle(sidebar.current).width, 10) + dx;
+  sidebar.current.style.width = `${sidebarWidth}px`;
+  document.body.style.left = `${sidebarWidth}px`;
 }
 
 interface DragProps {
@@ -58,13 +60,14 @@ const Drag = ({ sidebar }: DragProps): h.JSX.Element => {
   }, [sidebar]);
 
   return (
-    <div id="drag"
+    <div
+      id="drag"
       onMouseDown={(e) => {
         if (!sidebar.current) {
           return;
         }
 
-        m_pos = e.x;
+        mousePosition = e.x;
         document.body.classList.add("resizing-sidebar");
         sidebar.current.style.minWidth = "";
 

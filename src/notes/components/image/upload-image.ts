@@ -2,7 +2,7 @@ import { uploadFileBody } from "background/google-drive/bodies";
 import * as api from "background/google-drive/api";
 import { Sync } from "shared/storage/schema";
 import { setItem } from "shared/storage";
-import { Log } from "shared/logger";
+import Log from "shared/log";
 import stop from "background/google-drive/sync/stop";
 
 interface Image {
@@ -22,7 +22,9 @@ interface UploadImageProps {
   onError: () => void
 }
 
-const uploadImageCore = async (run: number, { sync, token, image, onProgress, onUploaded, onError }: UploadImageProps): Promise<void> => {
+const uploadImageCore = async (run: number, {
+  sync, token, image, onProgress, onUploaded, onError,
+}: UploadImageProps): Promise<void> => {
   if (run > 2) {
     return;
   }
@@ -35,7 +37,7 @@ const uploadImageCore = async (run: number, { sync, token, image, onProgress, on
 
   xhr.upload.onprogress = (event) => {
     if (event.lengthComputable) {
-      const percentComplete = event.loaded / event.total * 100;
+      const percentComplete = (event.loaded / event.total) * 100;
       onProgress(percentComplete);
     }
   };
@@ -68,7 +70,9 @@ const uploadImageCore = async (run: number, { sync, token, image, onProgress, on
         assetsFolderId: newAssetsFolderId,
       });
 
-      uploadImageCore(run + 1, { sync: updatedSync, token, image, onProgress, onUploaded, onError });
+      uploadImageCore(run + 1, {
+        sync: updatedSync, token, image, onProgress, onUploaded, onError,
+      });
       return;
     }
 
@@ -92,6 +96,6 @@ const uploadImageCore = async (run: number, { sync, token, image, onProgress, on
   xhr.send(body);
 };
 
-export const uploadImage = (props: UploadImageProps): void => {
+export default (props: UploadImageProps): void => {
   uploadImageCore(1, props);
 };

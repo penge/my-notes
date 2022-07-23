@@ -1,22 +1,22 @@
 import { Sync } from "shared/storage/schema";
-import { havingPermission } from "shared/permissions/index";
-import { getItem } from "shared/storage/index";
-import { Log } from "shared/logger";
+import { havingPermission } from "shared/permissions";
+import { getItem } from "shared/storage";
+import Log from "shared/log";
 
 import stop from "../sync/stop";
 
-export const runCommonPreconditions = async (PREFIX: string): Promise<Sync | undefined> => {
+export default async (PREFIX: string): Promise<Sync | undefined> => {
   // Check if having the Internet connection
   if (!navigator.onLine) {
     Log(`${PREFIX} - PROBLEM - not connected to the Internet`);
-    return; // We are offline
+    return undefined; // We are offline
   }
 
   // Check if having the permission
   const allowed = await havingPermission("identity");
   if (!allowed) {
     Log(`${PREFIX} - PROBLEM - not having a permission`);
-    return;
+    return undefined;
   }
 
   const sync = await getItem<Sync>("sync");
@@ -25,14 +25,14 @@ export const runCommonPreconditions = async (PREFIX: string): Promise<Sync | und
   if (!sync) {
     Log(`${PREFIX} - PROBLEM - sync not set`);
     await stop(); // STOP synchronization, cannot continue without sync
-    return;
+    return undefined;
   }
 
   // Check if folderId is set
   if (!sync.folderId) {
     Log(`${PREFIX} - PROBLEM - folderId not set`);
     await stop(); // STOP synchronization, cannot continue without folderId
-    return;
+    return undefined;
   }
 
   return sync;

@@ -42,7 +42,7 @@ const Sidebar = ({
       id="sidebar"
       ref={sidebarRef}
       style={{
-        width: width,
+        width,
         minWidth: width,
       }}
     >
@@ -51,6 +51,7 @@ const Sidebar = ({
           <SidebarNotes
             id="sidebar-notes-pinned"
             notes={pinnedNotes}
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...commonSidebarNotesProps}
             canDragEnter={onDraggingNoteOriginator === "sidebar-notes-pinned"}
             onChangeOrder={(newOrder) => onChangeOrder([
@@ -68,6 +69,7 @@ const Sidebar = ({
           <SidebarNotes
             id="sidebar-notes-unpinned"
             notes={unpinnedNotes}
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...commonSidebarNotesProps}
             canDragEnter={onDraggingNoteOriginator === "sidebar-notes-unpinned"}
             onChangeOrder={(newOrder) => onChangeOrder([

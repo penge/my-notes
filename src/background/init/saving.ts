@@ -9,7 +9,7 @@ export const CLIPBOARD_NOTE_NAME = "@clipboard";
 const RECEIVED_NOTE_NAME = "@received";
 
 export const saveTextToLocalMyNotes = (textToSave: string, noteName: string): void => {
-  chrome.storage.local.get(["notes"], local => {
+  chrome.storage.local.get(["notes"], (local) => {
     const notes = local.notes as NotesObject;
 
     const time = new Date().toISOString();
@@ -33,7 +33,7 @@ export const saveTextToLocalMyNotes = (textToSave: string, noteName: string): vo
 };
 
 export const saveTextToRemotelyOpenMyNotes = (textToSave: string): void => {
-  chrome.storage.local.get(["id"], local => {
+  chrome.storage.local.get(["id"], (local) => {
     if (!local.id) {
       return;
     }
@@ -57,7 +57,7 @@ export const saveTextOnDrop = (): void => chrome.runtime.onMessage.addListener((
     return;
   }
 
-  chrome.storage.local.get("notes", local => {
+  chrome.storage.local.get("notes", (local) => {
     const notes = local.notes as NotesObject;
 
     if (!(targetNoteName in notes)) {
@@ -85,13 +85,13 @@ export const saveTextOnDrop = (): void => chrome.runtime.onMessage.addListener((
 export const saveTextOnRemoteTransfer = (): void => {
   chrome.storage.onChanged.addListener((changes, areaName) => {
     // Used by "Save to remotely open My Notes"
-    if (areaName === "sync" && changes["selection"]) {
-      const selection = changes["selection"].newValue as ContextMenuSelection;
+    if (areaName === "sync" && changes.selection) {
+      const selection = changes.selection.newValue as ContextMenuSelection;
       if (!selection || !selection.text) {
         return;
       }
 
-      chrome.storage.local.get(["id"], local => {
+      chrome.storage.local.get(["id"], (local) => {
         if (selection.sender === local.id) {
           return;
         }

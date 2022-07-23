@@ -1,3 +1,4 @@
 out/*
 jest.config.js
 build.js
+set-client-id.js
