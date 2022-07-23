@@ -218,11 +218,13 @@
   "Context Menu": {
     "menus": {
       "Save URL to": "Save URL to {{note}}",
+      "Save URL to remotely open My Notes": "Save URL to remotely open My Notes",
       "Save to": "Save to {{note}}",
       "Save to remotely open My Notes": "Save to remotely open My Notes"
     },
     "notifications": {
       "Saved URL to": "Saved URL to {{note}}",
+      "Sent URL to remotely open My Notes": "Sent URL to remotely open My Notes",
       "Saved text to": "Saved text to {{note}}",
       "Sent text to remotely open My Notes": "Sent text to remotely open My Notes"
     }
