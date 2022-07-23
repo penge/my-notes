@@ -1,20 +1,20 @@
 import { NotesObject } from "shared/storage/schema";
 import { tString } from "i18n";
-import { getUrlToSave, getSelectionToSave } from "./content";
+import { getTextToSave } from "./context";
 import {
+  CLIPBOARD_NOTE_NAME,
   saveTextToLocalMyNotes,
   saveTextToRemotelyOpenMyNotes,
-  CLIPBOARD_NOTE_NAME,
 } from "../saving";
 import { notify } from "../notifications";
 
 const ID = "my-notes";
 
-const MY_NOTES_SAVE_URL_TO_NOTE_PREFIX = "my-notes-save-url-to-note-";
-const MY_NOTES_SAVE_URL_TO_REMOTE = "my-notes-save-url-to-remote";
+const PAGE_NOTE_PREFIX = "page-note-";
+const PAGE_REMOTE_MY_NOTES = "page-remote-my-notes";
 
-const MY_NOTES_SAVE_SELECTION_TO_NOTE_PREFIX = "my-notes-save-selection-to-note-";
-const MY_NOTES_SAVE_SELECTION_TO_REMOTE = "my-notes-save-selection-to-remote";
+const SELECTION_NOTE_PREFIX = "selection-note-";
+const SELECTION_REMOTE_MY_NOTES = "selection-remote-my-notes";
 
 const isLocked = (notes: NotesObject, noteName: string): boolean => !!(notes[noteName]?.locked);
 
@@ -31,115 +31,141 @@ const createContextMenu = (notes: NotesObject): string | number => chrome.contex
   title: "My Notes",
   contexts: ["page", "selection"],
 }, () => {
-  const noteCreateProperties = ({ context, prefix, noteName, tKey }: { context: chrome.contextMenus.ContextType, prefix: string, noteName: string, tKey: string }): chrome.contextMenus.CreateProperties => ({
+  const forEveryNoteExceptClipboard = (callback: (noteName: string) => void) => {
+    Object.keys(notes).filter(noteName => noteName !== CLIPBOARD_NOTE_NAME).sort().forEach(callback);
+  };
+
+  /* -------------< page >------------- */
+
+  const pageCommonProperties: chrome.contextMenus.CreateProperties = {
     parentId: ID,
-    id: `${prefix}${noteName}`,
-    title: tString(tKey, { note: noteName }),
-    contexts: [context],
-    enabled: !isLocked(notes, noteName),
+    contexts: ["page"],
+  };
+
+  chrome.contextMenus.create({
+    ...pageCommonProperties,
+    id: [PAGE_NOTE_PREFIX, CLIPBOARD_NOTE_NAME].join(""),
+    title: tString("Context Menu.menus.Save URL to", { note: CLIPBOARD_NOTE_NAME }),
+    enabled: !isLocked(notes, CLIPBOARD_NOTE_NAME),
   });
 
-  const remoteCreateProperties = (context: chrome.contextMenus.ContextType, id: string, tKey: string): chrome.contextMenus.CreateProperties => ({
-    parentId: ID,
-    id,
-    title: tString(tKey),
-    contexts: [context],
-  });
-
-  const separatorCreateProperties = (context: chrome.contextMenus.ContextType, id: string): chrome.contextMenus.CreateProperties => ({
-    parentId: ID,
-    id: `my-notes-${context}-separator-${id}`,
+  chrome.contextMenus.create({
+    ...pageCommonProperties,
     type: "separator",
-    contexts: [context],
+    id: "page-separator-one",
   });
 
-  const forEveryNote = (callback: (noteName: string) => void) => Object.keys(notes).sort().forEach(callback);
-
-  /* ------------- page ------------- */
-  const pageContext: chrome.contextMenus.ContextType = "page";
-  const saveUrlToNoteCreateProperties = (noteName: string): chrome.contextMenus.CreateProperties =>
-    noteCreateProperties({
-      context: pageContext,
-      prefix: MY_NOTES_SAVE_URL_TO_NOTE_PREFIX,
-      noteName,
-      tKey: "Context Menu.menus.Save URL to",
+  forEveryNoteExceptClipboard((noteName) => {
+    chrome.contextMenus.create({
+      ...pageCommonProperties,
+      id: [PAGE_NOTE_PREFIX, noteName].join(""),
+      title: tString("Context Menu.menus.Save URL to", { note: noteName }),
+      enabled: !isLocked(notes, noteName),
     });
-  chrome.contextMenus.create(saveUrlToNoteCreateProperties(CLIPBOARD_NOTE_NAME));
-  chrome.contextMenus.create(separatorCreateProperties(pageContext, "one"));
-  forEveryNote((noteName) => {
-    chrome.contextMenus.create(saveUrlToNoteCreateProperties(noteName));
   });
-  chrome.contextMenus.create(separatorCreateProperties(pageContext, "two"));
-  chrome.contextMenus.create(remoteCreateProperties(
-    pageContext,
-    MY_NOTES_SAVE_URL_TO_REMOTE,
-    "Context Menu.menus.Save URL to remotely open My Notes",
-  ));
 
-  /* ------------- selection ------------- */
-  const selectionContext: chrome.contextMenus.ContextType = "selection";
-  const saveSelectionToNoteCreateProperties = (noteName: string): chrome.contextMenus.CreateProperties =>
-    noteCreateProperties({
-      context: selectionContext,
-      prefix: MY_NOTES_SAVE_SELECTION_TO_NOTE_PREFIX,
-      noteName,
-      tKey: "Context Menu.menus.Save to",
+  chrome.contextMenus.create({
+    ...pageCommonProperties,
+    type: "separator",
+    id: "page-separator-two",
+  });
+
+  chrome.contextMenus.create({
+    ...pageCommonProperties,
+    id: PAGE_REMOTE_MY_NOTES,
+    title: tString("Context Menu.menus.Save URL to remotely open My Notes"),
+  });
+
+  /* -------------< selection >------------- */
+
+  const selectionCommonProperties: chrome.contextMenus.CreateProperties = {
+    parentId: ID,
+    contexts: ["selection"],
+  };
+
+  chrome.contextMenus.create({
+    ...selectionCommonProperties,
+    id: [SELECTION_NOTE_PREFIX, CLIPBOARD_NOTE_NAME].join(""),
+    title: tString("Context Menu.menus.Save to", { note: CLIPBOARD_NOTE_NAME }),
+    enabled: !isLocked(notes, CLIPBOARD_NOTE_NAME),
+  });
+
+  chrome.contextMenus.create({
+    ...selectionCommonProperties,
+    type: "separator",
+    id: "selection-separator-one",
+  });
+
+  forEveryNoteExceptClipboard((noteName) => {
+    chrome.contextMenus.create({
+      ...selectionCommonProperties,
+      id: [SELECTION_NOTE_PREFIX, noteName].join(""),
+      title: tString("Context Menu.menus.Save to", { note: noteName }),
+      enabled: !isLocked(notes, noteName),
     });
-
-  chrome.contextMenus.create(saveSelectionToNoteCreateProperties(CLIPBOARD_NOTE_NAME));
-  chrome.contextMenus.create(separatorCreateProperties(selectionContext, "one"));
-  forEveryNote((noteName) => {
-    chrome.contextMenus.create(saveSelectionToNoteCreateProperties(noteName));
   });
-  chrome.contextMenus.create(separatorCreateProperties(selectionContext, "two"));
-  chrome.contextMenus.create(remoteCreateProperties(
-    selectionContext,
-    MY_NOTES_SAVE_SELECTION_TO_REMOTE,
-    "Context Menu.menus.Save to remotely open My Notes",
-  ));
+
+  chrome.contextMenus.create({
+    ...selectionCommonProperties,
+    type: "separator",
+    id: "selection-separator-two",
+  });
+
+  chrome.contextMenus.create({
+    ...selectionCommonProperties,
+    id: SELECTION_REMOTE_MY_NOTES,
+    title: tString("Context Menu.menus.Save to remotely open My Notes"),
+  });
 });
 
 let currentNotesString: string;
 
 export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClicked.addListener((info) => {
   const menuId: string = info.menuItemId.toString();
-
-  if (menuId.startsWith(MY_NOTES_SAVE_URL_TO_NOTE_PREFIX)) {
-    const destinationNoteName = menuId.replace(MY_NOTES_SAVE_URL_TO_NOTE_PREFIX, "");
-    const urlToSave = getUrlToSave(info);
-    saveTextToLocalMyNotes(urlToSave, destinationNoteName);
-
-    notify(tString("Context Menu.notifications.Saved URL to", { note: destinationNoteName }));
+  const context = menuId.split("-")[0] as chrome.contextMenus.ContextType;
+  const textToSave = getTextToSave(context, info);
+  if (!textToSave) {
     return;
   }
 
-  if (menuId === MY_NOTES_SAVE_URL_TO_REMOTE) {
-    const urlToSave = getUrlToSave(info);
-    saveTextToRemotelyOpenMyNotes(urlToSave);
+  /* -------------< page >------------- */
 
+  if (menuId.startsWith(PAGE_NOTE_PREFIX)) {
+    const noteName = menuId.replace(PAGE_NOTE_PREFIX, "");
+    saveTextToLocalMyNotes(textToSave, noteName);
+    notify(tString("Context Menu.notifications.Saved URL to", { note: noteName }));
+    return;
+  }
+
+  if (menuId === PAGE_REMOTE_MY_NOTES) {
+    saveTextToRemotelyOpenMyNotes(textToSave);
     notify(tString("Context Menu.notifications.Sent URL to remotely open My Notes"));
     return;
   }
 
-  if (menuId.startsWith(MY_NOTES_SAVE_SELECTION_TO_NOTE_PREFIX)) {
-    const destinationNoteName = menuId.replace(MY_NOTES_SAVE_SELECTION_TO_NOTE_PREFIX, "");
-    const selectionToSave = getSelectionToSave(info);
-    saveTextToLocalMyNotes(selectionToSave, destinationNoteName);
+  /* -------------< selection >------------- */
 
-    notify(tString("Context Menu.notifications.Saved text to", { note: destinationNoteName }));
+  if (menuId.startsWith(SELECTION_NOTE_PREFIX)) {
+    const noteName = menuId.replace(SELECTION_NOTE_PREFIX, "");
+    saveTextToLocalMyNotes(textToSave, noteName);
+    notify(tString("Context Menu.notifications.Saved text to", { note: noteName }));
     return;
   }
 
-  if (menuId === MY_NOTES_SAVE_SELECTION_TO_REMOTE) {
-    const selectionToSave = getSelectionToSave(info);
-    saveTextToRemotelyOpenMyNotes(selectionToSave);
-
+  if (menuId === SELECTION_REMOTE_MY_NOTES) {
+    saveTextToRemotelyOpenMyNotes(textToSave);
     notify(tString("Context Menu.notifications.Sent text to remotely open My Notes"));
     return;
   }
 });
 
-const recreateContextMenuFromNotes = (notes: NotesObject): void => {
+const recreateContextMenuFromNotes = (notes: NotesObject | undefined): void => {
+  if (!notes) {
+    currentNotesString = "";
+    chrome.contextMenus.removeAll();
+    return;
+  }
+
   const notesString = JSON.stringify(Object.keys(notes).map((noteName) => `${noteName}_${notes[noteName].locked}`));
 
   // re-create context menu only when note names have changed or their "locked" property
@@ -161,7 +187,7 @@ export const createAndUpdateContextMenuFromNotes = (): void => {
 
   chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName === "local" && changes["notes"]) {
-      recreateContextMenuFromNotes(changes.notes.newValue as NotesObject);
+      recreateContextMenuFromNotes(changes.notes.newValue);
     }
   });
 };
