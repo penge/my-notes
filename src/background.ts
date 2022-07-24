@@ -25,13 +25,6 @@ import {
   handleChangedPermissions,
 } from "background/init/permissions";
 
-// Run when Installed or Updated
-chrome.runtime.onInstalled.addListener((details) => {
-  setId(); // Set unique My Notes ID, if not set before
-  runMigrations(); // Migrate notes and options (font type, font size, etc.)
-  showNewVersionNotification(details); // Notifications (NEW VERSION installed)
-});
-
 // Click on My Notes icon, or use a keyboard shortcut (see chrome://extensions/shortcuts)
 openMyNotesOnIconClick();
 openMyNotesOnKeyboardShortcut();
@@ -49,3 +42,10 @@ saveTextOnRemoteTransfer(); // when you use "Save to remotely open My Notes" fro
 
 // Permissions
 handleChangedPermissions(); // react to granted/removed optional permissions: "identity"
+
+// Run when Installed or Updated
+chrome.runtime.onInstalled.addListener((details) => {
+  setId(); // Set unique My Notes ID, if not set before
+  runMigrations(); // Migrate notes and options (font type, font size, etc.)
+  showNewVersionNotification(details); // Notifications (NEW VERSION installed)
+});
