@@ -38,4 +38,5 @@ export const tString = (path: string, props?: Record<string, unknown>): string =
 };
 
 export const t = (path: string, props?: Record<string, unknown>): h.JSX.Element =>
+  // eslint-disable-next-line react/no-danger
   <span dangerouslySetInnerHTML={{ __html: tString(path, props) }} />;

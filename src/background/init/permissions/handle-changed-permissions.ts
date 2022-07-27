@@ -1,7 +1,9 @@
-import { Log } from "shared/logger";
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/naming-convention */
+import Log from "shared/log";
 import { havingPermission } from "shared/permissions";
 import { MessageType } from "shared/storage/schema";
-import { handleGoogleDriveMessage } from "./google-drive";
+import { handleGoogleDriveMessage } from "../google-drive";
 
 type OptionalPermission = "identity";
 
@@ -9,16 +11,21 @@ const optionalPermissions: OptionalPermission[] = ["identity"];
 
 type PermissionHandlers = {
   [permissionName in OptionalPermission]: (having: boolean) => void
-}
+};
 
 const __handlers: PermissionHandlers = {
-  identity: (having: boolean) => handleGoogleDriveMessage({ type: having
-    ? MessageType.SYNC_INITIATE
-    : MessageType.SYNC_STOP
+  identity: (having: boolean) => handleGoogleDriveMessage({
+    type: having
+      ? MessageType.SYNC_INITIATE
+      : MessageType.SYNC_STOP,
   }),
 };
 
-const handlePermissions = (permissionHandlers: PermissionHandlers, permissions: chrome.permissions.Permissions, { having }: { having: boolean }): void => {
+const handlePermissions = (
+  permissionHandlers: PermissionHandlers,
+  permissions: chrome.permissions.Permissions,
+  { having }: { having: boolean },
+): void => {
   const diffPermissions = permissions.permissions;
   if (!diffPermissions) {
     return;
@@ -28,12 +35,12 @@ const handlePermissions = (permissionHandlers: PermissionHandlers, permissions: 
     .keys(permissionHandlers)
     .filter((permissionName) => diffPermissions.includes(permissionName as OptionalPermission))
     .forEach((permissionName) => {
-      Log(`Permissions - Acting on ${having ? "added" : "removed"} permission "${permissionName}"`);
+      Log(`Permissions - Acting on ${having ? "granted" : "removed"} permission "${permissionName}"`);
       permissionHandlers[permissionName as OptionalPermission](having);
     });
 };
 
-export const handleChangedPermissions = (): void => {
+export default (): void => {
   optionalPermissions.forEach((optionalPermission) => {
     havingPermission(optionalPermission).then((having) => !having && __handlers[optionalPermission](having));
   });

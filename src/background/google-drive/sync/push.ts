@@ -1,5 +1,5 @@
 import { Note, NotesObject, GoogleDriveFile } from "shared/storage/schema";
-import { Log } from "shared/logger";
+import Log from "shared/log";
 import { GoogleDriveFileUpdate } from "../api";
 import { CreateFileBodyOptions, UpdateFileBodyOptions } from "../bodies";
 
@@ -18,7 +18,8 @@ interface PushOptions {
 export default async (folderId: string, notes: NotesObject, { createFile, updateFile }: PushOptions): Promise<NotesObject> => {
   const updatedNotes = { ...notes };
 
-  for (const noteName of Object.keys(updatedNotes)) {
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const noteName of Object.keys(updatedNotes)) {
     const note = updatedNotes[noteName];
 
     // 1. Create a file for every new note
@@ -27,7 +28,7 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
       Log(`SYNC - OUT - CREATING FILE - ${noteName}`);
       const file = await createFile(folderId, { ...note, name: noteName }); // Returns { id, name, content, createdTime, modifiedTime }
       note.sync = { file: merge(note, file) };
-      continue;
+      continue; // eslint-disable-line no-continue
     }
 
     // 2. Update file for every updated note

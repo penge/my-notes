@@ -19,7 +19,9 @@ const insertRow = (table: HTMLTableElement, rowIndex: number, cellCount: number)
   const row = table.insertRow(rowIndex);
   for (let c = 0; c < cellCount; c += 1) {
     const newCell = row.insertCell(-1); // insert empty cell at the end of the row
-    newCell.appendChild(document.createElement("BR")); // put BR into the empty cell so it has default font's height (by default it could have tiny height)
+
+    // put BR into the empty cell so it has default font's height (by default it could have tiny height)
+    newCell.appendChild(document.createElement("BR"));
   }
 };
 
@@ -76,7 +78,7 @@ const toggleHeadingColumn = (cb: Callback): void => withtd((td: HTMLTableCellEle
   const containsHeading = td.classList.contains("heading");
 
   const table = td.closest("table") as HTMLTableElement;
-  const cellIndex = td.cellIndex;
+  const { cellIndex } = td;
   for (let row = 0; row < table.rows.length; row += 1) {
     table.rows[row].cells[cellIndex].classList.toggle("heading", !containsHeading);
   }
@@ -87,7 +89,7 @@ const toggleHeadingColumn = (cb: Callback): void => withtd((td: HTMLTableCellEle
 
 const deleteRow = (cb: Callback): void => withtr((tr: HTMLTableRowElement) => {
   const table = tr.closest("table") as HTMLTableElement;
-  const rowIndex = tr.rowIndex;
+  const { rowIndex } = tr;
   table.deleteRow(rowIndex);
 
   // Delete table if having no rows
@@ -101,7 +103,7 @@ const deleteRow = (cb: Callback): void => withtr((tr: HTMLTableRowElement) => {
 
 const deleteColumn = (cb: Callback): void => withtd((td: HTMLTableCellElement) => {
   const table = td.closest("table") as HTMLTableElement;
-  const cellIndex = td.cellIndex;
+  const { cellIndex } = td;
   for (let row = 0; row < table.rows.length; row += 1) {
     table.rows[row].deleteCell(cellIndex);
   }

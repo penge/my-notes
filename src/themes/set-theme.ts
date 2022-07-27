@@ -2,13 +2,19 @@ import { Theme } from "shared/storage/schema";
 
 const reset = (document: Document) => {
   const elem = document.getElementById("theme");
-  elem && elem.remove();
+  if (elem) {
+    elem.remove();
+  }
 };
 
-const appendTheme = (document: Document, element: HTMLLinkElement | HTMLStyleElement, theme: Theme) => {
+const appendTheme = (
+  document: Document,
+  element: HTMLLinkElement | HTMLStyleElement,
+  theme: Theme,
+) => {
   document.head.appendChild(element);
-  document.body.id = theme;
-  document.body.style.opacity = "1";
+  document.body.id = theme; // eslint-disable-line no-param-reassign
+  document.body.style.opacity = "1"; // eslint-disable-line no-param-reassign
 };
 
 const insertTheme = (document: Document, theme: Theme) => {

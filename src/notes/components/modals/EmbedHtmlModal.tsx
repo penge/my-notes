@@ -1,6 +1,6 @@
 import { h } from "preact";
-import Modal from "./Modal";
 import { tString } from "i18n";
+import Modal from "./Modal";
 
 export interface EmbedHtmlModalProps {
   onCancel: () => void

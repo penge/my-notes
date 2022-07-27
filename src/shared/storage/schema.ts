@@ -26,10 +26,10 @@ export interface GoogleFont {
   href: string
 }
 
-export type Theme = "light" | "dark" | "custom"
+export type Theme = "light" | "dark" | "custom";
 
 export enum NotificationType {
-  NEW_VERSION
+  NEW_VERSION,
 }
 
 export interface Notification {
@@ -58,7 +58,7 @@ export interface SyncLookup extends Sync {
 
 export type NotesObject = {
   [key: string]: Note
-}
+};
 
 export enum NotesOrder {
   Alphabetical = "Alphabetical",
@@ -98,7 +98,7 @@ export interface Storage {
   autoSync: boolean
 }
 
-export type StorageKey = keyof Storage
+export type StorageKey = keyof Storage;
 
 export interface ContextMenuSelection {
   text: string

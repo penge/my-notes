@@ -1,6 +1,6 @@
 import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
 import { GetFileFunction } from "background/google-drive/api";
-import { pullUpdate } from "../pull-update";
+import pullUpdate from "../pull-update";
 
 const getFile: GetFileFunction = (fileId: string) => Promise.resolve(`content from ${fileId}`);
 
@@ -20,11 +20,11 @@ describe("pullUpdate()", () => {
                   name: "Books",
                   createdTime: "CT",
                   modifiedTime: "MT",
-                }
+                },
               },
               locked: true,
               pinnedTime: "PT",
-            }
+            },
           };
 
           const files: GoogleDriveFile[] = [
@@ -33,7 +33,7 @@ describe("pullUpdate()", () => {
               name: "Books",
               createdTime: "CT",
               modifiedTime: "MT",
-            }
+            },
           ];
 
           const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -54,12 +54,12 @@ describe("pullUpdate()", () => {
                   name: "Books",
                   createdTime: "CT",
                   modifiedTime: "MT",
-                }
+                },
               },
               locked: true,
               pinnedTime: "PT",
               raw: true,
-            }
+            },
           };
 
           const files: GoogleDriveFile[] = [
@@ -68,7 +68,7 @@ describe("pullUpdate()", () => {
               name: "Books",
               createdTime: "CT",
               modifiedTime: "MT-2",
-            }
+            },
           ];
 
           const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -83,12 +83,12 @@ describe("pullUpdate()", () => {
                   name: "Books",
                   createdTime: "CT",
                   modifiedTime: "MT-2",
-                }
+                },
               },
               locked: true,
               pinnedTime: "PT",
               raw: true,
-            }
+            },
           });
         });
       });
@@ -106,9 +106,9 @@ describe("pullUpdate()", () => {
                   name: "Books",
                   createdTime: "CT",
                   modifiedTime: "MT",
-                }
-              }
-            }
+                },
+              },
+            },
           };
 
           const files: GoogleDriveFile[] = [
@@ -117,7 +117,7 @@ describe("pullUpdate()", () => {
               name: "Readings",
               createdTime: "CT",
               modifiedTime: "MT-2",
-            }
+            },
           ];
 
           const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -132,9 +132,9 @@ describe("pullUpdate()", () => {
                   name: "Readings",
                   createdTime: "CT",
                   modifiedTime: "MT-2",
-                }
-              }
-            }
+                },
+              },
+            },
           });
         });
       });
@@ -155,9 +155,9 @@ describe("pullUpdate()", () => {
                     name: "Books",
                     createdTime: "CT",
                     modifiedTime: "MT",
-                  }
-                }
-              }
+                  },
+                },
+              },
             };
 
             const files: GoogleDriveFile[] = [
@@ -166,7 +166,7 @@ describe("pullUpdate()", () => {
                 name: "Books",
                 createdTime: "CT",
                 modifiedTime: "MT-2",
-              }
+              },
             ];
 
             const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -187,9 +187,9 @@ describe("pullUpdate()", () => {
                     name: "Books",
                     createdTime: "CT",
                     modifiedTime: "MT",
-                  }
-                }
-              }
+                  },
+                },
+              },
             };
 
             const files: GoogleDriveFile[] = [
@@ -198,7 +198,7 @@ describe("pullUpdate()", () => {
                 name: "Books",
                 createdTime: "CT",
                 modifiedTime: "MT-6",
-              }
+              },
             ];
 
             const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -213,9 +213,9 @@ describe("pullUpdate()", () => {
                     name: "Books",
                     createdTime: "CT",
                     modifiedTime: "MT-6",
-                  }
-                }
-              }
+                  },
+                },
+              },
             });
           });
         });
@@ -233,9 +233,9 @@ describe("pullUpdate()", () => {
                     name: "Books",
                     createdTime: "CT",
                     modifiedTime: "MT",
-                  }
-                }
-              }
+                  },
+                },
+              },
             };
 
             const files: GoogleDriveFile[] = [
@@ -244,7 +244,7 @@ describe("pullUpdate()", () => {
                 name: "Wishlist",
                 createdTime: "CT",
                 modifiedTime: "MT-7",
-              }
+              },
             ];
 
             const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -259,9 +259,9 @@ describe("pullUpdate()", () => {
                     name: "Wishlist",
                     createdTime: "CT",
                     modifiedTime: "MT-7",
-                  }
-                }
-              }
+                  },
+                },
+              },
             });
           });
         });
@@ -277,7 +277,7 @@ describe("pullUpdate()", () => {
             content: "my books",
             createdTime: "CT",
             modifiedTime: "MT",
-          }
+          },
         };
 
         const files: GoogleDriveFile[] = [
@@ -286,7 +286,7 @@ describe("pullUpdate()", () => {
             name: "Books",
             createdTime: "CT",
             modifiedTime: "MT",
-          }
+          },
         ];
 
         const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -301,9 +301,9 @@ describe("pullUpdate()", () => {
                 name: "Books",
                 createdTime: "CT",
                 modifiedTime: "MT",
-              }
-            }
-          }
+              },
+            },
+          },
         });
       });
     });
@@ -316,7 +316,7 @@ describe("pullUpdate()", () => {
               content: "my books",
               createdTime: "CT",
               modifiedTime: "MT-2",
-            }
+            },
           };
 
           const files: GoogleDriveFile[] = [
@@ -325,7 +325,7 @@ describe("pullUpdate()", () => {
               name: "Books",
               createdTime: "CT",
               modifiedTime: "MT",
-            }
+            },
           ];
 
           const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -340,9 +340,9 @@ describe("pullUpdate()", () => {
                   name: "Books",
                   createdTime: "CT",
                   modifiedTime: "MT",
-                }
-              }
-            }
+                },
+              },
+            },
           });
         });
       });
@@ -354,7 +354,7 @@ describe("pullUpdate()", () => {
               content: "my books",
               createdTime: "CT",
               modifiedTime: "MT-2",
-            }
+            },
           };
 
           const files: GoogleDriveFile[] = [
@@ -363,7 +363,7 @@ describe("pullUpdate()", () => {
               name: "Books",
               createdTime: "CT",
               modifiedTime: "MT-3",
-            }
+            },
           ];
 
           const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
@@ -378,9 +378,9 @@ describe("pullUpdate()", () => {
                   name: "Books",
                   createdTime: "CT",
                   modifiedTime: "MT-3",
-                }
-              }
-            }
+                },
+              },
+            },
           });
         });
       });

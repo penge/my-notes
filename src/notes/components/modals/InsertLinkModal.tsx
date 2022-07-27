@@ -1,6 +1,6 @@
 import { h } from "preact";
-import Modal from "./Modal";
 import { t, tString } from "i18n";
+import Modal from "./Modal";
 
 export interface InsertLinkModalProps {
   onCancel: () => void
@@ -31,7 +31,8 @@ const InsertLinkModal = ({ onCancel, onConfirm }: InsertLinkModalProps): h.JSX.E
           "chrome-extension": "<span class=\"url\">chrome-extension</span>",
         })}
 
-        <br /><br />
+        <br />
+        <br />
 
         {t("Insert Link description.line2")}
       </div>

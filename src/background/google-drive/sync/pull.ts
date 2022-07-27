@@ -1,7 +1,7 @@
 import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
-import { pullCreate } from "./pull/pull-create";
-import { pullDelete } from "./pull/pull-delete";
-import { pullUpdate } from "./pull/pull-update";
+import pullDelete from "./pull/pull-delete";
+import pullCreate from "./pull/pull-create";
+import pullUpdate from "./pull/pull-update";
 
 interface PullOptions {
   getFile: (fileId: string) => Promise<string | undefined>

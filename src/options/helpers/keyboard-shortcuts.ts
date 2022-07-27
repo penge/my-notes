@@ -129,17 +129,17 @@ const keyboardShortcuts: KeyboardShortcut[] = [
   {
     description: "Current date",
     mac: "⌘ + ;",
-    other: "Ctrl + ;"
+    other: "Ctrl + ;",
   },
   {
     description: "Current time",
     mac: "⌘ + Shift + ;",
-    other: "Ctrl + Shift + ;"
+    other: "Ctrl + Shift + ;",
   },
   {
     description: "Current date and time",
     mac: "⌘ + Shift + Option + ;",
-    other: "Ctrl + Shift + Alt + ;"
+    other: "Ctrl + Shift + Alt + ;",
   },
 ];
 

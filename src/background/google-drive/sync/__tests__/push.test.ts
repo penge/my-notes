@@ -1,12 +1,13 @@
-process.env.LOG_LEVEL = "SILENT";
-
 import { CreateFileBodyOptions, UpdateFileBodyOptions } from "background/google-drive/bodies";
 import push from "../push";
+
+process.env.LOG_LEVEL = "SILENT";
 
 /*
 UNCHANGED - File should remain unchanged if the note has "sync" and note.modifiedTime === note.sync.file.modifiedTime
 NEW - Create a new file for every note without "sync", update "sync" with the created file
-UPDATED - Update file name/content for every updated note (note with "sync", where note.modifiedTime > note.sync.file.modifiedTime), update "sync.file" after finished
+UPDATED - Update file name/content for every updated note (note with "sync", where note.modifiedTime > note.sync.file.modifiedTime),
+  update "sync.file" after finished
 */
 const notes = {
   Clipboard: { // UNCHANGED
@@ -19,8 +20,8 @@ const notes = {
         name: "Clipboard",
         createdTime: "2020-04-20T09:07:00Z",
         modifiedTime: "2020-04-20T09:07:07Z",
-      }
-    }
+      },
+    },
   },
 
   Radio: { // NEW
@@ -39,8 +40,8 @@ const notes = {
         name: "Todo",
         createdTime: "2020-04-20T09:02:00Z",
         modifiedTime: "2020-04-20T09:02:02Z",
-      }
-    }
+      },
+    },
   },
 
   Books: { // UNCHANGED
@@ -53,8 +54,8 @@ const notes = {
         name: "Books",
         createdTime: "2020-04-20T09:04:00Z",
         modifiedTime: "2020-04-20T09:04:04Z",
-      }
-    }
+      },
+    },
   },
 
   Amazon: { // UPDATED (also new name; name before - "Shopping")
@@ -67,8 +68,8 @@ const notes = {
         name: "Shopping",
         createdTime: "2020-04-20T09:06:00Z",
         modifiedTime: "2020-04-20T09:06:06Z",
-      }
-    }
+      },
+    },
   },
 
   Math: { // NEW

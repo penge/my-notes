@@ -1,4 +1,5 @@
 import { h } from "preact";
+import { Sync } from "shared/storage/schema";
 import { isImageFile, readImageFile } from "./read-image";
 import {
   createImageSkeleton,
@@ -7,8 +8,7 @@ import {
   replaceImageSkeletonWithImage,
   removeSkeleton,
 } from "./image-skeleton";
-import { uploadImage } from "./upload-image";
-import { Sync } from "shared/storage/schema";
+import uploadImage from "./upload-image";
 
 interface DropImageProps {
   event: h.JSX.TargetedDragEvent<HTMLDivElement>
@@ -20,7 +20,9 @@ interface DropImageProps {
 
 export const getBase64FromDataURL = (dataUrl: string): string => dataUrl.replace(/^data:(.*,)?/, "");
 
-export const dropImage = async ({ event, sync, token, file, onComplete }: DropImageProps): Promise<void> => {
+export const dropImage = async ({
+  event, sync, token, file, onComplete,
+}: DropImageProps): Promise<void> => {
   if (!isImageFile(file)) {
     return;
   }

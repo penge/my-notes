@@ -1,5 +1,7 @@
 import { SidebarNote } from "notes/adapters";
-import { Filter, FilterType, prepareFilter, prepareItems } from "../CommandPalette";
+import {
+  Filter, FilterType, prepareFilter, prepareItems,
+} from "../CommandPalette";
 
 describe("prepareFilter", () => {
   it("detects CommandsByName filter", () => {

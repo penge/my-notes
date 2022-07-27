@@ -7,10 +7,12 @@ import { ContentProps, reattachEditNote } from "./common";
 
 const focus = (content: HTMLTextAreaElement) => content && window.setTimeout(() => {
   content.focus();
-  content.setSelectionRange(0,0);
+  content.setSelectionRange(0, 0);
 });
 
-const ContentText = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
+const ContentText = ({
+  note, onEdit, indentOnTab, tabSize,
+}: ContentProps): h.JSX.Element => {
   const contentRef = useRef<HTMLTextAreaElement | null>(null);
 
   const [setIndentOnTabHandlerOnTab] = useKeyboardShortcut(KeyboardShortcut.OnTab);
@@ -34,7 +36,7 @@ const ContentText = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JS
   useEffect(() => setIndentOnTabHandlerOnTab(
     indentOnTab
       ? InsertTabFactory({ tabSize })
-      : undefined
+      : undefined,
   ), [indentOnTab, tabSize]);
 
   return (
@@ -43,7 +45,7 @@ const ContentText = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JS
       className={note.locked ? "locked" : undefined}
       ref={contentRef}
       spellCheck
-      autofocus
+      autoFocus
       onInput={onInput}
     />
   );

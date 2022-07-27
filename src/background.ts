@@ -1,5 +1,5 @@
-import { setId } from "background/init/id";
-import { runMigrations } from "background/init/migrations";
+import setId from "background/init/set-id";
+import runMigrations from "background/init/migrations/run-migrations";
 import { showNewVersionNotification } from "background/init/notifications";
 
 import {
@@ -21,9 +21,7 @@ import {
   saveTextOnRemoteTransfer,
 } from "background/init/saving";
 
-import {
-  handleChangedPermissions,
-} from "background/init/permissions";
+import handleChangedPermissions from "background/init/permissions/handle-changed-permissions";
 
 // Click on My Notes icon, or use a keyboard shortcut (see chrome://extensions/shortcuts)
 openMyNotesOnIconClick();

@@ -1,4 +1,4 @@
-import { sortNotes } from "notes/sort";
+import sortNotes from "notes/sort";
 import { NotesObject, Note, NotesOrder } from "shared/storage/schema";
 
 export interface SidebarNote extends Note {

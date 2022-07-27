@@ -1,6 +1,6 @@
 import { h } from "preact";
-import Modal from "./Modal";
 import { tString } from "i18n";
+import Modal from "./Modal";
 
 export interface RenameNoteModalProps {
   noteName: string
@@ -9,7 +9,9 @@ export interface RenameNoteModalProps {
   onConfirm: (newNoteName: string) => void
 }
 
-const RenameNoteModal = ({ noteName, validate, onCancel, onConfirm }: RenameNoteModalProps): h.JSX.Element =>
+const RenameNoteModal = ({
+  noteName, validate, onCancel, onConfirm,
+}: RenameNoteModalProps): h.JSX.Element => (
   <Modal
     input={{
       type: "text",
@@ -24,6 +26,7 @@ const RenameNoteModal = ({ noteName, validate, onCancel, onConfirm }: RenameNote
       confirmValue: tString("Rename"),
       onConfirm,
     }}
-  />;
+  />
+);
 
 export default RenameNoteModal;

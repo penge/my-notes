@@ -21,7 +21,7 @@ const handlers: Partial<Record<chrome.contextMenus.ContextType, Handler>> = {
   selection: getSelectionToSave,
 };
 
-export const getTextToSave = (context: chrome.contextMenus.ContextType, info: chrome.contextMenus.OnClickData): string => {
+export default (context: chrome.contextMenus.ContextType, info: chrome.contextMenus.OnClickData): string => {
   const handler = handlers[context];
   if (!handler) {
     return "";

@@ -1,6 +1,6 @@
 import { h } from "preact";
-import Modal from "./Modal";
 import { t, tString } from "i18n";
+import Modal from "./Modal";
 
 export interface InsertImageModalProps {
   onCancel: () => void
@@ -12,7 +12,7 @@ export interface InsertImageModalProps {
 // - to: https://drive.google.com/uc?id=1y0...v9S
 // otherwise keeps the url unchanged.
 export const transformImageUrl = (src: string): string => {
-  const googleLinkMatch = src.match(new RegExp("https://drive.google.com/file/d/(.*)/view"));
+  const googleLinkMatch = src.match(/https:\/\/drive.google.com\/file\/d\/(.*)\/view/);
   if (googleLinkMatch) {
     return `https://drive.google.com/uc?id=${googleLinkMatch[1]}`;
   }

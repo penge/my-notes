@@ -1,15 +1,15 @@
 import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
+import runUploadPreconditions from "background/google-drive/preconditions/run-upload-preconditions";
 import { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
+import __range from "notes/range";
+import { reinitTables } from "notes/content/table";
 import { commands, InsertTabFactory } from "../../commands";
 import { ContentProps, reattachEditNote } from "./common";
-import __range from "notes/range";
 
 import { isImageFile } from "../image/read-image";
 import { dropImage } from "../image/drop-image";
-import { runUploadPreconditions } from "background/google-drive/preconditions/upload-preconditions";
-import { reinitTables } from "notes/content/table";
 
 const focus = (content: HTMLDivElement) => content && window.setTimeout(() => {
   const selection = window.getSelection();
@@ -31,14 +31,16 @@ const openLink = (event: MouseEvent) => {
   }
 
   event.preventDefault();
-  const target = event.target;
+  const { target } = event;
   const href = target && (target as HTMLLinkElement).href;
   if (href && ["http", "chrome-extension"].some((protocol) => href.startsWith(protocol))) {
     window.open(href, "_blank");
   }
 };
 
-const ContentHtml = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JSX.Element => {
+const ContentHtml = ({
+  note, onEdit, indentOnTab, tabSize,
+}: ContentProps): h.JSX.Element => {
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const [setIndentOnTabHandlerOnTab] = useKeyboardShortcut(KeyboardShortcut.OnTab);
@@ -46,7 +48,7 @@ const ContentHtml = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JS
   useEffect(() => setIndentOnTabHandlerOnTab(
     indentOnTab
       ? InsertTabFactory({ tabSize })
-      : undefined
+      : undefined,
   ), [indentOnTab, tabSize]);
 
   useEffect(() => {
@@ -57,7 +59,7 @@ const ContentHtml = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JS
         onResize: () => {
           const event = new Event("editnote");
           document.dispatchEvent(event);
-        }
+        },
       });
     }
   }, [note.active, note.initialContent]);
@@ -103,8 +105,8 @@ const ContentHtml = ({ note, onEdit, indentOnTab, tabSize }: ContentProps): h.JS
       className={note.locked ? "locked" : undefined}
       ref={contentRef}
       contentEditable
-      spellcheck
-      autofocus
+      spellCheck
+      autoFocus
       onInput={onInput}
       onClick={openLink}
       onDragEnter={() => {

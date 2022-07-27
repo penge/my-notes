@@ -63,8 +63,8 @@ const publish = (keyboardShortcut: KeyboardShortcut, event: KeyboardEvent): void
 
 const registerNewNote = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyI") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyI")
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyI")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyI")
   ) {
     publish(KeyboardShortcut.OnNewNote, event);
   }
@@ -72,8 +72,8 @@ const registerNewNote = (event: KeyboardEvent, os: Os) => {
 
 const registerOpenOptions = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyO") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyO")
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyO")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyO")
   ) {
     publish(KeyboardShortcut.OnOpenOptions, event);
   }
@@ -81,8 +81,8 @@ const registerOpenOptions = (event: KeyboardEvent, os: Os) => {
 
 const registerToggleFocusMode = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyF") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyF")
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyF")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyF")
   ) {
     publish(KeyboardShortcut.OnToggleFocusMode, event);
   }
@@ -90,8 +90,8 @@ const registerToggleFocusMode = (event: KeyboardEvent, os: Os) => {
 
 const registerToggleSidebar = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && !event.shiftKey && event.code === "KeyS") ||
-    (!isMac(os) && event.ctrlKey && !event.shiftKey && event.code === "KeyS")
+    (isMac(os) && event.metaKey && !event.shiftKey && event.code === "KeyS")
+    || (!isMac(os) && event.ctrlKey && !event.shiftKey && event.code === "KeyS")
   ) {
     publish(KeyboardShortcut.OnToggleSidebar, event);
   }
@@ -99,8 +99,8 @@ const registerToggleSidebar = (event: KeyboardEvent, os: Os) => {
 
 const registerToggleToolbar = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.code === "KeyE") ||
-    (!isMac(os) && event.ctrlKey && event.code === "KeyE")
+    (isMac(os) && event.metaKey && event.code === "KeyE")
+    || (!isMac(os) && event.ctrlKey && event.code === "KeyE")
   ) {
     publish(KeyboardShortcut.OnToggleToolbar, event);
   }
@@ -108,8 +108,8 @@ const registerToggleToolbar = (event: KeyboardEvent, os: Os) => {
 
 const registerToggleCommandPalette = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && !event.shiftKey && event.code === "KeyP") ||
-    (!isMac(os) && event.ctrlKey && !event.shiftKey && event.code === "KeyP")
+    (isMac(os) && event.metaKey && !event.shiftKey && event.code === "KeyP")
+    || (!isMac(os) && event.ctrlKey && !event.shiftKey && event.code === "KeyP")
   ) {
     publish(KeyboardShortcut.OnToggleCommandPalette, event);
   }
@@ -117,8 +117,8 @@ const registerToggleCommandPalette = (event: KeyboardEvent, os: Os) => {
 
 const registerControl = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && !event.shiftKey) ||
-    (!isMac(os) && event.ctrlKey && !event.shiftKey)
+    (isMac(os) && event.metaKey && !event.shiftKey)
+    || (!isMac(os) && event.ctrlKey && !event.shiftKey)
   ) {
     publish(KeyboardShortcut.OnControl, event);
   }
@@ -144,8 +144,8 @@ const registerTab = (event: KeyboardEvent) => {
 
 const registerRepeatLastExecutedCommand = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyP") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyP")
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyP")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "KeyP")
   ) {
     publish(KeyboardShortcut.OnRepeatLastExecutedCommand, event);
   }
@@ -159,8 +159,8 @@ const registerUnderline = (event: KeyboardEvent, os: Os) => {
 
 const registerStrikethrough = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyX") ||
-    (!isMac(os) && event.altKey && event.shiftKey && event.code === "Digit5")
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "KeyX")
+    || (!isMac(os) && event.altKey && event.shiftKey && event.code === "Digit5")
   ) {
     publish(KeyboardShortcut.OnStrikethrough, event);
   }
@@ -168,8 +168,8 @@ const registerStrikethrough = (event: KeyboardEvent, os: Os) => {
 
 const registerRemoveFormat = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.code === "Backslash") ||
-    (!isMac(os) && event.ctrlKey && event.code === "Backslash")
+    (isMac(os) && event.metaKey && event.code === "Backslash")
+    || (!isMac(os) && event.ctrlKey && event.code === "Backslash")
   ) {
     publish(KeyboardShortcut.OnRemoveFormat, event);
   }
@@ -177,8 +177,8 @@ const registerRemoveFormat = (event: KeyboardEvent, os: Os) => {
 
 const registerUnorderedList = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit7") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit7")
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit7")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit7")
   ) {
     publish(KeyboardShortcut.OnUnorderedList, event);
   }
@@ -186,8 +186,8 @@ const registerUnorderedList = (event: KeyboardEvent, os: Os) => {
 
 const registerOrderedList = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit8") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit8")
+    (isMac(os) && event.metaKey && event.shiftKey && event.code === "Digit8")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && event.code === "Digit8")
   ) {
     publish(KeyboardShortcut.OnOrderedList, event);
   }
@@ -195,8 +195,8 @@ const registerOrderedList = (event: KeyboardEvent, os: Os) => {
 
 const registerInsertDate = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && !event.shiftKey && !event.altKey && event.code === "Semicolon") ||
-    (!isMac(os) && event.ctrlKey && !event.shiftKey && !event.altKey && event.code === "Semicolon")
+    (isMac(os) && event.metaKey && !event.shiftKey && !event.altKey && event.code === "Semicolon")
+    || (!isMac(os) && event.ctrlKey && !event.shiftKey && !event.altKey && event.code === "Semicolon")
   ) {
     publish(KeyboardShortcut.OnInsertDate, event);
   }
@@ -204,8 +204,8 @@ const registerInsertDate = (event: KeyboardEvent, os: Os) => {
 
 const registerInsertTime = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && !event.altKey && event.code === "Semicolon") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && !event.altKey && event.code === "Semicolon")
+    (isMac(os) && event.metaKey && event.shiftKey && !event.altKey && event.code === "Semicolon")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && !event.altKey && event.code === "Semicolon")
   ) {
     publish(KeyboardShortcut.OnInsertTime, event);
   }
@@ -213,8 +213,8 @@ const registerInsertTime = (event: KeyboardEvent, os: Os) => {
 
 const registerInsertDateAndTime = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.shiftKey && event.altKey && event.code === "Semicolon") ||
-    (!isMac(os) && event.ctrlKey && event.shiftKey && event.altKey && event.code === "Semicolon")
+    (isMac(os) && event.metaKey && event.shiftKey && event.altKey && event.code === "Semicolon")
+    || (!isMac(os) && event.ctrlKey && event.shiftKey && event.altKey && event.code === "Semicolon")
   ) {
     publish(KeyboardShortcut.OnInsertDateAndTime, event);
   }
@@ -222,8 +222,8 @@ const registerInsertDateAndTime = (event: KeyboardEvent, os: Os) => {
 
 const registerSyncNotes = (event: KeyboardEvent, os: Os) => {
   if (
-    (isMac(os) && event.metaKey && event.code === "KeyR") ||
-    (!isMac(os) && event.ctrlKey && event.code === "KeyR")
+    (isMac(os) && event.metaKey && event.code === "KeyR")
+    || (!isMac(os) && event.ctrlKey && event.code === "KeyR")
   ) {
     publish(KeyboardShortcut.OnSync, event);
   }

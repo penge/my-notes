@@ -1,4 +1,3 @@
-import { NotesObject } from "shared/storage/schema";
 import { readTextFile, ReadTextFileResponse } from "./read-text-file";
 import { readZipFile } from "./read-zip-file";
 
@@ -13,7 +12,7 @@ const importNotes = (responses: ReadTextFileResponse[]): Promise<string[]> => ne
       return;
     }
 
-    const notes: NotesObject = local.notes;
+    const { notes } = local;
     sortedImportableResponses.forEach((response) => {
       notes[response.name] = response.note;
     });
@@ -21,7 +20,6 @@ const importNotes = (responses: ReadTextFileResponse[]): Promise<string[]> => ne
     chrome.storage.local.set({ notes }, () => {
       const importedNoteNames = sortedImportableResponses.map((response) => response.name);
       resolve(importedNoteNames);
-      return;
     });
   });
 });

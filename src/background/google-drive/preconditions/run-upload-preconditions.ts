@@ -1,18 +1,18 @@
-import { runCommonPreconditions } from "./common-preconditions";
-import * as api from "../api";
-import { getToken } from "shared/permissions/identity";
+import getAuthToken from "shared/identity/get-auth-token";
 import { setItem } from "shared/storage";
 import { Sync } from "shared/storage/schema";
+import runCommonPreconditions from "./run-common-preconditions";
+import * as api from "../api";
 
 interface UploadPreconditionsResult {
   sync: Sync
   token: string
 }
 
-export const runUploadPreconditions = async (): Promise<UploadPreconditionsResult | undefined> => {
+export default async (): Promise<UploadPreconditionsResult | undefined> => {
   const sync = await runCommonPreconditions("UPLOAD");
   if (!sync) {
-    return;
+    return undefined;
   }
 
   // Get existing "assets" folder ID, or create "assets" folder if not found
@@ -24,9 +24,9 @@ export const runUploadPreconditions = async (): Promise<UploadPreconditionsResul
     });
   }
 
-  const token = await getToken();
+  const token = await getAuthToken();
   if (!token) {
-    return;
+    return undefined;
   }
 
   return {

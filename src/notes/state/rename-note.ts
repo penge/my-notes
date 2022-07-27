@@ -6,7 +6,7 @@ export default function renameNote(oldName: string, newName: string): void {
     return;
   }
 
-  chrome.storage.local.get(["notes"], local => {
+  chrome.storage.local.get(["notes"], (local) => {
     const notes: NotesObject = { ...local.notes };
 
     // newName must be available

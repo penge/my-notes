@@ -6,7 +6,7 @@ export default function createNote(newNoteName: string): void {
     return;
   }
 
-  chrome.storage.local.get(["notes"], local => {
+  chrome.storage.local.get(["notes"], (local) => {
     const notes: NotesObject = { ...local.notes };
 
     // Name must be available

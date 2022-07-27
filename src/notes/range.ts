@@ -29,12 +29,12 @@ const empty = (): void => {
 };
 
 export const withRange = (fn: (range: Range) => void): void => {
-  const range = save();
-  if (!range) {
+  const savedRange = save();
+  if (!savedRange) {
     return;
   }
 
-  fn(range);
+  fn(savedRange);
 };
 
 export default {

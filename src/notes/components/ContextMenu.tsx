@@ -4,21 +4,22 @@ import clsx from "clsx";
 import { t } from "i18n";
 
 export interface ContextMenuProps {
-  noteName: string
   x: number
   y: number
-  onRename: (noteName: string) => void
-  onDelete: (noteName: string) => void
+  onRename: () => void
+  onDelete: () => void
+  onToggleLocked: () => void
+  onTogglePinnedTime: () => void
+  onDuplicate: () => void
+  onExport: () => void
   locked: boolean
-  onToggleLocked: (noteName: string) => void
   pinned: boolean
-  onTogglePinnedTime: (noteName: string) => void
-  onDuplicate: (noteName: string) => void
-  onExport: (noteName: string) => void
 }
 
 const ContextMenu = ({
-  noteName, x, y, onRename, onDelete, locked, onToggleLocked, pinned, onTogglePinnedTime, onDuplicate, onExport,
+  x, y,
+  onRename, onDelete, onToggleLocked, onTogglePinnedTime, onDuplicate, onExport,
+  locked, pinned,
 }: ContextMenuProps): h.JSX.Element => {
   const [offsetHeight, setOffsetHeight] = useState<number>(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -36,19 +37,23 @@ const ContextMenu = ({
   }, [ref.current, offsetHeight]);
 
   return (
-    <div id="context-menu" ref={ref} style={offsetHeight ? {
-      left: x + "px",
-      top: (y + offsetHeight < window.innerHeight) ? `${y}px` : "",
-      bottom: (y + offsetHeight >= window.innerHeight) ? "1em" : "",
-    }: {
-      opacity: 0, // offsetHeight NOT set, yet
-    }}>
-      <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onRename(noteName)}>{t("Rename")}</div>
-      <div class={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete(noteName)}>{t("Delete")}</div>
-      <div class="action" onClick={() => onToggleLocked(noteName)}>{locked ? t("Unlock") : t("Lock")}</div>
-      <div class="action" onClick={() => onTogglePinnedTime(noteName)}>{pinned ? t("Unpin") : t("Pin")}</div>
-      <div class="action" onClick={() => onDuplicate(noteName)}>{t("Duplicate")}</div>
-      <div class="action" onClick={() => onExport(noteName)}>{t("Export")}</div>
+    <div
+      id="context-menu"
+      ref={ref}
+      style={offsetHeight ? {
+        left: `${x}px`,
+        top: (y + offsetHeight < window.innerHeight) ? `${y}px` : "",
+        bottom: (y + offsetHeight >= window.innerHeight) ? "1em" : "",
+      } : {
+        opacity: 0, // offsetHeight NOT set, yet
+      }}
+    >
+      <div className={clsx("action", locked && "disabled")} onClick={() => !locked && onRename()}>{t("Rename")}</div>
+      <div className={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete()}>{t("Delete")}</div>
+      <div className="action" onClick={() => onToggleLocked()}>{locked ? t("Unlock") : t("Lock")}</div>
+      <div className="action" onClick={() => onTogglePinnedTime()}>{pinned ? t("Unpin") : t("Pin")}</div>
+      <div className="action" onClick={() => onDuplicate()}>{t("Duplicate")}</div>
+      <div className="action" onClick={() => onExport()}>{t("Export")}</div>
     </div>
   );
 };

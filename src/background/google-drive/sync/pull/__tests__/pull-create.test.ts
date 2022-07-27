@@ -1,6 +1,6 @@
 import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
 import { GetFileFunction } from "background/google-drive/api";
-import { pullCreate } from "../pull-create";
+import pullCreate from "../pull-create";
 
 const notes: NotesObject = {
   // "Books" does NOT exist here (should be downloaded)
@@ -15,8 +15,8 @@ const notes: NotesObject = {
         name: "Todo",
         createdTime: "2021-04-03T15:00:00Z",
         modifiedTime: "2021-04-03T15:10:00Z",
-      }
-    }
+      },
+    },
   },
 
   // "Amazon" was named "Shopping" before
@@ -30,8 +30,8 @@ const notes: NotesObject = {
         name: "Amazon",
         createdTime: "2021-04-04T10:00:00Z",
         modifiedTime: "2021-04-04T10:30:00Z",
-      }
-    }
+      },
+    },
   },
 };
 
@@ -72,10 +72,10 @@ test("pullCreate() creates notes for every file where note with file's name does
           name: "Books",
           createdTime: "2021-04-02T14:30:00Z",
           modifiedTime: "2021-04-02T14:45:00Z",
-        }
+        },
       },
     },
-    Todo: notes["Todo"], // "Todo" should be unchanged (file exists)
-    Amazon: notes["Amazon"], // "Amazon" should be unchanged (file exists)
+    Todo: notes.Todo, // "Todo" should be unchanged (file exists)
+    Amazon: notes.Amazon, // "Amazon" should be unchanged (file exists)
   });
 });

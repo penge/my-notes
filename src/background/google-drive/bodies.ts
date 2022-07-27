@@ -18,7 +18,10 @@ export interface CreateFileBodyOptions {
 }
 
 export const createFileBody = (
-  parent: string, { name, content, createdTime, modifiedTime }: CreateFileBodyOptions
+  parent: string,
+  {
+    name, content, createdTime, modifiedTime,
+  }: CreateFileBodyOptions,
 ): string => `
 --my-notes
 Content-Type: application/json; charset=UTF-8
@@ -44,7 +47,7 @@ export interface UpdateFileBodyOptions {
 }
 
 export const updateFileBody = (
-  { name, content, modifiedTime }: UpdateFileBodyOptions
+  { name, content, modifiedTime }: UpdateFileBodyOptions,
 ): string => `
 --my-notes
 Content-Type: application/json; charset=UTF-8
@@ -66,7 +69,10 @@ export interface UploadFileBodyOptions extends CreateFileBodyOptions {
 }
 
 export const uploadFileBody = (
-  parent: string, { name, type, content, createdTime, modifiedTime }: UploadFileBodyOptions
+  parent: string,
+  {
+    name, type, content, createdTime, modifiedTime,
+  }: UploadFileBodyOptions,
 ): string => `
 --my-notes
 Content-Type: application/json; charset=UTF-8

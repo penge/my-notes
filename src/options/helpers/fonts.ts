@@ -43,13 +43,12 @@ export const fontFamilies: FontFamily[] = [
   },
   {
     id: "google-fonts",
-    name: "Google Fonts"
-  }
+    name: "Google Fonts",
+  },
 ];
 
-export const ideizeFont = (fontName: string): string =>
-  // "Roboto Mono" -> "roboto-mono"
-  fontName.toLowerCase().replace(/\s/g, "-");
+// "Roboto Mono" -> "roboto-mono"
+export const ideizeFont = (fontName: string): string => fontName.toLowerCase().replace(/\s/g, "-");
 
 export const getGoogleFontHref = (fontName: string): string => {
   // "Roboto Mono" -> "Roboto+Mono"

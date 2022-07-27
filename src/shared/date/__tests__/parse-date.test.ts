@@ -13,7 +13,7 @@ it("returns parsed date", () => {
     day: 8,
     date: "2021 January 8",
     time: "9:41:01 AM",
-    dateTime: "2021 January 8, 9:41:01 AM"
+    dateTime: "2021 January 8, 9:41:01 AM",
   };
 
   expect(parseDate(date)).toEqual(expected);

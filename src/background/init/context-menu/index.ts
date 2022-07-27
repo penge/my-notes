@@ -1,6 +1,6 @@
 import { NotesObject } from "shared/storage/schema";
 import { tString } from "i18n";
-import { getTextToSave } from "./context";
+import getTextToSave from "./get-text-to-save";
 import {
   CLIPBOARD_NOTE_NAME,
   saveTextToLocalMyNotes,
@@ -32,7 +32,7 @@ const createContextMenu = (notes: NotesObject): string | number => chrome.contex
   contexts: ["page", "selection"],
 }, () => {
   const forEveryNoteExceptClipboard = (callback: (noteName: string) => void) => {
-    Object.keys(notes).filter(noteName => noteName !== CLIPBOARD_NOTE_NAME).sort().forEach(callback);
+    Object.keys(notes).filter((noteName) => noteName !== CLIPBOARD_NOTE_NAME).sort().forEach(callback);
   };
 
   /* -------------< page >------------- */
@@ -155,7 +155,6 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
   if (menuId === SELECTION_REMOTE_MY_NOTES) {
     saveTextToRemotelyOpenMyNotes(textToSave);
     notify(tString("Context Menu.notifications.Sent text to remotely open My Notes"));
-    return;
   }
 });
 
@@ -182,11 +181,11 @@ const recreateContextMenuFromNotes = (notes: NotesObject | undefined): void => {
 
 export const createAndUpdateContextMenuFromNotes = (): void => {
   chrome.storage.local.get("notes", (local) => {
-    recreateContextMenuFromNotes(local.notes as NotesObject);
+    recreateContextMenuFromNotes(local.notes);
   });
 
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === "local" && changes["notes"]) {
+    if (areaName === "local" && changes.notes) {
       recreateContextMenuFromNotes(changes.notes.newValue);
     }
   });

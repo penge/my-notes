@@ -1,7 +1,9 @@
 import { h } from "preact";
-import { useRef, useState, useMemo, useCallback, useEffect } from "preact/hooks";
+import {
+  useRef, useState, useMemo, useCallback, useEffect,
+} from "preact/hooks";
 import clsx from "clsx";
-import { useBodyClass } from "notes/hooks/use-body-class";
+import useBodyClass from "notes/hooks/use-body-class";
 import { SidebarNote } from "notes/adapters";
 import { t, tString } from "i18n";
 
@@ -25,10 +27,16 @@ export interface Filter {
 
 /**
  * Returns filter to be used based on the input.
+ *
  * We can filter:
- * A) CommandsByName => filter commands by name, when input starts with ">" (whitespace before and after ">" is allowed, whitespace at the end is allowed)
- * B) NotesByContent => filter notes by the content, when input starts with "?" (whitespace before and after "?" is allowed, whitespace at the end is allowed)
- * C) NotesByName => filter notes by their name, when input does NOT start with [">", "?"] (whitespace before is allowed, whitespace at the end is allowed)
+ * A) CommandsByName
+ * => filter commands by name, when input starts with ">" (whitespace before and after ">" is allowed, whitespace at the end is allowed)
+ *
+ * B) NotesByContent
+ * => filter notes by the content, when input starts with "?" (whitespace before and after "?" is allowed, whitespace at the end is allowed)
+ *
+ * C) NotesByName
+ * => filter notes by their name, when input does NOT start with [">", "?"] (whitespace before is allowed, whitespace at the end is allowed)
  */
 export const prepareFilter = (rawInput: string): Filter => {
   const input = rawInput.trim().toLowerCase().replace(/^([>?])\s*(.*)/, "$1$2"); // trim whitespace, remove whitespace after [">", "?"]
@@ -64,7 +72,7 @@ export const prepareItems = (notes: SidebarNote[], commands: string[], filter: F
   }
 
   const input = filter.input.trim();
-  const prepareFilterPredicate = (input: string) => (item: string) => input ? item.toLowerCase().includes(input) : item;
+  const prepareFilterPredicate = (givenInput: string) => (item: string) => (givenInput ? item.toLowerCase().includes(givenInput) : item);
 
   // A) CommandsByName
   if (filter.type === FilterType.CommandsByName) {
@@ -73,11 +81,11 @@ export const prepareItems = (notes: SidebarNote[], commands: string[], filter: F
 
   // B) NotesByContent
   if (filter.type === FilterType.NotesByContent) {
-    const filter = prepareFilterPredicate(input);
+    const filterPredicate = prepareFilterPredicate(input);
     return input
       ? noteNames.filter((noteName) => {
         const foundNote = notes.find((note) => note.name === noteName);
-        return foundNote && filter(foundNote.content);
+        return foundNote && filterPredicate(foundNote.content);
       })
       : noteNames;
   }
@@ -86,7 +94,9 @@ export const prepareItems = (notes: SidebarNote[], commands: string[], filter: F
   return noteNames.filter(prepareFilterPredicate(input));
 };
 
-const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: CommandPaletteProps): h.JSX.Element => {
+const CommandPalette = ({
+  notes, commands, onActivateNote, onExecuteCommand,
+}: CommandPaletteProps): h.JSX.Element => {
   useBodyClass("with-command-palette");
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -106,12 +116,13 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
     }
 
     onActivateNote(name);
-    return;
   }, [filter, onActivateNote, onExecuteCommand]);
 
-  useEffect(() => inputRef.current?.focus(), [inputRef]); // auto-focus the input when Command Palette is open
+  // auto-focus the input when Command Palette is open
+  useEffect(() => inputRef.current?.focus(), [inputRef]);
 
-  useEffect(() => setSelectedItemIndex(items.length === 1 ? 0 : -1), [filter, items]); // reset selected item when props change; auto-select it when there's just one
+  // reset selected item when props change; auto-select it when there's just one
+  useEffect(() => setSelectedItemIndex(items.length === 1 ? 0 : -1), [filter, items]);
 
   return (
     <div
@@ -133,7 +144,7 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
         setSelectedItemIndex(
           activeIndexCandidate < 0 && direction === -1
             ? items.length - 1
-            : activeIndexCandidate
+            : activeIndexCandidate,
         );
       }}
     >
@@ -147,12 +158,12 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
           const newFilter = prepareFilter((event.target as HTMLInputElement).value);
           setFilter(newFilter);
         }}
-        autocomplete="off"
+        autoComplete="off"
       />
 
       {items.length > 0 && (
         <div className="command-palette-list">
-          {items.map((name, index) =>
+          {items.map((name, index) => (
             <div
               className={clsx("command-palette-list-item", index === selectedItemIndex && "active")}
               onClick={() => handleItem(name)}
@@ -160,10 +171,9 @@ const CommandPalette = ({ notes, commands, onActivateNote, onExecuteCommand }: C
             >
               {(filter?.type === FilterType.CommandsByName)
                 ? commands.find((command) => command.name === name)?.translation
-                : name
-              }
+                : name}
             </div>
-          )}
+          ))}
         </div>
       )}
 

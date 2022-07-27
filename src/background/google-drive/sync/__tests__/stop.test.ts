@@ -11,8 +11,8 @@ const notes = {
         name: "Clipboard",
         createdTime: "2020-04-20T09:07:00Z",
         modifiedTime: "2020-04-20T09:07:07Z",
-      }
-    }
+      },
+    },
   },
 
   Radio: {
@@ -31,8 +31,8 @@ const notes = {
         name: "Todo",
         createdTime: "2020-04-20T09:02:00Z",
         modifiedTime: "2020-04-20T09:02:02Z",
-      }
-    }
+      },
+    },
   },
 };
 

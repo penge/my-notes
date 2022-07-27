@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import { h, render, Fragment } from "preact";
 import { useState, useEffect } from "preact/hooks";
 
@@ -13,7 +14,6 @@ import __Version from "options/Version";
 import {
   Os,
   Storage,
-  NotesObject,
   NotesOrder,
   RegularFont,
   GoogleFont,
@@ -59,7 +59,7 @@ const Options = (): h.JSX.Element => {
       // Sync
       "sync",
       "autoSync",
-    ], items => {
+    ], (items) => {
       const local = items as Storage;
 
       // Appearance
@@ -87,50 +87,50 @@ const Options = (): h.JSX.Element => {
         return;
       }
 
-      if (changes["font"]) {
-        setFont(changes["font"].newValue);
+      if (changes.font) {
+        setFont(changes.font.newValue);
       }
 
-      if (changes["size"]) {
-        setSize(changes["size"].newValue);
+      if (changes.size) {
+        setSize(changes.size.newValue);
       }
 
-      if (changes["theme"]) {
-        setTheme(changes["theme"].newValue);
+      if (changes.theme) {
+        setTheme(changes.theme.newValue);
       }
 
-      if (changes["customTheme"]) {
-        setCustomTheme(changes["customTheme"].newValue);
+      if (changes.customTheme) {
+        setCustomTheme(changes.customTheme.newValue);
       }
 
-      if (changes["notes"]) {
-        const newValue: NotesObject = changes["notes"].newValue;
+      if (changes.notes) {
+        const { newValue } = changes.notes;
         const newNotesCount = Object.keys(newValue).length;
         setNotesCount(newNotesCount);
       }
 
-      if (changes["notesOrder"]) {
-        setNotesOrder(changes["notesOrder"].newValue);
+      if (changes.notesOrder) {
+        setNotesOrder(changes.notesOrder.newValue);
       }
 
-      if (changes["tab"]) {
-        setTab(changes["tab"].newValue);
+      if (changes.tab) {
+        setTab(changes.tab.newValue);
       }
 
-      if (changes["tabSize"]) {
-        setTabSize(changes["tabSize"].newValue);
+      if (changes.tabSize) {
+        setTabSize(changes.tabSize.newValue);
       }
 
-      if (changes["openNoteOnMouseHover"]) {
-        setOpenNoteOnMouseHover(changes["openNoteOnMouseHover"].newValue);
+      if (changes.openNoteOnMouseHover) {
+        setOpenNoteOnMouseHover(changes.openNoteOnMouseHover.newValue);
       }
 
-      if (changes["sync"]) {
-        setSync(changes["sync"].newValue);
+      if (changes.sync) {
+        setSync(changes.sync.newValue);
       }
 
-      if (changes["autoSync"]) {
-        setAutoSync(changes["autoSync"].newValue);
+      if (changes.autoSync) {
+        setAutoSync(changes.autoSync.newValue);
       }
     });
   }, []);
@@ -140,7 +140,9 @@ const Options = (): h.JSX.Element => {
     // - light.css
     // - dark.css
     // - customTheme string
-    theme && setThemeCore(document, { theme, customTheme: customTheme });
+    if (theme) {
+      setThemeCore(document, { theme, customTheme });
+    }
   }, [theme, customTheme]);
 
   return (
@@ -152,14 +154,16 @@ const Options = (): h.JSX.Element => {
       <__NotesOrder notesOrder={notesOrder} />
       <__Theme theme={theme} />
       {os && <__KeyboardShortcuts os={os} />}
-      {os && <__Options
-        os={os}
-        sync={sync}
-        autoSync={autoSync}
-        tab={tab}
-        tabSize={tabSize}
-        openNoteOnMouseHover={openNoteOnMouseHover}
-      />}
+      {os && (
+        <__Options
+          os={os}
+          sync={sync}
+          autoSync={autoSync}
+          tab={tab}
+          tabSize={tabSize}
+          openNoteOnMouseHover={openNoteOnMouseHover}
+        />
+      )}
       <__ExportImport canExport={notesCount > 0} />
       <__Version version={version} />
     </Fragment>

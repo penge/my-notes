@@ -14,13 +14,13 @@ const CustomTheme = (): h.JSX.Element => {
   const [saveButtonText, setSaveButtonText] = useState<string>(tString("Save"));
 
   useEffect(() => {
-    chrome.storage.local.get(["customTheme"], local => {
+    chrome.storage.local.get(["customTheme"], (local) => {
       setInitialCustomTheme(local.customTheme || "");
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
-      if (areaName === "local" && changes["customTheme"]) {
-        setInitialCustomTheme(changes["customTheme"].newValue || "");
+      if (areaName === "local" && changes.customTheme) {
+        setInitialCustomTheme(changes.customTheme.newValue || "");
       }
     });
   }, []);
@@ -51,17 +51,20 @@ const CustomTheme = (): h.JSX.Element => {
         placeholder={(typeof customTheme === "string" && !customTheme.length) ? placeholder : undefined}
         value={customTheme}
         onInput={(event) => setCustomTheme((event.target as HTMLTextAreaElement).value)}
-        autofocus
+        autoFocus
       />
 
       <button
+        type="button"
         id="save"
         className={canSave ? "" : "disabled"}
         onClick={canSave ? () => {
           chrome.storage.local.set({ customTheme });
           setSaveButtonText(tString("Saved!"));
         } : undefined}
-      >{saveButtonText}</button>
+      >
+        {saveButtonText}
+      </button>
     </Fragment>
   );
 };

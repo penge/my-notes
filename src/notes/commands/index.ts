@@ -1,7 +1,7 @@
 import dateUtils from "shared/date/date-utils";
+import { getFocusOverride } from "notes/location";
 import table from "./table";
 import highlight from "./highlight";
-import { getFocusOverride } from "notes/location";
 
 export type Command = () => void;
 type CommandFactory<P> = (props: P) => Command;
@@ -31,8 +31,8 @@ const AlignRight: Command = () => { exec("justifyRight"); };
 const InsertTabFactory: CommandFactory<{ tabSize: number }> = (props): Command => () => {
   const tabHtml: string = {
     "-1": "&#009",
-    "2": "&nbsp;&nbsp;",
-    "4": "&nbsp;&nbsp;&nbsp;&nbsp;"
+    2: "&nbsp;&nbsp;",
+    4: "&nbsp;&nbsp;&nbsp;&nbsp;",
   }[props.tabSize] || "&#009";
   exec("insertHTML", tabHtml);
 };
@@ -99,7 +99,7 @@ const toggleSidebar: Command = () => {
     return;
   }
 
-  chrome.storage.local.get(["focus"], local => {
+  chrome.storage.local.get(["focus"], (local) => {
     if (!local.focus) { // toggle only if not in focus mode
       const hasSidebar = document.body.classList.toggle("with-sidebar");
       chrome.storage.local.set({ sidebar: hasSidebar });
@@ -112,7 +112,7 @@ const toggleToolbar: Command = () => {
     return;
   }
 
-  chrome.storage.local.get(["focus"], local => {
+  chrome.storage.local.get(["focus"], (local) => {
     if (!local.focus) { // toggle only if not in focus mode
       const hasToolbar = document.body.classList.toggle("with-toolbar");
       chrome.storage.local.set({ toolbar: hasToolbar });

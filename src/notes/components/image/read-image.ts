@@ -4,9 +4,7 @@ export interface ReadImageProps {
   result: string
 }
 
-export const isImageFile = (file: File): boolean => {
-  return file.type.match("image/*") !== null;
-};
+export const isImageFile = (file: File): boolean => file.type.match("image/*") !== null;
 
 export const readImageFile = (file: File): Promise<ReadImageProps | undefined> => new Promise((resolve) => {
   if (!isImageFile(file)) {

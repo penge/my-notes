@@ -1,8 +1,9 @@
 import * as path from "path";
 import * as fs from "fs";
 
-const getLines = (filename: string): string[] =>
-  fs.readFileSync(path.join(__dirname, `../../../static/themes/${filename}`), "utf8").split("\n");
+const getLines = (filename: string): string[] => fs
+  .readFileSync(path.join(__dirname, `../../../static/themes/${filename}`), "utf8")
+  .split("\n");
 
 it("has the same CSS variables", () => {
   const lightLines = getLines("light.css");
@@ -16,10 +17,9 @@ it("has the same CSS variables", () => {
     const isVariable = lightLines[i].startsWith("  --");
     if (!isVariable) {
       expect(lightLines[i]).toEqual(darkLines[i]);
-      continue;
+    } else {
+      const variableName = lightLines[i].split(":")[0];
+      expect(darkLines[i].startsWith(variableName)).toBe(true);
     }
-
-    const variableName = lightLines[i].split(":")[0];
-    expect(darkLines[i].startsWith(variableName)).toBe(true);
   }
 });

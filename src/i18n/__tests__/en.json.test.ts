@@ -1,12 +1,12 @@
+import capitalize from "shared/string/capitalize";
 import en from "../en.json";
-import { capitalize } from "shared/string/capitalize-string";
 
 test("all root keys start with uppercase letter", () => {
   expect(
     Object
       .keys(en)
       .map((key) => key === capitalize(key))
-      .every((expectation) => expectation === true)
+      .every((expectation) => expectation === true),
   ).toBe(true);
 });
 

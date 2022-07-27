@@ -1,18 +1,18 @@
 import { h, Fragment } from "preact";
-import { Theme } from "shared/storage/schema";
+import { Theme as OneTheme } from "shared/storage/schema";
 import { t } from "i18n";
 
-const THEMES = ["light", "dark", "custom"] as Theme[];
+const THEMES = ["light", "dark", "custom"] as OneTheme[];
 
 interface ThemeProps {
-  theme?: Theme
+  theme?: OneTheme,
 }
 
 const Theme = ({ theme }: ThemeProps): h.JSX.Element => (
   <Fragment>
     <h2>Theme</h2>
-    {THEMES.map((aTheme) =>
-      <div class="selection">
+    {THEMES.map((aTheme) => (
+      <div className="selection">
         <input
           type="radio"
           id={aTheme}
@@ -21,21 +21,22 @@ const Theme = ({ theme }: ThemeProps): h.JSX.Element => (
           onClick={() => {
             chrome.storage.local.set({ theme: aTheme });
           }}
-        />&nbsp;
+        />
+        {" "}
 
         <label
-          for={aTheme}
+          htmlFor={aTheme}
           id={`${aTheme}-theme-label`}
-          class="bold theme-label"
+          className="bold theme-label"
         >
           {t(`Themes.${aTheme}`)}
         </label>
 
         {aTheme === "custom" && (
-          <a href="themes/custom/index.html" target="_blank" class="space-left">{t("Customize")}</a>
+          <a href="themes/custom/index.html" target="_blank" className="space-left">{t("Customize")}</a>
         )}
       </div>
-    )}
+    ))}
   </Fragment>
 );
 

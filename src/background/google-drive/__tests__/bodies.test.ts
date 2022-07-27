@@ -1,3 +1,4 @@
+/* eslint-disable no-multiple-empty-lines */
 import {
   createFolderBody,
   createFileBody,
@@ -36,7 +37,7 @@ it("has valid create file body", () => expect(createFileBody("12345", {
   name: "Todo",
   content: "buy milk",
   createdTime: "CT",
-  modifiedTime: "MT"
+  modifiedTime: "MT",
 })).toEqual(`
 --my-notes
 Content-Type: application/json; charset=UTF-8
@@ -59,7 +60,7 @@ buy milk
 it("has valid update file body", () => expect(updateFileBody({
   name: "Todo Today",
   content: "buy milk, buy coffee",
-  modifiedTime: "MT"
+  modifiedTime: "MT",
 })).toEqual(`
 --my-notes
 Content-Type: application/json; charset=UTF-8
@@ -82,7 +83,7 @@ it("has valid upload file body", () => expect(uploadFileBody("12345", {
   type: "image/jpeg",
   content: "IMAGE_CONTENT",
   createdTime: "CT",
-  modifiedTime: "MT"
+  modifiedTime: "MT",
 })).toEqual(`
 --my-notes
 Content-Type: application/json; charset=UTF-8

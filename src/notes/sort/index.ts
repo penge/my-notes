@@ -1,7 +1,7 @@
 import { SidebarNote } from "notes/adapters";
 import { NotesOrder } from "shared/storage/schema";
 
-export const sortNotes = (notes: SidebarNote[], notesOrder: NotesOrder, custom?: string[]): SidebarNote[] => {
+export default (notes: SidebarNote[], notesOrder: NotesOrder, custom?: string[]): SidebarNote[] => {
   const pinnedNotes = notes.filter((note) => note.pinnedTime);
   const unpinnedNotes = notes.filter((note) => !note.pinnedTime);
 

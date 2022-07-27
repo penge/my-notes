@@ -1,7 +1,9 @@
 import { h } from "preact";
-import { useRef, useState, useEffect, useMemo, useCallback } from "preact/hooks";
+import {
+  useRef, useState, useEffect, useMemo, useCallback,
+} from "preact/hooks";
 import clsx from "clsx";
-import { useBodyClass } from "notes/hooks/use-body-class";
+import useBodyClass from "notes/hooks/use-body-class";
 import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 
 interface ModalProps {
@@ -60,9 +62,9 @@ const Modal = ({
     const value = inputValue.trim();
     const isValid = validate ? validate(value) : true;
     if (!isValid) {
-      return;
+      return undefined;
     }
-    return () => confirm.onConfirm(value);
+    return () => { confirm.onConfirm(value); };
   }, [inputValue, validate, confirm.onConfirm]);
 
   const [setOnCancelHandlerOnEscape] = useKeyboardShortcut(KeyboardShortcut.OnEscape);
@@ -74,7 +76,7 @@ const Modal = ({
   return (
     <div id="modal" className={className}>
       {title && (
-        <div class="bold">{title}</div>
+        <div className="bold">{title}</div>
       )}
 
       {input?.type === "text" && (
@@ -83,7 +85,7 @@ const Modal = ({
           type="text"
           ref={inputRef}
           onBlur={() => inputRef.current?.focus()}
-          autocomplete="off"
+          autoComplete="off"
           value={inputValue}
           onInput={onInput}
         />
@@ -94,7 +96,7 @@ const Modal = ({
           id="textarea"
           ref={textareaRef}
           onBlur={() => textareaRef.current?.focus()}
-          autocomplete="off"
+          autoComplete="off"
           value={inputValue}
           onInput={onInput}
         />
@@ -111,7 +113,7 @@ const Modal = ({
         <input
           type="submit"
           value={confirm.confirmValue}
-          class={clsx("bold", !onSubmit && "disabled")}
+          className={clsx("bold", !onSubmit && "disabled")}
           onClick={onSubmit}
         />
       </div>

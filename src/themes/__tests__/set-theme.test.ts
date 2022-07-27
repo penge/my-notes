@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { JSDOM } from "jsdom";
 import { Theme } from "shared/storage/schema";
 import { setTheme } from "../set-theme";
