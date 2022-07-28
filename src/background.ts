@@ -1,6 +1,9 @@
 import setId from "background/init/set-id";
 import runMigrations from "background/init/migrations/run-migrations";
-import { showNewVersionNotification } from "background/init/notifications";
+import {
+  showNewVersionNotification,
+  attachNotificationsOnClicked,
+} from "background/init/notifications";
 
 import {
   openMyNotesOnIconClick,
@@ -40,6 +43,9 @@ saveTextOnRemoteTransfer(); // when you use "Save to remotely open My Notes" fro
 
 // Permissions
 handleChangedPermissions(); // react to granted/removed optional permissions: "identity"
+
+// Notifications
+attachNotificationsOnClicked();
 
 // Run when Installed or Updated
 chrome.runtime.onInstalled.addListener((details) => {

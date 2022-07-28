@@ -82,13 +82,19 @@ export const attachContextMenuOnClicked = (): void => chrome.contextMenus.onClic
 
   if (destination === "note" && noteName) {
     saveTextToLocalMyNotes(textToSave, noteName);
-    notify(tString(tKey, { note: noteName }));
+    notify({
+      notificationId: `note-${new Date().getTime()}-${noteName}`,
+      message: tString(tKey, { note: noteName }),
+    });
     return;
   }
 
   if (destination === "remote") {
     saveTextToRemotelyOpenMyNotes(textToSave);
-    notify(tString(tKey));
+    notify({
+      notificationId: `remote-${new Date().getTime()}`,
+      message: tString(tKey),
+    });
   }
 });
 
