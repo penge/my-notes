@@ -9,6 +9,12 @@ const getUrlToSave: Handler = (info) => {
   return toSave;
 };
 
+const getImageToSave: Handler = (info) => {
+  const { srcUrl } = info;
+  const toSave = `<img src="${srcUrl}"><br><br>`;
+  return toSave;
+};
+
 const getSelectionToSave: Handler = (info) => {
   const { pageUrl, selectionText } = info;
   const pageUrlHtml = getPageUrlHtml(pageUrl);
@@ -18,6 +24,7 @@ const getSelectionToSave: Handler = (info) => {
 
 const handlers: Partial<Record<chrome.contextMenus.ContextType, Handler>> = {
   page: getUrlToSave,
+  image: getImageToSave,
   selection: getSelectionToSave,
 };
 
