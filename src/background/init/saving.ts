@@ -4,9 +4,7 @@ import {
   MessageType,
   Message,
 } from "shared/storage/schema";
-
-export const CLIPBOARD_NOTE_NAME = "@clipboard";
-const RECEIVED_NOTE_NAME = "@received";
+import { RECEIVED_NOTE_NAME } from "./reserved-note-names";
 
 export const saveTextToLocalMyNotes = (textToSave: string, noteName: string): void => {
   chrome.storage.local.get(["notes"], (local) => {

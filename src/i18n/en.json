@@ -216,17 +216,29 @@
   "Created by": "Created by",
   "Buy me a coffee": "Buy me a coffee",
   "Context Menu": {
-    "menus": {
-      "Save URL to": "Save URL to {{note}}",
-      "Save URL to remotely open My Notes": "Save URL to remotely open My Notes",
-      "Save to": "Save to {{note}}",
-      "Save to remotely open My Notes": "Save to remotely open My Notes"
+    "page-note": {
+      "title": "Save URL to {{note}}",
+      "notification": "Saved URL to {{note}}"
     },
-    "notifications": {
-      "Saved URL to": "Saved URL to {{note}}",
-      "Sent URL to remotely open My Notes": "Sent URL to remotely open My Notes",
-      "Saved text to": "Saved text to {{note}}",
-      "Sent text to remotely open My Notes": "Sent text to remotely open My Notes"
+    "page-remote": {
+      "title": "Save URL to remotely open My Notes",
+      "notification": "Sent URL to remotely open My Notes"
+    },
+    "image-note": {
+      "title": "Save image to {{note}}",
+      "notification": "Saved image to {{note}}"
+    },
+    "image-remote": {
+      "title": "Save image to remotely open My Notes",
+      "notification": "Sent image to remotely open My Notes"
+    },
+    "selection-note": {
+      "title": "Save to {{note}}",
+      "notification": "Saved text to {{note}}"
+    },
+    "selection-remote": {
+      "title": "Save to remotely open My Notes",
+      "notification": "Sent text to remotely open My Notes"
     }
   },
   "Notifications": {
