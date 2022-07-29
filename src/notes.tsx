@@ -2,9 +2,8 @@
 /* eslint-disable react/jsx-pascal-case */
 import { h, render, Fragment } from "preact";
 import {
-  useState, useEffect, useRef, useCallback, useMemo,
+  useState, useEffect, useRef, useCallback,
 } from "preact/hooks";
-
 import {
   Os,
   Storage,
@@ -49,12 +48,9 @@ import getFirstAvailableNoteName from "notes/filters/get-first-available-note-na
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
-import {
-  Command, commands, toggleSidebar, toggleToolbar,
-} from "notes/commands";
+import { Command, toggleSidebar, toggleToolbar } from "notes/commands";
 import { exportNote } from "notes/export";
 import { notesToSidebarNotes } from "notes/adapters";
-import { t } from "i18n";
 
 let autoSyncIntervalId: number | undefined;
 
@@ -504,45 +500,12 @@ const Notes = (): h.JSX.Element => {
     chrome.storage.local.set({ active: noteName });
   }, [notesProps]);
 
-  // Command Palette
-  const commandPaletteCommands: { name: string, translation: h.JSX.Element, command: Command }[] = useMemo(() => [
-    {
-      name: "Insert current Date",
-      translation: t("Insert current Date"),
-      command: commands.InsertCurrentDate,
-    },
-    {
-      name: "Insert current Time",
-      translation: t("Insert current Time"),
-      command: commands.InsertCurrentTime,
-    },
-    {
-      name: "Insert current Date and Time",
-      translation: t("Insert current Date and Time"),
-      command: commands.InsertCurrentDateAndTime,
-    },
-    {
-      name: "Toggle Sidebar",
-      translation: t("Shortcuts descriptions.Toggle Sidebar"),
-      command: toggleSidebar,
-    },
-    {
-      name: "Toggle Toolbar",
-      translation: t("Shortcuts descriptions.Toggle Toolbar"),
-      command: toggleToolbar,
-    },
-  ], []);
-
   // Repeat last executed command
   const [setOnRepeatLastExecutedCommandHandler] = useKeyboardShortcut(KeyboardShortcut.OnRepeatLastExecutedCommand);
 
   // Command Palette
   const [setOnToggleCommandPaletteHandler] = useKeyboardShortcut(KeyboardShortcut.OnToggleCommandPalette);
   useEffect(() => {
-    if (!notesOrder) {
-      return;
-    }
-
     // Detach when there are no notes
     if (!Object.keys(notesProps.notes).length) {
       setOnToggleCommandPaletteHandler(undefined);
@@ -550,27 +513,16 @@ const Notes = (): h.JSX.Element => {
       return;
     }
 
-    // Start preparing props for Command Palette
-    const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
-    const newCommands = currentNoteLocked ? [] : commandPaletteCommands;
-
     // Props for Command Palette
+    const currentNoteLocked: boolean = notesProps.active in notesProps.notes && notesProps.notes[notesProps.active].locked === true;
     const props: CommandPaletteProps = {
-      notes: notesToSidebarNotes(notesProps.notes, notesOrder, order),
-      commands: newCommands,
-      onActivateNote: (noteName: string) => {
+      includeContentCommands: !currentNoteLocked,
+      onCommandToExecute: (command: Command) => {
         setCommandPaletteProps(null);
-        range.restore(() => handleOnActivateNote(noteName));
-      },
-      onExecuteCommand: (commandName: string) => {
-        const foundCommand = commandPaletteCommands.find((command) => command.name === commandName);
-        if (foundCommand) {
-          setCommandPaletteProps(null);
-          range.restore(() => {
-            foundCommand.command();
-            setOnRepeatLastExecutedCommandHandler(foundCommand.command);
-          });
-        }
+        range.restore(() => {
+          command();
+          setOnRepeatLastExecutedCommandHandler(command);
+        });
       },
     };
 
@@ -589,7 +541,7 @@ const Notes = (): h.JSX.Element => {
 
     // Update props for already visible Command Palette
     setCommandPaletteProps((prev) => (!prev ? prev : props));
-  }, [os, notesProps, notesOrder, order, handleOnActivateNote, commandPaletteCommands]);
+  }, [notesProps]);
 
   // Automatically show modal to create a new note if there are 0 notes
   useEffect(() => {

@@ -138,11 +138,6 @@
     "Options": "Options",
     "Sync notes to and from Google Drive": "Sync notes to and from Google Drive",
     "Command palette": "Command palette",
-    "Command palette detail": {
-      "line1": "By default, Command palette looks for notes <b>by their name.</b>",
-      "line2": "Type {{symbol}} first, and continue to start search for <b>commands.</b>",
-      "line3": "Type {{symbol}} first, and continue to start search for notes <b>by their content.</b>"
-    },
     "Repeat last command": "Repeat last command",
     "Toggle Focus mode": "Toggle Focus mode",
     "Toggle Sidebar": "Toggle Sidebar",
