@@ -107,6 +107,10 @@
   --command-palette-active-item-text-color: white;
 
 
+  /* Overview */
+  --overview-tile-border-color: #454545;
+
+
   /* Only in Options */
 
   --keyboard-shortcut-background-color: #222;

@@ -1,2 +1,5 @@
-export const getFocusOverride = (): boolean => new URL(window.location.href).searchParams.get("focus") === "";
-export const getActiveFromUrl = (): string => new URL(window.location.href).searchParams.get("note") || ""; // Bookmark
+const getParam = (name: string) => new URL(window.location.href).searchParams.get(name);
+
+export const getFocusOverride = (): boolean => getParam("focus") === "";
+export const getActiveFromUrl = (): string => getParam("note") || "";
+export const isOverview = (): boolean => getParam("overview") === "";

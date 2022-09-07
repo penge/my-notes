@@ -1,5 +1,5 @@
 import dateUtils from "shared/date/date-utils";
-import { getFocusOverride } from "notes/location";
+import { getFocusOverride, isOverview } from "notes/location";
 import table from "./table";
 import highlight from "./highlight";
 
@@ -94,13 +94,15 @@ const commands: { [key in AvailableCommand]: Command } = {
   RemoveFormat,
 };
 
+const canToggle = () => !getFocusOverride() && !isOverview();
+
 const toggleSidebar: Command = () => {
-  if (getFocusOverride()) {
+  if (!canToggle()) {
     return;
   }
 
   chrome.storage.local.get(["focus"], (local) => {
-    if (!local.focus) { // toggle only if not in focus mode
+    if (!local.focus) { // toggle only if NOT in focus mode
       const hasSidebar = document.body.classList.toggle("with-sidebar");
       chrome.storage.local.set({ sidebar: hasSidebar });
     }
@@ -108,15 +110,25 @@ const toggleSidebar: Command = () => {
 };
 
 const toggleToolbar: Command = () => {
-  if (getFocusOverride()) {
+  if (!canToggle()) {
     return;
   }
 
   chrome.storage.local.get(["focus"], (local) => {
-    if (!local.focus) { // toggle only if not in focus mode
+    if (!local.focus) { // toggle only if NOT in focus mode
       const hasToolbar = document.body.classList.toggle("with-toolbar");
       chrome.storage.local.set({ toolbar: hasToolbar });
     }
+  });
+};
+
+const toggleFocusMode: Command = () => {
+  if (!canToggle()) {
+    return;
+  }
+
+  chrome.storage.local.get(["focus"], (local) => {
+    chrome.storage.local.set({ focus: !local.focus });
   });
 };
 
@@ -133,4 +145,5 @@ export {
 
   toggleSidebar,
   toggleToolbar,
+  toggleFocusMode,
 };

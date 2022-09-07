@@ -43,12 +43,15 @@ import {
 } from "notes/content/save";
 import sendMessage from "shared/messages/send";
 
-import { getActiveFromUrl, getFocusOverride } from "notes/location";
+import { getActiveFromUrl, getFocusOverride, isOverview } from "notes/location";
+import Overview from "notes/overview/Overview";
 import getFirstAvailableNoteName from "notes/filters/get-first-available-note-name";
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
-import { Command, toggleSidebar, toggleToolbar } from "notes/commands";
+import {
+  Command, toggleSidebar, toggleToolbar, toggleFocusMode,
+} from "notes/commands";
 import { exportNote } from "notes/export";
 import { notesToSidebarNotes } from "notes/adapters";
 
@@ -63,6 +66,8 @@ const Notes = (): h.JSX.Element => {
   const [os, setOs] = useState<Os | undefined>(undefined);
   const [tabId, setTabId] = useState<number | undefined>(undefined);
   const [initialized, setInitialized] = useState<boolean>(false);
+
+  const [view] = useState<"default" | "overview">(isOverview() ? "overview" : "default");
 
   // Notifications
   const [notification, setNotification] = useState<Notification | undefined>(undefined);
@@ -378,8 +383,8 @@ const Notes = (): h.JSX.Element => {
 
   // Sidebar
   useEffect(() => {
-    document.body.classList.toggle("with-sidebar", sidebar);
-  }, [sidebar]);
+    document.body.classList.toggle("with-sidebar", view === "default" && sidebar);
+  }, [sidebar, view]);
 
   // Sidebar width
   useEffect(() => {
@@ -429,8 +434,8 @@ const Notes = (): h.JSX.Element => {
       raw: note.raw || false,
     });
 
-    document.title = note ? notesProps.active : "My Notes";
-  }, [notesProps.active]);
+    document.title = (view === "default" && note) ? notesProps.active : "My Notes";
+  }, [notesProps.active, view]);
 
   // Toolbar
   useEffect(() => {
@@ -455,18 +460,10 @@ const Notes = (): h.JSX.Element => {
       });
     });
     keyboardShortcuts.subscribe(KeyboardShortcut.OnOpenOptions, chrome.runtime.openOptionsPage);
-    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, () => {
-      if (getFocusOverride()) {
-        return;
-      }
-      chrome.storage.local.get(["focus"], (local) => {
-        chrome.storage.local.set({ focus: !local.focus });
-      });
-    });
 
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleSidebar, toggleSidebar);
-
     keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleToolbar, toggleToolbar);
+    keyboardShortcuts.subscribe(KeyboardShortcut.OnToggleFocusMode, toggleFocusMode);
 
     keyboardShortcuts.subscribe(KeyboardShortcut.OnSync, () => sendMessage(MessageType.SYNC));
   }, [os]);
@@ -571,6 +568,12 @@ const Notes = (): h.JSX.Element => {
       sendMessage(MessageType.SYNC);
     }, 6000); // and then Auto Sync every 6 seconds
   }, [initialized, autoSync]);
+
+  if (view === "overview" && notesOrder && order) {
+    return (
+      <Overview notes={notesToSidebarNotes(notesProps.notes, notesOrder, order)} />
+    );
+  }
 
   return (
     <Fragment>

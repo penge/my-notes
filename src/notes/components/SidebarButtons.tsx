@@ -7,6 +7,7 @@ import SVG from "notes/components/SVG";
 import FileSvgText from "svg/file.svg";
 import GearSvgText from "svg/gear.svg";
 import RefreshSvgText from "svg/refresh.svg";
+import GridSvgText from "svg/grid.svg";
 import { importNoteFromTextFile } from "notes/import";
 import sendMessage from "shared/messages/send";
 import formatDate from "shared/date/format-date";
@@ -23,6 +24,7 @@ const SidebarButtons = ({
 }: SidebarButtonsProps): h.JSX.Element => {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const openOptions = useCallback(() => chrome.runtime.openOptionsPage(), []);
+  const openOverview = useCallback(() => window.open("notes.html?overview", "_blank"), []);
 
   return (
     <div
@@ -78,6 +80,12 @@ const SidebarButtons = ({
           onClick={() => sync && sendMessage(MessageType.SYNC)}
         >
           <SVG text={RefreshSvgText} />
+        </div>
+      </Tooltip>
+
+      <Tooltip tooltip="Overview">
+        <div id="open-overview" className="button" onClick={openOverview}>
+          <SVG text={GridSvgText} />
         </div>
       </Tooltip>
     </div>

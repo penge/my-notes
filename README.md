@@ -59,16 +59,26 @@
 
 ## Context menu
 
-Context menu allows you to quickly save selected text from any website to My Notes, or to transfer selected text to My Notes on other computers.
+Context menu can be displayed on right-click on any website and based on the context used to quickly save:
 
-To use Context menu, select the text on website, right-click and see "My Notes" Context menu.
+<ol type="a">
+  <li>selected text</li>
+  <li>current page URL (right-click on an empty space)</li>
+  <li>image</li>
+</ol>
 
-Context menu has these options:
+Destination can be any local note, or My Notes on other computers.
 
-- `Save to [note name]` – Option for every note. As you create new notes, they are automatically added to the list. My Notes doesn't have to be open. Google Drive Sync is not required.
-- `Save to remotely open My Notes` – My Notes on other computers needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note to save the text will be named **"@received"** (created automatically if it doesn't exist, otherwise updated).
+Options are based on the context but in general are:
 
-Context menu also allows you to save current page URL (no text selected) to **"@clipboard"** (created automatically if it doesn't exist, otherwise updated).
+- `Save to [note name]` – Option for every note. My Notes doesn't have to be open. Google Drive Sync is not required.
+- `Save to remotely open My Notes` – My Notes on other computers needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note will be named `@received`.
+
+There is a few general purpose notes that can be used as destination. Their name starts with `@` and they are created automatically when needed:
+
+- `@received`
+- `@clipboard`
+- `@images`
 
 <br><br>
 
@@ -87,17 +97,11 @@ Click on the **"Save"** button to save the custom theme.
 
 ## Command palette
 
-Command palette is a window which you can open with `Cmd + P` (or `Ctrl + P`) and use your keyboard to quickly perform any of the following actions:
+Command palette is a window which you can open with `Cmd + P` (or `Ctrl + P`) and use your keyboard to quickly find <b>commands,</b> and execute one.
 
-<ol type="A">
-  <li>Find note(s) <b>by their name,</b> and open one. (default behavior)</li>
-  <li>Find note(s) <b>by their content,</b> and open one. (type <code>?</code> first, then continue)</li>
-  <li>Find <b>commands,</b> and execute one. (type <code>></code> first, then continue)</li>
-</ol>
+To navigate between the commands, use `Up` and `Down` arrow keys.
 
-To navigate between the results, use `Up` and `Down` arrow keys.
-
-To open a selected note or execute a selected command, press `Enter`.
+To execute a selected command, press `Enter`.
 
 The last executed command can be repeated with `Cmd + Shift + P` (or `Ctrl + Shift + P`).
 
