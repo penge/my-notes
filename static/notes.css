@@ -90,6 +90,44 @@ hr {
   border-bottom: 1px solid var(--notification-border-color);
 }
 
+/* Overview */
+
+#notes-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  column-gap: 1em;
+  row-gap: 1em;
+  padding: 1em;
+  overflow-y: auto;
+}
+
+.note-tile {
+  display: inline-block;
+  height: 400px;
+  border: 1px solid var(--overview-tile-border-color);
+  border-radius: 3px;
+  overflow: auto;
+}
+
+.note-tile::-webkit-scrollbar-track,
+.note-tile::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+}
+
+.note-tile-title {
+  position: sticky;
+  left: 0;
+  top: 0;
+  background: var(--background-color);
+  padding: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.note-tile-content {
+  padding: 1em;
+}
+
 /* Bar (for #sidebar-buttons and #toolbar) */
 
 #toolbar, #sidebar-buttons {
@@ -164,8 +202,8 @@ body:not(.with-sidebar) { left: 0 !important; }
   align-items: center;
   cursor: pointer;
   font-weight: bold;
-  padding: .5em 1em;
-  margin-top: 3px;
+  padding: .5em;
+  margin-bottom: 3px;
   border-radius: 3px;
 }
 
