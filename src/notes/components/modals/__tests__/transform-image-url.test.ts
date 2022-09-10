@@ -1,6 +1,4 @@
-import {
-  transformImageUrl,
-} from "../InsertImageModal";
+import transformImageUrl from "../transform-image-url";
 
 test("transformImageUrl() transforms Google Drive image url", () => {
   expect(transformImageUrl("https://drive.google.com/file/d/1y0v9S/view"))

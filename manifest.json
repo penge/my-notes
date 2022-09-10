@@ -27,7 +27,8 @@
     ]
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.mjs",
+    "type": "module"
   },
   "action": {
     "default_icon": "images/icon128.png"
@@ -42,6 +43,6 @@
       "description": "Open My Notes"
     }
   },
-  "minimum_chrome_version": "88",
+  "minimum_chrome_version": "92",
   "offline_enabled": true
 }

@@ -2,33 +2,31 @@
   "include": ["./src/**/*"],
 
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "es2015",
-    "sourceMap": true,
-    "outDir": "./out",
+    "module": "ES2022",
+    "target": "ES2022",
+    "moduleResolution": "node",
+    "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": "./src",
+    "sourceMap": true,
 
     "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "alwaysStrict": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
-
-    "baseUrl": "./src",
-
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-
     "resolveJsonModule": true,
 
-    "moduleResolution": "node",
     "jsx": "react",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment"
+  },
+
+  "ts-node": {
+    "moduleTypes": {
+      "jest.config.ts": "cjs"
+    }
   }
 }

@@ -5,48 +5,51 @@
   "author": "Pavel Bucka",
   "license": "MIT",
   "repository": "github:penge/my-notes",
+  "type": "module",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
   },
   "scripts": {
-    "__prepare-folder": "rimraf out && copyfiles LICENSE manifest.json out && copyup static/images/icon128.png static/* out && cp -R static/themes out",
-    "__prepare-folder-develop": "npm run __prepare-folder && cp -R static/integration out && node ./env/set-client-id.js out/manifest.json",
+    "__prepare-folder": "rimraf dist && copyfiles LICENSE manifest.json dist && copyup public/images/icon128.png public/* dist && cp -R public/themes dist",
+    "__prepare-folder-develop": "npm run __prepare-folder && cp -R public/integration dist && ts-node --esm ./env/set-client-id.ts dist/manifest.json",
     "__check-types": "tsc --noEmit",
-    "__develop-core": "npm run __check-types && NODE_ENV=development node build.js",
+    "__develop-core": "npm run __check-types && NODE_ENV=development ts-node --esm build.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "LOG_LEVEL=SILENT TZ=UTC jest --maxWorkers=4",
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",
     "develop-watch": "npm run develop && chokidar \"src/**/*.(ts|tsx|json)\" -c \"npm run __develop-core\"",
-    "develop-watch-static": "chokidar \"static/*.(html|css)\" -c \"cp {path} out\"",
-    "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node build.js"
+    "develop-watch-public": "chokidar \"public/*.(html|css)\" -c \"cp {path} dist\"",
+    "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production ts-node --esm build.ts"
   },
   "devDependencies": {
-    "@testing-library/preact": "^2.0.1",
-    "@types/chrome": "0.0.188",
-    "@types/jest": "^27.4.1",
+    "@jest/types": "^27.5.1",
+    "@testing-library/preact": "^3.2.2",
+    "@types/chrome": "0.0.199",
+    "@types/jest": "^27.5.2",
     "@types/jsdom": "^16.2.13",
-    "@typescript-eslint/eslint-plugin": "^5.30.7",
-    "@typescript-eslint/parser": "^5.30.7",
+    "@typescript-eslint/eslint-plugin": "^5.40.0",
+    "@typescript-eslint/parser": "^5.40.0",
     "chokidar-cli": "^3.0.0",
     "copyfiles": "^2.4.1",
-    "esbuild": "0.14.50",
-    "eslint": "^8.20.0",
+    "esbuild": "0.15.12",
+    "eslint": "^8.26.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "jest": "^27.4.4",
+    "jest": "^27.5.1",
     "jsdom": "^16.7.0",
     "rimraf": "^3.0.2",
-    "ts-jest": "^27.1.3",
-    "typescript": "4.7.4"
+    "ts-jest": "^27.1.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   },
   "dependencies": {
     "clsx": "^1.2.1",
-    "fflate": "^0.7.3",
-    "preact": "10.10.0"
+    "fflate": "^0.7.4",
+    "preact": "10.11.2"
   }
 }
