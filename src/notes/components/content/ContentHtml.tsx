@@ -4,6 +4,7 @@ import runUploadPreconditions from "background/google-drive/preconditions/run-up
 import { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
 import __range from "notes/range";
+import { insideListItem } from "notes/content/list";
 import { reinitTables } from "notes/content/table";
 import { commands, InsertTabFactory } from "../../commands";
 import { ContentProps, reattachEditNote } from "./common";
@@ -43,13 +44,35 @@ const ContentHtml = ({
 }: ContentProps): h.JSX.Element => {
   const contentRef = useRef<HTMLDivElement | null>(null);
 
-  const [setIndentOnTabHandlerOnTab] = useKeyboardShortcut(KeyboardShortcut.OnTab);
+  const [setOnTabHandler] = useKeyboardShortcut(KeyboardShortcut.OnTab);
+  const [setOnShiftTabHandler] = useKeyboardShortcut(KeyboardShortcut.OnShiftTab);
 
-  useEffect(() => setIndentOnTabHandlerOnTab(
-    indentOnTab
-      ? InsertTabFactory({ tabSize })
-      : undefined,
-  ), [indentOnTab, tabSize]);
+  useEffect(() => {
+    const insertTab = InsertTabFactory({ tabSize });
+
+    setOnTabHandler(() => {
+      if (!indentOnTab) {
+        return;
+      }
+
+      if (insideListItem({ canBeFirstDescendant: true })) {
+        commands.Indent();
+        return;
+      }
+
+      insertTab();
+    });
+
+    setOnShiftTabHandler(() => {
+      if (!indentOnTab) {
+        return;
+      }
+
+      if (insideListItem({ canBeFirstDescendant: false })) {
+        commands.Outdent();
+      }
+    });
+  }, [indentOnTab, tabSize]);
 
   useEffect(() => {
     if (contentRef.current) {

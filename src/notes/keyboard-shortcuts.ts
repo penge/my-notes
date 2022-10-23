@@ -20,6 +20,7 @@ export enum KeyboardShortcut {
   OnEscape,
   OnEnter,
   OnTab,
+  OnShiftTab,
 
   // Commands
   OnRepeatLastExecutedCommand,
@@ -137,8 +138,14 @@ const registerEnter = (event: KeyboardEvent) => {
 };
 
 const registerTab = (event: KeyboardEvent) => {
-  if (event.key === "Tab") {
+  if (event.key === "Tab" && !event.shiftKey) {
     publish(KeyboardShortcut.OnTab, event);
+  }
+};
+
+const registerShiftTab = (event: KeyboardEvent) => {
+  if (event.key === "Tab" && event.shiftKey) {
+    publish(KeyboardShortcut.OnShiftTab, event);
   }
 };
 
@@ -247,6 +254,7 @@ const keydown = (os: Os) => document.addEventListener("keydown", (event) => {
   registerEscape(event);
   registerEnter(event);
   registerTab(event);
+  registerShiftTab(event);
 
   // Commands
   registerRepeatLastExecutedCommand(event, os);
