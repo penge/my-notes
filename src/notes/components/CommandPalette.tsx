@@ -3,7 +3,7 @@ import {
   useRef, useState, useEffect, useMemo,
 } from "preact/hooks";
 import clsx from "clsx";
-import useBodyClass from "notes/hooks/use-body-class";
+import useBodyClass from "notes/components/hooks/use-body-class";
 import { t, tString } from "i18n";
 import {
   Command, commands as contentCommands, toggleSidebar, toggleToolbar,

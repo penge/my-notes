@@ -3,8 +3,8 @@ import {
   useRef, useState, useEffect, useMemo, useCallback,
 } from "preact/hooks";
 import clsx from "clsx";
-import useBodyClass from "notes/hooks/use-body-class";
-import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
+import useBodyClass from "notes/components/hooks/use-body-class";
+import { useKeyboardShortcut, KeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
 
 interface ModalProps {
   className?: string
