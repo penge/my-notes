@@ -1,98 +1,72 @@
-import { NotesObject, NotesOrder } from "shared/storage/schema";
-import { notesToSidebarNotes } from "..";
+import { Note, NotesObject, NotesOrder } from "shared/storage/schema";
+import * as sortNotes from "notes/sort";
+import { notesToSidebarNotes, SidebarNote } from "..";
+
+const notRelevant: Pick<Note, "createdTime" | "modifiedTime"> = {
+  createdTime: "",
+  modifiedTime: "",
+};
+
+const notes: NotesObject = {
+  Todo: {
+    content: "my todo",
+    ...notRelevant,
+  },
+  Shopping: {
+    content: "my shopping",
+    ...notRelevant,
+    pinnedTime: "PT-2",
+  },
+  Article: {
+    content: "my article",
+    ...notRelevant,
+  },
+  Clipboard: {
+    content: "my clipboard",
+    ...notRelevant,
+    pinnedTime: "PT-1",
+  },
+};
 
 describe("notesToSidebarNotes()", () => {
-  describe("unpinned notes only", () => {
-    it("returns notes in correct order", () => {
-      const notes: NotesObject = {
-        Todo: {
-          content: "my todo",
-          createdTime: "CT-TODO",
-          modifiedTime: "MT-TODO",
-        },
-        Article: {
-          content: "my article",
-          createdTime: "CT-ARTICLE",
-          modifiedTime: "MT-ARTICLE",
-        },
-        Shopping: {
-          content: "my shopping",
-          createdTime: "CT-SHOPPING",
-          modifiedTime: "MT-SHOPPING",
-        },
-      };
+  it("returns notes in correct order", () => {
+    const sidebarNotes = notesToSidebarNotes(notes, NotesOrder.Alphabetical);
+    expect(sidebarNotes).toEqual([
+      { name: "Clipboard", ...notes.Clipboard },
+      { name: "Shopping", ...notes.Shopping },
 
-      const sidebarNotes = notesToSidebarNotes(notes, NotesOrder.Alphabetical);
-      expect(sidebarNotes).toEqual([
-        { name: "Article", ...notes.Article },
-        { name: "Shopping", ...notes.Shopping },
-        { name: "Todo", ...notes.Todo },
-      ]);
-    });
+      { name: "Article", ...notes.Article },
+      { name: "Todo", ...notes.Todo },
+    ]);
   });
 
-  describe("pinned and unpinned notes", () => {
-    it("returns notes in correct order", () => {
-      const notes: NotesObject = {
-        Todo: {
-          content: "my todo",
-          createdTime: "CT-TODO",
-          modifiedTime: "MT-3",
-        },
-        Shopping: {
-          content: "my shopping",
-          createdTime: "CT-SHOPPING",
-          modifiedTime: "MT-9",
-          pinnedTime: "PT-SHOPPING",
-        },
-        Article: {
-          content: "my article",
-          createdTime: "CT-ARTICLE",
-          modifiedTime: "MT-2",
-        },
-        Clipboard: {
-          content: "my clipboard",
-          createdTime: "CT-CLIPBOARD",
-          modifiedTime: "MT-8",
-          pinnedTime: "PT-CLIPBOARD",
-        },
-      };
+  describe("dependency on sortNotes()", () => {
+    const expectedNotesArgument: SidebarNote[] = [
+      { name: "Todo", ...notes.Todo },
+      { name: "Shopping", ...notes.Shopping },
+      { name: "Article", ...notes.Article },
+      { name: "Clipboard", ...notes.Clipboard },
+    ];
 
-      const sidebarNotes = notesToSidebarNotes(notes, NotesOrder.Alphabetical);
-      expect(sidebarNotes).toEqual([
-        { name: "Clipboard", ...notes.Clipboard },
-        { name: "Shopping", ...notes.Shopping },
+    const dummyReturn: SidebarNote[] = [{
+      name: "dummy", ...notes.Todo,
+    }];
 
-        { name: "Article", ...notes.Article },
-        { name: "Todo", ...notes.Todo },
-      ]);
+    it("calls sortNotes() with correct arguments", () => {
+      const spy = jest.spyOn(sortNotes, "default").mockReturnValue(dummyReturn);
 
-      const sidebarNotes2 = notesToSidebarNotes(notes, NotesOrder.NewestFirst);
-      expect(sidebarNotes2).toEqual([
-        { name: "Shopping", ...notes.Shopping },
-        { name: "Clipboard", ...notes.Clipboard },
+      const scenarios: Array<[NotesObject, NotesOrder, string[] | undefined]> = [
+        [notes, NotesOrder.Alphabetical, undefined],
+        [notes, NotesOrder.LatestCreated, undefined],
+        [notes, NotesOrder.LatestModified, undefined],
+        [notes, NotesOrder.Custom, ["Shopping", "Article"]],
+      ];
 
-        { name: "Todo", ...notes.Todo },
-        { name: "Article", ...notes.Article },
-      ]);
-
-      const sidebarNotes3 = notesToSidebarNotes(notes, NotesOrder.Custom, ["Shopping", "Article"]);
-      expect(sidebarNotes3).toEqual([
-        { name: "Clipboard", ...notes.Clipboard },
-        { name: "Shopping", ...notes.Shopping },
-
-        { name: "Todo", ...notes.Todo },
-        { name: "Article", ...notes.Article },
-      ]);
-
-      const sidebarNotes4 = notesToSidebarNotes(notes, NotesOrder.Custom, []);
-      expect(sidebarNotes4).toEqual([
-        { name: "Shopping", ...notes.Shopping },
-        { name: "Clipboard", ...notes.Clipboard },
-
-        { name: "Todo", ...notes.Todo },
-        { name: "Article", ...notes.Article },
-      ]);
+      scenarios.forEach((scenario) => {
+        const returnValue = notesToSidebarNotes(...scenario);
+        expect(spy).toHaveBeenCalledWith(expectedNotesArgument, scenario[1], scenario[2]);
+        expect(returnValue).toEqual(dummyReturn);
+      });
     });
   });
 });

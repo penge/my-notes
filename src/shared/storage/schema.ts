@@ -62,7 +62,8 @@ export type NotesObject = {
 
 export enum NotesOrder {
   Alphabetical = "Alphabetical",
-  NewestFirst = "NewestFirst",
+  LatestCreated = "LatestCreated",
+  LatestModified = "LatestModified",
   Custom = "Custom",
 }
 
