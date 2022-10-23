@@ -75,6 +75,7 @@ const Drag = ({ sidebar }: DragProps): h.JSX.Element => {
         document.addEventListener("mousemove", mousemoveListener);
         document.addEventListener("mouseup", mouseupListener);
       }}
+      // eslint-disable-next-line react/no-unknown-property
       onDblClick={() => {
         if (!sidebar.current) {
           return;

@@ -5,7 +5,7 @@
   <img src="https://badgen.net/github/license/penge/my-notes" />
   <img src="https://badgen.net/chrome-web-store/users/lkeeogfaiembcblonahillacpaabmiop" />
   <br><br>
-  <img src="static/images/my-notes.png" width="760" /><br>
+  <img src="public/images/my-notes.png" width="760" /><br>
   <strong>My Notes</strong> – <a href="https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop">Chrome extension</a> for simple and fast note-taking
 </p>
 
@@ -88,7 +88,7 @@ Custom theme allows you to customize My Notes styles in many ways.
 
 To use a Custom theme, open Options, select **"Custom"** theme, and click on the **"Customize"** button to start creating your own theme.
 
-To start, paste into the editor content of [<ins>light.css</ins>](static/themes/light.css) or [<ins>dark.css</ins>](static/themes/dark.css).
+To start, paste into the editor content of [<ins>light.css</ins>](public/themes/light.css) or [<ins>dark.css</ins>](public/themes/dark.css).
 Then, modify CSS variables as you like to change background colors, text colors, etc.
 You can add any valid CSS as well to make further changes.
 Click on the **"Save"** button to save the custom theme.
@@ -178,7 +178,7 @@ Develop:
 ```
 $ npm install
 $ export MY_NOTES_CLIENT_ID=<CLIENT_ID>    # needed when developing Google Drive Sync
-$ npm run develop-watch                    # see "out" folder
+$ npm run develop-watch                    # see "dist" folder
 ```
 
 `MY_NOTES_CLIENT_ID` can be created at [<ins>Google Cloud</ins>](https://console.cloud.google.com) / APIs & Services / Credentials / OAuth 2.0 Client IDs.
@@ -198,7 +198,7 @@ $ npm test
 Build:
 
 ```
-$ npm run build   # see "out" folder
+$ npm run build   # see "dist" folder
 ```
 
 <br><br>
@@ -206,9 +206,9 @@ $ npm run build   # see "out" folder
 ## Folder structure
 
 ```
-env/              # Helpers for environment variables
+env/              # Environment helpers
 
-out/              # Bundled My Notes (excluded from Git)
+dist/             # Bundled My Notes (excluded from Git)
 
 src/
   background/
@@ -255,7 +255,7 @@ src/
   notes.ts          # Main script for notes
   options.ts        # Main script for options
 
-static/           # All static files (images, icons, HTML, CSS) copied to out/
+public/             # All public files (images, icons, HTML, CSS) copied to dist/
 
 
 .editorconfig     # To enforce same editor configuration
@@ -263,7 +263,7 @@ static/           # All static files (images, icons, HTML, CSS) copied to out/
 .eslintignore     # Files excluded from ESLint checking
 .gitignore        # Files excluded from Git
 
-jest.config.js    # Jest configuration
+jest.config.ts    # Jest configuration
 tsconfig.json     # Typescript configuration
 
 package-lock.json
@@ -271,6 +271,8 @@ package.json
 
 LICENSE           # MIT
 manifest.json     # Main extension file
+
+build.ts          # Produces /dist folder
 
 README.md
 ```
@@ -334,7 +336,7 @@ After a successful review, the new version is available on Web Store.
 
 Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [<ins>Web Store</ins>](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 To install My Notes manually, download the zip file of the latest version which you can find [<ins>here</ins>](https://github.com/penge/my-notes/releases). Then, unpack the downloaded file and install NPM packages followed by `npm run build`.
-Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive by selecting the `out` directory.
+Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive by selecting the `dist` folder.
 
 <br>
 

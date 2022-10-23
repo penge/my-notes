@@ -1,4 +1,4 @@
-out/*
-jest.config.js
-build.js
-set-client-id.js
+dist/*
+jest.config.ts
+build.ts
+set-client-id.ts

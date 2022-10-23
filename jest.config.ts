@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from "@jest/types";
+
+const config: Config.InitialOptions = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   testMatch: [
@@ -6,3 +8,5 @@ module.exports = {
   ],
   moduleDirectories: ["node_modules", "src"]
 };
+
+export default config;

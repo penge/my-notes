@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 
 const getLines = (filename: string): string[] => fs
-  .readFileSync(path.join(__dirname, `../../../static/themes/${filename}`), "utf8")
+  .readFileSync(path.join(__dirname, `../../../public/themes/${filename}`), "utf8")
   .split("\n");
 
 it("has the same CSS variables", () => {

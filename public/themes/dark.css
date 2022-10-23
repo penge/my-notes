@@ -8,6 +8,7 @@
 
 
   /* Selection */
+
   --selection-background-color: #008eff;
   --selection-text-color: white;
 
@@ -79,6 +80,7 @@
 
 
   /* Tooltip */
+
   --tooltip-background-color: #222;
   --tooltip-text-color: white;
 
@@ -108,6 +110,7 @@
 
 
   /* Overview */
+
   --overview-tile-border-color: #454545;
 
 
