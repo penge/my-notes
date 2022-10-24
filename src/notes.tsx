@@ -19,13 +19,13 @@ import {
 } from "shared/storage/schema";
 import { setTheme as setThemeCore } from "themes/set-theme";
 
+import Overview from "notes/components/Overview";
 import __Notification from "notes/components/Notification";
 import __Sidebar from "notes/components/Sidebar";
 import __Content from "notes/components/content/Content";
 import { ContentNote } from "notes/components/content/common";
 import __CommandPalette, { CommandPaletteProps } from "notes/components/CommandPalette";
 import __Toolbar from "notes/components/Toolbar";
-import range from "notes/range";
 
 import __ContextMenu, { ContextMenuProps } from "notes/components/ContextMenu";
 import __RenameNoteModal, { RenameNoteModalProps } from "notes/components/modals/RenameNoteModal";
@@ -44,14 +44,14 @@ import {
 import sendMessage from "shared/messages/send";
 
 import { getActiveFromUrl, getFocusOverride, isOverview } from "notes/location";
-import Overview from "notes/overview/Overview";
 import getFirstAvailableNoteName from "notes/filters/get-first-available-note-name";
 import notesHistory from "notes/history";
 import keyboardShortcuts, { KeyboardShortcut } from "notes/keyboard-shortcuts";
-import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
+import { useKeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
 import {
   Command, toggleSidebar, toggleToolbar, toggleFocusMode,
 } from "notes/commands";
+import range from "notes/range";
 import { exportNote } from "notes/export";
 import { notesToSidebarNotes } from "notes/adapters";
 

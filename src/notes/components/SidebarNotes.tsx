@@ -7,7 +7,7 @@ import { SidebarNote } from "notes/adapters";
 import clsx from "clsx";
 import SVG from "notes/components/SVG";
 import LockSvgText from "svg/lock.svg";
-import { useKeyboardShortcut, KeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
+import { useKeyboardShortcut, KeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
 import sendMessage from "shared/messages/send";
 
 export interface SidebarNotesProps {

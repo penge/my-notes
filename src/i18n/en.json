@@ -116,7 +116,8 @@
   "Current order:": "Current order:",
   "Orders": {
     "Alphabetical": "Alphabetical",
-    "NewestFirst": "Newest first",
+    "LatestCreated": "Latest Created",
+    "LatestModified": "Latest Modified",
     "Custom": "Custom"
   },
   "Orders description": "When <b>\"Custom\"</b> is selected, you can <b>Drag & Drop</b> notes to change their order.",

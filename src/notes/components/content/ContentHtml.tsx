@@ -2,7 +2,7 @@ import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import runUploadPreconditions from "background/google-drive/preconditions/run-upload-preconditions";
 import { KeyboardShortcut } from "notes/keyboard-shortcuts";
-import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
+import { useKeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
 import __range from "notes/range";
 import { insideListItem } from "notes/content/list";
 import { reinitTables } from "notes/content/table";

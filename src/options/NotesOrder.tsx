@@ -22,11 +22,9 @@ const NotesOrder = ({ notesOrder }: OrderProps): h.JSX.Element => (
           chrome.storage.local.set({ notesOrder: newNotesOrder });
         }}
       >
-        {[
-          NotesOrderEnum.Alphabetical,
-          NotesOrderEnum.NewestFirst,
-          NotesOrderEnum.Custom,
-        ].map((oneOrder) => <option value={oneOrder}>{t(`Orders.${oneOrder}`)}</option>)}
+        {Object.values(NotesOrderEnum).map((oneOrder) => (
+          <option value={oneOrder}>{t(`Orders.${oneOrder}`)}</option>
+        ))}
       </select>
     </p>
     <p>{t("Orders description")}</p>

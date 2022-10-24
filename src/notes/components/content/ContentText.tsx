@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { KeyboardShortcut } from "notes/keyboard-shortcuts";
-import { useKeyboardShortcut } from "notes/hooks/use-keyboard-shortcut";
+import { useKeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
 import { InsertTabFactory } from "../../commands";
 import { ContentProps, reattachEditNote } from "./common";
 

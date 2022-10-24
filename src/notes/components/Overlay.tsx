@@ -1,5 +1,5 @@
 import { h } from "preact";
-import useBodyClass from "notes/hooks/use-body-class";
+import useBodyClass from "notes/components/hooks/use-body-class";
 
 interface OverlayProps {
   type: "to-rename" | "to-delete" | "to-create"
