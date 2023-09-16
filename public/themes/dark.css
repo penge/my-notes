@@ -69,14 +69,9 @@
   /* Bar */
 
   --bar-border-color: #454545;
-
-
-  /* Toolbar */
-
-  --toolbar-button-color: #626262;
-  --toolbar-button-hover-background-color: #222;
-  --toolbar-button-hover-color: white;
-  --toolbar-submenu-background-color: #121212;
+  --bar-button-hover-background-color: #222;
+  --bar-button-hover-color: white;
+  --bar-submenu-background-color: #121212;
 
 
   /* Tooltip */

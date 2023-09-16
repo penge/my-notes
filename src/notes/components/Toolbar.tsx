@@ -97,11 +97,11 @@ const Toolbar = ({
       <div id="toolbar" className={clsx(note.locked && "locked")}>
         <div className="topmenu bar">
           <Tooltip tooltip={t("Toggle RAW")}>
-            <div id="RAW-ACTIVE" className="button" onClick={onToggleRaw}>RAW</div>
+            <div id="RAW-ACTIVE" className="button last" onClick={onToggleRaw}>RAW</div>
           </Tooltip>
 
           <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
-            <div id="INFO" className="button last">
+            <div id="INFO" className="button">
               <SVG text={InfoSvgText} />
             </div>
           </Tooltip>
@@ -205,7 +205,7 @@ const Toolbar = ({
             {HIGHLIGHT_COLORS.map((color) => (
               <Tooltip tooltip={t("Change selected text color to", { color: capitalize(color) })}>
                 <div
-                  className={`plain button letter my-notes-text-color-${color}`}
+                  className={`plain letter button my-notes-text-color-${color}`}
                   onClick={() => highlight(`my-notes-text-color-${color}`, callback)}
                 >
                   A
@@ -213,19 +213,25 @@ const Toolbar = ({
               </Tooltip>
             ))}
             <Tooltip tooltip={t("Change selected text color to default text color")}>
-              <div className="plain button letter my-notes-text-color-auto" onClick={() => highlight("my-notes-text-color-auto", callback)}>Auto</div>
+              <div
+                className="plain auto letter button my-notes-text-color-auto"
+                onClick={() => highlight("my-notes-text-color-auto", callback)}
+              >
+                Auto
+              </div>
             </Tooltip>
             <Tooltip tooltip={t("Highlight selected text")}>
-              <div className="last plain button auto letter my-notes-highlight" onClick={() => highlight("my-notes-highlight", callback)}>Hi</div>
+              <div
+                className="last plain auto letter button my-notes-highlight"
+                onClick={() => highlight("my-notes-highlight", callback)}
+              >
+                Hi
+              </div>
             </Tooltip>
           </div>
         )}
 
         <div className="topmenu bar">
-          <Tooltip tooltip={t("Toggle RAW")}>
-            <div id="RAW" className="button" onClick={onToggleRaw}>RAW</div>
-          </Tooltip>
-
           <Tooltip tooltip={t(`Bold.${os}`)}>
             <div id="B" className="button" onClick={commands.Bold}>
               <SVG text={BoldSvgText} />
@@ -406,8 +412,12 @@ const Toolbar = ({
             </div>
           </Tooltip>
 
+          <Tooltip tooltip={t("Toggle RAW")}>
+            <div id="RAW" className="button last" onClick={onToggleRaw}>RAW</div>
+          </Tooltip>
+
           <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
-            <div id="INFO" className="button last">
+            <div id="INFO" className="button">
               <SVG text={InfoSvgText} />
             </div>
           </Tooltip>
