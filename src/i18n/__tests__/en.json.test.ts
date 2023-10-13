@@ -1,7 +1,7 @@
 import capitalize from "shared/string/capitalize";
 import en from "../en.json";
 
-test("all root keys start with uppercase letter", () => {
+test("all root keys start with Uppercase letter", () => {
   expect(
     Object
       .keys(en)

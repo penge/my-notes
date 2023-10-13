@@ -6,7 +6,8 @@ const config: Config.InitialOptions = {
   testMatch: [
     "**/__tests__/**/*.test.ts?(x)"
   ],
-  moduleDirectories: ["node_modules", "src"]
+  moduleDirectories: ["node_modules", "src"],
+  setupFiles: ["<rootDir>/jest.setup.ts"]
 };
 
 export default config;
