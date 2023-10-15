@@ -1,6 +1,6 @@
 import { havingPermission } from "../permissions";
 
-export default async (): Promise<string> => {
+export default async (): Promise<string | undefined> => {
   const allowed = await havingPermission("identity");
   if (!allowed) {
     return "";
