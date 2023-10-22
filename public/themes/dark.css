@@ -17,14 +17,14 @@
 
   --background-color: #121212;
   --text-color: #bcbcbc;
-  --link-color: white;
+  --link-color: #bcbcbc;
   --svg-fill-color: #626262;
   --horizontal-rule: 1px solid #3d3d3d;
 
 
   /* Notifications */
 
-  --notification-border-color: transparent;
+  --notification-border-color: #454545;
 
 
   /* Overlay */
@@ -115,9 +115,9 @@
   --keyboard-shortcut-text-color: white;
 
   --comment-background-color: #222;
-  --comment-text-color: white;
+  --comment-text-color: #d6d6d6;
 
-  --slider-background-color: white;
-  --slider-thumb-background-color: white;
+  --slider-background-color: #d6d6d6;
+  --slider-thumb-background-color: #d6d6d6;
   --slider-thumb-size: 16px;
 }

@@ -22,7 +22,8 @@ import {
 } from "shared/storage/schema";
 import { setTheme as setThemeCore } from "themes/set-theme";
 
-const Options = (): h.JSX.Element => {
+const Options = (): h.JSX.Element | null => {
+  const [initialized, setInitialized] = useState<boolean>(false);
   const [os, setOs] = useState<Os | undefined>(undefined);
   const [version] = useState<string>(chrome.runtime.getManifest().version);
   const [notesCount, setNotesCount] = useState<number>(0);
@@ -80,6 +81,9 @@ const Options = (): h.JSX.Element => {
       // Sync
       setSync(local.sync);
       setAutoSync(local.autoSync);
+
+      // Initialized
+      setInitialized(true);
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -145,11 +149,15 @@ const Options = (): h.JSX.Element => {
     }
   }, [theme, customTheme]);
 
+  if (!initialized) {
+    return null;
+  }
+
   return (
     <Fragment>
       <h1>My Notes</h1>
 
-      <__Font font={font} />
+      {font && <__Font font={font} />}
       <__Size size={size} />
       <__NotesOrder notesOrder={notesOrder} />
       <__Theme theme={theme} />

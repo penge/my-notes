@@ -3,18 +3,18 @@ import { useState, useEffect } from "preact/hooks";
 import clsx from "clsx";
 import { RegularFont, GoogleFont } from "shared/storage/schema";
 import {
-  FontFamily, fontFamilies, ideizeFont, getGoogleFontHref,
+  FontFamily, fontFamilies, findFontFamily, getGoogleFontName, getGoogleFontHref, ideizeFont,
 } from "options/helpers/fonts";
 import { t, tString } from "i18n";
 
 interface FontProps {
-  font?: RegularFont | GoogleFont
+  font: RegularFont | GoogleFont
 }
 
 const Font = ({ font }: FontProps): h.JSX.Element => {
-  const [fontFamily, setFontFamily] = useState<FontFamily | undefined>(undefined);
+  const [fontFamily, setFontFamily] = useState<FontFamily>(findFontFamily(font));
 
-  const [googleFontName, setGoogleFontName] = useState<string>("");
+  const [googleFontName, setGoogleFontName] = useState<string>(getGoogleFontName(font));
   const [googleSubmitButtonText, setGoogleSubmitButtonText] = useState<string>(tString("Apply"));
 
   useEffect(() => {
@@ -22,12 +22,8 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
       return;
     }
 
-    setFontFamily(
-      fontFamilies.find((family) => family.id === (font as RegularFont).genericFamily)
-      || fontFamilies.find((family) => family.id === "google-fonts"),
-    );
-
-    setGoogleFontName((font && (font as GoogleFont).href) ? (font as GoogleFont).name : "");
+    setFontFamily(findFontFamily(font));
+    setGoogleFontName(getGoogleFontName(font));
   }, [font]);
 
   return (
@@ -47,7 +43,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
           <Fragment>
             <span
               className={clsx("font-category", family.id === fontFamily?.id && "active")}
-              onClick={() => setFontFamily(fontFamilies.find((item) => item.id === family.id))}
+              onClick={() => setFontFamily(fontFamilies.find((item) => family.id === item.id) as FontFamily)}
             >
               {family.name}
             </span>
@@ -58,7 +54,7 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
 
       {/* Radio buttons for the current font family (except Google Fonts) */}
       {fontFamily && fontFamily.fonts && (
-        <div className="font-area">
+        <div key="common-fonts" className="font-area">
           {fontFamily.fonts?.map((commonFontName) => (
             <div className="selection">
               <input
@@ -90,48 +86,50 @@ const Font = ({ font }: FontProps): h.JSX.Element => {
 
       {/* Google Fonts */}
       {fontFamily && !fontFamily.fonts && (
-        <div className="font-area" id="google-fonts-area">
+        <div key="google-fonts" className="font-area" id="google-fonts-area">
           <ol>
             <li>{t("Google Fonts.step1", { website: "https://fonts.google.com" })}</li>
             <li>{t("Google Fonts.step2")}</li>
             <li>{t("Google Fonts.step3")}</li>
           </ol>
-          <input
-            type="text"
-            placeholder={tString("Google Fonts.placeholder")}
-            className="input"
-            value={googleFontName}
-            onInput={(event) => {
-              setGoogleFontName((event.target as HTMLInputElement).value);
-              setGoogleSubmitButtonText(tString("Apply"));
-            }}
-          />
-          <input
-            type="submit"
-            className={clsx("bold", "button", (googleFontName === font?.name) && "disabled")}
-            value={googleSubmitButtonText}
-            onClick={() => {
-              const trimmedGoogleFontName = googleFontName.trim();
-              if (!trimmedGoogleFontName || (trimmedGoogleFontName === font?.name)) {
-                return;
-              }
+          <div className="inputs">
+            <input
+              type="text"
+              placeholder={tString("Google Fonts.placeholder")}
+              className="input"
+              value={googleFontName}
+              onInput={(event) => {
+                setGoogleFontName((event.target as HTMLInputElement).value);
+                setGoogleSubmitButtonText(tString("Apply"));
+              }}
+            />
+            <input
+              type="submit"
+              className={clsx("bold", "button", (googleFontName === font?.name) && "disabled")}
+              value={googleSubmitButtonText}
+              onClick={() => {
+                const trimmedGoogleFontName = googleFontName.trim();
+                if (!trimmedGoogleFontName || (trimmedGoogleFontName === font?.name)) {
+                  return;
+                }
 
-              const googleFont: GoogleFont = {
-                id: ideizeFont(trimmedGoogleFontName),
-                name: trimmedGoogleFontName,
-                fontFamily: trimmedGoogleFontName,
-                href: getGoogleFontHref(trimmedGoogleFontName),
-              };
+                const googleFont: GoogleFont = {
+                  id: ideizeFont(trimmedGoogleFontName),
+                  name: trimmedGoogleFontName,
+                  fontFamily: trimmedGoogleFontName,
+                  href: getGoogleFontHref(trimmedGoogleFontName),
+                };
 
-              fetch(googleFont.href, { method: "HEAD" }).then(() => {
-                chrome.storage.local.set({ font: googleFont });
-                setGoogleFontName(trimmedGoogleFontName);
-                setGoogleSubmitButtonText(tString("Applied"));
-              }).catch(() => {
-                setGoogleSubmitButtonText(tString("Font Name Doesn't Exist"));
-              });
-            }}
-          />
+                fetch(googleFont.href, { method: "HEAD" }).then(() => {
+                  chrome.storage.local.set({ font: googleFont });
+                  setGoogleFontName(trimmedGoogleFontName);
+                  setGoogleSubmitButtonText(tString("Applied"));
+                }).catch(() => {
+                  setGoogleSubmitButtonText(tString("Font Name Doesn't Exist"));
+                });
+              }}
+            />
+          </div>
         </div>
       )}
     </Fragment>

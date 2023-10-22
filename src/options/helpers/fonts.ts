@@ -1,3 +1,5 @@
+import { RegularFont, GoogleFont } from "shared/storage/schema";
+
 export interface FontFamily {
   id: string
   name: string
@@ -47,8 +49,14 @@ export const fontFamilies: FontFamily[] = [
   },
 ];
 
-// "Roboto Mono" -> "roboto-mono"
-export const ideizeFont = (fontName: string): string => fontName.toLowerCase().replace(/\s/g, "-");
+export const findFontFamily = (font: RegularFont | GoogleFont): FontFamily => (
+  fontFamilies.find((family) => family.id === (font as RegularFont).genericFamily)
+  || fontFamilies.find((family) => family.id === "google-fonts")
+) as FontFamily;
+
+export const getGoogleFontName = (font: RegularFont | GoogleFont): string => (
+  (font as GoogleFont).href ? (font as GoogleFont).name : ""
+);
 
 export const getGoogleFontHref = (fontName: string): string => {
   // "Roboto Mono" -> "Roboto+Mono"
@@ -60,3 +68,6 @@ export const getGoogleFontHref = (fontName: string): string => {
   const href = `https://fonts.googleapis.com/css?family=${family}:400,700&display=swap`;
   return href;
 };
+
+// "Roboto Mono" -> "roboto-mono"
+export const ideizeFont = (fontName: string): string => fontName.toLowerCase().replace(/\s/g, "-");
