@@ -1,12 +1,20 @@
 {
-  "include": ["./src/**/*"],
+  "include": [
+    "./src/**/*",
+    "./env/set-client-id.ts",
+    "./jest.config.ts",
+    "./jest.setup.ts",
+    "./register.js",
+    "./build.ts"
+  ],
 
   "compilerOptions": {
+    "lib": ["ES2022"],
     "module": "ES2022",
     "target": "ES2022",
     "moduleResolution": "node",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "baseUrl": "./src",
     "sourceMap": true,
 
