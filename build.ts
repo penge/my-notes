@@ -1,3 +1,4 @@
+import fs from "fs";
 import esbuild from "esbuild";
 
 esbuild.build({
@@ -6,6 +7,7 @@ esbuild.build({
     "./src/notes.tsx",
     "./src/options.tsx",
     "./src/themes/custom/custom.tsx",
+    "./src/themes/init.ts",
     ...(process.env.NODE_ENV === "development" ? ["./src/integration/index.ts"] : []),
   ],
   chunkNames: "chunks/[name]-[hash]",
@@ -23,4 +25,9 @@ esbuild.build({
   minify: process.env.NODE_ENV === "production",
   sourcemap: process.env.NODE_ENV === "development" ? "inline" : false,
   logLevel: "info",
+}).then(() => {
+  const templateString = fs.readFileSync("./src/template.html", "utf8");
+  ["notes", "options"].forEach((page) => {
+    fs.writeFileSync(`./dist/${page}.html`, templateString.replaceAll("{{page}}", page));
+  });
 });
