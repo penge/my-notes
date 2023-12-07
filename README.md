@@ -88,10 +88,12 @@ Custom theme allows you to customize My Notes styles in many ways.
 
 To use a Custom theme, open Options, select **"Custom"** theme, and click on the **"Customize"** button to start creating your own theme.
 
-To start, paste into the editor content of [<ins>light.css</ins>](public/themes/light.css) or [<ins>dark.css</ins>](public/themes/dark.css).
+To start, either copy and paste into the editor the content of [<ins>light.css</ins>](public/themes/light.css) or [<ins>dark.css</ins>](public/themes/dark.css), or use CSS `@import` to import the theme you would like your Custom theme to be based on.
+
 Then, modify CSS variables as you like to change background colors, text colors, etc.
 You can add any valid CSS as well to make further changes.
-Click on the **"Save"** button to save the custom theme.
+
+Click on the **"Save"** button to save the Custom theme.
 
 <br><br>
 
@@ -227,11 +229,9 @@ src/
                       # - Registers the ways to open My Notes (icon click, keyboard shortcut)
                       # - Registers events to trigger Google Drive Sync from My Notes
 
-  dom/              # Helpers to get DOM elements
+  i18n/             # Internationalization (English)
 
   integration/      # Integration tests for Google Drive Sync
-
-  messages/         # Communication between My Notes and background script
 
   notes/            # Everything related to Notes
                       # - Create/Rename/Delete notes; Note editing, Note saving
@@ -249,11 +249,14 @@ src/
                       # - Helpers for Chrome Storage
                       # - Default values (Notes, Options)
 
+  svg/              # SVG images for Toolbar
+
   themes/           # Light, Dark, Custom
 
-  background.ts     # Main script for background page
+  background.ts     # Main script for service worker
   notes.ts          # Main script for notes
   options.ts        # Main script for options
+  template.html     # Template for notes.html and options.html
 
 public/             # All public files (images, icons, HTML, CSS) copied to dist/
 
@@ -264,7 +267,8 @@ public/             # All public files (images, icons, HTML, CSS) copied to dist
 .gitignore        # Files excluded from Git
 
 jest.config.ts    # Jest configuration
-tsconfig.json     # Typescript configuration
+jest.setup.ts     # Jest setup
+tsconfig.json     # TypeScript configuration
 
 package-lock.json
 package.json
@@ -272,7 +276,8 @@ package.json
 LICENSE           # MIT
 manifest.json     # Main extension file
 
-build.ts          # Produces /dist folder
+register.js       # Uses ts-node/esm to resolve build.ts
+build.ts          # Produces dist/ folder
 
 README.md
 ```
@@ -307,6 +312,7 @@ My Notes has the permissions listed in `manifest.json`.
 - `"storage"` — used to save your notes and options to Chrome Storage (locally in your Chrome)
 - `"unlimitedStorage"` — used to increase the default storage limit (which is 5MB)
 - `"contextMenus"` — used to create My Notes Context menu
+- `"notifications"` — used to show a Chrome notification (when Context menu was used)
 
 Required permissions are shown to the user before installing the extension, and are needed at all times to provide the basic functionality.
 

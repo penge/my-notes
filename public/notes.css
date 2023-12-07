@@ -136,34 +136,63 @@ hr {
 
 .bar {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   user-select: none;
   box-sizing: border-box;
   border-top: 1px solid var(--bar-border-color);
+  background: var(--background-color);
   padding: 0 .25em;
-  align-items: center;
+}
+
+.bar.submenu {
+  background: var(--bar-submenu-background-color);
 }
 
 .bar > .button {
+  display: flex;
+  flex-shrink: 0;
   font-weight: bold;
   padding: .5em;
   margin: .5em .25em;
   border-radius: 3px;
   height: 1.2em;
   width: 1em;
-  flex-shrink: 0;
 }
 
-.bar > .button.last {
-  margin-left: auto;
+.bar > .button > * {
+  pointer-events: none;
 }
 
 .bar > .button.auto {
   width: auto;
 }
 
-.bar > .button > * {
-  pointer-events: none;
+.bar > .button.last {
+  margin-left: auto;
+}
+
+.bar > .button:not(.letter) {
+  color: var(--svg-fill-color);
+}
+
+.bar > .button.active,
+.bar > .button:hover:not(.plain) {
+  background: var(--bar-button-hover-background-color);
+  color: var(--bar-button-hover-color);
+}
+
+.bar > .button.active > svg,
+.bar > .button:hover:not(.plain) > svg {
+  fill: var(--bar-button-hover-color);
+}
+
+.bar > .button { cursor: pointer; }
+.bar > .button.wide { margin-right: 1.5em; }
+.bar > .button.rotate90 > svg { transform: rotate(90deg); }
+.bar > .button.letter {
+  display: inline-block;
+  text-align: center;
 }
 
 /* Sidebar */
@@ -563,60 +592,34 @@ body.with-command-palette #toolbar {
 
 #toolbar {
   transform: translateY(100%);
-  background: var(--background-color);
-  color: var(--toolbar-button-color);
-}
-
-#toolbar .button:not(.letter) {
-  color: var(--svg-fill-color);
-}
-
-#toolbar .button.active,
-#toolbar .button:hover:not(.plain) {
-  background: var(--toolbar-button-hover-background-color);
-  color: var(--toolbar-button-hover-color);
-}
-
-#toolbar .button.active > svg,
-#toolbar .button:hover:not(.plain) > svg {
-  fill: var(--toolbar-button-hover-color);
 }
 
 body:not(.with-toolbar) #toolbar { display: none; }
 body.with-toolbar #toolbar { transform: translateY(0); }
 
-#toolbar .button { cursor: pointer; }
-#toolbar .button.wide { margin-right: 1.5em; }
-#toolbar .button.rotate90 > svg { transform: rotate(90deg); }
-
-#H1 > span { font-size: 1em; }
-#H2 > span { font-size: .85em; }
-#H3 > span { font-size: .65em; }
-
-#toolbar > .submenu {
-  background: var(--toolbar-submenu-background-color);
+#toolbar .button#H1,
+#toolbar .button#H2,
+#toolbar .button#H3 {
+  display: flex;
+  align-items: baseline;
 }
-
-#toolbar .button.letter {
-  display: inline-block;
-  text-align: center;
-}
+#toolbar .button#H1 > span { font-size: 1em; }
+#toolbar .button#H2 > span { font-size: .85em; }
+#toolbar .button#H3 > span { font-size: .65em; }
 
 #toolbar .button#RAW,
 #toolbar .button#RAW-ACTIVE {
   width: auto;
-  font-size: .7em;
-  margin: 0 1em;
-}
-
-#toolbar .button#RAW {
-  background: #9e9e9e;
-  color: white;
+  font-size: .8em;
 }
 
 #toolbar .button#RAW-ACTIVE {
   background: #ff9800;
   color: white;
+}
+
+#toolbar .button#INFO {
+  cursor: default;
 }
 
 /* Tooltip */

@@ -1,7 +1,2 @@
 node_modules/*
 dist/*
-register.js
-jest.config.ts
-jest.setup.ts
-build.ts
-set-client-id.ts

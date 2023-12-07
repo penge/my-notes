@@ -104,9 +104,9 @@
   "Font example": "The quick brown fox jumps over the lazy dog ({{font}})",
   "Google Fonts": {
     "step1": "Open <a href=\"{{website}}\" target=\"_blank\">{{website}}</a> to see the available fonts",
-    "step2": "Type in the Font Name, e.g.: <b>Roboto Mono</b>",
+    "step2": "Type in the Font Name (e.g.: Roboto Mono)",
     "step3": "Click <b>Apply</b> to use the font",
-    "placeholder": "Font Name (e.g. Roboto Mono)"
+    "placeholder": "Font Name (e.g.: Roboto Mono)"
   },
   "Apply": "Apply",
   "Applied": "Applied",

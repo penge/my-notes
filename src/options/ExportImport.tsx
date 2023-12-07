@@ -30,7 +30,6 @@ interface ExportImportProps {
 
 const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
   const [lockedExport, setLockedExport] = useState<boolean>(false);
-  const [commonButtonClasses] = useState(["bold", "button", "space-bottom-small space-right-small"]);
   const textRef = useRef<HTMLInputElement>(null);
   const zipRef = useRef<HTMLInputElement>(null);
 
@@ -46,37 +45,39 @@ const ExportImport = ({ canExport }: ExportImportProps): h.JSX.Element => {
 
       {/* Buttons */}
 
-      <input
-        type="button"
-        className={clsx(commonButtonClasses, !canExport && "disabled")}
-        value={tString("Export notes")}
-        onKeyPress={preventEnter}
-        onClick={() => {
-          if (!canExport || lockedExport) {
-            return;
-          }
+      <div className="buttons">
+        <input
+          type="button"
+          className={clsx("bold", "button", !canExport && "disabled")}
+          value={tString("Export notes")}
+          onKeyPress={preventEnter}
+          onClick={() => {
+            if (!canExport || lockedExport) {
+              return;
+            }
 
-          setLockedExport(true);
-          exportNotes();
-          window.setTimeout(() => setLockedExport(false), 1000);
-        }}
-      />
+            setLockedExport(true);
+            exportNotes();
+            window.setTimeout(() => setLockedExport(false), 1000);
+          }}
+        />
 
-      <input
-        type="button"
-        className={clsx(commonButtonClasses)}
-        value={tString("Import notes from text files")}
-        onKeyPress={preventEnter}
-        onClick={() => textRef.current?.click()}
-      />
+        <input
+          type="button"
+          className={clsx("bold", "button")}
+          value={tString("Import notes from text files")}
+          onKeyPress={preventEnter}
+          onClick={() => textRef.current?.click()}
+        />
 
-      <input
-        type="button"
-        className={clsx(commonButtonClasses)}
-        value={tString("Import notes from a ZIP file")}
-        onKeyPress={preventEnter}
-        onClick={() => zipRef.current?.click()}
-      />
+        <input
+          type="button"
+          className={clsx("bold", "button")}
+          value={tString("Import notes from a ZIP file")}
+          onKeyPress={preventEnter}
+          onClick={() => zipRef.current?.click()}
+        />
+      </div>
 
       {/* File Inputs */}
 

@@ -30,7 +30,6 @@
     "@typescript-eslint/parser": "^6.7.5",
     "chokidar-cli": "^3.0.0",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.19.4",
     "eslint": "^8.51.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
@@ -48,6 +47,7 @@
   },
   "dependencies": {
     "clsx": "^2.0.0",
+    "esbuild": "^0.19.8",
     "fflate": "^0.8.1",
     "preact": "10.18.1"
   }

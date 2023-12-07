@@ -10,14 +10,12 @@ import {
   Notification,
   RegularFont,
   GoogleFont,
-  Theme,
   NotesObject,
   NotesOrder,
   Sync,
   Message,
   MessageType,
 } from "shared/storage/schema";
-import { setTheme as setThemeCore } from "themes/set-theme";
 
 import Overview from "notes/components/Overview";
 import __Notification from "notes/components/Notification";
@@ -62,7 +60,7 @@ interface NotesProps {
   active: string
 }
 
-const Notes = (): h.JSX.Element => {
+const Notes = (): h.JSX.Element | null => {
   const [os, setOs] = useState<Os | undefined>(undefined);
   const [tabId, setTabId] = useState<number | undefined>(undefined);
   const [initialized, setInitialized] = useState<boolean>(false);
@@ -78,8 +76,6 @@ const Notes = (): h.JSX.Element => {
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [sidebarWidth, setSidebarWidth] = useState<string | undefined>(undefined);
   const [toolbar, setToolbar] = useState<boolean>(false);
-  const [theme, setTheme] = useState<Theme | undefined>(undefined);
-  const [customTheme, setCustomTheme] = useState<string>("");
 
   // Notes
   const [notesProps, setNotesProps] = useState<NotesProps>({
@@ -164,8 +160,6 @@ const Notes = (): h.JSX.Element => {
       setSidebar(local.sidebar);
       setSidebarWidth(local.sidebarWidth);
       setToolbar(local.toolbar);
-      setTheme(local.theme);
-      setCustomTheme(local.customTheme);
 
       // Notes
       const activeFromUrl = getActiveFromUrl();
@@ -207,14 +201,6 @@ const Notes = (): h.JSX.Element => {
 
       if (changes.size) {
         setSize(changes.size.newValue);
-      }
-
-      if (changes.theme) {
-        setTheme(changes.theme.newValue);
-      }
-
-      if (changes.customTheme) {
-        setCustomTheme(changes.customTheme.newValue);
       }
 
       if (changes.notes) {
@@ -391,17 +377,6 @@ const Notes = (): h.JSX.Element => {
     document.body.style.left = sidebarWidth ?? "";
   }, [sidebarWidth]);
 
-  // Theme
-  useEffect(() => {
-    // setThemeCore injects one of:
-    // - light.css
-    // - dark.css
-    // - customTheme string
-    if (theme) {
-      setThemeCore(document, { theme, customTheme });
-    }
-  }, [theme, customTheme]);
-
   // Focus
   useEffect(() => {
     document.body.classList.toggle("focus", focus);
@@ -573,6 +548,10 @@ const Notes = (): h.JSX.Element => {
     return (
       <Overview notes={notesToSidebarNotes(notesProps.notes, notesOrder, order)} />
     );
+  }
+
+  if (!initialized) {
+    return null;
   }
 
   return (

@@ -2,7 +2,9 @@ import { Fragment, h, render } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { t, tString } from "i18n";
 
-const placeholder = `:root {
+const placeholder = `@import "themes/light.css";
+
+:root {
 
 }`;
 

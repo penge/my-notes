@@ -20,9 +20,9 @@ import {
   Theme,
   Sync,
 } from "shared/storage/schema";
-import { setTheme as setThemeCore } from "themes/set-theme";
 
-const Options = (): h.JSX.Element => {
+const Options = (): h.JSX.Element | null => {
+  const [initialized, setInitialized] = useState<boolean>(false);
   const [os, setOs] = useState<Os | undefined>(undefined);
   const [version] = useState<string>(chrome.runtime.getManifest().version);
   const [notesCount, setNotesCount] = useState<number>(0);
@@ -30,7 +30,6 @@ const Options = (): h.JSX.Element => {
   const [font, setFont] = useState<RegularFont | GoogleFont | undefined>(undefined);
   const [size, setSize] = useState<number>(0);
   const [theme, setTheme] = useState<Theme | undefined>(undefined);
-  const [customTheme, setCustomTheme] = useState<string>("");
   const [tab, setTab] = useState<boolean>(false);
   const [tabSize, setTabSize] = useState<number>(-1);
   const [openNoteOnMouseHover, setOpenNoteOnMouseHover] = useState<boolean>(false);
@@ -66,7 +65,6 @@ const Options = (): h.JSX.Element => {
       setFont(local.font);
       setSize(local.size);
       setTheme(local.theme);
-      setCustomTheme(local.customTheme);
 
       // Notes
       setNotesCount(Object.keys(local.notes).length);
@@ -80,6 +78,9 @@ const Options = (): h.JSX.Element => {
       // Sync
       setSync(local.sync);
       setAutoSync(local.autoSync);
+
+      // Initialized
+      setInitialized(true);
     });
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -97,10 +98,6 @@ const Options = (): h.JSX.Element => {
 
       if (changes.theme) {
         setTheme(changes.theme.newValue);
-      }
-
-      if (changes.customTheme) {
-        setCustomTheme(changes.customTheme.newValue);
       }
 
       if (changes.notes) {
@@ -135,21 +132,15 @@ const Options = (): h.JSX.Element => {
     });
   }, []);
 
-  useEffect(() => {
-    // setThemeCore injects one of:
-    // - light.css
-    // - dark.css
-    // - customTheme string
-    if (theme) {
-      setThemeCore(document, { theme, customTheme });
-    }
-  }, [theme, customTheme]);
+  if (!initialized) {
+    return null;
+  }
 
   return (
     <Fragment>
       <h1>My Notes</h1>
 
-      <__Font font={font} />
+      {font && <__Font font={font} />}
       <__Size size={size} />
       <__NotesOrder notesOrder={notesOrder} />
       <__Theme theme={theme} />

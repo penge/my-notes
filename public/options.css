@@ -17,19 +17,23 @@ input, select {
   font-size: inherit;
 }
 
-input[type="radio"], input[type='checkbox'] {
+input[type="radio"],
+input[type='checkbox'] {
   width: 1.15rem;
   height: 1.15rem;
   flex-shrink: 0;
   margin: 0 10px 0 2px;
 }
 
+#dark input[type="radio"],
+#dark input[type='checkbox'] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
 .separator { padding: 0 12px; }
 .bold { font-weight: bold; }
 .space-top { margin-top: 1em; }
 .space-left { margin-left: 1em; }
-.space-right-small { margin-right: .5em; }
-.space-bottom-small { margin-bottom: .5em; }
 
 .disabled {
   opacity: .3;
@@ -39,12 +43,27 @@ input[type="radio"], input[type='checkbox'] {
 
 /* Inputs */
 
+.inputs {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+
+.inputs > [type=submit] {
+  margin-top: .25em;
+  align-self: flex-end;
+}
+
+.buttons > .button {
+  margin-right: .5em;
+  margin-bottom: .5em;
+}
+
 .button {
   cursor: pointer;
 }
 
 .button, .input, .select {
-  max-width: 500px;
   box-sizing: content-box;
   outline: none;
   border: 1px solid silver;
@@ -106,34 +125,25 @@ body#dark .comment {
 #google-fonts-area ol { margin-top: 0; }
 #google-fonts-area ol li { line-height: 2em; }
 
-#google-fonts-area .input {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-#google-fonts-area .button {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 /* Font size */
 
 .slider {
+  appearance: none;
   -webkit-appearance: none;
   width: 100%;
   height: 3px;
   border-radius: 3px;
   outline: none;
-  background: var(--slider-background-color);
+  background: var(--slider-background-color, #d3d3d3);
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   border-radius: 50%;
   cursor: pointer;
-  background: var(--slider-thumb-background-color);
-  width: var(--slider-thumb-size);
-  height: var(--slider-thumb-size);
+  background: var(--slider-thumb-background-color, black);
+  width: var(--slider-thumb-size, 15px);
+  height: var(--slider-thumb-size, 15px);
 }
 
 /* With comment */
