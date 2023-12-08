@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+import { dispatchNoteEdited } from "notes/events";
+
 const TABLE_RESIZING_DIV_CLASSNAME = "table-resizing-div";
 const TABLE_COLUMN_RESIZING_DIV_CLASSNAME = "table-column-resizing-div";
 const TABLE_ROW_RESIZING_DIV_CLASSNAME = "table-row-resizing-div";
@@ -188,12 +190,16 @@ export const makeTableResizable = ({
   }
 };
 
-interface ReinitTableProps {
+interface InitTableProps {
+  table: HTMLTableElement
   resizableProps: MakeTableResizableProps
   makeTableResizableFunction: (props: MakeTableResizableProps) => void
+  onContextMenu: (event: MouseEvent) => void
 }
 
-export const reinitTable = ({ resizableProps, makeTableResizableFunction }: ReinitTableProps): void => {
+export const initTable = ({
+  table, resizableProps, makeTableResizableFunction, onContextMenu,
+}: InitTableProps): void => {
   const cells = resizableProps.table.querySelectorAll("td");
   cells.forEach((oneCell) => {
     oneCell.onmouseleave = null;
@@ -202,21 +208,33 @@ export const reinitTable = ({ resizableProps, makeTableResizableFunction }: Rein
   });
 
   makeTableResizableFunction(resizableProps);
+  table.oncontextmenu = onContextMenu;
 };
 
-interface ReinitTablesProps {
-  onResize: OnResizeCallback
+interface InitTables {
+  contextMenuRenderFunction: (table: HTMLTableElement, event: MouseEvent) => void
 }
 
-export const reinitTables = ({ onResize }: ReinitTablesProps): void => {
+export const initTables = ({
+  contextMenuRenderFunction,
+}: InitTables): void => {
   const tables = document.querySelectorAll<HTMLTableElement>("body > #content-container > #content table");
-  tables.forEach((table) => reinitTable({
+  tables.forEach((table) => initTable({
+    table,
     resizableProps: {
       document,
       computedStyleFunction: window.getComputedStyle,
       table,
-      onResize,
+      onResize: dispatchNoteEdited,
     },
     makeTableResizableFunction: makeTableResizable,
+    onContextMenu: (event) => {
+      if (!document.body.classList.contains("with-control")) {
+        return;
+      }
+
+      event.preventDefault();
+      contextMenuRenderFunction(table, event);
+    },
   }));
 };

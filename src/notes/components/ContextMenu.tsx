@@ -1,59 +1,46 @@
-import { h } from "preact";
+import { h, ComponentChildren } from "preact";
 import { useState, useRef, useEffect } from "preact/hooks";
-import clsx from "clsx";
-import { t } from "i18n";
 
 export interface ContextMenuProps {
   x: number
   y: number
-  onRename: () => void
-  onDelete: () => void
-  onToggleLocked: () => void
-  onTogglePinnedTime: () => void
-  onDuplicate: () => void
-  onExport: () => void
-  locked: boolean
-  pinned: boolean
+  children: ComponentChildren
 }
 
-const ContextMenu = ({
-  x, y,
-  onRename, onDelete, onToggleLocked, onTogglePinnedTime, onDuplicate, onExport,
-  locked, pinned,
-}: ContextMenuProps): h.JSX.Element => {
-  const [offsetHeight, setOffsetHeight] = useState<number>(0);
+interface Offsets {
+  offsetHeight: number
+  offsetWidth: number
+}
+
+const ContextMenu = ({ x, y, children }: ContextMenuProps): h.JSX.Element => {
   const ref = useRef<HTMLDivElement>(null);
+  const [offsets, setOffsets] = useState<Offsets | undefined>(undefined);
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref.current || offsets) {
       return;
     }
 
-    if (offsetHeight) {
-      return; // offsetHeight already set
-    }
-
-    setOffsetHeight(ref.current.offsetHeight);
-  }, [ref.current, offsetHeight]);
+    setOffsets({
+      offsetHeight: ref.current.offsetHeight,
+      offsetWidth: ref.current.offsetWidth,
+    });
+  }, [ref.current]);
 
   return (
     <div
       id="context-menu"
       ref={ref}
-      style={offsetHeight ? {
-        left: `${x}px`,
-        top: (y + offsetHeight < window.innerHeight) ? `${y}px` : "",
-        bottom: (y + offsetHeight >= window.innerHeight) ? "1em" : "",
+      style={offsets ? {
+        left: (x + offsets.offsetWidth < window.innerWidth) ? `${x}px` : undefined,
+        right: (x + offsets.offsetWidth >= window.innerWidth) ? "1em" : undefined,
+        top: (y + offsets.offsetHeight < window.innerHeight) ? `${y}px` : undefined,
+        bottom: (y + offsets.offsetHeight >= window.innerHeight) ? "1em" : undefined,
       } : {
-        opacity: 0, // offsetHeight NOT set, yet
+        opacity: 0, // offsets NOT known, yet
       }}
     >
-      <div className={clsx("action", locked && "disabled")} onClick={() => !locked && onRename()}>{t("Rename")}</div>
-      <div className={clsx("action", locked && "disabled")} onClick={() => !locked && onDelete()}>{t("Delete")}</div>
-      <div className="action" onClick={() => onToggleLocked()}>{locked ? t("Unlock") : t("Lock")}</div>
-      <div className="action" onClick={() => onTogglePinnedTime()}>{pinned ? t("Unpin") : t("Pin")}</div>
-      <div className="action" onClick={() => onDuplicate()}>{t("Duplicate")}</div>
-      <div className="action" onClick={() => onExport()}>{t("Export")}</div>
+      {children}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import {
   getAllCellsInColumn,
   MakeTableResizableProps,
   makeTableResizable,
-  reinitTable,
+  initTable,
 } from "../table";
 
 // A B C
@@ -79,7 +79,7 @@ test("getAllCellsInColumn() returns cells in a column", () => {
   expect(getAllCellsInColumn(table, 99).map((cell) => cell.innerHTML)).toEqual([]);
 });
 
-describe("reinitTable", () => {
+describe("initTable", () => {
   let dom: JSDOM;
   let table: HTMLTableElement;
   let resizableProps: MakeTableResizableProps;
@@ -96,9 +96,11 @@ describe("reinitTable", () => {
       onResize: () => { },
     };
     makeTableResizableFunction = jest.fn();
-    reinitTable({
+    initTable({
+      table,
       resizableProps,
       makeTableResizableFunction,
+      onContextMenu: () => {},
     });
   });
 

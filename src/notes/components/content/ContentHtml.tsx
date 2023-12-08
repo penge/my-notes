@@ -5,9 +5,10 @@ import { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
 import __range from "notes/range";
 import { insideListItem } from "notes/content/list";
-import { reinitTables } from "notes/content/table";
+import initContent from "notes/content/init";
+import { reattachOnNoteEdited } from "notes/events";
 import { commands, InsertTabFactory } from "../../commands";
-import { ContentProps, reattachEditNote } from "./common";
+import { ContentProps } from "./common";
 
 import { isImageFile } from "../image/read-image";
 import { dropImage } from "../image/drop-image";
@@ -78,12 +79,7 @@ const ContentHtml = ({
     if (contentRef.current) {
       contentRef.current.innerHTML = note.initialContent;
       focus(contentRef.current);
-      reinitTables({
-        onResize: () => {
-          const event = new Event("editnote");
-          document.dispatchEvent(event);
-        },
-      });
+      initContent();
     }
   }, [note.active, note.initialContent]);
 
@@ -91,12 +87,13 @@ const ContentHtml = ({
     if (note.active && contentRef.current) {
       const content = contentRef.current.innerHTML;
       onEdit(note.active, content);
+      initContent();
     }
   }, [note.active]);
 
   // Toolbar controls (e.g. TABLE_INSERT) can change #content.innerHTML.
-  // To save the changed content, "editnote" event is triggered from Toolbar.
-  useEffect(() => reattachEditNote(onInput), [onInput]);
+  // To save the changed content, "NoteEdited" event is triggered from Toolbar.
+  useEffect(() => reattachOnNoteEdited(onInput), [onInput]);
 
   const [onUnderline] = useKeyboardShortcut(KeyboardShortcut.OnUnderline);
   const [onStrikethrough] = useKeyboardShortcut(KeyboardShortcut.OnStrikethrough);
