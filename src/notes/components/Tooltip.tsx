@@ -19,13 +19,7 @@ interface TooltipRenderProps {
   className?: string
 }
 
-const getContainer = () => {
-  const container = document.getElementById("tooltip-container");
-  if (!container) {
-    throw new Error("Container not found!");
-  }
-  return container;
-};
+const getContainer = () => document.getElementById("tooltip-container")!;
 
 const MINIMAL_OFFSET = 5;
 const EDGE_OFFSET = ".5em";
