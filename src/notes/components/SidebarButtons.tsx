@@ -4,10 +4,7 @@ import { Os, Sync, MessageType } from "shared/storage/schema";
 import clsx from "clsx";
 import { t } from "i18n";
 import SVG from "notes/components/SVG";
-import FileSvgText from "svg/file.svg";
-import GearSvgText from "svg/gear.svg";
-import RefreshSvgText from "svg/refresh.svg";
-import GridSvgText from "svg/grid.svg";
+import svgs from "svg";
 import { importNoteFromTextFile } from "notes/import";
 import sendMessage from "shared/messages/send";
 import formatDate from "shared/date/format-date";
@@ -51,13 +48,13 @@ const SidebarButtons = ({
     >
       <Tooltip tooltip={t("New note")}>
         <div id="new-note" className="button" onClick={onNewNote}>
-          <SVG text={FileSvgText} />
+          <SVG text={svgs.FileSvgText} />
         </div>
       </Tooltip>
 
       <Tooltip tooltip={t("Options")}>
         <div id="open-options" className="button" onClick={openOptions}>
-          <SVG text={GearSvgText} />
+          <SVG text={svgs.GearSvgText} />
         </div>
       </Tooltip>
 
@@ -79,13 +76,13 @@ const SidebarButtons = ({
           className={clsx("button", (!sync || !sync.lastSync) && "disabled")}
           onClick={() => sync && sendMessage(MessageType.SYNC)}
         >
-          <SVG text={RefreshSvgText} />
+          <SVG text={svgs.RefreshSvgText} />
         </div>
       </Tooltip>
 
       <Tooltip tooltip="Overview">
         <div id="open-overview" className="button" onClick={openOverview}>
-          <SVG text={GridSvgText} />
+          <SVG text={svgs.GridSvgText} />
         </div>
       </Tooltip>
     </div>

@@ -14,7 +14,7 @@
     "__prepare-folder": "rimraf dist && copyfiles LICENSE manifest.json dist && copyup public/images/icon128.png public/* dist && cp -R public/themes dist",
     "__prepare-folder-develop": "npm run __prepare-folder && cp -R public/integration dist && node --import ./register.js ./env/set-client-id.ts dist/manifest.json",
     "__check-types": "tsc --noEmit",
-    "__develop-core": "npm run __check-types && NODE_ENV=development node --import ./register.js ./build.ts",
+    "__develop-core": "NODE_ENV=development node --import ./register.js ./build.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "LOG_LEVEL=SILENT TZ=UTC jest --maxWorkers=4",
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",

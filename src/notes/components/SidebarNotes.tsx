@@ -6,7 +6,7 @@ import { MessageType } from "shared/storage/schema";
 import { SidebarNote } from "notes/adapters";
 import clsx from "clsx";
 import SVG from "notes/components/SVG";
-import LockSvgText from "svg/lock.svg";
+import svgs from "svg";
 import { useKeyboardShortcut, KeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
 import sendMessage from "shared/messages/send";
 
@@ -171,7 +171,7 @@ const SidebarNotes = ({
           }}
         >
           {note.name}
-          {note.locked && <SVG text={LockSvgText} />}
+          {note.locked && <SVG text={svgs.LockSvgText} />}
         </div>
       ))}
     </div>

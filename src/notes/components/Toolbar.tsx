@@ -8,35 +8,7 @@ import capitalize from "shared/string/capitalize";
 import { HIGHLIGHT_COLORS } from "notes/commands/highlight";
 import { reinitTables } from "notes/content/table";
 import SVG from "notes/components/SVG";
-import BoldSvgText from "svg/bold.svg";
-import ItalicSvgText from "svg/italic.svg";
-import UnderlineSvgText from "svg/underline.svg";
-import StrikethroughSvgText from "svg/strikethrough.svg";
-import TextSvgText from "svg/text.svg";
-import BulletedListSvgText from "svg/bulleted-list.svg";
-import NumberedListSvgText from "svg/numbered-list.svg";
-import OutdentSvgText from "svg/outdent.svg";
-import IndentSvgText from "svg/indent.svg";
-import AlignLeftSvgText from "svg/align-left.svg";
-import AlignCenterSvgText from "svg/align-center.svg";
-import AlignRightSvgText from "svg/align-right.svg";
-import HorizontalRuleSvgText from "svg/horizontal-rule.svg";
-import ImageSvgText from "svg/image.svg";
-import LinkSvgText from "svg/link.svg";
-import EmbedHtmlSvgText from "svg/embed.svg";
-import CodeSvgText from "svg/code.svg";
-import ClockSvgText from "svg/clock.svg";
-import TableSvgText from "svg/table.svg";
-import TableRowAboveSvgText from "svg/table-row-above.svg";
-import TableRowBelowSvgText from "svg/table-row-below.svg";
-import TableColumnLeftSvgText from "svg/table-column-left.svg";
-import TableColumnRightSvgText from "svg/table-column-right.svg";
-import TableLineSvgText from "svg/table-line.svg";
-import TableDeleteRowSvgText from "svg/table-delete-row.svg";
-import TableDeleteColumnSvgText from "svg/table-delete-column.svg";
-import TextColorSvgText from "svg/text-color.svg";
-import RemoveFormatSvgText from "svg/remove-format.svg";
-import InfoSvgText from "svg/info.svg";
+import svgs from "svg";
 import {
   commands,
   InsertImageFactory,
@@ -102,7 +74,7 @@ const Toolbar = ({
 
           <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
             <div id="INFO" className="button">
-              <SVG text={InfoSvgText} />
+              <SVG text={svgs.InfoSvgText} />
             </div>
           </Tooltip>
         </div>
@@ -154,47 +126,47 @@ const Toolbar = ({
           <div className="submenu bar" style={{ paddingLeft: ".33em" }}>
             <Tooltip tooltip={t("Insert table (3x3)")}>
               <div id="TABLE_INSERT" className="button wide" onClick={() => table.insertTable(tableCallback)}>
-                <SVG text={TableSvgText} />
+                <SVG text={svgs.TableSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Insert row above")}>
               <div id="TABLE_ROW_ABOVE" className="button" onClick={() => table.insertRowAbove(tableCallback)}>
-                <SVG text={TableRowAboveSvgText} />
+                <SVG text={svgs.TableRowAboveSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Insert row below")}>
               <div id="TABLE_ROW_BELOW" className="button" onClick={() => table.insertRowBelow(tableCallback)}>
-                <SVG text={TableRowBelowSvgText} />
+                <SVG text={svgs.TableRowBelowSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Insert column left")}>
               <div id="TABLE_COLUMN_LEFT" className="button" onClick={() => table.insertColumnLeft(tableCallback)}>
-                <SVG text={TableColumnLeftSvgText} />
+                <SVG text={svgs.TableColumnLeftSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Insert column right")}>
               <div id="TABLE_COLUMN_RIGHT" className="button wide" onClick={() => table.insertColumnRight(tableCallback)}>
-                <SVG text={TableColumnRightSvgText} />
+                <SVG text={svgs.TableColumnRightSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Toggle heading row")}>
               <div id="TABLE_HEADING_ROW" className="button" onClick={() => table.toggleHeadingRow(callback)}>
-                <SVG text={TableLineSvgText} />
+                <SVG text={svgs.TableLineSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Toggle heading column")}>
               <div id="TABLE_HEADING_COLUMN" className="button wide rotate90" onClick={() => table.toggleHeadingColumn(callback)}>
-                <SVG text={TableLineSvgText} />
+                <SVG text={svgs.TableLineSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Delete row")}>
               <div id="TABLE_DELETE_ROW" className="button" onClick={() => table.deleteRow(tableCallback)}>
-                <SVG text={TableDeleteRowSvgText} />
+                <SVG text={svgs.TableDeleteRowSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Delete column")}>
               <div id="TABLE_DELETE_COLUMN" className="button" onClick={() => table.deleteColumn(tableCallback)}>
-                <SVG text={TableDeleteColumnSvgText} />
+                <SVG text={svgs.TableDeleteColumnSvgText} />
               </div>
             </Tooltip>
           </div>
@@ -234,79 +206,79 @@ const Toolbar = ({
         <div className="topmenu bar">
           <Tooltip tooltip={t(`Bold.${os}`)}>
             <div id="B" className="button" onClick={commands.Bold}>
-              <SVG text={BoldSvgText} />
+              <SVG text={svgs.BoldSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t(`Italic.${os}`)}>
             <div id="I" className="button" onClick={commands.Italic}>
-              <SVG text={ItalicSvgText} />
+              <SVG text={svgs.ItalicSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t(`Underline.${os}`)}>
             <div id="U" className="button" onClick={commands.Underline}>
-              <SVG text={UnderlineSvgText} />
+              <SVG text={svgs.UnderlineSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t(`StrikeThrough.${os}`)}>
             <div id="S" className="button wide" onClick={commands.StrikeThrough}>
-              <SVG text={StrikethroughSvgText} />
+              <SVG text={svgs.StrikethroughSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Heading")}>
             <div id="H" className={clsx("button", submenu === "H" && "active")} onClick={toggleSubmenu}>
-              <SVG text={TextSvgText} />
+              <SVG text={svgs.TextSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t(`UL.${os}`)}>
             <div id="UL" className="button" onClick={commands.UL}>
-              <SVG text={BulletedListSvgText} />
+              <SVG text={svgs.BulletedListSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t(`OL.${os}`)}>
             <div id="OL" className="button" onClick={commands.OL}>
-              <SVG text={NumberedListSvgText} />
+              <SVG text={svgs.NumberedListSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Outdent")}>
             <div id="OUTDENT" className="button" onClick={commands.Outdent}>
-              <SVG text={OutdentSvgText} />
+              <SVG text={svgs.OutdentSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Indent")}>
             <div id="INDENT" className="button" onClick={commands.Indent}>
-              <SVG text={IndentSvgText} />
+              <SVG text={svgs.IndentSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Align Left")}>
             <div id="CL" className="button" onClick={commands.AlignLeft}>
-              <SVG text={AlignLeftSvgText} />
+              <SVG text={svgs.AlignLeftSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Align Center")}>
             <div id="CC" className="button" onClick={commands.AlignCenter}>
-              <SVG text={AlignCenterSvgText} />
+              <SVG text={svgs.AlignCenterSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Align Right")}>
             <div id="CR" className="button" onClick={commands.AlignRight}>
-              <SVG text={AlignRightSvgText} />
+              <SVG text={svgs.AlignRightSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Insert Horizontal Rule")}>
             <div id="HR" className="button" onClick={commands.InsertHorizontalRule}>
-              <SVG text={HorizontalRuleSvgText} />
+              <SVG text={svgs.HorizontalRuleSvgText} />
             </div>
           </Tooltip>
 
@@ -330,7 +302,7 @@ const Toolbar = ({
                 });
               }}
             >
-              <SVG text={ImageSvgText} />
+              <SVG text={svgs.ImageSvgText} />
             </div>
           </Tooltip>
 
@@ -354,7 +326,7 @@ const Toolbar = ({
                 });
               }}
             >
-              <SVG text={LinkSvgText} />
+              <SVG text={svgs.LinkSvgText} />
             </div>
           </Tooltip>
 
@@ -378,37 +350,37 @@ const Toolbar = ({
                 });
               }}
             >
-              <SVG text={EmbedHtmlSvgText} />
+              <SVG text={svgs.EmbedHtmlSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Code")}>
             <div id="PRE" className="button" onClick={commands.Pre}>
-              <SVG text={CodeSvgText} />
+              <SVG text={svgs.CodeSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Date and Time")}>
             <div id="DT" className={clsx("button", submenu === "DT" && "active")} onClick={toggleSubmenu}>
-              <SVG text={ClockSvgText} />
+              <SVG text={svgs.ClockSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Table")}>
             <div id="TABLE" className={clsx("button", submenu === "TABLE" && "active")} onClick={toggleSubmenu}>
-              <SVG text={TableSvgText} />
+              <SVG text={svgs.TableSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t("Text Color")}>
             <div id="TC" className={clsx("button", submenu === "TC" && "active")} onClick={toggleSubmenu}>
-              <SVG text={TextColorSvgText} />
+              <SVG text={svgs.TextColorSvgText} />
             </div>
           </Tooltip>
 
           <Tooltip tooltip={t(`Remove Formatting.${os}`)}>
             <div id="RF" className="button" onClick={commands.RemoveFormat}>
-              <SVG text={RemoveFormatSvgText} />
+              <SVG text={svgs.RemoveFormatSvgText} />
             </div>
           </Tooltip>
 
@@ -418,7 +390,7 @@ const Toolbar = ({
 
           <Tooltip id="info-tooltip" className="info-tooltip" tooltip={note ? <NoteInfo note={note} /> : ""}>
             <div id="INFO" className="button">
-              <SVG text={InfoSvgText} />
+              <SVG text={svgs.InfoSvgText} />
             </div>
           </Tooltip>
         </div>
