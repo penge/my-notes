@@ -357,6 +357,10 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
 #content ul { margin: 0; }
 #content ol { margin: 0 0 0 1em; }
 
+#content img {
+  cursor: default;
+}
+
 #content pre {
   overflow: auto;
   padding: .5em;
@@ -388,6 +392,10 @@ body.with-control #content a {
 
 body.with-control #content a > * {
   pointer-events: none;
+}
+
+body.with-control.resizing-img #content {
+  overflow: hidden;
 }
 
 /* My Notes classes */
