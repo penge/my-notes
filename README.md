@@ -13,17 +13,17 @@
 
 ## Features
 
-→ &nbsp; Automatically saved and updated in every open tab ([<ins>How to open</ins>](#how-to-open))
+→ &nbsp; Automatically saved and updated in every open tab ([How to open](#how-to-open))
 
-→ &nbsp; Context menu to save selected text to note or My Notes in second computer ([<ins>Context menu</ins>](#context-menu))
+→ &nbsp; Context menu to save selected text to note or My Notes in second computer ([Context menu](#context-menu))
 
-→ &nbsp; Back up notes to Google Drive ([<ins>Google Drive Sync</ins>](#google-drive-sync))
+→ &nbsp; Back up notes to Google Drive ([Google Drive Sync](#google-drive-sync))
 
-→ &nbsp; Sync notes between My Notes and Google Drive, edit them from other devices or My Notes ([<ins>Google Drive Sync</ins>](#google-drive-sync))
+→ &nbsp; Sync notes between My Notes and Google Drive, edit them from other devices or My Notes ([Google Drive Sync](#google-drive-sync))
 
-→ &nbsp; Auto Sync notes to Google Drive ([<ins>Google Drive Sync</ins>](#google-drive-sync))
+→ &nbsp; Auto Sync notes to Google Drive ([Google Drive Sync](#google-drive-sync))
 
-→ &nbsp; Drag and drop image with automatic image upload to Google Drive ([<ins>Google Drive Sync</ins>](#google-drive-sync))
+→ &nbsp; Drag and Drop image with automatic image upload to Google Drive ([Google Drive Sync](#google-drive-sync))
 
 → &nbsp; Toolbar (**Bold**, _Italic_, <ins>Underline</ins>, etc.)
 
@@ -31,7 +31,7 @@
 
 → &nbsp; Keyboard shortcuts
 
-→ &nbsp; Command palette ([<ins>Command palette</ins>](#command-palette))
+→ &nbsp; Command palette ([Command palette](#command-palette))
 
 → &nbsp; Works offline
 
@@ -88,7 +88,7 @@ Custom theme allows you to customize My Notes styles in many ways.
 
 To use a Custom theme, open Options, select **"Custom"** theme, and click on the **"Customize"** button to start creating your own theme.
 
-To start, either copy and paste into the editor the content of [<ins>light.css</ins>](public/themes/light.css) or [<ins>dark.css</ins>](public/themes/dark.css), or use CSS `@import` to import the theme you would like your Custom theme to be based on.
+To start, either copy and paste into the editor the content of [light.css](public/themes/light.css) or [dark.css](public/themes/dark.css), or use CSS `@import` to import the theme you would like your Custom theme to be based on.
 
 Then, modify CSS variables as you like to change background colors, text colors, etc.
 You can add any valid CSS as well to make further changes.
@@ -149,27 +149,29 @@ It cannot see, access nor modify, any other files in your Google Drive.
 
 ## Tips and tricks
 
-1. Set a keyboard shortcut to quickly open My Notes (for example `Cmd + Shift + M`), which you can set on this page `chrome://extensions/shortcuts`. If you make the keyboard shortcut Global, it will open My Notes even if Google Chrome is closed.
+1. Set a keyboard shortcut to quickly open My Notes (e.g. `Cmd + Shift + M`), which you can set on page `chrome://extensions/shortcuts`. If you make the keyboard shortcut Global, it will open My Notes even when Google Chrome is closed.
 2. Check keyboard shortcuts (open Options) on how to quickly do some actions.
-3. Hold down the Shift key (`Cmd + Shift + V`) to paste text in a plain format (without styles).
-4. Hide Toolbar and Sidebar if you prefer a simple interface.
-5. See [<ins>Google Fonts</ins>](https://fonts.google.com) for a font you like, write its name into My Notes Options to use it.
-6. Note name is present in the URL, therefore you can save it to bookmarks for quick access. If you append saved URL with `&focus`, it will always open that note in Focus mode.
-7. Use [<ins>Context menu</ins>](#context-menu) to transfer selected text to My Notes on other computers.
-8. Use [<ins>Custom theme</ins>](#custom-theme) to customize the look of My Notes in any way as needed.
+3. Use `Cmd + Shift + V` (or `Ctrl + Shift + V`) to paste text in a plain format (without formatting).
+4. Hide Toolbar and Sidebar if you prefer a simple interface. You can use keyboard shortcuts to do so, or use [Command palette](#command-palette).
+5. See [Google Fonts](https://fonts.google.com) for a font you like, write its name into My Notes Options to use it.
+6. Note name is present in the URL, therefore you can save it to bookmarks for quick access. If you append saved URL with `&focus`, it will always open that note in Focus mode (Sidebar hidden, Toolbar hidden).
+7. Use [Context menu](#context-menu) to transfer selected text to My Notes on other computers.
+8. Use [Custom theme](#custom-theme) to customize the look of My Notes in any way needed.
 9. Drag and Drop selected text onto a note's name in the Sidebar to insert the text into the note.
-10. Drag and Drop a TXT or HTML file anywhere in the bottom part of the Sidebar (the area with 3 icons) to import the file as a new note.
-11. Drag the Sidebar line to resize the Sidebar, double-click on the Sidebar line to restore the original Sidebar width.
+10. Drag and Drop a TXT or HTML file anywhere in the bottom icon area of the Sidebar to import the file as a new note.
+11. Drag the Sidebar line to resize the Sidebar. Double-click on the Sidebar line to restore the original Sidebar width.
+12. Hold down `Cmd` (or `Ctrl`) and move mouse wheel (or touchpad) up and down over the image to resize it. Double-click on the image to restore its original size.
+13. Hold down `Cmd` (or `Ctrl`) and right-click anywhere in the table for a context menu, where you can align the table (Left, Center, Right).
 
 <br><br>
 
 ## How to contribute
 
-1. Share your feedback (what to improve, what to change) under [<ins>Issues</ins>](https://github.com/penge/my-notes/issues) or join the discussion in [<ins>Discussions</ins>](https://github.com/penge/my-notes/discussions).
+1. Share your feedback (what to improve, what to change) under [Issues](https://github.com/penge/my-notes/issues) or join the discussion in [Discussions](https://github.com/penge/my-notes/discussions).
 2. Join the development.
 3. Help to test the upcoming version (to get feedback, to improve or tweak).
 4. Help to improve the documentation.
-5. [<ins>Buy Me a Coffee</ins>](https://www.buymeacoffee.com/penge).
+5. [Buy Me a Coffee](https://www.buymeacoffee.com/penge).
 
 <br><br>
 
@@ -183,7 +185,7 @@ $ export MY_NOTES_CLIENT_ID=<CLIENT_ID>    # needed when developing Google Drive
 $ npm run develop-watch                    # see "dist" folder
 ```
 
-`MY_NOTES_CLIENT_ID` can be created at [<ins>Google Cloud</ins>](https://console.cloud.google.com) / APIs & Services / Credentials / OAuth 2.0 Client IDs.
+`MY_NOTES_CLIENT_ID` can be created at [Google Cloud](https://console.cloud.google.com) / APIs & Services / Credentials / OAuth 2.0 Client IDs.
 
 Code check:
 
@@ -234,14 +236,16 @@ src/
   integration/      # Integration tests for Google Drive Sync
 
   notes/            # Everything related to Notes
-                      # - Create/Rename/Delete notes; Note editing, Note saving
+                      # - Note editing, Note saving
+                      # - Sidebar
                       # - Toolbar
-                      # - Every UI init and update when data changes
-                      # - Registers commands (Toggle Focus mode - can be enabled in Options)
 
   options/          # Everything related to Options
-                      # - Font type, Font size, Theme, etc.
-                      # - Every UI init and update when data changes
+                      # - Font
+                      # - Theme (Light, Dark, Custom)
+                      # - Shortcuts
+                      # - Google Drive Sync
+                      # - Export & Import
 
   shared/           # Everything common (used at more places)
                       # - Date formatting (Last sync)
@@ -330,8 +334,8 @@ User has the choice to either approve or deny the permissions.
 
 **1. Where is My Notes published? What is the process behind publishing My Notes?**
 
-My Notes is published on [<ins>Web Store</ins>](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop), a store for Google Chrome extensions.
-When publishing a new version, I first make a [<ins>new release</ins>](https://github.com/penge/my-notes/releases) here on GitHub.
+My Notes is published on [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop), a store for Google Chrome extensions.
+When publishing a new version, I first make a [new release](https://github.com/penge/my-notes/releases) here on GitHub.
 Then I create a build of the new release and send it to Web Store for a review.
 The review usually takes between 24 hours and a few days.
 After a successful review, the new version is available on Web Store.
@@ -340,8 +344,8 @@ After a successful review, the new version is available on Web Store.
 
 **2. Can I install My Notes manually by downloading it from GitHub?**
 
-Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [<ins>Web Store</ins>](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
-To install My Notes manually, download the zip file of the latest version which you can find [<ins>here</ins>](https://github.com/penge/my-notes/releases). Then, unpack the downloaded file and install NPM packages followed by `npm run build`.
+Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+To install My Notes manually, download the zip file of the latest version which you can find [here](https://github.com/penge/my-notes/releases). Then, unpack the downloaded file and install NPM packages followed by `npm run build`.
 Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive by selecting the `dist` folder.
 
 <br>
@@ -411,7 +415,7 @@ Copy the link and paste it into My Notes using the "Insert Image" button.
 **11. Is My Notes free?**
 
 My Notes is open source, free to download, install, and use.
-The recommended way to install My Notes is from [<ins>Web Store</ins>](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+The recommended way to install My Notes is from [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
 
 <br><br>
 
