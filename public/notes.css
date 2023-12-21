@@ -328,9 +328,6 @@ body.resizing-sidebar { cursor: col-resize; }
 body.resizing-sidebar-locked-min { cursor: e-resize; }
 body.resizing-sidebar-locked-max { cursor: w-resize; }
 
-body.resizing-table-column { cursor: col-resize; }
-body.resizing-table-row { cursor: row-resize; }
-
 /* Note */
 
 #content-container {
@@ -359,6 +356,10 @@ body.resizing-table-row { cursor: row-resize; }
 
 #content ul { margin: 0; }
 #content ol { margin: 0 0 0 1em; }
+
+#content img {
+  cursor: default;
+}
 
 #content pre {
   overflow: auto;
@@ -393,7 +394,20 @@ body.with-control #content a > * {
   pointer-events: none;
 }
 
+body.with-control.resizing-img #content {
+  overflow: hidden;
+}
+
 /* My Notes classes */
+
+.my-notes-table-align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.my-notes-table-align-right  {
+  margin-left: auto;
+}
 
 .my-notes-highlight {
   background: var(--highlight-background-color, yellow) !important;
@@ -450,7 +464,7 @@ body.with-control #content a > * {
 }
 
 .table-resizing-div.active {
-  background: var(--table-resizing-line-color);
+  background: var(--resizing-line-color);
 }
 
 .table-column-resizing-div {
@@ -468,6 +482,9 @@ body.with-control #content a > * {
   cursor: row-resize;
   height: 4px;
 }
+
+body.resizing-table-column { cursor: col-resize; }
+body.resizing-table-row { cursor: row-resize; }
 
 /* Locked */
 
@@ -565,20 +582,23 @@ body.with-command-palette #toolbar {
   background: var(--context-menu-background-color);
   color: var(--context-menu-text-color);
   cursor: pointer;
+}
+
+#context-menu .action:not(.group) {
   padding: .8em;
 }
 
-#context-menu .action:hover:not(.disabled) {
+#context-menu .action:hover:not(.group):not(.disabled) {
   background: var(--context-menu-hover-background-color);
   color: var(--context-menu-hover-text-color);
 }
 
-#context-menu .action:first-child {
+#context-menu .action:not(.inline):first-child {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
-#context-menu .action:last-child {
+#context-menu .action:not(.inline):last-child {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
@@ -586,6 +606,36 @@ body.with-command-palette #toolbar {
 #context-menu .action.disabled {
   cursor: default;
   color: var(--context-menu-disabled-text-color);
+}
+
+#context-menu .action > svg {
+  height: 1em;
+  fill: var(--context-menu-text-color);
+}
+
+#context-menu .action.group {
+  display: flex;
+}
+
+#context-menu .action.group:first-child > .action:first-child {
+  border-top-left-radius: 5px;
+}
+
+#context-menu .action.group:first-child > .action:last-child {
+  border-top-right-radius: 5px;
+}
+
+#context-menu .action.group:last-child > .action:first-child {
+  border-bottom-left-radius: 5px;
+}
+
+#context-menu .action.group:last-child > .action:last-child {
+  border-bottom-right-radius: 5px;
+}
+
+#context-menu .action.inline {
+  display: flex;
+  align-items: center;
 }
 
 /* Toolbar */

@@ -1,4 +1,5 @@
 import { Os } from "shared/storage/schema";
+import { dispatchNoteEdited } from "./events";
 
 const isMac = (os: Os) => os === "mac";
 
@@ -279,6 +280,10 @@ const keydown = (os: Os) => document.addEventListener("keydown", (event) => {
 
 const keyup = () => document.addEventListener("keyup", () => {
   document.body.classList.remove("with-control");
+  if (document.body.classList.contains("resizing-img")) {
+    document.body.classList.remove("resizing-img");
+    dispatchNoteEdited();
+  }
 });
 
 const register = (os: Os): void => {

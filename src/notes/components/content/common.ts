@@ -11,10 +11,3 @@ export interface ContentProps {
   indentOnTab: boolean
   tabSize: number
 }
-
-let latestCb: () => void;
-export const reattachEditNote = (cb: () => void) => {
-  document.removeEventListener("editnote", latestCb);
-  latestCb = cb;
-  document.addEventListener("editnote", latestCb);
-};

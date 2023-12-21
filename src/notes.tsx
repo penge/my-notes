@@ -25,7 +25,7 @@ import { ContentNote } from "notes/components/content/common";
 import __CommandPalette, { CommandPaletteProps } from "notes/components/CommandPalette";
 import __Toolbar from "notes/components/Toolbar";
 
-import __ContextMenu, { ContextMenuProps } from "notes/components/ContextMenu";
+import NoteContextMenu, { NoteContextMenuProps } from "notes/components/NoteContextMenu";
 import __RenameNoteModal, { RenameNoteModalProps } from "notes/components/modals/RenameNoteModal";
 import __DeleteNoteModal, { DeleteNoteModalProps } from "notes/components/modals/DeleteNoteModal";
 import __NewNoteModal, { NewNoteModalProps } from "notes/components/modals/NewNoteModal";
@@ -102,11 +102,17 @@ const Notes = (): h.JSX.Element | null => {
   const [autoSync, setAutoSync] = useState<boolean>(false);
 
   // Modals
-  const [contextMenuProps, setContextMenuProps] = useState<ContextMenuProps | null>(null);
+  const [noteContextMenuProps, setNoteContextMenuProps] = useState<NoteContextMenuProps | null>(null);
   const [renameNoteModalProps, setRenameNoteModalProps] = useState<RenameNoteModalProps | null>(null);
   const [deleteNoteModalProps, setDeleteNoteModalProps] = useState<DeleteNoteModalProps | null>(null);
   const [newNoteModalProps, setNewNoteModalProps] = useState<NewNoteModalProps | null>(null);
   const [commandPaletteProps, setCommandPaletteProps] = useState<CommandPaletteProps | null>(null);
+
+  useEffect(() => {
+    if (noteContextMenuProps) {
+      render(<NoteContextMenu {...noteContextMenuProps} />, document.getElementById("context-menu-container")!);
+    }
+  }, [noteContextMenuProps]);
 
   useEffect(() => {
     chrome.runtime.getPlatformInfo((platformInfo) => setOs(platformInfo.os === "mac" ? "mac" : "other"));
@@ -269,7 +275,7 @@ const Notes = (): h.JSX.Element | null => {
           // Update note content if updated from background
           const setBy: string | undefined = changes.setBy && changes.setBy.newValue;
           if (
-            (setBy && !setBy.startsWith(`${tabId}-`)) // expecting "worker-*" or "sync-*"
+            (setBy && !setBy.startsWith(`${tabId}-`)) // can be other tab, "worker-*", or "sync-*"
             && (newActive in oldNotes)
             && (newActive in newNotes)
             && (newNotes[newActive].content !== oldNotes[newActive].content)
@@ -382,14 +388,28 @@ const Notes = (): h.JSX.Element | null => {
     document.body.classList.toggle("focus", focus);
   }, [focus]);
 
-  // Hide context menu on click anywhere
+  const removeContextMenus = useCallback(() => {
+    setNoteContextMenuProps(null);
+
+    const container = document.getElementById("context-menu-container");
+    if (container) {
+      render("", container);
+    }
+
+    return true;
+  }, []);
+
+  // Remove context menus on click anywhere
   useEffect(() => {
-    document.addEventListener("click", (event) => {
-      if ((event.target as Element).closest("#context-menu") === null) {
-        setContextMenuProps(null);
-      }
+    document.addEventListener("click", () => {
+      removeContextMenus();
     });
   }, []);
+
+  // Remove context menus on changed active note
+  useEffect(() => {
+    removeContextMenus();
+  }, [notesProps.active]);
 
   // Activate note
   useEffect(() => {
@@ -425,7 +445,7 @@ const Notes = (): h.JSX.Element | null => {
 
     keyboardShortcuts.register(os);
     keyboardShortcuts.subscribe(KeyboardShortcut.OnEscape, () => {
-      setContextMenuProps(null);
+      removeContextMenus();
       setCommandPaletteProps((prev) => {
         if (prev) {
           range.restore();
@@ -443,7 +463,13 @@ const Notes = (): h.JSX.Element | null => {
     keyboardShortcuts.subscribe(KeyboardShortcut.OnSync, () => sendMessage(MessageType.SYNC));
   }, [os]);
 
+  const [setOnControlHandler] = useKeyboardShortcut(KeyboardShortcut.OnControl);
+
   useEffect(() => {
+    setOnControlHandler(() => {
+      document.body.classList.add("with-control");
+    });
+
     window.addEventListener("blur", () => {
       document.body.classList.remove("with-control");
     });
@@ -573,11 +599,10 @@ const Notes = (): h.JSX.Element | null => {
           active={notesProps.active}
           width={sidebarWidth}
           onActivateNote={handleOnActivateNote}
-          onNoteContextMenu={(noteName, x, y) => setContextMenuProps({
+          onNoteContextMenu={(noteName, x, y) => removeContextMenus() && setNoteContextMenuProps({
             x,
             y,
             onRename: () => {
-              setContextMenuProps(null);
               setRenameNoteModalProps({
                 noteName,
                 validate: (newNoteName: string) => newNoteName.length > 0 && newNoteName !== noteName && !(newNoteName in notesProps.notes),
@@ -589,7 +614,6 @@ const Notes = (): h.JSX.Element | null => {
               });
             },
             onDelete: () => {
-              setContextMenuProps(null);
               setDeleteNoteModalProps({
                 noteName,
                 onCancel: () => setDeleteNoteModalProps(null),
@@ -601,29 +625,25 @@ const Notes = (): h.JSX.Element | null => {
             },
             locked: notesProps.notes[noteName].locked ?? false,
             onToggleLocked: () => {
-              setContextMenuProps(null);
               if (tabId && notesRef.current) {
                 setLocked(noteName, !(notesProps.notes[noteName].locked ?? false), tabId, notesRef.current);
               }
             },
             pinned: !!notesProps.notes[noteName].pinnedTime,
             onTogglePinnedTime: () => {
-              setContextMenuProps(null);
               if (tabId && notesRef.current) {
                 setPinnedTime(
                   noteName,
-                  (notesProps.notes[noteName].pinnedTime ?? undefined) ? undefined : new Date().toISOString(),
+                  notesProps.notes[noteName].pinnedTime ? undefined : new Date().toISOString(),
                   tabId,
                   notesRef.current,
                 );
               }
             },
             onDuplicate: () => {
-              setContextMenuProps(null);
               duplicateNote(noteName);
             },
             onExport: () => {
-              setContextMenuProps(null);
               exportNote(noteName);
             },
           })}
@@ -678,10 +698,6 @@ const Notes = (): h.JSX.Element | null => {
         />
       )}
 
-      {contextMenuProps && (
-        <__ContextMenu {...contextMenuProps} />
-      )}
-
       {renameNoteModalProps && (
         <Fragment>
           <__RenameNoteModal {...renameNoteModalProps} />
@@ -703,6 +719,7 @@ const Notes = (): h.JSX.Element | null => {
         </Fragment>
       )}
 
+      <div id="context-menu-container" />
       <div id="tooltip-container" />
     </Fragment>
   );

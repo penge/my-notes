@@ -6,7 +6,8 @@ import { Os, Note } from "shared/storage/schema";
 import { t } from "i18n";
 import capitalize from "shared/string/capitalize";
 import { HIGHLIGHT_COLORS } from "notes/commands/highlight";
-import { reinitTables } from "notes/content/table";
+import initContent from "notes/content/init";
+import { dispatchNoteEdited } from "notes/events";
 import SVG from "notes/components/SVG";
 import svgs from "svg";
 import {
@@ -24,16 +25,9 @@ import Tooltip from "./Tooltip";
 import NoteInfo from "./NoteInfo";
 import EmbedHtmlModal, { EmbedHtmlModalProps } from "./modals/EmbedHtmlModal";
 
-const callback = () => {
-  const event = new Event("editnote");
-  document.dispatchEvent(event);
-};
-
 const tableCallback = () => {
-  callback();
-  reinitTables({
-    onResize: callback,
-  });
+  dispatchNoteEdited();
+  initContent();
 };
 
 interface ToolbarProps {
@@ -150,12 +144,12 @@ const Toolbar = ({
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Toggle heading row")}>
-              <div id="TABLE_HEADING_ROW" className="button" onClick={() => table.toggleHeadingRow(callback)}>
+              <div id="TABLE_HEADING_ROW" className="button" onClick={() => table.toggleHeadingRow(tableCallback)}>
                 <SVG text={svgs.TableLineSvgText} />
               </div>
             </Tooltip>
             <Tooltip tooltip={t("Toggle heading column")}>
-              <div id="TABLE_HEADING_COLUMN" className="button wide rotate90" onClick={() => table.toggleHeadingColumn(callback)}>
+              <div id="TABLE_HEADING_COLUMN" className="button wide rotate90" onClick={() => table.toggleHeadingColumn(tableCallback)}>
                 <SVG text={svgs.TableLineSvgText} />
               </div>
             </Tooltip>
@@ -178,7 +172,7 @@ const Toolbar = ({
               <Tooltip tooltip={t("Change selected text color to", { color: capitalize(color) })}>
                 <div
                   className={`plain letter button my-notes-text-color-${color}`}
-                  onClick={() => highlight(`my-notes-text-color-${color}`, callback)}
+                  onClick={() => highlight(`my-notes-text-color-${color}`, dispatchNoteEdited)}
                 >
                   A
                 </div>
@@ -187,7 +181,7 @@ const Toolbar = ({
             <Tooltip tooltip={t("Change selected text color to default text color")}>
               <div
                 className="plain auto letter button my-notes-text-color-auto"
-                onClick={() => highlight("my-notes-text-color-auto", callback)}
+                onClick={() => highlight("my-notes-text-color-auto", dispatchNoteEdited)}
               >
                 Auto
               </div>
@@ -195,7 +189,7 @@ const Toolbar = ({
             <Tooltip tooltip={t("Highlight selected text")}>
               <div
                 className="last plain auto letter button my-notes-highlight"
-                onClick={() => highlight("my-notes-highlight", callback)}
+                onClick={() => highlight("my-notes-highlight", dispatchNoteEdited)}
               >
                 Hi
               </div>

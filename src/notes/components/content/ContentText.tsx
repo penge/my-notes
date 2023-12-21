@@ -2,8 +2,9 @@ import { h } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { KeyboardShortcut } from "notes/keyboard-shortcuts";
 import { useKeyboardShortcut } from "notes/components/hooks/use-keyboard-shortcut";
+import { reattachOnNoteEdited } from "notes/events";
 import { InsertTabFactory } from "../../commands";
-import { ContentProps, reattachEditNote } from "./common";
+import { ContentProps } from "./common";
 
 const focus = (content: HTMLTextAreaElement) => content && window.setTimeout(() => {
   content.focus();
@@ -31,7 +32,7 @@ const ContentText = ({
     }
   }, [note.active]);
 
-  useEffect(() => reattachEditNote(onInput), [onInput]);
+  useEffect(() => reattachOnNoteEdited(onInput), [onInput]);
 
   useEffect(() => setIndentOnTabHandlerOnTab(
     indentOnTab
