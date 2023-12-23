@@ -5,7 +5,7 @@ import { t } from "i18n";
 const THEMES = ["light", "dark", "custom"] as OneTheme[];
 
 interface ThemeProps {
-  theme?: OneTheme,
+  theme?: OneTheme
 }
 
 const Theme = ({ theme }: ThemeProps): h.JSX.Element => (
