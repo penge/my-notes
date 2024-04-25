@@ -1,5 +1,6 @@
 :root {
   --default-sidebar-width: 25%;
+  --resizing-div-overflow: -10000px;
 }
 
 html {
@@ -372,6 +373,7 @@ body.resizing-sidebar-locked-max { cursor: w-resize; }
   border: var(--table-border);
   border-spacing: 0;
   border-collapse: collapse;
+  overflow: hidden !important;
 }
 
 #content table td {
@@ -461,26 +463,33 @@ body.with-control.resizing-img #content {
 
 .table-resizing-div {
   position: absolute;
+  z-index: 100;
 }
 
-.table-resizing-div.active {
+body:not(.resizing-table) .table-resizing-div:hover, .table-resizing-div.active {
   background: var(--resizing-line-color);
 }
 
 .table-column-resizing-div {
-  top: 0;
+  top: var(--resizing-div-overflow);
+  bottom: var(--resizing-div-overflow);
   right: 0;
-  bottom: 0;
+  width: var(--table-resizing-div-thickness);
+}
+
+body:not(.resizing-table) .table-column-resizing-div {
   cursor: col-resize;
-  width: 4px;
 }
 
 .table-row-resizing-div {
-  left: 0;
-  right: 0;
+  left: var(--resizing-div-overflow);
+  right: var(--resizing-div-overflow);
   bottom: 0;
+  height: var(--table-resizing-div-thickness);
+}
+
+body:not(.resizing-table) .table-row-resizing-div {
   cursor: row-resize;
-  height: 4px;
 }
 
 body.resizing-table-column { cursor: col-resize; }
