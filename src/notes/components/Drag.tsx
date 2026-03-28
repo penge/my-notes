@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import { h, RefObject } from "preact";
 import { useCallback } from "preact/hooks";
+import { minSidebarWidth } from "shared/storage/validations";
 
 let mousePosition: number;
 
@@ -20,8 +21,7 @@ function resize(e: MouseEvent, sidebar: RefObject<HTMLDivElement>) {
     return;
   }
 
-  const min = ((width / 100) * 0.3); // .3%
-  if (mousePosition <= min) {
+  if (mousePosition <= minSidebarWidth) {
     document.body.classList.add("resizing-sidebar-locked-min");
     return;
   }

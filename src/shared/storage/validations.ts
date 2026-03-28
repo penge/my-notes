@@ -40,3 +40,9 @@ export const validStringArray = (value: unknown): value is Array<string> => Arra
 export const validTabSize = (value: unknown): value is number => typeof value === "number" && [-1, 2, 4].includes(value);
 
 export const validNotesOrder = (value: unknown): value is NotesOrder => Object.values(NotesOrder).includes(value as NotesOrder);
+
+export const minSidebarWidth = 150;
+
+export const normalizeSidebarWidth = (value: unknown): string | undefined => (
+  (typeof value === "string" && parseInt(value, 10) >= minSidebarWidth) ? value : undefined
+);
