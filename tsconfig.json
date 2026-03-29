@@ -5,7 +5,8 @@
     "./jest.config.ts",
     "./jest.setup.ts",
     "./register.js",
-    "./build.ts"
+    "./build.ts",
+    "./scripts/**/*"
   ],
 
   "compilerOptions": {
