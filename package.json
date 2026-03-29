@@ -19,7 +19,8 @@
     "test": "LOG_LEVEL=SILENT TZ=UTC jest --maxWorkers=4",
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",
     "develop-watch": "npm run develop && chokidar \"src/**/*.(ts|tsx|json)\" \"public/**/*.(html|css)\" -c \"[[ {path} == src* ]] && npm run __develop-core;[[ {path} == public* ]] && copyup {path} dist\"",
-    "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node --import ./register.js ./build.ts"
+    "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node --import ./register.js ./build.ts",
+    "bump": "node --import ./register.js scripts/bump-version.ts"
   },
   "devDependencies": {
     "@jest/types": "^29.6.3",
