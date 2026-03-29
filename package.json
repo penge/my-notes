@@ -46,6 +46,9 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
+  "overrides": {
+    "picomatch": ">=2.3.2"
+  },
   "dependencies": {
     "clsx": "^2.0.0",
     "esbuild": "^0.25.0",
