@@ -6,16 +6,20 @@
   <img src="https://badgen.net/chrome-web-store/users/lkeeogfaiembcblonahillacpaabmiop" />
   <br><br>
   <img src="public/images/my-notes.png" width="760" /><br>
-  <strong>My Notes</strong> – <a href="https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop">Chrome extension</a> for simple and fast note-taking
+  <strong>My Notes</strong> – <a href="https://chromewebstore.google.com/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop">Chrome extension</a> for simple and fast note-taking.<br>Zero setup, works offline, no account needed.
 </p>
 
 <br><br>
 
 ## Features
 
+→ &nbsp; Zero setup — install and start writing
+
+→ &nbsp; Works offline
+
 → &nbsp; Automatically saved and updated in every open tab ([How to open](#how-to-open))
 
-→ &nbsp; Context menu to save selected text to note or My Notes in second computer ([Context menu](#context-menu))
+→ &nbsp; Context menu to save selected text to note or My Notes on another computer ([Context menu](#context-menu))
 
 → &nbsp; Back up notes to Google Drive ([Google Drive Sync](#google-drive-sync))
 
@@ -32,8 +36,6 @@
 → &nbsp; Keyboard shortcuts
 
 → &nbsp; Command palette ([Command palette](#command-palette))
-
-→ &nbsp; Works offline
 
 <br>
 
@@ -74,7 +76,7 @@ Options are based on the context but in general are:
 - `Save to [note name]` – Option for every note. My Notes doesn't have to be open. Google Drive Sync is not required.
 - `Save to remotely open My Notes` – My Notes on other computers needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note will be named `@received`.
 
-There is a few general purpose notes that can be used as destination. Their name starts with `@` and they are created automatically when needed:
+There are a few general purpose notes that can be used as destination. Their name starts with `@` and they are created automatically when needed:
 
 - `@received`
 - `@clipboard`
@@ -258,8 +260,8 @@ src/
   themes/           # Light, Dark, Custom
 
   background.ts     # Main script for service worker
-  notes.ts          # Main script for notes
-  options.ts        # Main script for options
+  notes.tsx         # Main script for notes
+  options.tsx       # Main script for options
   template.html     # Template for notes.html and options.html
 
 public/             # All public files (images, icons, HTML, CSS) copied to dist/
@@ -330,11 +332,11 @@ User has the choice to either approve or deny the permissions.
 
 <br><br>
 
-## QA
+## FAQ
 
 **1. Where is My Notes published? What is the process behind publishing My Notes?**
 
-My Notes is published on [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop), a store for Google Chrome extensions.
+My Notes is published on [Web Store], a store for Google Chrome extensions.
 When publishing a new version, I first make a [new release](https://github.com/penge/my-notes/releases) here on GitHub.
 Then I create a build of the new release and send it to Web Store for a review.
 The review usually takes between 24 hours and a few days.
@@ -344,7 +346,7 @@ After a successful review, the new version is available on Web Store.
 
 **2. Can I install My Notes manually by downloading it from GitHub?**
 
-Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [Web Store].
 To install My Notes manually, download the zip file of the latest version which you can find [here](https://github.com/penge/my-notes/releases). Then, unpack the downloaded file and install NPM packages followed by `npm run build`.
 Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive by selecting the `dist` folder.
 
@@ -415,10 +417,12 @@ Copy the link and paste it into My Notes using the "Insert Image" button.
 **11. Is My Notes free?**
 
 My Notes is open source, free to download, install, and use.
-The recommended way to install My Notes is from [Web Store](https://chrome.google.com/webstore/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop).
+The recommended way to install My Notes is from [Web Store].
 
 <br><br>
 
 ---
 
 <p align="center"><code>Created with ❤ in 2019.</code></p>
+
+[Web Store]: https://chromewebstore.google.com/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop
