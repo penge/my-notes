@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "clsx": "^2.0.0",
-    "esbuild": "^0.19.8",
+    "esbuild": "^0.25.0",
     "fflate": "^0.8.1",
     "preact": "10.18.1"
   }
