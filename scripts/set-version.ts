@@ -3,7 +3,7 @@ import { execSync } from "child_process";
 
 const version = process.argv[2];
 if (!version || !/^\d+\.\d+\.\d+$/.test(version)) {
-  console.error("Usage: bump-version.ts <major.minor.patch>");
+  console.error("Usage: set-version.ts <major.minor.patch>");
   process.exit(1);
 }
 
