@@ -16,6 +16,7 @@ import {
   Message,
   MessageType,
 } from "shared/storage/schema";
+import { normalizeSidebarWidth } from "shared/storage/validations";
 
 import Overview from "notes/components/Overview";
 import __Notification from "notes/components/Notification";
@@ -164,7 +165,7 @@ const Notes = (): h.JSX.Element | null => {
       setFont(local.font);
       setSize(local.size);
       setSidebar(local.sidebar);
-      setSidebarWidth(local.sidebarWidth);
+      setSidebarWidth(normalizeSidebarWidth(local.sidebarWidth));
       setToolbar(local.toolbar);
 
       // Notes
