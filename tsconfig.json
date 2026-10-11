@@ -6,6 +6,7 @@
     "./jest.setup.ts",
     "./register.js",
     "./build.ts",
+    "./watch.ts",
     "./scripts/**/*"
   ],
 

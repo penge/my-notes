@@ -8,7 +8,7 @@ export default async function call(url: string, options: RequestInit): Promise<R
   try {
     const response = await fetch(url, options);
     return response;
-  } catch (e) {
+  } catch {
     return {
       json: () => Promise.resolve(undefined),
       text: () => Promise.resolve(undefined),

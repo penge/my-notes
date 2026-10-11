@@ -6,7 +6,7 @@ export const downloadURL = (data: string, fileName: string): void => {
   a.remove();
 };
 
-export const downloadBlob = (data: Uint8Array, fileName: string, mimeType: string): void => {
+export const downloadBlob = (data: Uint8Array<ArrayBuffer>, fileName: string, mimeType: string): void => {
   const blob = new Blob([data], {
     type: mimeType,
   });
