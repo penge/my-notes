@@ -72,11 +72,28 @@ export const deleteFile = async (fileId: string): Promise<boolean> => {
   return response.ok;
 };
 
-export const listFiles = async (folderId: string): Promise<GoogleDriveFile[]> => {
+// Returns every file in the folder, or undefined if any page could not be
+// retrieved. A partial listing must never be returned, as sync treats a file
+// missing from the listing as deleted in Google Drive.
+export const listFiles = async (folderId: string): Promise<GoogleDriveFile[] | undefined> => {
   const query = listFilesQuery(folderId);
-  const fields = "files(id,name,createdTime,modifiedTime)";
-  const json = await files.list(query, fields) as { files: [] };
-  return json && json.files;
+  const fields = "nextPageToken,files(id,name,createdTime,modifiedTime)";
+  const pageSize = 1000;
+  const allFiles: GoogleDriveFile[] = [];
+  let pageToken: string | undefined;
+
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const json = await files.list(query, fields, pageSize, pageToken) as { files?: GoogleDriveFile[], nextPageToken?: string } | undefined;
+    if (!json || !Array.isArray(json.files)) {
+      return undefined;
+    }
+
+    allFiles.push(...json.files);
+    pageToken = json.nextPageToken;
+  } while (pageToken);
+
+  return allFiles;
 };
 
 export type GetFileFunction = (fileId: string) => Promise<string | undefined>;
