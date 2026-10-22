@@ -1,4 +1,6 @@
-import { NotesObject, MessageType, SyncLookup } from "shared/storage/schema";
+import {
+  NotesObject, MessageType, Sync, SyncLookup,
+} from "shared/storage/schema";
 import { getItem, setItems } from "shared/storage";
 import sendMessage from "shared/messages/send";
 import Log from "shared/log";
@@ -61,6 +63,14 @@ const syncNotes = async ({
 
   const notesAfterPull = await pull(notes, files, { getFile });
   const notesAfterPush = await push(folderId, notesAfterPull, { createFile, updateFile });
+
+  // The user stopped sync while it was running, which removed `sync` and
+  // unlinked every note; writing the result would undo that
+  if (!(await getItem<Sync>("sync"))) {
+    Log("SYNC - STOPPED MEANWHILE");
+    onDone();
+    return false;
+  }
 
   // The user may have edited notes while pull and push were running; keep
   // those edits instead of overwriting them with the notes before sync. If
