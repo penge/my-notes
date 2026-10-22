@@ -30,7 +30,7 @@ export const initFolderActions = (): void => window.addEventListener("load", () 
 
   elem.getMyNotesFolderId.addEventListener("click", async () => {
     withIdentity(async () => {
-      folderId = await api.getMyNotesFolderId();
+      folderId = (await api.getMyNotesFolderId()) || "";
       console.log("folderId", folderId);
     });
   });

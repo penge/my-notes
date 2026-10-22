@@ -18,19 +18,25 @@ const createFolder = async (folderName: string, parent?: string): Promise<string
   return folderId;
 };
 
-const getFolder = async (folderName: string, parent?: string): Promise<string> => {
+// Returns the folder ID, null if there is no such folder, or undefined if
+// the request failed, so a transient error is not mistaken for a missing
+// folder
+const getFolder = async (folderName: string, parent?: string): Promise<string | null | undefined> => {
   const query = listFoldersQuery(folderName, parent);
   const fields = "files(id)";
-  const json = await files.list(query, fields) as { files: { id: string }[] };
-  const folderId = json && json.files && json.files[0] && json.files[0].id;
-  return folderId;
+  const json = await files.list(query, fields) as { files?: { id: string }[] } | undefined;
+  if (!json || !Array.isArray(json.files)) {
+    return undefined;
+  }
+
+  return json.files[0]?.id ?? null;
 };
 
 export const createMyNotesFolder = (): Promise<string> => createFolder("My Notes");
-export const getMyNotesFolderId = (): Promise<string> => getFolder("My Notes");
+export const getMyNotesFolderId = (): Promise<string | null | undefined> => getFolder("My Notes");
 
 export const createAssetsFolder = (parent: string): Promise<string> => createFolder("assets", parent);
-export const getAssetsFolderId = (parent: string): Promise<string> => getFolder("assets", parent);
+export const getAssetsFolderId = (parent: string): Promise<string | null | undefined> => getFolder("assets", parent);
 
 export const createFile = async (
   folderId: string,
