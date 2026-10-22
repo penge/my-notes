@@ -95,6 +95,11 @@ export const listFiles = async (folderId: string): Promise<GoogleDriveFile[] | u
 
 export type GetFileFunction = (fileId: string) => Promise<string | undefined>;
 
+// Thrown by pull when a file cannot be downloaded. Acting on the rest of the
+// pull could push local content over a remote edit that was not fetched, or
+// create a duplicate of a file that was not linked, so the sync run fails
+export class DownloadError extends Error {}
+
 export const getFile: GetFileFunction = async (fileId: string): Promise<string | undefined> => {
   const file = await files.get(fileId);
   return file;

@@ -1,5 +1,5 @@
 import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
-import { GetFileFunction } from "background/google-drive/api";
+import { GetFileFunction, DownloadError } from "background/google-drive/api";
 import pullCreate from "../pull-create";
 
 const notes: NotesObject = {
@@ -78,4 +78,12 @@ test("pullCreate() creates notes for every file where note with file's name does
     Todo: notes.Todo, // "Todo" should be unchanged (file exists)
     Amazon: notes.Amazon, // "Amazon" should be unchanged (file exists)
   });
+});
+
+test("pullCreate() fails if a file cannot be downloaded, so the sync run writes nothing", async () => {
+  const remoteFiles = [{
+    id: "FILE-1", name: "Books", createdTime: "CT", modifiedTime: "MT",
+  }];
+
+  await expect(pullCreate({}, remoteFiles, () => Promise.resolve(undefined))).rejects.toThrow(DownloadError);
 });

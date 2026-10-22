@@ -1,6 +1,6 @@
 import { NotesObject, Note, GoogleDriveFile } from "shared/storage/schema";
 import Log from "shared/log";
-import { GetFileFunction } from "background/google-drive/api";
+import { GetFileFunction, DownloadError } from "background/google-drive/api";
 
 const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile): Note => ({
   ...existingNote,
@@ -29,7 +29,10 @@ const updateNote = async (
   const notesCopy: NotesObject = { ...notes };
 
   const previousNoteName = Object.keys(notesCopy).find((key) => notesCopy[key] === syncedNote);
-  const fileContent = await getFile(file.id) || "";
+  const fileContent = await getFile(file.id);
+  if (fileContent === undefined) {
+    throw new DownloadError(file.name);
+  }
 
   // eslint-disable-next-line max-len
   Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
@@ -85,7 +88,11 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
       !syncedNote && file.name in notesCopy // note is NOT synced
       && notesCopy[file.name].modifiedTime !== file.modifiedTime // note and file do NOT have the same modified time
     ) {
-      const fileContent = await getFile(file.id) || "";
+      const fileContent = await getFile(file.id);
+      if (fileContent === undefined) {
+        throw new DownloadError(file.name);
+      }
+
       Log(`SYNC - IN - UPDATING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
       notesCopy[file.name] = prepareNote(
         notesCopy[file.name],

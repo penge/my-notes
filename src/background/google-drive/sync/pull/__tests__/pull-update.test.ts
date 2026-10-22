@@ -1,5 +1,5 @@
 import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
-import { GetFileFunction } from "background/google-drive/api";
+import { GetFileFunction, DownloadError } from "background/google-drive/api";
 import pullUpdate from "../pull-update";
 
 const getFile: GetFileFunction = (fileId: string) => Promise.resolve(`content from ${fileId}`);
@@ -385,5 +385,27 @@ describe("pullUpdate()", () => {
         });
       });
     });
+  });
+});
+
+describe("pullUpdate() when things go wrong", () => {
+  const syncedNote = (content: string, fileId: string, name: string) => ({
+    content,
+    createdTime: "CT",
+    modifiedTime: "MT",
+    sync: {
+      file: {
+        id: fileId, name, createdTime: "CT", modifiedTime: "MT",
+      },
+    },
+  });
+
+  test("fails if a file cannot be downloaded, so the sync run writes and pushes nothing", async () => {
+    const notes: NotesObject = { Books: { ...syncedNote("my books, edited", "FILE-1", "Books"), modifiedTime: "MT3" } }; // edited on both sides
+    const files: GoogleDriveFile[] = [{
+      id: "FILE-1", name: "Books", createdTime: "CT", modifiedTime: "MT4",
+    }];
+
+    await expect(pullUpdate(notes, files, () => Promise.resolve(undefined))).rejects.toThrow(DownloadError);
   });
 });

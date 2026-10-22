@@ -27,7 +27,9 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
     if (!note.sync) {
       Log(`SYNC - OUT - CREATING FILE - ${noteName}`);
       const file = await createFile(folderId, { ...note, name: noteName }); // Returns { id, name, content, createdTime, modifiedTime }
-      note.sync = { file: merge(note, file) };
+      if (file.id) { // not created => the note stays unlinked and is created by a later sync
+        note.sync = { file: merge(note, file) };
+      }
       continue; // eslint-disable-line no-continue
     }
 
@@ -36,7 +38,9 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
     if (note.modifiedTime > note.sync.file.modifiedTime) {
       Log(`SYNC - OUT - UPDATING FILE - ${noteName} (name before: ${note.sync.file.name})`);
       const file = await updateFile(note.sync.file.id, { ...note, name: noteName }); // Returns { id, name, content, modifiedTime }
-      note.sync = { file: merge(note, file) };
+      if (file.id) { // not updated => the note keeps its link and is updated by a later sync
+        note.sync = { file: merge(note, file) };
+      }
     }
   }
 

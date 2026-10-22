@@ -147,3 +147,25 @@ it("pushes new and updated notes", async () => {
   expect(updatedNotes.Math.sync?.file.modifiedTime).toBe("2020-04-20T09:09:09Z");
   expect(Object.keys(updatedNotes.Math.sync?.file || {}).length).toBe(4); // { id, name, createdTime, modifiedTime }
 });
+
+it("keeps a note's link as it was if its file cannot be created or updated", async () => {
+  const failingNotes = {
+    New: { content: "new", createdTime: "CT", modifiedTime: "MT" },
+    Changed: {
+      content: "changed",
+      createdTime: "CT",
+      modifiedTime: "MT2",
+      sync: {
+        file: {
+          id: "FILE-1", name: "Changed", createdTime: "CT", modifiedTime: "MT",
+        },
+      },
+    },
+  };
+  const failedCreate = (_folderId: string, options: CreateFileBodyOptions) => Promise.resolve({ ...options, id: undefined as unknown as string });
+  const failedUpdate = (_fileId: string, options: UpdateFileBodyOptions) => Promise.resolve({ ...options, id: undefined as unknown as string });
+
+  const notesAfterPush = await push("folder", JSON.parse(JSON.stringify(failingNotes)), { createFile: failedCreate, updateFile: failedUpdate });
+
+  expect(notesAfterPush).toEqual(failingNotes); // New stays unlinked, Changed keeps FILE-1 and stays modified
+});

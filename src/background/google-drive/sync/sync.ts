@@ -1,4 +1,4 @@
-import { NotesObject, MessageType } from "shared/storage/schema";
+import { NotesObject, MessageType, SyncLookup } from "shared/storage/schema";
 import { getItem, setItems } from "shared/storage";
 import sendMessage from "shared/messages/send";
 import Log from "shared/log";
@@ -9,6 +9,8 @@ import pull from "./pull";
 import push from "./push";
 
 import * as api from "../api";
+
+const { DownloadError } = api;
 
 // File actions
 const {
@@ -42,23 +44,11 @@ const onDone = () => {
   sendMessage(MessageType.SYNC_DONE);
 };
 
-const sync = async (): Promise<boolean> => {
-  if (syncInProgress) {
-    Log("SYNC - ALREADY IN PROGRESS");
-    return false;
-  }
-
-  onStart();
-
-  const fulfilled = await runSyncPreconditions("SYNC");
-  if (!fulfilled) {
-    onFail();
-    return false;
-  }
-
-  const {
-    folderId, folderLocation, assetsFolderId, files,
-  } = fulfilled;
+// Pulls from and pushes to Google Drive, then stores the result. Throws on
+// any failure; `sync` ends the run
+const syncNotes = async ({
+  folderId, folderLocation, assetsFolderId, files,
+}: SyncLookup): Promise<boolean> => {
   const notes = await getItem<NotesObject>("notes");
   if (!notes) {
     onDone();
@@ -83,6 +73,32 @@ const sync = async (): Promise<boolean> => {
 
   onDone();
   return true;
+};
+
+const sync = async (): Promise<boolean> => {
+  if (syncInProgress) {
+    Log("SYNC - ALREADY IN PROGRESS");
+    return false;
+  }
+
+  onStart();
+
+  const fulfilled = await runSyncPreconditions("SYNC");
+  if (!fulfilled) {
+    onFail();
+    return false;
+  }
+
+  try {
+    return await syncNotes(fulfilled);
+  } catch (error) {
+    // Any failure ends the run, so sync is not left marked as in progress
+    const kind = error instanceof DownloadError ? "IN - CANNOT DOWNLOAD" : "FAILED";
+    const detail = error instanceof Error ? error.message : String(error);
+    Log(`SYNC - ${kind} - ${detail}`, "red");
+    onFail();
+    return false;
+  }
 };
 
 const syncDeleteFile = async (fileId: string): Promise<boolean> => {
