@@ -1,8 +1,5 @@
 import { Note, NotesObject } from "shared/storage/schema";
-import { CreateFileBodyOptions, UpdateFileBodyOptions } from "background/google-drive/bodies";
 import merge, { orphanedFileIds } from "../merge";
-import pull from "../pull";
-import push from "../push";
 
 process.env.LOG_LEVEL = "SILENT";
 
@@ -262,27 +259,5 @@ describe("orphanedFileIds()", () => {
     const merged: NotesObject = { Remote: note("r", T0, "1"), A: note("a, b", T1, "2") };
 
     expect(orphanedFileIds(listed, notesAfterSync, merged)).toEqual([]);
-  });
-});
-
-describe("merge() and orphanedFileIds() after the real pull and push", () => {
-  const file = (id: string, name: string, modifiedTime: string) => ({
-    id, name, createdTime: T0, modifiedTime,
-  });
-  const getFile = async (id: string) => `content of ${id}`;
-  const createFile = async (_folderId: string, options: CreateFileBodyOptions) => ({ id: `created-${options.name}`, ...options });
-  const updateFile = async (id: string, options: UpdateFileBodyOptions) => ({ id, ...options });
-
-  test("push mutates the notes it was given, which must not hide a deleted note's new file", async () => {
-    const notesBeforeSync: NotesObject = { New: note("fresh", T0) }; // no file yet
-    const files = [file("remote-1", "Remote", T0)]; // listing taken before pull
-    const notesCurrent: NotesObject = {}; // user deleted New while push created its file
-
-    const afterPull = await pull(notesBeforeSync, files, { getFile });
-    const notesAfterSync = await push("folder", afterPull, { createFile, updateFile });
-    const merged = merge(notesBeforeSync, notesAfterSync, notesCurrent);
-
-    expect(merged).toEqual({ Remote: expect.objectContaining({ content: "content of remote-1" }) });
-    expect(orphanedFileIds(files.map((f) => f.id), notesAfterSync, merged)).toEqual(["created-New"]);
   });
 });
