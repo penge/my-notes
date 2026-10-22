@@ -16,8 +16,11 @@ export default function duplicateNote(noteNameToDuplicate: string): void {
 
     const duplicateName = findFirstAvailableDuplicateName(Object.keys(notes), noteNameToDuplicate);
     const time = new Date().toISOString();
+    // Without the file link of the original: the duplicate is a new note, and
+    // sync uploads it as a file of its own instead of over the original's
+    const { sync, ...original } = notes[noteNameToDuplicate];
     const duplicate: Note = {
-      ...notes[noteNameToDuplicate],
+      ...original,
       createdTime: time,
       modifiedTime: time,
     };
