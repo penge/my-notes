@@ -34,15 +34,20 @@ const updateNote = async (
     throw new DownloadError(file.name);
   }
 
+  // The note follows its file's new name, unless another note already has
+  // that name; that note is not overwritten, and the note keeps its name
+  const nameTaken = file.name in notesCopy && notesCopy[file.name] !== syncedNote;
+  const noteName = nameTaken && previousNoteName ? previousNoteName : file.name;
+
   // eslint-disable-next-line max-len
-  Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
-  notesCopy[file.name] = prepareNote(
+  Log(`SYNC - IN - UPDATING NOTE - ${noteName} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
+  notesCopy[noteName] = prepareNote(
     syncedNote,
     contentResolution === "replace" ? fileContent : mergeContent(syncedNote.content, fileContent),
     file,
   );
 
-  if (previousNoteName && previousNoteName !== file.name) {
+  if (previousNoteName && previousNoteName !== noteName) {
     delete notesCopy[previousNoteName];
   }
 
@@ -73,7 +78,7 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
     }
 
     if (
-      !syncedNote && file.name in notesCopy // note is NOT synced
+      !syncedNote && file.name in notesCopy && !notesCopy[file.name].sync // note is NOT synced, not even to another file of the same name
       && notesCopy[file.name].modifiedTime === file.modifiedTime // note and file have the same modified time
     ) {
       Log(`SYNC - IN - CONNECTING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
@@ -85,7 +90,7 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
     }
 
     if (
-      !syncedNote && file.name in notesCopy // note is NOT synced
+      !syncedNote && file.name in notesCopy && !notesCopy[file.name].sync // note is NOT synced, not even to another file of the same name
       && notesCopy[file.name].modifiedTime !== file.modifiedTime // note and file do NOT have the same modified time
     ) {
       const fileContent = await getFile(file.id);

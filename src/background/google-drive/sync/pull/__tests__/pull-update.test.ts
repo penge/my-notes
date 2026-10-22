@@ -408,4 +408,39 @@ describe("pullUpdate() when things go wrong", () => {
 
     await expect(pullUpdate(notes, files, () => Promise.resolve(undefined))).rejects.toThrow(DownloadError);
   });
+
+  test("note keeps its name if its file was renamed to the name of another note", async () => {
+    const notes: NotesObject = {
+      Books: syncedNote("my books", "FILE-1", "Books"),
+      Movies: { content: "my movies", createdTime: "CT", modifiedTime: "MT" }, // unrelated note
+    };
+    const files: GoogleDriveFile[] = [{
+      id: "FILE-1", name: "Movies", createdTime: "CT", modifiedTime: "MT2", // renamed in Google Drive
+    }];
+
+    const notesAfterPullUpdate = await pullUpdate(notes, files, getFile);
+    expect(notesAfterPullUpdate.Movies).toEqual(notes.Movies);
+    expect(notesAfterPullUpdate.Books.content).toBe("content from FILE-1");
+  });
+
+  test("an unlinked note takes the content of only one of two files with its name, once", async () => {
+    const notes: NotesObject = {
+      Books: { content: "my books", createdTime: "CT", modifiedTime: "MT" }, // unlinked, e.g. after sync was turned off and on
+    };
+    const files: GoogleDriveFile[] = [
+      {
+        id: "FILE-1", name: "Books", createdTime: "CT", modifiedTime: "MT1",
+      },
+      {
+        id: "FILE-2", name: "Books", createdTime: "CT", modifiedTime: "MT2",
+      },
+    ];
+
+    const afterFirstSync = await pullUpdate(notes, files, getFile);
+    expect(afterFirstSync.Books.content).toBe("my books<br><br>content from FILE-1");
+    expect(afterFirstSync.Books.sync!.file.id).toBe("FILE-1");
+
+    const afterSecondSync = await pullUpdate(afterFirstSync, files, getFile);
+    expect(afterSecondSync).toEqual(afterFirstSync); // the other file is not merged in on every sync
+  });
 });
