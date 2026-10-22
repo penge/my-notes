@@ -66,10 +66,7 @@ export const updateFile = async (fileId: string, { name, content, modifiedTime }
 
 export const deleteFile = async (fileId: string): Promise<boolean> => {
   const response = await files.delete(fileId);
-  if (!(response instanceof Response)) {
-    return false;
-  }
-  return response.ok;
+  return response?.ok ?? false;
 };
 
 // Returns every file in the folder, or undefined if any page could not be

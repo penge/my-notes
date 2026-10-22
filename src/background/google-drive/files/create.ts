@@ -24,6 +24,5 @@ export default async (body: string): Promise<unknown | undefined> => {
   };
 
   const response = await call(url, options);
-  const json = await response.json();
-  return json;
+  return response.json();
 };

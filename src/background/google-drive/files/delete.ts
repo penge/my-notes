@@ -1,8 +1,8 @@
 import getAuthToken from "shared/identity/get-auth-token";
-import call, { DummyResponse } from "../call";
+import call, { CallResponse } from "../call";
 
 // Deletes a file in Google Drive
-export default async (fileId: string): Promise<Response | DummyResponse | undefined> => {
+export default async (fileId: string): Promise<CallResponse | undefined> => {
   if (!fileId) {
     return undefined;
   }
