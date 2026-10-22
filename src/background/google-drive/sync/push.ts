@@ -20,7 +20,8 @@ export default async (folderId: string, notes: NotesObject, { createFile, update
 
   // eslint-disable-next-line no-restricted-syntax
   for await (const noteName of Object.keys(updatedNotes)) {
-    const note = updatedNotes[noteName];
+    const note = { ...updatedNotes[noteName] }; // the notes passed in stay as they were
+    updatedNotes[noteName] = note;
 
     // 1. Create a file for every new note
     //    COND: note.sync is undefined

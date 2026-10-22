@@ -7,6 +7,7 @@ import runSyncPreconditions from "../preconditions/run-sync-preconditions";
 
 import pull from "./pull";
 import push from "./push";
+import merge, { orphanedFileIds } from "./merge";
 
 import * as api from "../api";
 
@@ -49,6 +50,9 @@ const onDone = () => {
 const syncNotes = async ({
   folderId, folderLocation, assetsFolderId, files,
 }: SyncLookup): Promise<boolean> => {
+  // `lastSync` is the time the notes were read. A content edit made while
+  // sync is running is then newer than `lastSync`, so Auto Sync pushes it next.
+  const lastSync = new Date().toISOString();
   const notes = await getItem<NotesObject>("notes");
   if (!notes) {
     onDone();
@@ -58,10 +62,17 @@ const syncNotes = async ({
   const notesAfterPull = await pull(notes, files, { getFile });
   const notesAfterPush = await push(folderId, notesAfterPull, { createFile, updateFile });
 
-  const lastSync = new Date().toISOString();
+  // The user may have edited notes while pull and push were running; keep
+  // those edits instead of overwriting them with the notes before sync. If
+  // the notes cannot be read now, nothing is known to have changed, so the
+  // notes before sync are used. No request runs between this read and the
+  // write below, but a save from the editor landing in between is still
+  // overwritten, as `chrome.storage` has no transactions
+  const notesCurrent = (await getItem<NotesObject>("notes")) || notes;
+  const mergedNotes = merge(notes, notesAfterPush, notesCurrent);
 
   await setItems({
-    notes: notesAfterPush,
+    notes: mergedNotes,
     sync: {
       folderId,
       folderLocation,
@@ -70,6 +81,15 @@ const syncNotes = async ({
     },
     setBy: `sync-${lastSync}`,
   });
+
+  // A file created by this push for a note the user deleted or renamed
+  // meanwhile is held by no note, so it is removed before the next sync
+  // would pull it back as a new note
+  const orphans = orphanedFileIds(files.map((file) => file.id), notesAfterPush, mergedNotes);
+  await Promise.all(orphans.map((fileId) => {
+    Log(`SYNC - OUT - DELETING ORPHANED FILE - ${fileId}`, "red");
+    return deleteFile(fileId);
+  }));
 
   onDone();
   return true;

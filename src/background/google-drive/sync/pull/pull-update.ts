@@ -17,7 +17,7 @@ const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile)
   },
 });
 
-const mergeContent = (noteContent: string, fileContent: string) => `${noteContent}<br><br>${fileContent}`;
+export const mergeContent = (noteContent: string, fileContent: string) => `${noteContent}<br><br>${fileContent}`;
 
 const updateNote = async (
   notes: NotesObject,
