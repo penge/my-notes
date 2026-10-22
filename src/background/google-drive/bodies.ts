@@ -17,6 +17,10 @@ export interface CreateFileBodyOptions {
   modifiedTime: string
 }
 
+// Metadata is serialized with JSON.stringify, so a note or file name with a
+// quote, backslash or line break still produces valid JSON
+const metadata = (fields: Record<string, unknown>): string => JSON.stringify(fields, null, 2);
+
 export const createFileBody = (
   parent: string,
   {
@@ -26,12 +30,9 @@ export const createFileBody = (
 --my-notes
 Content-Type: application/json; charset=UTF-8
 
-{
-  "parents": ["${parent}"],
-  "name": "${name}",
-  "createdTime": "${createdTime}",
-  "modifiedTime": "${modifiedTime}"
-}
+${metadata({
+    parents: [parent], name, createdTime, modifiedTime,
+  })}
 
 --my-notes
 Content-Type: text/html
@@ -52,10 +53,7 @@ export const updateFileBody = (
 --my-notes
 Content-Type: application/json; charset=UTF-8
 
-{
-  "name": "${name}",
-  "modifiedTime": "${modifiedTime}"
-}
+${metadata({ name, modifiedTime })}
 
 --my-notes
 Content-Type: text/html
@@ -77,12 +75,9 @@ export const uploadFileBody = (
 --my-notes
 Content-Type: application/json; charset=UTF-8
 
-{
-  "parents": ["${parent}"],
-  "name": "${name}",
-  "createdTime": "${createdTime}",
-  "modifiedTime": "${modifiedTime}"
-}
+${metadata({
+    parents: [parent], name, createdTime, modifiedTime,
+  })}
 
 --my-notes
 Content-Type: ${type}

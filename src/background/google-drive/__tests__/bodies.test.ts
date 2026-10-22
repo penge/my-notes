@@ -43,7 +43,9 @@ it("has valid create file body", () => expect(createFileBody("12345", {
 Content-Type: application/json; charset=UTF-8
 
 {
-  "parents": ["12345"],
+  "parents": [
+    "12345"
+  ],
   "name": "Todo",
   "createdTime": "CT",
   "modifiedTime": "MT"
@@ -89,7 +91,9 @@ it("has valid upload file body", () => expect(uploadFileBody("12345", {
 Content-Type: application/json; charset=UTF-8
 
 {
-  "parents": ["12345"],
+  "parents": [
+    "12345"
+  ],
   "name": "image.jpeg",
   "createdTime": "CT",
   "modifiedTime": "MT"
@@ -102,3 +106,19 @@ Content-Transfer-Encoding: base64
 IMAGE_CONTENT
 
 --my-notes--`));
+
+
+// The metadata part is the JSON between the first blank line and the next boundary
+const metadataOf = (body: string) => JSON.parse(body.split("\n\n")[1]);
+
+it("has valid JSON metadata for names with a quote, backslash or line break", () => {
+  const name = 'Say "hi" \\ to\nall';
+
+  expect(metadataOf(createFileBody("12345", {
+    name, content: "", createdTime: "CT", modifiedTime: "MT",
+  })).name).toBe(name);
+  expect(metadataOf(updateFileBody({ name, content: "", modifiedTime: "MT" })).name).toBe(name);
+  expect(metadataOf(uploadFileBody("12345", {
+    name, type: "image/png", content: "", createdTime: "CT", modifiedTime: "MT",
+  })).name).toBe(name);
+});
