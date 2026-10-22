@@ -175,18 +175,18 @@ describe("pullUpdate()", () => {
         });
 
         describe("file is the latest update", () => {
-          test("note content is merged with file content, file's modified time is definitive", async () => {
+          test("note content is merged with file content, stamped 1 second after the later time", async () => {
             const notes: NotesObject = {
               Books: {
                 content: "my books",
                 createdTime: "CT",
-                modifiedTime: "MT-4",
+                modifiedTime: "2020-04-20T09:04:00.000Z",
                 sync: {
                   file: {
                     id: "FILE-123",
                     name: "Books",
                     createdTime: "CT",
-                    modifiedTime: "MT",
+                    modifiedTime: "2020-04-20T09:00:00.000Z",
                   },
                 },
               },
@@ -197,7 +197,7 @@ describe("pullUpdate()", () => {
                 id: "FILE-123",
                 name: "Books",
                 createdTime: "CT",
-                modifiedTime: "MT-6",
+                modifiedTime: "2020-04-20T09:06:00.000Z",
               },
             ];
 
@@ -206,13 +206,13 @@ describe("pullUpdate()", () => {
               Books: {
                 content: "my books<br><br>content from FILE-123",
                 createdTime: "CT",
-                modifiedTime: "MT-6",
+                modifiedTime: "2020-04-20T09:06:01.000Z",
                 sync: {
                   file: {
                     id: "FILE-123",
                     name: "Books",
                     createdTime: "CT",
-                    modifiedTime: "MT-6",
+                    modifiedTime: "2020-04-20T09:06:00.000Z",
                   },
                 },
               },
@@ -221,18 +221,18 @@ describe("pullUpdate()", () => {
         });
 
         describe("file is the latest update, and renamed", () => {
-          test("note content is merged with file content, file's modified time is definitive, and note is renamed", async () => {
+          test("note content is merged with file content and stamped 1 second after the later time, and note is renamed", async () => {
             const notes: NotesObject = {
               Books: {
                 content: "my books",
                 createdTime: "CT",
-                modifiedTime: "MT-4",
+                modifiedTime: "2020-04-20T09:04:00.000Z",
                 sync: {
                   file: {
                     id: "FILE-123",
                     name: "Books",
                     createdTime: "CT",
-                    modifiedTime: "MT",
+                    modifiedTime: "2020-04-20T09:00:00.000Z",
                   },
                 },
               },
@@ -243,7 +243,7 @@ describe("pullUpdate()", () => {
                 id: "FILE-123",
                 name: "Wishlist",
                 createdTime: "CT",
-                modifiedTime: "MT-7",
+                modifiedTime: "2020-04-20T09:07:00.000Z",
               },
             ];
 
@@ -252,13 +252,13 @@ describe("pullUpdate()", () => {
               Wishlist: {
                 content: "my books<br><br>content from FILE-123",
                 createdTime: "CT",
-                modifiedTime: "MT-7",
+                modifiedTime: "2020-04-20T09:07:01.000Z",
                 sync: {
                   file: {
                     id: "FILE-123",
                     name: "Wishlist",
                     createdTime: "CT",
-                    modifiedTime: "MT-7",
+                    modifiedTime: "2020-04-20T09:07:00.000Z",
                   },
                 },
               },
@@ -310,12 +310,12 @@ describe("pullUpdate()", () => {
 
     describe("note and file do NOT have the same modified time", () => {
       describe("note is newer", () => {
-        test("sync property is added, note content is merged with file content, file's modified time is definitive", async () => {
+        test("sync property is added, note content is merged with file content, stamped 1 second after the later time", async () => {
           const notes: NotesObject = {
             Books: {
               content: "my books",
               createdTime: "CT",
-              modifiedTime: "MT-2",
+              modifiedTime: "2020-04-20T09:02:00.000Z",
             },
           };
 
@@ -324,7 +324,7 @@ describe("pullUpdate()", () => {
               id: "FILE-123",
               name: "Books",
               createdTime: "CT",
-              modifiedTime: "MT",
+              modifiedTime: "2020-04-20T09:00:00.000Z",
             },
           ];
 
@@ -333,13 +333,13 @@ describe("pullUpdate()", () => {
             Books: {
               content: "my books<br><br>content from FILE-123",
               createdTime: "CT",
-              modifiedTime: "MT",
+              modifiedTime: "2020-04-20T09:02:01.000Z",
               sync: {
                 file: {
                   id: "FILE-123",
                   name: "Books",
                   createdTime: "CT",
-                  modifiedTime: "MT",
+                  modifiedTime: "2020-04-20T09:00:00.000Z",
                 },
               },
             },
@@ -348,12 +348,12 @@ describe("pullUpdate()", () => {
       });
 
       describe("file is newer", () => {
-        test("sync property is added, note content is merged with file content, file's modified time is definitive", async () => {
+        test("sync property is added, note content is merged with file content, stamped 1 second after the later time", async () => {
           const notes: NotesObject = {
             Books: {
               content: "my books",
               createdTime: "CT",
-              modifiedTime: "MT-2",
+              modifiedTime: "2020-04-20T09:02:00.000Z",
             },
           };
 
@@ -362,7 +362,7 @@ describe("pullUpdate()", () => {
               id: "FILE-123",
               name: "Books",
               createdTime: "CT",
-              modifiedTime: "MT-3",
+              modifiedTime: "2020-04-20T09:03:00.000Z",
             },
           ];
 
@@ -371,13 +371,13 @@ describe("pullUpdate()", () => {
             Books: {
               content: "my books<br><br>content from FILE-123",
               createdTime: "CT",
-              modifiedTime: "MT-3",
+              modifiedTime: "2020-04-20T09:03:01.000Z",
               sync: {
                 file: {
                   id: "FILE-123",
                   name: "Books",
                   createdTime: "CT",
-                  modifiedTime: "MT-3",
+                  modifiedTime: "2020-04-20T09:03:00.000Z",
                 },
               },
             },
@@ -425,14 +425,15 @@ describe("pullUpdate() when things go wrong", () => {
 
   test("an unlinked note takes the content of only one of two files with its name, once", async () => {
     const notes: NotesObject = {
-      Books: { content: "my books", createdTime: "CT", modifiedTime: "MT" }, // unlinked, e.g. after sync was turned off and on
+      // unlinked, e.g. after sync was turned off and on
+      Books: { content: "my books", createdTime: "2020-04-20T08:00:00.000Z", modifiedTime: "2020-04-20T09:00:00.000Z" },
     };
     const files: GoogleDriveFile[] = [
       {
-        id: "FILE-1", name: "Books", createdTime: "CT", modifiedTime: "MT1",
+        id: "FILE-1", name: "Books", createdTime: "2020-04-20T08:00:00.000Z", modifiedTime: "2020-04-20T09:01:00.000Z",
       },
       {
-        id: "FILE-2", name: "Books", createdTime: "CT", modifiedTime: "MT2",
+        id: "FILE-2", name: "Books", createdTime: "2020-04-20T08:00:00.000Z", modifiedTime: "2020-04-20T09:02:00.000Z",
       },
     ];
 

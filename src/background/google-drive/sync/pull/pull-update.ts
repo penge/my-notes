@@ -19,6 +19,14 @@ const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile)
 
 export const mergeContent = (noteContent: string, fileContent: string) => `${noteContent}<br><br>${fileContent}`;
 
+// A merged note holds content its file does not have yet. Stamping it 1 second
+// after the later of the note's and the file's time makes it newer than the
+// file, so push uploads the merged content in the same sync; the local clock
+// is not involved
+const mergedTime = (note: Note, file: GoogleDriveFile): string => new Date(
+  Math.max(Date.parse(note.modifiedTime), Date.parse(file.modifiedTime)) + 1000,
+).toISOString();
+
 const updateNote = async (
   notes: NotesObject,
   syncedNote: Note,
@@ -41,11 +49,9 @@ const updateNote = async (
 
   // eslint-disable-next-line max-len
   Log(`SYNC - IN - UPDATING NOTE - ${noteName} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
-  notesCopy[noteName] = prepareNote(
-    syncedNote,
-    contentResolution === "replace" ? fileContent : mergeContent(syncedNote.content, fileContent),
-    file,
-  );
+  notesCopy[noteName] = contentResolution === "replace"
+    ? prepareNote(syncedNote, fileContent, file)
+    : { ...prepareNote(syncedNote, mergeContent(syncedNote.content, fileContent), file), modifiedTime: mergedTime(syncedNote, file) };
 
   if (previousNoteName && previousNoteName !== noteName) {
     delete notesCopy[previousNoteName];
@@ -99,11 +105,10 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
       }
 
       Log(`SYNC - IN - UPDATING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
-      notesCopy[file.name] = prepareNote(
-        notesCopy[file.name],
-        mergeContent(notesCopy[file.name].content, fileContent),
-        file,
-      );
+      notesCopy[file.name] = {
+        ...prepareNote(notesCopy[file.name], mergeContent(notesCopy[file.name].content, fileContent), file),
+        modifiedTime: mergedTime(notesCopy[file.name], file),
+      };
     }
   }
 
