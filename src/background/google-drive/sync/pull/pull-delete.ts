@@ -21,5 +21,17 @@ export default (notes: NotesObject, remoteFiles: GoogleDriveFile[]): NotesObject
     Log(`SYNC - IN - DELETING NOTE - ${noteName}`, "red");
     delete notesCopy[noteName];
   });
+
+  // A note modified since the last sync is kept even though its file is
+  // gone, and loses its link to that file, so push creates a new one
+  const remoteFileIds = new Set(remoteFiles.map((file) => file.id));
+  Object.keys(notesCopy).forEach((noteName) => {
+    const { sync, ...note } = notesCopy[noteName];
+    if (sync && !remoteFileIds.has(sync.file.id)) {
+      Log(`SYNC - IN - UNLINKING NOTE - ${noteName}`, "red");
+      notesCopy[noteName] = note;
+    }
+  });
+
   return notesCopy;
 };
