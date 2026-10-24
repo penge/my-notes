@@ -242,6 +242,32 @@ describe("merge()", () => {
     expect(merged.A.sync).toEqual(notesAfterSync.B.sync);
   });
 
+  describe("an original and its duplicate still sharing one file, during the sync that separates them", () => {
+    // Before sync both hold file 1; pull unlinks the duplicate, created later,
+    // and push gives it file 2
+    const notesBeforeSync: NotesObject = { O: note("orig", T0, "1"), D: note("dup", T0, "1") };
+    const notesAfterSync: NotesObject = { O: note("orig", T0, "1"), D: note("dup", T0, "2") };
+
+    test("an edit of the original keeps its own content, without its old text appended", () => {
+      const notesCurrent: NotesObject = { O: note("orig edited", T1, "1"), D: note("dup", T0, "1") };
+
+      const merged = merge(notesBeforeSync, notesAfterSync, notesCurrent);
+
+      expect(merged.O.content).toBe("orig edited");
+      expect(merged.O.sync!.file.id).toBe("1");
+    });
+
+    test("an edit of the duplicate keeps its own content and its new file", () => {
+      const notesCurrent: NotesObject = { O: note("orig", T0, "1"), D: note("dup edited", T1, "1") };
+
+      const merged = merge(notesBeforeSync, notesAfterSync, notesCurrent);
+
+      expect(merged.D.content).toBe("dup edited");
+      expect(merged.D.sync!.file.id).toBe("2");
+      expect(orphanedFileIds(["1"], notesAfterSync, merged)).toEqual([]); // file 2 is held, not deleted
+    });
+  });
+
   test("keeps both the original and its duplicate made while sync was running", () => {
     const notesBeforeSync: NotesObject = { A: note("a", T0, "1") };
     const notesAfterSync: NotesObject = { A: note("a", T0, "1") };

@@ -90,8 +90,17 @@ export default (notesBeforeSync: NotesObject, notesAfterSync: NotesObject, notes
     const fileId = currentLink?.file.id;
     const sameName = notesAfterSync[noteName];
     const sameNameIsOther = sameName && nameBeforePullRename(noteName, sameName);
-    const counterpart = (fileId && afterSyncById.get(fileId)) || (sameNameIsOther ? undefined : sameName);
-    const noteBeforeSync = (fileId && beforeSyncById.get(fileId)) || notesBeforeSync[noteName];
+
+    // A note with the same name before and after sync is its own counterpart.
+    // Matching by file is for renames, and is ambiguous while a note and its
+    // duplicate from before duplicates dropped their link still share a file
+    const keptName = noteName in notesBeforeSync && noteName in notesAfterSync;
+    const counterpart = keptName
+      ? notesAfterSync[noteName]
+      : (fileId && afterSyncById.get(fileId)) || (sameNameIsOther ? undefined : sameName);
+    const noteBeforeSync = keptName
+      ? notesBeforeSync[noteName]
+      : (fileId && beforeSyncById.get(fileId)) || notesBeforeSync[noteName];
     const pulled = counterpart && pulledContent(noteBeforeSync, counterpart);
 
     // Only renamed, not edited: nothing of the user's to keep, so the content
