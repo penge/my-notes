@@ -10,6 +10,10 @@ const T0 = "2020-04-20T09:00:00.000Z"; // last sync
 const T1 = "2020-04-20T09:04:00.000Z"; // edited here
 const T2 = "2020-04-20T09:06:00.000Z"; // edited elsewhere
 
+// "Now" for the stamp of merged notes, later than every local edit below
+beforeEach(() => jest.spyOn(Date, "now").mockReturnValue(Date.parse("2020-04-20T09:05:00.000Z")));
+afterEach(() => jest.restoreAllMocks());
+
 const note = (content: string, modifiedTime: string, fileId?: string, fileModifiedTime = modifiedTime): Note => ({
   content,
   createdTime: T0,

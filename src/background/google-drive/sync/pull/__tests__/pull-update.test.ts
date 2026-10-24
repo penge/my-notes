@@ -4,6 +4,10 @@ import pullUpdate from "../pull-update";
 
 const getFile: GetFileFunction = (fileId: string) => Promise.resolve(`content from ${fileId}`);
 
+// "Now" for the stamp of merged notes, later than every local edit below
+beforeEach(() => jest.spyOn(Date, "now").mockReturnValue(Date.parse("2020-04-20T09:05:00.000Z")));
+afterEach(() => jest.restoreAllMocks());
+
 describe("pullUpdate()", () => {
   describe("note is synced", () => {
     describe("note is NOT modified since the last sync", () => {
@@ -175,7 +179,7 @@ describe("pullUpdate()", () => {
         });
 
         describe("file is the latest update", () => {
-          test("note content is merged with file content, stamped 1 second after the later time", async () => {
+          test("note content is merged with file content, stamped newer than the file", async () => {
             const notes: NotesObject = {
               Books: {
                 content: "my books",
@@ -221,7 +225,7 @@ describe("pullUpdate()", () => {
         });
 
         describe("file is the latest update, and renamed", () => {
-          test("note content is merged with file content and stamped 1 second after the later time, and note is renamed", async () => {
+          test("note content is merged with file content and stamped newer than the file, and note is renamed", async () => {
             const notes: NotesObject = {
               Books: {
                 content: "my books",
@@ -310,7 +314,7 @@ describe("pullUpdate()", () => {
 
     describe("note and file do NOT have the same modified time", () => {
       describe("note is newer", () => {
-        test("sync property is added, note content is merged with file content, stamped 1 second after the later time", async () => {
+        test("sync property is added, note content is merged with file content, stamped newer than the file", async () => {
           const notes: NotesObject = {
             Books: {
               content: "my books",
@@ -333,7 +337,7 @@ describe("pullUpdate()", () => {
             Books: {
               content: "my books<br><br>content from FILE-123",
               createdTime: "CT",
-              modifiedTime: "2020-04-20T09:02:01.000Z",
+              modifiedTime: "2020-04-20T09:05:00.000Z",
               sync: {
                 file: {
                   id: "FILE-123",
@@ -348,7 +352,7 @@ describe("pullUpdate()", () => {
       });
 
       describe("file is newer", () => {
-        test("sync property is added, note content is merged with file content, stamped 1 second after the later time", async () => {
+        test("sync property is added, note content is merged with file content, stamped newer than the file", async () => {
           const notes: NotesObject = {
             Books: {
               content: "my books",
@@ -371,7 +375,7 @@ describe("pullUpdate()", () => {
             Books: {
               content: "my books<br><br>content from FILE-123",
               createdTime: "CT",
-              modifiedTime: "2020-04-20T09:03:01.000Z",
+              modifiedTime: "2020-04-20T09:05:00.000Z",
               sync: {
                 file: {
                   id: "FILE-123",

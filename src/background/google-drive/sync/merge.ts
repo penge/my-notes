@@ -1,5 +1,5 @@
 import { Note, NotesObject } from "shared/storage/schema";
-import { mergeContent } from "./pull/pull-update";
+import { mergeContent, newerThanFile } from "./pull/pull-update";
 
 // Sync works on a copy of the notes while the user keeps editing in the
 // meantime. Rather than writing that copy back over those edits, the sync
@@ -102,7 +102,7 @@ export default (notesBeforeSync: NotesObject, notesAfterSync: NotesObject, notes
     merged[noteName] = {
       ...noteCurrent,
       content: pulled && !contentUnchanged ? mergeContent(content, pulled) : content,
-      modifiedTime: new Date().toISOString(),
+      modifiedTime: newerThanFile(counterpart?.sync?.file.modifiedTime),
       ...(counterpart?.sync && { sync: counterpart.sync }),
     };
   });

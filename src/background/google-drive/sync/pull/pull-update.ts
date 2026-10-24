@@ -19,13 +19,13 @@ const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile)
 
 export const mergeContent = (noteContent: string, fileContent: string) => `${noteContent}<br><br>${fileContent}`;
 
-// A merged note holds content its file does not have yet. Stamping it 1 second
-// after the later of the note's and the file's time makes it newer than the
-// file, so push uploads the merged content in the same sync; the local clock
-// is not involved
-const mergedTime = (note: Note, file: GoogleDriveFile): string => new Date(
-  Math.max(Date.parse(note.modifiedTime), Date.parse(file.modifiedTime)) + 1000,
-).toISOString();
+// A merged note holds content its file does not have yet, so its time must be
+// later than the file's for push to upload it. Later than both now and the
+// file's time plus 1 second, so it holds whatever the devices' clocks say
+export const newerThanFile = (fileModifiedTime: string | undefined): string => new Date(Math.max(
+  Date.now(),
+  fileModifiedTime ? Date.parse(fileModifiedTime) + 1000 : 0,
+)).toISOString();
 
 const updateNote = async (
   notes: NotesObject,
@@ -51,7 +51,7 @@ const updateNote = async (
   Log(`SYNC - IN - UPDATING NOTE - ${noteName} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
   notesCopy[noteName] = contentResolution === "replace"
     ? prepareNote(syncedNote, fileContent, file)
-    : { ...prepareNote(syncedNote, mergeContent(syncedNote.content, fileContent), file), modifiedTime: mergedTime(syncedNote, file) };
+    : { ...prepareNote(syncedNote, mergeContent(syncedNote.content, fileContent), file), modifiedTime: newerThanFile(file.modifiedTime) };
 
   if (previousNoteName && previousNoteName !== noteName) {
     delete notesCopy[previousNoteName];
@@ -107,7 +107,7 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
       Log(`SYNC - IN - UPDATING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
       notesCopy[file.name] = {
         ...prepareNote(notesCopy[file.name], mergeContent(notesCopy[file.name].content, fileContent), file),
-        modifiedTime: mergedTime(notesCopy[file.name], file),
+        modifiedTime: newerThanFile(file.modifiedTime),
       };
     }
   }

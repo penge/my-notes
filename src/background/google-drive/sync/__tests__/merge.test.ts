@@ -64,6 +64,18 @@ describe("merge()", () => {
     expect(merged.Todo.sync).toEqual(notesAfterSync.Todo.sync);
   });
 
+  test("stamps a note merged meanwhile newer than its file, even when the file's clock is ahead", () => {
+    const ahead = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // the other device's clock is 5 minutes ahead
+    const notesBeforeSync: NotesObject = { Todo: note("milk", T0, "1") };
+    const notesAfterSync: NotesObject = { Todo: note("milk, eggs", ahead, "1") }; // pulled from that device
+    const notesCurrent: NotesObject = { Todo: note("milk, coffee", T1, "1") }; // typed here meanwhile
+
+    const merged = merge(notesBeforeSync, notesAfterSync, notesCurrent);
+
+    expect(merged.Todo.content).toBe("milk, coffee<br><br>milk, eggs");
+    expect(merged.Todo.modifiedTime > merged.Todo.sync!.file.modifiedTime).toBe(true); // what push checks before uploading
+  });
+
   test("appends only what pull fetched when pull itself already merged two sides", () => {
     const notesBeforeSync: NotesObject = { Todo: note("milk, coffee", T0, "1") }; // local edit pending push
     const notesAfterSync: NotesObject = { Todo: note("milk, coffee<br><br>milk, eggs", T2, "1") }; // pull merged remote into it
