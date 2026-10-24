@@ -1,14 +1,15 @@
-import { NotesObject, MessageType } from "shared/storage/schema";
+import { MessageType } from "shared/storage/schema";
 import { getItem, setItems } from "shared/storage";
 import sendMessage from "shared/messages/send";
 import Log from "shared/log";
 
 import runSyncPreconditions from "../preconditions/run-sync-preconditions";
 
-import pull from "./pull";
-import push from "./push";
+import syncNotes from "./sync-notes";
 
 import * as api from "../api";
+
+const { DownloadError } = api;
 
 // File actions
 const {
@@ -56,33 +57,23 @@ const sync = async (): Promise<boolean> => {
     return false;
   }
 
-  const {
-    folderId, folderLocation, assetsFolderId, files,
-  } = fulfilled;
-  const notes = await getItem<NotesObject>("notes");
-  if (!notes) {
+  try {
+    const synced = await syncNotes(fulfilled, {
+      drive: {
+        getFile, createFile, updateFile, deleteFile,
+      },
+      storage: { getItem, setItems },
+    });
     onDone();
+    return synced;
+  } catch (error) {
+    // Any failure ends the run, so sync is not left marked as in progress
+    const kind = error instanceof DownloadError ? "IN - CANNOT DOWNLOAD" : "FAILED";
+    const detail = error instanceof Error ? error.message : String(error);
+    Log(`SYNC - ${kind} - ${detail}`, "red");
+    onFail();
     return false;
   }
-
-  const notesAfterPull = await pull(notes, files, { getFile });
-  const notesAfterPush = await push(folderId, notesAfterPull, { createFile, updateFile });
-
-  const lastSync = new Date().toISOString();
-
-  await setItems({
-    notes: notesAfterPush,
-    sync: {
-      folderId,
-      folderLocation,
-      assetsFolderId,
-      lastSync,
-    },
-    setBy: `sync-${lastSync}`,
-  });
-
-  onDone();
-  return true;
 };
 
 const syncDeleteFile = async (fileId: string): Promise<boolean> => {

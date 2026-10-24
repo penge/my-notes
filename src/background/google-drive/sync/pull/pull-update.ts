@@ -1,6 +1,6 @@
 import { NotesObject, Note, GoogleDriveFile } from "shared/storage/schema";
 import Log from "shared/log";
-import { GetFileFunction } from "background/google-drive/api";
+import { GetFileFunction, DownloadError } from "background/google-drive/api";
 
 const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile): Note => ({
   ...existingNote,
@@ -17,7 +17,15 @@ const prepareNote = (existingNote: Note, content: string, file: GoogleDriveFile)
   },
 });
 
-const mergeContent = (noteContent: string, fileContent: string) => `${noteContent}<br><br>${fileContent}`;
+export const mergeContent = (noteContent: string, fileContent: string) => `${noteContent}<br><br>${fileContent}`;
+
+// A merged note holds content its file does not have yet, so its time must be
+// later than the file's for push to upload it. Later than both now and the
+// file's time plus 1 second, so it holds whatever the devices' clocks say
+export const newerThanFile = (fileModifiedTime: string | undefined): string => new Date(Math.max(
+  Date.now(),
+  fileModifiedTime ? Date.parse(fileModifiedTime) + 1000 : 0,
+)).toISOString();
 
 const updateNote = async (
   notes: NotesObject,
@@ -29,17 +37,23 @@ const updateNote = async (
   const notesCopy: NotesObject = { ...notes };
 
   const previousNoteName = Object.keys(notesCopy).find((key) => notesCopy[key] === syncedNote);
-  const fileContent = await getFile(file.id) || "";
+  const fileContent = await getFile(file.id);
+  if (fileContent === undefined) {
+    throw new DownloadError(file.name);
+  }
+
+  // The note follows its file's new name, unless another note already has
+  // that name; that note is not overwritten, and the note keeps its name
+  const nameTaken = file.name in notesCopy && notesCopy[file.name] !== syncedNote;
+  const noteName = nameTaken && previousNoteName ? previousNoteName : file.name;
 
   // eslint-disable-next-line max-len
-  Log(`SYNC - IN - UPDATING NOTE - ${file.name} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
-  notesCopy[file.name] = prepareNote(
-    syncedNote,
-    contentResolution === "replace" ? fileContent : mergeContent(syncedNote.content, fileContent),
-    file,
-  );
+  Log(`SYNC - IN - UPDATING NOTE - ${noteName} (name before: ${previousNoteName || file.name}, note MT: ${syncedNote.modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
+  notesCopy[noteName] = contentResolution === "replace"
+    ? prepareNote(syncedNote, fileContent, file)
+    : { ...prepareNote(syncedNote, mergeContent(syncedNote.content, fileContent), file), modifiedTime: newerThanFile(file.modifiedTime) };
 
-  if (previousNoteName && previousNoteName !== file.name) {
+  if (previousNoteName && previousNoteName !== noteName) {
     delete notesCopy[previousNoteName];
   }
 
@@ -70,7 +84,7 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
     }
 
     if (
-      !syncedNote && file.name in notesCopy // note is NOT synced
+      !syncedNote && file.name in notesCopy && !notesCopy[file.name].sync // note is NOT synced, not even to another file of the same name
       && notesCopy[file.name].modifiedTime === file.modifiedTime // note and file have the same modified time
     ) {
       Log(`SYNC - IN - CONNECTING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
@@ -82,16 +96,19 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
     }
 
     if (
-      !syncedNote && file.name in notesCopy // note is NOT synced
+      !syncedNote && file.name in notesCopy && !notesCopy[file.name].sync // note is NOT synced, not even to another file of the same name
       && notesCopy[file.name].modifiedTime !== file.modifiedTime // note and file do NOT have the same modified time
     ) {
-      const fileContent = await getFile(file.id) || "";
+      const fileContent = await getFile(file.id);
+      if (fileContent === undefined) {
+        throw new DownloadError(file.name);
+      }
+
       Log(`SYNC - IN - UPDATING NOTE - ${file.name} (note MT: ${notesCopy[file.name].modifiedTime}, file MT: ${file.modifiedTime})`, "blue");
-      notesCopy[file.name] = prepareNote(
-        notesCopy[file.name],
-        mergeContent(notesCopy[file.name].content, fileContent),
-        file,
-      );
+      notesCopy[file.name] = {
+        ...prepareNote(notesCopy[file.name], mergeContent(notesCopy[file.name].content, fileContent), file),
+        modifiedTime: newerThanFile(file.modifiedTime),
+      };
     }
   }
 

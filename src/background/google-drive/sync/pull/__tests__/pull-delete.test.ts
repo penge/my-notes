@@ -2,7 +2,8 @@ import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
 import pullDelete from "../pull-delete";
 
 const notes: NotesObject = {
-  // Do not delete Draft as it was modified since the last sync (even though the file in Google Drive was deleted)
+  // Do not delete Draft as it was modified since the last sync (even though the file in Google Drive was deleted),
+  // but unlink it from the deleted file, so push creates a new file for it
   Draft: {
     content: "my draft",
     createdTime: "2021-04-04T09:40:00Z",
@@ -64,12 +65,14 @@ const files: GoogleDriveFile[] = [
   },
 ];
 
-test("pullDelete() deletes unchanged notes if their file was deleted", () => {
+test("pullDelete() deletes unchanged notes if their file was deleted, and unlinks modified ones", () => {
+  const { sync, ...unlinkedDraft } = notes.Draft;
   const notesAfterPullDelete = pullDelete(notes, files);
   expect(notesAfterPullDelete).toEqual({
-    Draft: notes.Draft,
+    Draft: unlinkedDraft,
     Math: notes.Math,
     // "News" deleted
     Books: notes.Books,
   });
+  expect(notes.Draft.sync).toBe(sync); // the notes passed in are not changed
 });

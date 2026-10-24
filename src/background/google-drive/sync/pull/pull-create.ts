@@ -1,6 +1,6 @@
 import { NotesObject, GoogleDriveFile } from "shared/storage/schema";
 import Log from "shared/log";
-import { GetFileFunction } from "background/google-drive/api";
+import { GetFileFunction, DownloadError } from "background/google-drive/api";
 
 const getNewFiles = (notes: NotesObject, remoteFiles: GoogleDriveFile[]): GoogleDriveFile[] => {
   const existingNoteNames = Object.keys(notes);
@@ -22,7 +22,10 @@ export default async (notes: NotesObject, remoteFiles: GoogleDriveFile[], getFil
 
   // eslint-disable-next-line no-restricted-syntax
   for await (const file of newFiles) {
-    const fileContent = await getFile(file.id) || "";
+    const fileContent = await getFile(file.id);
+    if (fileContent === undefined) {
+      throw new DownloadError(file.name);
+    }
 
     Log(`SYNC - IN - CREATING NOTE - ${file.name}`, "green");
     notesCopy[file.name] = {

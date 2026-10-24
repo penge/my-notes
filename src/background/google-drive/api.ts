@@ -18,19 +18,25 @@ const createFolder = async (folderName: string, parent?: string): Promise<string
   return folderId;
 };
 
-const getFolder = async (folderName: string, parent?: string): Promise<string> => {
+// Returns the folder ID, null if there is no such folder, or undefined if
+// the request failed, so a transient error is not mistaken for a missing
+// folder
+const getFolder = async (folderName: string, parent?: string): Promise<string | null | undefined> => {
   const query = listFoldersQuery(folderName, parent);
   const fields = "files(id)";
-  const json = await files.list(query, fields) as { files: { id: string }[] };
-  const folderId = json && json.files && json.files[0] && json.files[0].id;
-  return folderId;
+  const json = await files.list(query, fields) as { files?: { id: string }[] } | undefined;
+  if (!json || !Array.isArray(json.files)) {
+    return undefined;
+  }
+
+  return json.files[0]?.id ?? null;
 };
 
 export const createMyNotesFolder = (): Promise<string> => createFolder("My Notes");
-export const getMyNotesFolderId = (): Promise<string> => getFolder("My Notes");
+export const getMyNotesFolderId = (): Promise<string | null | undefined> => getFolder("My Notes");
 
 export const createAssetsFolder = (parent: string): Promise<string> => createFolder("assets", parent);
-export const getAssetsFolderId = (parent: string): Promise<string> => getFolder("assets", parent);
+export const getAssetsFolderId = (parent: string): Promise<string | null | undefined> => getFolder("assets", parent);
 
 export const createFile = async (
   folderId: string,
@@ -66,20 +72,39 @@ export const updateFile = async (fileId: string, { name, content, modifiedTime }
 
 export const deleteFile = async (fileId: string): Promise<boolean> => {
   const response = await files.delete(fileId);
-  if (!(response instanceof Response)) {
-    return false;
-  }
-  return response.ok;
+  return response?.ok ?? false;
 };
 
-export const listFiles = async (folderId: string): Promise<GoogleDriveFile[]> => {
+// Returns every file in the folder, or undefined if any page could not be
+// retrieved. A partial listing must never be returned, as sync treats a file
+// missing from the listing as deleted in Google Drive.
+export const listFiles = async (folderId: string): Promise<GoogleDriveFile[] | undefined> => {
   const query = listFilesQuery(folderId);
-  const fields = "files(id,name,createdTime,modifiedTime)";
-  const json = await files.list(query, fields) as { files: [] };
-  return json && json.files;
+  const fields = "nextPageToken,files(id,name,createdTime,modifiedTime)";
+  const pageSize = 1000;
+  const allFiles: GoogleDriveFile[] = [];
+  let pageToken: string | undefined;
+
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const json = await files.list(query, fields, pageSize, pageToken) as { files?: GoogleDriveFile[], nextPageToken?: string } | undefined;
+    if (!json || !Array.isArray(json.files)) {
+      return undefined;
+    }
+
+    allFiles.push(...json.files);
+    pageToken = json.nextPageToken;
+  } while (pageToken);
+
+  return allFiles;
 };
 
 export type GetFileFunction = (fileId: string) => Promise<string | undefined>;
+
+// Thrown by pull when a file cannot be downloaded. Acting on the rest of the
+// pull could push local content over a remote edit that was not fetched, or
+// create a duplicate of a file that was not linked, so the sync run fails
+export class DownloadError extends Error {}
 
 export const getFile: GetFileFunction = async (fileId: string): Promise<string | undefined> => {
   const file = await files.get(fileId);
