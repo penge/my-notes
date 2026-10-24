@@ -179,7 +179,7 @@ describe("pullUpdate()", () => {
         });
 
         describe("file is the latest update", () => {
-          test("note content is merged with file content, stamped newer than the file", async () => {
+          test("note content is merged with file content, stamped 1 second after the file's time, later than now", async () => {
             const notes: NotesObject = {
               Books: {
                 content: "my books",
@@ -225,7 +225,7 @@ describe("pullUpdate()", () => {
         });
 
         describe("file is the latest update, and renamed", () => {
-          test("note content is merged with file content and stamped newer than the file, and note is renamed", async () => {
+          test("note content is merged with file content, stamped 1 second after the file's time, and note is renamed", async () => {
             const notes: NotesObject = {
               Books: {
                 content: "my books",
@@ -314,7 +314,7 @@ describe("pullUpdate()", () => {
 
     describe("note and file do NOT have the same modified time", () => {
       describe("note is newer", () => {
-        test("sync property is added, note content is merged with file content, stamped newer than the file", async () => {
+        test("sync property is added, note content is merged with file content, stamped now, later than the file's time plus 1 second", async () => {
           const notes: NotesObject = {
             Books: {
               content: "my books",
@@ -352,7 +352,7 @@ describe("pullUpdate()", () => {
       });
 
       describe("file is newer", () => {
-        test("sync property is added, note content is merged with file content, stamped newer than the file", async () => {
+        test("sync property is added, note content is merged with file content, stamped now, later than the file's time plus 1 second", async () => {
           const notes: NotesObject = {
             Books: {
               content: "my books",
