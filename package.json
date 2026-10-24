@@ -20,6 +20,7 @@
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",
     "develop-watch": "npm run develop && node --import ./register.js ./watch.ts",
     "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node --import ./register.js ./build.ts",
+    "package": "npm run build && rm -f my-notes-$npm_package_version.zip && cd dist && zip -r -X ../my-notes-$npm_package_version.zip . -x '*.DS_Store'",
     "set-version": "node --import ./register.js scripts/set-version.ts"
   },
   "devDependencies": {

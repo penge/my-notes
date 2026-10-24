@@ -204,7 +204,8 @@ $ npm test
 Build:
 
 ```
-$ npm run build   # see "dist" folder
+$ npm run build     # see "dist" folder
+$ npm run package   # builds and zips "dist" into my-notes-<version>.zip, for the Chrome Web Store
 ```
 
 <br><br>
