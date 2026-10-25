@@ -58,12 +58,12 @@
   "Insert Image": "Insert Image",
   "Image URL": "Image URL",
   "Insert": "Insert",
-  "Insert Image description": "You can <strong>Drag & Drop</strong> an image to the note to upload it to Google Drive when Google Drive Sync is enabled.",
+  "Insert Image description": "Paste any image URL, including a Google Drive link. To upload a new image to Google Drive, enable Google Drive Sync and <strong>drag and drop</strong> the image into the note.",
   "Insert Link": "Insert Link",
   "Link URL": "Link URL",
   "Insert Link description": {
-    "line1": "The link can start with {{http}}, {{https}}, or {{chrome-extension}} if referencing another note.",
-    "line2": "See <strong>Shortcuts</strong> for how to open the inserted link."
+    "line1": "The link can start with {{http}} or {{https}}, or with {{chrome-extension}} to link to another note.",
+    "line2": "See <strong>Shortcuts</strong> in Options for how to open the link."
   },
   "Embed HTML": "Embed HTML",
   "Embed": "Embed",
@@ -84,7 +84,7 @@
   "Delete column": "Delete column",
   "Text Color": "Text Color",
   "Change selected text color to": "Change selected text color to {{color}}",
-  "Change selected text color to default text color": "Change selected text color to default text color",
+  "Change selected text color to default": "Change selected text color to default",
   "Highlight selected text": "Highlight selected text",
   "Remove Formatting": {
     "mac": "Remove Formatting (⌘ + \\)",
@@ -104,9 +104,9 @@
   "Font example": "The quick brown fox jumps over the lazy dog ({{font}})",
   "Google Fonts": {
     "step1": "Open <a href=\"{{website}}\" target=\"_blank\">{{website}}</a> to see the available fonts",
-    "step2": "Type in the Font Name (e.g.: Roboto Mono)",
+    "step2": "Type the font name",
     "step3": "Click <b>Apply</b> to use the font",
-    "placeholder": "Font Name (e.g.: Roboto Mono)"
+    "placeholder": "e.g. Roboto Mono"
   },
   "Apply": "Apply",
   "Applied": "Applied",
@@ -120,7 +120,7 @@
     "LatestModified": "Latest Modified",
     "Custom": "Custom"
   },
-  "Orders description": "When <b>\"Custom\"</b> is selected, you can <b>Drag & Drop</b> notes to change their order.",
+  "Orders description": "When <b>\"Custom\"</b> is selected, you can <b>drag and drop</b> notes to change their order.",
   "Theme": "Theme",
   "Themes": {
     "light": "Light",
@@ -146,8 +146,8 @@
     "Open previous note": "Open previous note",
     "Open next note": "Open next note",
     "Open note on mouse hover": "Open note on mouse hover",
-    "Open link in a New Tab": "Open link in a New Tab",
-    "Open link in a New Tab and make it active": "Open link in a New Tab and make it active",
+    "Open link in a new tab": "Open link in a new tab",
+    "Open link in a new tab and switch to it": "Open link in a new tab and switch to it",
     "Close": "Close",
     "Confirm": "Confirm",
     "Bold": "Bold",
@@ -170,32 +170,32 @@
   "Options available": {
     "Enable Google Drive Sync": "Enable Google Drive Sync",
     "Enable Google Drive Sync detail": {
-      "description": "Creates a folder <b>My Notes</b> (automatically, once) in your Google Drive, and uses it to back up your notes. Notes are synchronized to and from Google Drive once the feature is enabled, and then on every click on the <b>Sync now</b> button in the Sidebar.",
+      "description": "Creates a <b>My Notes</b> folder in your Google Drive (once) and uses it to back up your notes. Notes are synced to and from Google Drive when the feature is enabled, and then every time you click the <b>Sync now</b> button in the Sidebar.",
       "Why sync:": "Why sync:",
       "Why sync reasons": {
-        "reason1": "Having a backup of your notes (notes can be restored)",
-        "reason2": "Can edit notes from other sources (Google Drive, My Notes, vice versa)",
-        "reason3": "Can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)"
+        "reason1": "A backup of your notes (notes can be restored)",
+        "reason2": "Edit notes in Google Drive or other apps, and see the changes in My Notes",
+        "reason3": "Sync and edit notes on other computers (install My Notes and use the same Google Account)"
       },
       "Permission:": "Permission:",
       "Permission details": {
         "detail1": "My Notes can only access the files it created. It cannot see other files in your Google Drive.",
-        "detail2": "My Notes will request a permission to enable this feature."
+        "detail2": "My Notes asks for permission when you enable this feature."
       },
       "Location:": "Location:",
       "Last sync:": "Last sync:",
       "Enable Auto Sync": "Enable Auto Sync",
-      "Enable Auto Sync description": "Auto Sync will automatically sync your notes to and from Google Drive every time you open My Notes, and every 6 seconds if your local notes were updated since the last sync."
+      "Enable Auto Sync description": "Auto Sync syncs your notes to and from Google Drive every time you open My Notes, and every 6 seconds if your local notes changed since the last sync."
     },
     "Indent text on Tab": "Indent text on {{Tab}}",
     "Indent text on Tab detail": {
-      "description": "By default, Tab key changes focus between the address bar and a note. This can be changed to indent the text instead.",
+      "description": "By default, the Tab key moves focus between the address bar and the note. Enable this to indent the text instead.",
       "Tab size:": "Tab size:",
       "Tab": "Tab",
       "2 spaces": "2 spaces",
       "4 spaces": "4 spaces"
     },
-    "Open note on mouse hover": "Open note on mouse hover holding {{key}}"
+    "Open note on mouse hover": "Open note on mouse hover while holding {{key}}"
   },
   "Export & Import": "Export & Import",
   "Export notes": "Export notes",

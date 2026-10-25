@@ -178,7 +178,7 @@ const Toolbar = ({
                 </div>
               </Tooltip>
             ))}
-            <Tooltip tooltip={t("Change selected text color to default text color")}>
+            <Tooltip tooltip={t("Change selected text color to default")}>
               <div
                 className="plain auto letter button my-notes-text-color-auto"
                 onClick={() => highlight("my-notes-text-color-auto", dispatchNoteEdited)}

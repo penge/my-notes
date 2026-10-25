@@ -72,14 +72,14 @@ const keyboardShortcuts: KeyboardShortcut[] = [
     needsToBeEnabled: true,
   },
   {
-    description: "Open link in a New Tab",
+    description: "Open link in a new tab",
     mac: "⌘ + Click",
     other: "Ctrl + Click",
   },
   {
-    description: "Open link in a New Tab and make it active",
+    description: "Open link in a new tab and switch to it",
     mac: "⌘ + Shift + Click",
-    other: "Ctrl + Shift+ Click",
+    other: "Ctrl + Shift + Click",
   },
   {
     description: "Close",
