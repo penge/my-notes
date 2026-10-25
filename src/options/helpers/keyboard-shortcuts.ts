@@ -79,7 +79,7 @@ const keyboardShortcuts: KeyboardShortcut[] = [
   {
     description: "Open link in a New Tab and make it active",
     mac: "⌘ + Shift + Click",
-    other: "Ctrl + Shift+ Click",
+    other: "Ctrl + Shift + Click",
   },
   {
     description: "Close",
