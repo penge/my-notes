@@ -283,7 +283,6 @@ package.json
 LICENSE           # MIT
 manifest.json     # Main extension file
 
-register.js       # Registers ts-node/esm so Node can run the TypeScript scripts
 build.ts          # Produces dist/ folder
 watch.ts          # Rebuilds dist/ on changes (npm run develop-watch)
 

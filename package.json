@@ -7,28 +7,28 @@
   "repository": "github:penge/my-notes",
   "type": "module",
   "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=10.0.0"
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
   },
   "scripts": {
     "__prepare-folder": "rimraf dist && copyfiles LICENSE manifest.json dist && copyup public/images/icon128.png public/* dist && cp -R public/themes dist",
-    "__prepare-folder-develop": "npm run __prepare-folder && cp -R public/integration dist && node --import ./register.js ./env/set-client-id.ts dist/manifest.json",
+    "__prepare-folder-develop": "npm run __prepare-folder && cp -R public/integration dist && node ./env/set-client-id.ts dist/manifest.json",
     "__check-types": "tsc --noEmit",
-    "__develop-core": "NODE_ENV=development node --import ./register.js ./build.ts",
+    "__develop-core": "NODE_ENV=development node ./build.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "LOG_LEVEL=SILENT TZ=UTC jest --maxWorkers=4",
     "develop": "npm run __prepare-folder-develop && npm run __develop-core",
-    "develop-watch": "npm run develop && node --import ./register.js ./watch.ts",
-    "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node --import ./register.js ./build.ts",
+    "develop-watch": "npm run develop && node ./watch.ts",
+    "build": "npm run __prepare-folder && npm run __check-types && NODE_ENV=production node ./build.ts",
     "package": "npm ci && npm run build && rm -f my-notes-$npm_package_version.zip && cd dist && zip -r -X ../my-notes-$npm_package_version.zip . -x '*.DS_Store'",
-    "set-version": "node --import ./register.js scripts/set-version.ts"
+    "set-version": "node scripts/set-version.ts"
   },
   "devDependencies": {
     "@jest/types": "^30.5.1",
     "@types/chrome": "0.0.246",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^20.19.43",
+    "@types/node": "^24.19.2",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",
     "chokidar": "^4.0.3",
@@ -44,7 +44,6 @@
     "jsdom": "^26.1.0",
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.1",
     "typescript": "^5.9.3"
   },
   "overrides": {
