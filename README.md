@@ -6,7 +6,7 @@
   <img src="https://badgen.net/chrome-web-store/users/lkeeogfaiembcblonahillacpaabmiop" />
   <br><br>
   <img src="public/images/my-notes.png" width="760" /><br>
-  <strong>My Notes</strong> – <a href="https://chromewebstore.google.com/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop">Chrome extension</a> for simple and fast note-taking.<br>Zero setup, works offline, no account needed.
+  <strong>My Notes</strong> — <a href="https://chromewebstore.google.com/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop">Chrome extension</a> for simple and fast note-taking.<br>Zero setup, works offline, no account needed.
 </p>
 
 <br><br>
@@ -17,17 +17,17 @@
 
 → &nbsp; Works offline
 
-→ &nbsp; Automatically saved and updated in every open tab ([How to open](#how-to-open))
+→ &nbsp; Saved automatically and updated in every open tab ([How to open](#how-to-open))
 
-→ &nbsp; Context menu to save selected text to note or My Notes on another computer ([Context menu](#context-menu))
+→ &nbsp; Context menu to save selected text to a note, or to My Notes on other computers ([Context menu](#context-menu))
 
 → &nbsp; Back up notes to Google Drive ([Google Drive Sync](#google-drive-sync))
 
-→ &nbsp; Sync notes between My Notes and Google Drive, edit them from other devices or My Notes ([Google Drive Sync](#google-drive-sync))
+→ &nbsp; Sync notes with Google Drive and edit them from other devices ([Google Drive Sync](#google-drive-sync))
 
-→ &nbsp; Auto Sync notes to Google Drive ([Google Drive Sync](#google-drive-sync))
+→ &nbsp; Auto Sync with Google Drive ([Google Drive Sync](#google-drive-sync))
 
-→ &nbsp; Drag and Drop image with automatic image upload to Google Drive ([Google Drive Sync](#google-drive-sync))
+→ &nbsp; Drag and drop images, uploaded automatically to Google Drive ([Google Drive Sync](#google-drive-sync))
 
 → &nbsp; Toolbar (**Bold**, _Italic_, <ins>Underline</ins>, etc.)
 
@@ -35,7 +35,7 @@
 
 → &nbsp; Keyboard shortcuts
 
-→ &nbsp; Command palette ([Command palette](#command-palette))
+→ &nbsp; [Command palette](#command-palette)
 
 <br>
 
@@ -44,24 +44,24 @@
 **My Notes:**
 
 <ol type="A">
-  <li>Click on My Notes icon in Chrome Toolbar (pin the icon for quick access)</li>
-  <li>Use keyboard shortcut (see <code>chrome://extensions/shortcuts</code>)</li>
+  <li>Click the My Notes icon in the Chrome toolbar (pin it for quick access)</li>
+  <li>Use a keyboard shortcut (see <code>chrome://extensions/shortcuts</code>)</li>
 </ol>
 
 **Options:**
 
 <ol type="A">
-  <li>Click on gear icon in bottom left corner</li>
-  <li>Right-click on the pinned icon in Chrome Toolbar and select Options</li>
-  <li>Click on three-dots icon next to My Notes in Chrome Toolbar and select Options</li>
-  <li>Use keyboard shortcut (see Options)</li>
+  <li>Click the gear icon in the bottom left corner</li>
+  <li>Right-click the pinned icon in the Chrome toolbar and select Options</li>
+  <li>Click the three-dots icon next to My Notes in the Chrome toolbar and select Options</li>
+  <li>Use a keyboard shortcut (see Options)</li>
 </ol>
 
 <br><br>
 
 ## Context menu
 
-Context menu can be displayed on right-click on any website and based on the context used to quickly save:
+Right-click on any website to open the context menu and quickly save, depending on where you click:
 
 <ol type="a">
   <li>selected text</li>
@@ -69,14 +69,14 @@ Context menu can be displayed on right-click on any website and based on the con
   <li>image</li>
 </ol>
 
-Destination can be any local note, or My Notes on other computers.
+The destination can be any local note, or My Notes on other computers.
 
-Options are based on the context but in general are:
+The options depend on the context, but in general are:
 
-- `Save to [note name]` – Option for every note. My Notes doesn't have to be open. Google Drive Sync is not required.
-- `Save to remotely open My Notes` – My Notes on other computers needs to be open. The same Google Account needs to be used. Google Drive Sync is not required. The destination note will be named `@received`.
+- `Save to [note name]` — one option for every note. My Notes doesn't have to be open, and Google Drive Sync is not required.
+- `Save to remotely open My Notes` — My Notes must be open on the other computers, and Chrome must be signed in to the same Google Account on each of them. Google Drive Sync is not required. The destination note is named `@received`.
 
-There are a few general purpose notes that can be used as destination. Their name starts with `@` and they are created automatically when needed:
+A few general-purpose notes can be used as destinations. Their names start with `@`, and they are created automatically when needed:
 
 - `@received`
 - `@clipboard`
@@ -86,93 +86,91 @@ There are a few general purpose notes that can be used as destination. Their nam
 
 ## Custom theme
 
-Custom theme allows you to customize My Notes styles in many ways.
+The Custom theme lets you customize the look of My Notes in many ways.
 
-To use a Custom theme, open Options, select **"Custom"** theme, and click on the **"Customize"** button to start creating your own theme.
+To use it, open Options, select the **"Custom"** theme, and click the **"Customize"** button.
 
-To start, either copy and paste into the editor the content of [light.css](public/themes/light.css) or [dark.css](public/themes/dark.css), or use CSS `@import` to import the theme you would like your Custom theme to be based on.
+To start, either paste the content of [light.css](public/themes/light.css) or [dark.css](public/themes/dark.css) into the editor, or use CSS `@import` to base your theme on one of them.
 
-Then, modify CSS variables as you like to change background colors, text colors, etc.
-You can add any valid CSS as well to make further changes.
+Then change the CSS variables to set background colors, text colors, etc.
+You can also add any valid CSS for further changes.
 
-Click on the **"Save"** button to save the Custom theme.
+Click the **"Save"** button to save the Custom theme.
 
 <br><br>
 
 ## Command palette
 
-Command palette is a window which you can open with `Cmd + P` (or `Ctrl + P`) and use your keyboard to quickly find <b>commands,</b> and execute one.
+The Command palette opens with `Cmd + P` (or `Ctrl + P`) and lets you quickly find and run commands with the keyboard.
 
-To navigate between the commands, use `Up` and `Down` arrow keys.
+Use the `Up` and `Down` arrow keys to move between commands, and `Enter` to run the selected one.
 
-To execute a selected command, press `Enter`.
-
-The last executed command can be repeated with `Cmd + Shift + P` (or `Ctrl + Shift + P`).
+Repeat the last command with `Cmd + Shift + P` (or `Ctrl + Shift + P`).
 
 <br><br>
 
 ## Google Drive Sync
 
-Google Drive Sync (see Options) saves your notes to your personal Google Drive and synchronizes the changes between your local My Notes and your Google Drive every time you click on the "Sync now" button (bottom left corner).
+Google Drive Sync (see Options) saves your notes to your personal Google Drive and syncs the changes between My Notes and Google Drive every time you click the "Sync now" button (bottom left corner).
 
 **Why sync:**
 
-- Having a backup of your notes (notes can be restored)
-- Can edit notes from other sources (Google Drive, My Notes, vice versa)
-- Can sync notes and edit them from other computers (by installing My Notes and using the same Google Account)
+- A backup of your notes (notes can be restored)
+- Edit notes in Google Drive or other apps, and see the changes in My Notes
+- Sync and edit notes on other computers (install My Notes and use the same Google Account)
 
 ### Location
 
-Notes are uploaded to your Google Drive under the folder "My Notes". This folder is created automatically.
-If the folder exists from a previous installation, notes are downloaded and uploaded and the synchronization continues.
+Notes are uploaded to the "My Notes" folder in your Google Drive. The folder is created automatically.
+If the folder exists from a previous installation, My Notes keeps using it: the notes in the folder are downloaded, and your local notes are uploaded to it.
 
 ### Synchronization
 
-Synchronization works both ways — to Google Drive, from Google Drive.
+Synchronization works both ways — to and from Google Drive.
 
-Notes are synchronized every time you click on the "Sync now" button.
-While the synchronization is in progress, "Sync now" button will spin.
-"Sync now" button has a tooltip that shows the time of the most recent synchronization.
+Notes are synchronized every time you click the "Sync now" button.
+The button spins while synchronization is in progress.
+Its tooltip shows the time of the last synchronization.
 
 ### Auto Sync
 
-Auto Sync (see Options) can automatically sync your notes to and from Google Drive every time you open My Notes, and every 6 seconds if your local notes were updated since the last sync.
+Auto Sync (see Options) syncs your notes to and from Google Drive every time you open My Notes, and every 6 seconds if your local notes changed since the last sync.
 
 ### Image upload
 
-When Google Drive Sync is enabled and having an internet connection, you can Drag and Drop one image at a time into a note. Each image is immediately uploaded to your Google Drive under "My Notes" / "assets" folder, which is created automatically.
+When Google Drive Sync is enabled and you are online, you can drag and drop one image at a time into a note. Each image is uploaded right away to the "My Notes" / "assets" folder in your Google Drive. The folder is created automatically.
 
 ### Access
 
-My Notes can only access the folder "My Notes" it created, and files it created inside this folder.
-It cannot see, access nor modify, any other files in your Google Drive.
+My Notes can only access the "My Notes" folder it created, and the files it created inside it.
+It cannot see, access, or modify any other files in your Google Drive.
 
 <br><br>
 
 ## Tips and tricks
 
-1. Set a keyboard shortcut to quickly open My Notes (e.g. `Cmd + Shift + M`), which you can set on page `chrome://extensions/shortcuts`. If you make the keyboard shortcut Global, it will open My Notes even when Google Chrome is closed.
-2. Check keyboard shortcuts (open Options) on how to quickly do some actions.
-3. Use `Cmd + Shift + V` (or `Ctrl + Shift + V`) to paste text in a plain format (without formatting).
-4. Hide Toolbar and Sidebar if you prefer a simple interface. You can use keyboard shortcuts to do so, or use [Command palette](#command-palette).
-5. See [Google Fonts](https://fonts.google.com) for a font you like, write its name into My Notes Options to use it.
-6. Note name is present in the URL, therefore you can save it to bookmarks for quick access. If you append saved URL with `&focus`, it will always open that note in Focus mode (Sidebar hidden, Toolbar hidden).
-7. Use [Context menu](#context-menu) to transfer selected text to My Notes on other computers.
-8. Use [Custom theme](#custom-theme) to customize the look of My Notes in any way needed.
-9. Drag and Drop selected text onto a note's name in the Sidebar to insert the text into the note.
-10. Drag and Drop a TXT or HTML file anywhere in the bottom icon area of the Sidebar to import the file as a new note.
-11. Drag the Sidebar line to resize the Sidebar. Double-click on the Sidebar line to restore the original Sidebar width.
-12. Hold down `Cmd` (or `Ctrl`) and move mouse wheel (or touchpad) up and down over the image to resize it. Double-click on the image to restore its original size.
-13. Hold down `Cmd` (or `Ctrl`) and right-click anywhere in the table for a context menu, where you can align the table (Left, Center, Right).
+1. Set a keyboard shortcut to open My Notes quickly (e.g. `Cmd + Shift + M`) at `chrome://extensions/shortcuts`. If you make the shortcut Global, it opens My Notes even when Google Chrome is closed.
+2. See the keyboard shortcuts in Options for quick actions.
+3. Use `Cmd + Shift + V` (or `Ctrl + Shift + V`) to paste plain text (without formatting).
+4. Hide the Toolbar and Sidebar for a simpler interface. Use keyboard shortcuts or the [Command palette](#command-palette) to do it.
+5. Pick a font on [Google Fonts](https://fonts.google.com) and write its name in My Notes Options to use it.
+6. The note name is in the URL, so you can bookmark a note for quick access. Append `&focus` to the bookmarked URL to always open the note in Focus mode (Sidebar and Toolbar hidden).
+7. Use the [Context menu](#context-menu) to send selected text to My Notes on other computers.
+8. Use a [Custom theme](#custom-theme) to customize the look of My Notes in any way.
+9. Drag and drop selected text onto a note's name in the Sidebar to insert the text into the note.
+10. Drag and drop a TXT or HTML file onto the icon area at the bottom of the Sidebar to import it as a new note.
+11. Drag the Sidebar line to resize the Sidebar. Double-click the line to restore the original width.
+12. Hold `Cmd` (or `Ctrl`) and scroll up or down over an image to resize it. Double-click the image to restore its original size.
+13. Hold `Cmd` (or `Ctrl`) and right-click anywhere in a table to open a context menu for aligning the table (Left, Center, Right).
 
 <br><br>
 
 ## How to contribute
 
-1. Share your feedback (what to improve, what to change) under [Issues](https://github.com/penge/my-notes/issues) or join the discussion in [Discussions](https://github.com/penge/my-notes/discussions).
+1. Share your feedback (what to improve, what to change) in [Issues](https://github.com/penge/my-notes/issues) or join [Discussions](https://github.com/penge/my-notes/discussions).
 2. Join the development.
-3. Help to test the upcoming version (to get feedback, to improve or tweak).
-4. Help to improve the documentation.
+3. Help test upcoming versions.
+4. Help improve the documentation.
 5. [Buy Me a Coffee](https://www.buymeacoffee.com/penge).
 
 <br><br>
@@ -217,6 +215,8 @@ env/              # Environment helpers
 
 dist/             # Bundled My Notes (excluded from Git)
 
+scripts/          # Release scripts (set-version)
+
 src/
   background/
     google-drive/   # Everything related to Google Drive Sync
@@ -226,11 +226,11 @@ src/
                       # - Multipart bodies (create My Notes folder, create file, update file)
                       # - Tests
 
-    init/           # Run when My Notes is installed/updated
-                      # - Sets a Unique ID for My Notes installation (used by Context menu), if not already set
+    init/           # Runs when My Notes is installed/updated
+                      # - Sets a unique ID for the My Notes installation (used by Context menu), if not already set
                       # - Migrates notes and options
                       # - Creates Context menu and attaches the events
-                      # - Creates a Notification when My Notes is installed/updated
+                      # - Creates a notification when My Notes is installed/updated
                       # - Registers the ways to open My Notes (icon click, keyboard shortcut)
                       # - Registers events to trigger Google Drive Sync from My Notes
 
@@ -250,7 +250,7 @@ src/
                       # - Google Drive Sync
                       # - Export & Import
 
-  shared/           # Everything common (used at more places)
+  shared/           # Everything common (used in several places)
                       # - Date formatting (Last sync)
                       # - Managing the permissions (Requesting, Removing, Checking)
                       # - Helpers for Chrome Storage
@@ -267,11 +267,11 @@ src/
 
 public/             # All public files (images, icons, HTML, CSS) copied to dist/
 
-
 .editorconfig     # To enforce same editor configuration
 .eslintrc         # To enforce code quality and same coding style with ESLint
 .eslintignore     # Files excluded from ESLint checking
 .gitignore        # Files excluded from Git
+.nvmrc            # Node version
 
 jest.config.ts    # Jest configuration
 jest.setup.ts     # Jest setup
@@ -283,8 +283,9 @@ package.json
 LICENSE           # MIT
 manifest.json     # Main extension file
 
-register.js       # Uses ts-node/esm to resolve build.ts
+register.js       # Registers ts-node/esm so Node can run the TypeScript scripts
 build.ts          # Produces dist/ folder
+watch.ts          # Rebuilds dist/ on changes (npm run develop-watch)
 
 README.md
 ```
@@ -293,7 +294,7 @@ README.md
 
 ## Browser support
 
-My Notes has full support for Google Chrome only. Although it may be possible to install it in other browsers, the support is not complete.
+My Notes fully supports Google Chrome only. It may be possible to install it in other browsers, but the support is not complete.
 
 Support for other Chromium-based browsers will be added if possible.
 
@@ -306,7 +307,7 @@ All your notes are stored locally in your browser.
 If you use Google Drive Sync, My Notes can back up the notes to your personal Google Drive.
 
 To provide Google Drive functionality, My Notes has an application in Google Cloud.
-The sole purpose of this application is to authenticate you securely towards Google Drive and to allow the synchronization of notes.
+The application's sole purpose is to authenticate you securely with Google Drive and to allow the synchronization of notes.
 
 <br><br>
 
@@ -318,18 +319,18 @@ My Notes has the permissions listed in `manifest.json`.
 
 - `"storage"` — used to save your notes and options to Chrome Storage (locally in your Chrome)
 - `"unlimitedStorage"` — used to increase the default storage limit (which is 5MB)
-- `"contextMenus"` — used to create My Notes Context menu
+- `"contextMenus"` — used to create the My Notes Context menu
 - `"notifications"` — used to show a Chrome notification (when Context menu was used)
 
-Required permissions are shown to the user before installing the extension, and are needed at all times to provide the basic functionality.
+Required permissions are shown before installing the extension, and are needed at all times to provide the basic functionality.
 
 **Optional:**
 
 - `"identity"` — needed for "Enable Google Drive Sync" (see Options)
 
-Optional permissions are needed only to provide additional functionality that can be enabled via a checkbox in Options.
+Optional permissions are needed only for additional functionality, enabled with a checkbox in Options.
 
-User has the choice to either approve or deny the permissions.
+You can either approve or deny the optional permissions.
 
 <br><br>
 
@@ -337,88 +338,86 @@ User has the choice to either approve or deny the permissions.
 
 **1. Where is My Notes published? What is the process behind publishing My Notes?**
 
-My Notes is published on [Web Store], a store for Google Chrome extensions.
+My Notes is published on the [Chrome Web Store], the store for Google Chrome extensions.
 When publishing a new version, I first make a [new release](https://github.com/penge/my-notes/releases) here on GitHub.
-Then I create a build of the new release and send it to Web Store for a review.
+Then I build the new release and upload it to the Chrome Web Store for review.
 The review usually takes between 24 hours and a few days.
-After a successful review, the new version is available on Web Store.
+After a successful review, the new version is available on the Chrome Web Store.
 
 <br>
 
 **2. Can I install My Notes manually by downloading it from GitHub?**
 
-Yes, My Notes can be installed manually by downloading it from GitHub, but keep in mind, that Google Drive Sync works only if My Notes is installed from [Web Store].
-To install My Notes manually, download the zip file of the latest version which you can find [here](https://github.com/penge/my-notes/releases). Then, unpack the downloaded file and install NPM packages followed by `npm run build`.
-Finally, open `chrome://extensions` address in Google Chrome and click the **"Load unpacked"** button to load the unpacked extension from your drive by selecting the `dist` folder.
+Yes, but keep in mind that Google Drive Sync works only if My Notes is installed from the [Chrome Web Store].
+To install My Notes manually, download the zip file of the [latest release](https://github.com/penge/my-notes/releases), unpack it, and run `npm install` and `npm run build`.
+Then open `chrome://extensions` in Google Chrome, click the **"Load unpacked"** button, and select the `dist` folder.
 
 <br>
 
 **3. Why isn't Google Drive Sync working?**
 
-Google Drive Sync works only if My Notes is installed from Web Store on Google Chrome.
+Google Drive Sync works only if My Notes is installed from the Chrome Web Store on Google Chrome.
 There are two reasons for this.
-First, Google Chrome provides an "identity" API that My Notes relies on.
-Secondly, for security reasons, Google Drive Sync works only if My Notes has an ID equal to **"lkeeogfaiembcblonahillacpaabmiop"**, which is the ID it has on Web Store (also in the URL).
-When My Notes is installed manually, it gets an ID that is different to the one on Web Store.
+First, Google Chrome provides the `identity` API that My Notes relies on.
+Second, for security reasons, Google Drive Sync works only if My Notes has the ID **"lkeeogfaiembcblonahillacpaabmiop"**, which is its ID on the Chrome Web Store (also in the URL).
+When My Notes is installed manually, it gets a different ID.
 
 <br>
 
 **4. What browsers and operating systems are supported?**
 
 Currently, only Google Chrome is supported.
-Other Chromium-based browsers are next to come, if possible.
-Common OS's (Windows, Linux, macOS) are supported.
-Chromebooks are supported as well.
+Other Chromium-based browsers may follow, if possible.
+Windows, macOS, Linux, and Chromebooks are supported.
 
 <br>
 
 **5. How can I open or edit notes from my phone?**
 
-If Google Drive Sync is enabled, My Notes will sync your notes to/from your personal Google Drive into a folder called **"My Notes"**.
+If Google Drive Sync is enabled, My Notes syncs your notes to and from the **"My Notes"** folder in your personal Google Drive.
 
-To get access to your Google Drive from a phone, install the Google Drive app.
-To open the note, click on it from the list in the folder.
-To edit the note, click on the overflow menu (the three-circle icon) next to the note, and select "Open with" from the context menu.
-You can then choose a preferred editor from the list.
+To access your Google Drive from a phone, install the Google Drive app.
+To open a note, tap it in the folder.
+To edit a note, tap the overflow menu (the three-dot icon) next to it, select "Open with", and choose an editor from the list.
 
 <br>
 
 **6. What is the size limit for my notes?**
 
-Notes are _NOT_ limited in size with the addition of `"unlimitedStorage"` permission.
+Notes are _NOT_ limited in size, thanks to the `"unlimitedStorage"` permission.
 
 <br>
 
 **7. (Google Drive) Where are images uploaded?**
 
-Images are uploaded to your personal Google Drive under the folder My Notes / assets. The folder **"assets"** is created automatically when needed.
+Images are uploaded to the "My Notes" / "assets" folder in your personal Google Drive. The **"assets"** folder is created automatically when needed.
 
 <br>
 
 **8. (Google Drive) Are images stored privately?**
 
-Yes, only you can see the images. If you'd like to share the image(s) publicly or with someone specific, use the **Share** button in Google Drive.
+Yes, only you can see the images. To share an image publicly or with someone specific, use the **Share** button in Google Drive.
 
 <br>
 
 **9. (Google Drive) Are images deleted from my Google Drive after I remove them from a note?**
 
-No, images continue to be stored in your Google Drive for future use. This way images don't have to be uploaded again.
-If you'd like to delete an image permanently, delete the image in Google Drive.
+No, images stay in your Google Drive for future use, so they don't have to be uploaded again.
+To delete an image permanently, delete it in Google Drive.
 
 <br>
 
 **10. (Google Drive) How can I reuse a previously uploaded image after I have removed it from a note?**
 
-Go to your Google Drive, find the image you'd like to insert, right-click on the image and click on "Get link".
+Go to your Google Drive, right-click the image you'd like to insert, and select "Get link".
 Copy the link and paste it into My Notes using the "Insert Image" button.
 
 <br>
 
 **11. Is My Notes free?**
 
-My Notes is open source, free to download, install, and use.
-The recommended way to install My Notes is from [Web Store].
+Yes. My Notes is open source and free to download, install, and use.
+The recommended way to install My Notes is from the [Chrome Web Store].
 
 <br><br>
 
@@ -426,4 +425,4 @@ The recommended way to install My Notes is from [Web Store].
 
 <p align="center"><code>Created with ❤ in 2019.</code></p>
 
-[Web Store]: https://chromewebstore.google.com/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop
+[Chrome Web Store]: https://chromewebstore.google.com/detail/my-notes/lkeeogfaiembcblonahillacpaabmiop
