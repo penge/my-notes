@@ -4,7 +4,6 @@
     "./env/set-client-id.ts",
     "./jest.config.ts",
     "./jest.setup.ts",
-    "./register.js",
     "./build.ts",
     "./watch.ts",
     "./scripts/**/*"
@@ -32,11 +31,5 @@
     "jsx": "react",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment"
-  },
-
-  "ts-node": {
-    "moduleTypes": {
-      "jest.config.ts": "cjs"
-    }
   }
 }
